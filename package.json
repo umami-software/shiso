@@ -31,7 +31,7 @@
     "classnames": "^2.5.1",
     "glob": "^10.3.10",
     "gray-matter": "^4.0.3",
-    "next": "15.0.2",
+    "next": "15.0.3",
     "next-mdx-remote": "^5.0.0",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
