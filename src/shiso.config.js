@@ -1,4 +1,4 @@
-{
+export default {
   "tabs": [
     {
       "name": "docs",

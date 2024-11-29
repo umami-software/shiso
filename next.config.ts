@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: false,
   output: 'standalone',
+  async rewrites() {
+    return [{ source: '/docs', destination: '/docs/introduction' }];
+  },
 };
 
 export default withMDX(nextConfig);
