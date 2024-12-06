@@ -27,7 +27,7 @@
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
     "@next/mdx": "^15.0.2",
-    "@umami/react-zen": "^0.23.0",
+    "@umami/react-zen": "^0.25.0",
     "classnames": "^2.5.1",
     "glob": "^10.3.10",
     "gray-matter": "^4.0.3",

@@ -1,37 +1,27 @@
 import { Metadata } from 'next';
 import path from 'node:path';
+import { Blog, getContent } from '@/components';
 import config from '@/shiso.config';
-import { getFile } from '@/lib/content';
-import Docs from '@/components/Docs';
 
 const FOLDER = path.resolve(process.cwd(), './src/content/blog');
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string[] };
+  params: Promise<{ id: string[] }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const name = id?.length ? id.join('/') : 'index';
-  const doc = await getFile(name, FOLDER);
+  const content = await getContent(await params, FOLDER);
 
   return {
     title: {
-      absolute: `${doc?.meta?.title} – Shiso`,
+      absolute: `${content?.meta?.title} – Shiso`,
       default: 'Shiso',
     },
   };
 }
 
 export default async function ({ params }: { params: Promise<{ id: string[] }> }) {
-  const { id = [] } = await params;
+  const content = await getContent(await params, FOLDER);
 
-  const name = id?.length ? id.join('/') : 'index';
-  const doc = await getFile(name, FOLDER);
-
-  if (!doc) {
-    return <h1>Page not found</h1>;
-  }
-
-  return <Docs doc={doc} config={config} />;
+  return <Blog content={content} config={config} />;
 }

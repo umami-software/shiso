@@ -2262,10 +2262,10 @@
     "@typescript-eslint/types" "8.13.0"
     eslint-visitor-keys "^3.4.3"
 
-"@umami/react-zen@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/@umami/react-zen/-/react-zen-0.23.0.tgz#a050284a9696018ebaa607f4d8f56bbe8278fe4d"
-  integrity sha512-IJ7IDWV3QSZx+B+0mVU/ZH1ZeJLMvwcvgQhY/6OP23jzjfV+jJZ7u3U3FjJQJsnJhn0GIoXwcZA0yB7ssdfYmQ==
+"@umami/react-zen@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@umami/react-zen/-/react-zen-0.25.0.tgz#5f5d5f67fd816fa7bae9d86c39976acef87c425c"
+  integrity sha512-rGXaieeLOQ5Og6xl3a4aTMNHxHuRmB8jPYI39bgAAqBmY0c+EkU8A0Pgb+J52aw7RvA1v2x+7XaSJOZ8pwdKFA==
   dependencies:
     "@fontsource/jetbrains-mono" "^5.0.18"
     "@mdx-js/loader" "^3.0.0"

@@ -1,7 +1,7 @@
 import { ReactNode, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Grid, Container } from '@umami/react-zen';
+import { Grid, Container, Box, Column } from '@umami/react-zen';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import '@umami/react-zen/dist/styles.css';
@@ -26,12 +26,12 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Suspense>
-          <Container height="100vh">
-            <Grid rows="max-content 1fr max-content" height="100%">
+          <Container>
+            <Column height="100vh" className="ohhyeaaaaa">
               <Header />
               {children}
               <Footer />
-            </Grid>
+            </Column>
           </Container>
         </Suspense>
       </body>
