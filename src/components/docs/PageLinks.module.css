@@ -1,35 +1,21 @@
-.sidenav {
-  position: relative;
-}
-
-.nav {
-  font-size: 14px;
-  position: sticky;
-  top: 90px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .title {
   position: sticky;
   top: 0;
-  font-weight: 700;
 }
 
 .links {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  position: sticky;
+  top: 20px;
+  height: calc(100vh - 40px);
 }
 
-.nav .links a {
+.links a {
   display: block;
   color: var(--base-color-700);
   text-wrap: nowrap;
 }
 
-.nav .links a:hover {
+.links a:hover {
   color: var(--primary-color);
 }
 
@@ -59,10 +45,4 @@
 
 .selected {
   font-weight: bold;
-}
-
-@media screen and (max-width: 992px) {
-  .sidenav {
-    display: none;
-  }
 }

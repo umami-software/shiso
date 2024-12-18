@@ -1,10 +1,11 @@
 import { ReactNode, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Grid, Container, Box, Column } from '@umami/react-zen';
+import { Container, Column } from '@umami/react-zen';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import '@umami/react-zen/dist/styles.css';
+import 'highlight.js/styles/github-dark.css';
 
 const inter = Inter({ subsets: ['latin'] });
 

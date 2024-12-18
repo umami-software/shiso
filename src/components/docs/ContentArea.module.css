@@ -1,0 +1,59 @@
+.content {
+  font-size: 16px;
+  margin-bottom: 60px;
+}
+
+.content > p {
+  color: var(--font-muted-color);
+  line-height: 1.8;
+}
+
+.content a {
+  color: var(--font-color);
+  font-weight: 600;
+  text-decoration: underline var(--font-faded-color);
+  text-underline-offset: 4px;
+}
+
+.content a:hover {
+  text-decoration: underline var(--font-color);
+}
+
+.content h1 {
+  font-size: var(--font-size-8);
+  letter-spacing: var(--letter-spacing-1);
+  margin: 0 0 1rem 0;
+}
+
+.content h2 {
+  font-size: var(--font-size-6);
+  letter-spacing: var(--letter-spacing-1);
+  margin: 40px 0 1rem 0;
+}
+
+.content h3 {
+  font-size: var(--font-size-5);
+  letter-spacing: var(--letter-spacing-1);
+  margin: 30px 0 1rem 0;
+}
+
+.content ul {
+  list-style: disc;
+}
+
+.content ol {
+  list-style: decimal;
+}
+
+.content pre {
+  margin: var(--spacing-5) 0;
+}
+
+.content code {
+  font-size: 14px;
+  color: var(--font-color);
+  border: 1px solid var(--border-color);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius);
+  background: var(--base-color-50);
+}

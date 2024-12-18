@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { Column, Text } from '@umami/react-zen';
 import classNames from 'classnames';
 import styles from './PageLinks.module.css';
 
@@ -13,7 +14,7 @@ export default function PageLinks({ items, offset = 0 }) {
         return rect && rect.top <= offset;
       });
 
-      x && setHash(x.id);
+      if (x) setHash(x.id);
     };
 
     window.addEventListener('scroll', callback, false);
@@ -28,22 +29,21 @@ export default function PageLinks({ items, offset = 0 }) {
   }
 
   return (
-    <div className={styles.sidenav}>
-      <div className={styles.nav}>
-        <div className={styles.title}>On this page</div>
-        <div className={styles.links}>
-          {items.map(({ name, id, size }) => {
-            return (
-              <div
-                key={id}
-                className={classNames(styles[`indent-${size}`], { [styles.selected]: hash === id })}
-              >
-                <a href={`#${id}`}>{name}</a>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    <Column gap="3" minWidth="240px" className={styles.links}>
+      <Text size="2" weight="bold">
+        On this page
+      </Text>
+      {items.map(({ name, id, size }) => {
+        return (
+          <Text
+            key={id}
+            type="muted"
+            className={classNames(styles[`indent-${size}`], { [styles.selected]: hash === id })}
+          >
+            <a href={`#${id}`}>{name}</a>
+          </Text>
+        );
+      })}
+    </Column>
   );
 }

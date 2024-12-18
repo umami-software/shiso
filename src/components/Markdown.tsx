@@ -1,16 +1,21 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import { useMDXComponents } from '@/mdx-components';
+import Link, { LinkProps } from 'next/link';
+import { CodeBlock } from '@/components/docs/CodeBlock';
 
 const options = {
   mdxOptions: {
-    remarkPlugins: [],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeHighlight],
   },
 };
 
-export default function Markdown({ children }) {
-  const mdxComponents = useMDXComponents({});
+const components = {
+  a: (props: any) => <Link {...(props as LinkProps)} />,
+  pre: CodeBlock,
+};
 
-  return <MDXRemote source={children as any} components={{ ...mdxComponents }} options={options} />;
+export default function Markdown({ children }) {
+  return <MDXRemote source={children as any} components={components} options={options} />;
 }
