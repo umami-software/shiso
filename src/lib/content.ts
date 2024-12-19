@@ -53,7 +53,6 @@ export async function getFile(id: string, folder: string) {
 
 export async function getContent(params: { id: string[] }, folder: string) {
   const { id = [] } = params;
-  console.log({ params });
   const name = id?.length ? id.join('/') : 'index';
 
   return getFile(name, folder);

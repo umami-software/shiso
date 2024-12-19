@@ -35,13 +35,13 @@ export default function PageLinks({ items, offset = 0 }) {
       </Text>
       {items.map(({ name, id, size }) => {
         return (
-          <Text
+          <a
             key={id}
-            type="muted"
+            href={`#${id}`}
             className={classNames(styles[`indent-${size}`], { [styles.selected]: hash === id })}
           >
-            <a href={`#${id}`}>{name}</a>
-          </Text>
+            {name}
+          </a>
         );
       })}
     </Column>

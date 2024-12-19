@@ -11,13 +11,17 @@ export interface ContentAreaProps {
 
 export function ContentArea({ title, description, group, body }: ContentAreaProps): JSX.Element {
   return (
-    <Box className={styles.content} flexGrow={1}>
+    <Box flexGrow={1}>
       <Text color="primary" weight="bold">
         {group}
       </Text>
-      <Heading as="h1">{title}</Heading>
+      <Heading size="8" as="h1">
+        {title}
+      </Heading>
       <Text type="muted">{description}</Text>
-      <Markdown>{body}</Markdown>
+      <Box className={styles.content}>
+        <Markdown>{body}</Markdown>
+      </Box>
     </Box>
   );
 }

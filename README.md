@@ -1,3 +1,3 @@
 # Shiso
 
-Shiso allows to generate content using MDX.
+A content layer for [Next.js](https://nextjs.org/). 

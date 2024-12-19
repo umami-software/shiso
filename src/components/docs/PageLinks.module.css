@@ -5,14 +5,15 @@
 
 .links {
   position: sticky;
-  top: 20px;
-  height: calc(100vh - 40px);
+  top: 30px;
+  height: max-content;
 }
 
 .links a {
   display: block;
-  color: var(--base-color-700);
+  color: var(--font-muted-color);
   text-wrap: nowrap;
+  text-decoration: none;
 }
 
 .links a:hover {
@@ -43,6 +44,6 @@
   margin-left: 40px;
 }
 
-.selected {
-  font-weight: bold;
+a.selected {
+  color: var(--primary-color);
 }

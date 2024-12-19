@@ -1,0 +1,38 @@
+---
+title: Installation
+---
+
+These instructions show how to set up Shiso in a Next.js project.
+
+## 1. Install the package
+
+```shell
+npm install @umami/shiso
+```
+
+## 2. Create page
+
+In your `app` folder, create a folder for the content section you wish to add.
+
+```text
+src
+├── app
+│   └── docs
+│       └── [[...id]]
+│           └── page.jsx
+```
+
+In this case we are creating a section for `docs`.
+
+In the `page.jsx` file, add the following code:
+
+```javascript
+import shiso from '@umami/shiso/next';
+import config from '@/shiso.config.json';
+
+const { getMetadata, renderPage } = shiso(config);
+
+export const generateMetadata = getMetadata('SHISO');
+
+export default renderPage('docs');
+```

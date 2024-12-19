@@ -1,4 +1,5 @@
 export * from '@/lib/content';
+export * from '@/lib/next';
 
 export * from './blog/Blog';
 

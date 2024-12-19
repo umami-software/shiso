@@ -1,27 +1,8 @@
-import { Metadata } from 'next';
-import path from 'node:path';
-import { Docs, getContent } from '@/components';
-import config from '@/shiso.config';
+import shiso from '@/lib/next';
+import config from '@/shiso.config.json';
 
-const FOLDER = path.resolve(process.cwd(), './src/content/docs');
+const { getMetadata, renderPage } = shiso(config);
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string[] }>;
-}): Promise<Metadata> {
-  const content = await getContent(await params, FOLDER);
+export const generateMetadata = getMetadata('SHISO');
 
-  return {
-    title: {
-      absolute: `${content?.meta?.title} – Shiso`,
-      default: 'Shiso',
-    },
-  };
-}
-
-export default async function ({ params }: { params: Promise<{ id: string[] }> }) {
-  const content = await getContent(await params, FOLDER);
-
-  return <Docs content={content} config={config} />;
-}
+export default renderPage('docs');

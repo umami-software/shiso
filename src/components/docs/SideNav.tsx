@@ -18,7 +18,7 @@ export default function SideNav({ tabs, navigation }: SideNavProps) {
   const menu = navigation[tab?.id || 'docs'];
 
   return (
-    <Box position="sticky" flexGrow="1" minWidth="240px">
+    <Box className={styles.nav}>
       <List items={navigation}>
         {menu.map(({ group, pages }) => {
           return (

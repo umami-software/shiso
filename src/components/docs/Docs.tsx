@@ -35,7 +35,7 @@ export function Docs({ content, config }: contentsProps) {
   return (
     <Box flexGrow="1">
       {tabs && <TopNav tabs={tabs} />}
-      <Grid gap="6" columns="max-content 1fr max-content">
+      <Grid gap="6" columns="240px 1fr 240px">
         <SideNav tabs={tabs} navigation={navigation} />
         <ContentArea
           title={content?.meta?.title}
