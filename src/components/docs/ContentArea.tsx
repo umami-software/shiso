@@ -9,7 +9,7 @@ export interface ContentAreaProps {
   group?: string;
 }
 
-export function ContentArea({ title, description, group, body }: ContentAreaProps): JSX.Element {
+export function ContentArea({ title, description, group, body }: ContentAreaProps) {
   return (
     <Box flexGrow={1}>
       <Text color="primary" weight="bold">

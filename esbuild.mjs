@@ -5,7 +5,7 @@ import pkg from './package.json' with { type: 'json' };
 const { dependencies } = pkg;
 
 const config = {
-  entryPoints: ['src/components/index.ts'],
+  entryPoints: ['src/index.ts'],
   bundle: true,
   external: Object.keys(dependencies),
   jsx: 'automatic',

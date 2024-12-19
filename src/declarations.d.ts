@@ -1,3 +1,3 @@
 declare module 'recursive-readdir';
 declare module '*.json';
-declare module '*.css';
+declare module '*.module.css';
