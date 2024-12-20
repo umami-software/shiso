@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-import cssModulesPlugin from 'esbuild-plugin-css-modules';
+import cssModules from '@umami/esbuild-plugin-css-modules';
 import pkg from './package.json' with { type: 'json' };
 
 const { dependencies } = pkg;
@@ -10,11 +10,7 @@ const config = {
   external: Object.keys(dependencies),
   jsx: 'automatic',
   platform: 'node',
-  plugins: [
-    cssModulesPlugin({
-      localIdentName: '[name]_[local]_[hash:6]',
-    }),
-  ],
+  plugins: [cssModules()],
 };
 
 esbuild

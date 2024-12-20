@@ -2,6 +2,7 @@
 import { ReactNode, createContext } from 'react';
 
 export interface ShisoConfig {
+  contentDir: string;
   docs?: { [key: string]: any };
   blog?: { [key: string]: any };
 }

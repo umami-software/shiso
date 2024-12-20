@@ -1,7 +1,12 @@
 {
   "name": "umami-shiso",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A content layer for Next.js",
+  "homepage": "https://umami.is/shiso",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umami-software/shiso.git"
+  },
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -54,6 +59,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "@umami/esbuild-plugin-css-modules": "^0.4.0",
     "dts-bundle": "^0.7.3",
     "esbuild": "^0.24.0",
     "esbuild-plugin-css-modules": "^0.3.0",

@@ -3,6 +3,6 @@ import config from '@/shiso.config.json';
 
 const { getMetadata, renderPage } = shiso(config);
 
-export const generateMetadata = getMetadata('SHISO');
+export const generateMetadata = getMetadata({ title: 'SHISO' });
 
-export default renderPage('docs');
+export default renderPage({ type: 'docs' });
