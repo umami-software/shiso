@@ -11,16 +11,21 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "server"
+  ],
   "scripts": {
     "dev": "next dev --port 3100",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "icons": "svgr ./src/assets --out-dir ./src/components/icons --typescript",
-    "types": "tsc -p tsconfig.build.json",
+    "components": "tsc -p tsconfig.components.json",
+    "server": "tsc -p tsconfig.server.json",
     "esbuild": "node esbuild.mjs",
     "dts": "node dts.mjs",
-    "bundle": "npm-run-all types dts esbuild"
+    "bundle": "npm-run-all components server dts esbuild"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -35,15 +40,20 @@
       "prettier --write"
     ]
   },
+  "peerDependencies": {
+    "@umami/react-zen": "^0.1.0"
+  },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",
+    "@mdx-js/mdx": "^3.1.0",
     "@mdx-js/react": "^3.0.0",
     "@umami/react-zen": "^0.27.0",
     "classnames": "^2.5.1",
     "glob": "^10.3.10",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.0",
-    "next": "15.1.0",
+    "mdx-bundler": "^10.0.3",
+    "next": "15.1.2",
     "next-mdx-remote": "^5.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -61,7 +71,7 @@
     "@types/react-dom": "^19.0.2",
     "@umami/esbuild-plugin-css-modules": "^0.4.0",
     "dts-bundle": "^0.7.3",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.24.2",
     "esbuild-plugin-css-modules": "^0.3.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",

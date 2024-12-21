@@ -1,4 +1,3 @@
-'use client';
 import { useState, useRef } from 'react';
 import { Icon, Icons } from '@umami/react-zen';
 import styles from './CodeBlock.module.css';

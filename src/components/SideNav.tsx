@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { Box, List, ListItem, ListSection } from '@umami/react-zen';
 import classNames from 'classnames';

@@ -1,8 +1,9 @@
-import shiso from '@/lib/next';
+import { Docs } from '@/components/Docs';
 import config from '@/shiso.config.json';
+import { getContent } from '@/lib/content';
 
-const { getMetadata, renderPage } = shiso(config);
+export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
+  const content = await getContent(await params, './src/content/docs');
 
-export const generateMetadata = getMetadata({ title: 'SHISO' });
-
-export default renderPage({ type: 'docs' });
+  return <Docs content={content} config={config} />;
+}
