@@ -1,13 +1,12 @@
 {
-  "name": "umami-shiso",
-  "version": "0.2.0",
+  "name": "@umami/shiso",
+  "version": "0.7.0",
   "description": "A content layer for Next.js",
   "homepage": "https://umami.is/shiso",
   "repository": {
     "type": "git",
     "url": "https://github.com/umami-software/shiso.git"
   },
-  "private": true,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,8 +14,11 @@
     "dist",
     "server"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "dev": "next dev --port 3100",
+    "dev": "next dev --port 3100 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -41,7 +43,7 @@
     ]
   },
   "peerDependencies": {
-    "@umami/react-zen": "^0.1.0"
+    "@umami/react-zen": "^0.27.0"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",

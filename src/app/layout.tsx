@@ -30,7 +30,7 @@ export default function RootLayout({
           <Container>
             <Column height="100vh" className="ohhyeaaaaa">
               <Header />
-              {children}
+              {children as any}
               <Footer />
             </Column>
           </Container>

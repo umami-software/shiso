@@ -8,12 +8,6 @@ export interface ContentAreaProps {
 }
 
 export function ContentArea({ content, components }: ContentAreaProps) {
-  console.log({ content, components });
-
-  if (!content.code) {
-    return <h1>boooo</h1>;
-  }
-
   return (
     <Box flexGrow={1}>
       <Text color="primary" weight="bold">

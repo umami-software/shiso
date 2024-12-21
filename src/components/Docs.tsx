@@ -6,13 +6,13 @@ import TopNav from './TopNav';
 import { ContentArea } from './ContentArea';
 import { ShisoConfig } from './Shiso';
 
-export interface contentsProps {
+export interface DocsProps {
   config: ShisoConfig;
   content: any;
   components?: { [key: string]: any };
 }
 
-export function Docs({ content, config, components }: contentsProps) {
+export function Docs({ content, config, components }: DocsProps) {
   if (!content) {
     return <Heading size="6">Page not found</Heading>;
   }
