@@ -10,7 +10,7 @@ export interface SideNavProps {
   navigation: any;
 }
 
-export default function SideNav({ tabs, navigation }: SideNavProps) {
+export function SideNav({ tabs, navigation }: SideNavProps) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));

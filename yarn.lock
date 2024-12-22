@@ -6899,6 +6899,18 @@ remark-mdx-frontmatter@^4.0.0:
     unified "^11.0.0"
     yaml "^2.0.0"
 
+remark-mdx-frontmatter@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/remark-mdx-frontmatter/-/remark-mdx-frontmatter-5.0.0.tgz#22c48c4758963701595082fd89157586caa5a372"
+  integrity sha512-kI75pshe27TM71R+0iX7C3p4MbGMdygkvSbrk1WYSar88WAwR2JfQilofcDGgDNFAWUo5IwTPyq9XvGpifTwqQ==
+  dependencies:
+    "@types/mdast" "^4.0.0"
+    estree-util-is-identifier-name "^3.0.0"
+    estree-util-value-to-estree "^3.0.0"
+    toml "^3.0.0"
+    unified "^11.0.0"
+    yaml "^2.0.0"
+
 remark-mdx@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/remark-mdx/-/remark-mdx-3.1.0.tgz#f979be729ecb35318fa48e2135c1169607a78343"

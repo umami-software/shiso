@@ -27,13 +27,13 @@ In this case we are creating a section for `docs`.
 In the `page.jsx` file, add the following code:
 
 ```javascript
-import { Docs } from '@umami/shiso';
-import { getContent } from '@@umami/shiso/content';
-import config from './path/to/shiso.config.json';
+import { Shiso } from '@umami/shiso';
+import { getContent } from '@@umami/shiso/server';
+import config from 'path/to/shiso.config.json';
 
 export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
   const content = await getContent(await params, './src/content/docs');
 
-  return <Docs content={content} config={config} />;
+  return <Shiso type="docs" content={content} config={config} />;
 }
 ```

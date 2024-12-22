@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Tabs, TabList, Tab } from '@umami/react-zen';
 
-export default function TopNav({ tabs }) {
+export function TopNav({ tabs }) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ id, url }) => (id !== 'docs' ? pathname.startsWith(url) : false));

@@ -1,18 +1,14 @@
 'use client';
 import { Grid, Box, Heading } from '@umami/react-zen';
-import PageLinks from './PageLinks';
-import SideNav from './SideNav';
-import TopNav from './TopNav';
+import { useShiso } from './hooks/useShiso';
+import { PageLinks } from './PageLinks';
+import { SideNav } from './SideNav';
+import { TopNav } from './TopNav';
 import { ContentArea } from './ContentArea';
-import { ShisoConfig } from './Shiso';
 
-export interface DocsProps {
-  config: ShisoConfig;
-  content: any;
-  components?: { [key: string]: any };
-}
+export function Docs() {
+  const { content, config } = useShiso();
 
-export function Docs({ content, config, components }: DocsProps) {
   if (!content) {
     return <Heading size="6">Page not found</Heading>;
   }
@@ -37,7 +33,7 @@ export function Docs({ content, config, components }: DocsProps) {
       {tabs && <TopNav tabs={tabs} />}
       <Grid gap="6" columns="240px 1fr 240px">
         <SideNav tabs={tabs} navigation={navigation} />
-        <ContentArea content={content} components={components} />
+        <ContentArea content={content} />
         <PageLinks items={content?.anchors} offset={150} />
       </Grid>
     </Box>

@@ -1,6 +1,6 @@
 'use client';
 import styles from './Blog.module.css';
-import Markdown from './Markdown';
+import { Markdown } from './Markdown';
 
 export interface BlogProps {
   content: any;
