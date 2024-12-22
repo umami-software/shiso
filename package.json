@@ -43,7 +43,7 @@
     ]
   },
   "peerDependencies": {
-    "@umami/react-zen": "^0.27.0"
+    "@umami/react-zen": "^0.1.0"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",
@@ -57,8 +57,8 @@
     "mdx-bundler": "^10.0.3",
     "next": "15.1.2",
     "next-mdx-remote": "^5.0.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "recursive-readdir": "^2.2.3",
     "rehype-highlight": "^7.0.1",
     "remark-gfm": "^4.0.0",

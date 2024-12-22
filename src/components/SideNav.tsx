@@ -13,12 +13,12 @@ export interface SideNavProps {
 export default function SideNav({ tabs, navigation }: SideNavProps) {
   const pathname = usePathname();
 
-  const tab = tabs.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
+  const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
   const menu = navigation[tab?.id || 'docs'];
 
   return (
     <Box className={styles.nav}>
-      <List items={navigation}>
+      <List items={navigation} aria-label="nav">
         {menu.map(({ group, pages }) => {
           return (
             <ListSection title={group} key={group} className={styles.items}>

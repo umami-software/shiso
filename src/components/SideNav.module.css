@@ -4,25 +4,25 @@
   height: max-content;
 }
 
-.item {
+.nav .item {
   color: var(--font-muted-color);
   padding: 0;
   border-radius: 0;
   border-left: var(--border-size-1) solid var(--border-color);
 }
 
-.item a {
+.nav .item a {
   color: currentColor;
   width: 100%;
   padding: var(--padding-y) var(--padding-x);
   text-decoration: none;
 }
 
-.item a:hover {
+.nav .item a:hover {
   color: var(--primary-color);
 }
 
-.item.selected {
+.nav .item.selected {
   color: var(--font-color);
   border-color: var(--primary-color);
 }
