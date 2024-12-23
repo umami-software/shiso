@@ -12,7 +12,7 @@ npm install @umami/shiso
 
 ## 2. Create page
 
-In your `app` folder, create a folder for the content section you wish to add.
+In your `app` folder, create a folder for the content section you wish to add. In this case we are creating a section for `docs`.
 
 ```text
 src
@@ -22,14 +22,20 @@ src
 │           └── page.jsx
 ```
 
-In this case we are creating a section for `docs`.
-
 In the `page.jsx` file, add the following code:
 
 ```javascript
 import { Shiso } from '@umami/shiso';
-import { getContent } from '@@umami/shiso/server';
+import { getContent, getContentIds } from '@@umami/shiso/server';
 import config from 'path/to/shiso.config.json';
+
+export async function generateStaticParams() {
+  const ids = await getContentIds('./src/content/docs');
+
+  return ids.map((id: string) => ({
+    id: id.split('/')
+  }));
+}
 
 export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
   const content = await getContent(await params, './src/content/docs');
@@ -37,3 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string[] 
   return <Shiso type="docs" content={content} config={config} />;
 }
 ```
+
+## 3. Write content
+
+In the folder you specified, start adding `.mdx` files.
