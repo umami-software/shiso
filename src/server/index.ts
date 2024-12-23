@@ -5,6 +5,7 @@ import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import recursive from 'recursive-readdir';
 
 export const parseMdx = cache(async (file: string) => {
   const postContent = await fs.readFile(file, 'utf8');
@@ -45,6 +46,15 @@ export const parseMdx = cache(async (file: string) => {
     anchors,
   } as any;
 });
+
+export async function getContentIds(folder: string) {
+  const dir = path.resolve(folder);
+  const files = await recursive(dir);
+
+  return files.map(file => {
+    return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
+  });
+}
 
 export async function getContent(params: { id: string[] }, folder: string) {
   const { id = [] } = params;
