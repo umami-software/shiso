@@ -2,8 +2,6 @@ import { cache } from 'react';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import matter from 'gray-matter';
 import fs from 'node:fs/promises';
 import path from 'node:path';

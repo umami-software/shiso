@@ -38,7 +38,7 @@ export function Shiso({ content, type, config, components, templates }: ShisoPro
   const Component: ShisoTemplateComponent | undefined = { ...defaultTemplates, ...templates }[type];
 
   if (!Component) {
-    return <h1>{`Component not found: ${type}`}</h1>;
+    return <h1>{`Component not found for type: ${type}`}</h1>;
   }
 
   return (

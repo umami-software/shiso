@@ -2,6 +2,8 @@ import config from '@/shiso.config.json';
 import { getContent } from '@/server';
 import { Shiso } from '@/components/Shiso';
 
+export const dynamic = 'force-static';
+
 export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
   const content = await getContent(await params, './src/content/docs');
 

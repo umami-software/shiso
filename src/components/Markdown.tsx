@@ -1,41 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { evaluate, run } from '@mdx-js/mdx';
+import { runSync } from '@mdx-js/mdx';
 import { useMDXComponents } from '@mdx-js/react';
 import * as runtime from 'react/jsx-runtime';
 
+const parseMdx = (code: string) => {
+  try {
+    const result = runSync(code, {
+      ...runtime,
+      baseUrl: import.meta.url,
+    });
+
+    return { Component: result.default };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+};
+
 export function Markdown({ content }: { content: any }) {
-  const [Component, setComponent] = useState(null);
-  const [error, setError] = useState(null);
-
   const components = useMDXComponents();
-
-  useEffect(() => {
-    const renderMDX = async () => {
-      try {
-        // Evaluate the MDX content
-        const result = await run(content.code, {
-          ...runtime,
-          baseUrl: import.meta.url,
-        });
-
-        const MDXComponent = result.default;
-
-        setComponent(() => MDXComponent);
-        setError(null);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-        setComponent(null);
-      }
-    };
-
-    if (content.code) {
-      renderMDX();
-    }
-  }, [content.code]);
+  const { Component, error } = parseMdx(content.code);
 
   if (error) {
-    return <div className="text-red-500">Error rendering MDX: {error}</div>;
+    return <h1>Error rendering MDX: {error}</h1>;
   }
 
   if (!Component) {
