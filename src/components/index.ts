@@ -1,5 +1,5 @@
 'use client';
-import '@umami/react-zen/dist/styles.css';
+import '@umami/react-zen/styles.css';
 
 import { Blog } from './Blog';
 import { Docs } from './Docs';
