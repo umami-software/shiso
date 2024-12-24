@@ -7,7 +7,7 @@ const contentDir = './src/content/docs';
 export async function generateStaticParams() {
   const ids = await getContentIds(contentDir);
 
-  return ids.map(id => ({
+  return ids.map((id: string) => ({
     id: id.split('/'),
   }));
 }

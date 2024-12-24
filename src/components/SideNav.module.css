@@ -1,7 +1,8 @@
 .nav {
   position: sticky;
   top: 30px;
-  height: max-content;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .nav .item {
