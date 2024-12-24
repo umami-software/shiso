@@ -1,6 +1,6 @@
 {
   "name": "@umami/shiso",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "A content layer for Next.js",
   "homepage": "https://umami.is/shiso",
   "repository": {
@@ -54,7 +54,6 @@
     "glob": "^10.3.10",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.0",
-    "mdx-bundler": "^10.0.3",
     "next": "15.1.2",
     "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
