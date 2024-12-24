@@ -1,9 +1,21 @@
-import { Blog } from '@/components/Blog';
 import config from '@/shiso.config.json';
-import { getContent } from '@/server';
+import { getContent, getContentIds } from '@/server';
+import { Shiso } from '@/components/Shiso';
+
+const contentDir = './src/content/blog';
+
+export async function generateStaticParams() {
+  const ids = await getContentIds(contentDir);
+
+  return ids.map(id => ({
+    id: id.split('/'),
+  }));
+}
 
 export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
-  const content = await getContent(await params, './src/content/blog');
+  const name = (await params)?.id?.join('/');
 
-  return <Blog content={content} config={config} />;
+  const content = await getContent(name, contentDir);
+
+  return <Shiso type="blog" content={content} config={config} />;
 }

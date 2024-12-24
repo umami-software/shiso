@@ -15,7 +15,7 @@ export function ContentArea({ content }: ContentAreaProps) {
       <Heading size="8" as="h1">
         {content?.meta?.title}
       </Heading>
-      <Text type="muted">{content?.meta?.description}</Text>
+      <Text color="muted">{content?.meta?.description}</Text>
       <Box className={styles.content}>
         <Markdown content={content} />
       </Box>

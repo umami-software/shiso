@@ -2371,6 +2371,14 @@
     "@typescript-eslint/types" "8.13.0"
     eslint-visitor-keys "^3.4.3"
 
+"@umami/esbuild-plugin-css-modules@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@umami/esbuild-plugin-css-modules/-/esbuild-plugin-css-modules-0.2.0.tgz#eec50e52090ed51954f444400058914347a98660"
+  integrity sha512-bLqSDZ7ClfqwBiovhaYQFV5xzMQ19ZBpoKh8Tc6p+hJGBUPnhd6RS9W9URRFUrCA+bnyY+F4+BpTm+2bIBpGAw==
+  dependencies:
+    postcss "^8.4.49"
+    postcss-modules "^6.0.1"
+
 "@umami/esbuild-plugin-css-modules@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@umami/esbuild-plugin-css-modules/-/esbuild-plugin-css-modules-0.4.0.tgz#55ec59adf689cc15752a55e7ad68c0af3238b9be"
@@ -2404,6 +2412,50 @@
     recursive-readdir "^2.2.3"
     thenby "^1.3.4"
     zustand "^5.0.2"
+
+"@umami/react-zen@^0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@umami/react-zen/-/react-zen-0.28.0.tgz#7bed916eeea7a3674ed7ad890232234729debd40"
+  integrity sha512-pehpb7z8QMCaihiu03U/XETMXoWGiSbqNQs6XMhbXmucPjYeGnEXCjhD3BQ0Gn+Vu7Ym0WWfggUG4BBomwXQTg==
+  dependencies:
+    "@fontsource/jetbrains-mono" "^5.0.18"
+    "@react-spring/web" "^9.7.5"
+    "@umami/esbuild-plugin-css-modules" "0.2.0"
+    "@umami/shiso" "^0.10.0"
+    classnames "^2.5.1"
+    dts-bundle "^0.7.3"
+    glob "^10.3.10"
+    next "15.1.0"
+    react "^19.0.0"
+    react-aria-components "^1.5.0"
+    react-dom "^19.0.0"
+    react-hook-form "^7.54.1"
+    react-icons "^5.4.0"
+    thenby "^1.3.4"
+    zustand "^5.0.2"
+
+"@umami/shiso@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@umami/shiso/-/shiso-0.10.0.tgz#197a64ad7d67403c8437d462f4f9e7bb8cff68ce"
+  integrity sha512-F3sVixpjAQGGI5s1itURQ1JyaUeeE0oqTY0dWYkM8mvD9WS5yxb0kh0trmPgWrwtuFHDTPH0G7koHHn5HZ3roA==
+  dependencies:
+    "@mdx-js/loader" "^3.0.0"
+    "@mdx-js/mdx" "^3.1.0"
+    "@mdx-js/react" "^3.0.0"
+    "@umami/react-zen" "^0.27.0"
+    classnames "^2.5.1"
+    glob "^10.3.10"
+    gray-matter "^4.0.3"
+    highlight.js "^11.11.0"
+    mdx-bundler "^10.0.3"
+    next "15.1.2"
+    next-mdx-remote "^5.0.0"
+    react "^19.0.0"
+    react-dom "^19.0.0"
+    recursive-readdir "^2.2.3"
+    rehype-highlight "^7.0.1"
+    remark-gfm "^4.0.0"
+    thenby "^1.3.4"
 
 "@ungap/structured-clone@^1.0.0":
   version "1.2.0"

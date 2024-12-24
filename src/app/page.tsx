@@ -9,7 +9,7 @@ export default function Home() {
       <Icon size="lg">
         <Leaf />
       </Icon>
-      <Text as="p" type="muted">
+      <Text as="p" color="muted">
         Publish content using MDX.
       </Text>
       <Row gap="3">

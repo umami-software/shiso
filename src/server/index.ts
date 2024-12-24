@@ -7,11 +7,16 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import recursive from 'recursive-readdir';
 
-export const parseMdx = cache(async (file: string) => {
+function getId(name: string, folder: string) {
+  return name.replace('.mdx', '').replace(folder, '').replace(/\\/g, '/').replace(/^\//, '');
+}
+
+export const getContent = cache(async (name: string = 'index', folder: string) => {
+  const file = path.join(folder, `${name}.mdx`);
   const postContent = await fs.readFile(file, 'utf8');
   const { data: frontmatter, content: mdxContent } = matter(postContent);
 
-  const id = file.replace('.mdx', '').replace(/\\/g, '/').replace(/^\//, '');
+  const id = getId(name, folder);
   const anchors: { name: string; id: string; size: number }[] = [];
   const modifiedContent = mdxContent
     .split('\n')
@@ -47,18 +52,11 @@ export const parseMdx = cache(async (file: string) => {
   } as any;
 });
 
-export async function getContentIds(folder: string) {
+export const getContentIds = cache(async (folder: string) => {
   const dir = path.resolve(folder);
   const files = await recursive(dir);
 
-  return files.map(file => {
-    return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
+  return files.map((file: string) => {
+    return getId(file, dir);
   });
-}
-
-export async function getContent(params: { id: string[] }, folder: string) {
-  const { id = [] } = params;
-  const name = id?.length ? id.join('/') : 'index';
-
-  return parseMdx(path.resolve(folder, `${name}.mdx`));
-}
+});

@@ -5,7 +5,7 @@
 }
 
 .nav .item {
-  color: var(--font-muted-color);
+  color: var(--font-color-muted);
   padding: 0;
   border-radius: 0;
   border-left: var(--border-size-1) solid var(--border-color);
