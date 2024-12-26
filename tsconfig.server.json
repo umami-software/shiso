@@ -10,6 +10,7 @@
     "isolatedModules": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "jsx": "preserve",
     "lib": ["esnext"],
     "paths": {
       "@/*": ["./src/*"]

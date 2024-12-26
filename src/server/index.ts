@@ -1,4 +1,4 @@
-import { cache, createElement } from 'react';
+import { cache, createElement, ReactElement } from 'react';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -87,12 +87,24 @@ export function next(type: string, config: ShisoConfig) {
     }));
   }
 
-  async function renderPage({ params }: { params: Promise<{ id: string[] }> }) {
-    const name = (await params)?.id?.join('/');
+  function renderPage(
+    render: ({
+      type,
+      content,
+      config,
+    }: {
+      type: string;
+      content: any;
+      config: ShisoConfig;
+    }) => ReactElement,
+  ) {
+    return async ({ params }: { params: Promise<{ id: string[] }> }) => {
+      const name = (await params)?.id?.join('/');
 
-    const content = await getContent(name, dir);
+      const content = await getContent(name, dir);
 
-    return createElement(Shiso, { type, content, config });
+      return render({ type, content, config });
+    };
   }
 
   return { generateMetadata, generateStaticParams, renderPage };
