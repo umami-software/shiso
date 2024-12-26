@@ -1,21 +1,8 @@
 import config from '@/shiso.config.json';
-import { getContent, getContentIds } from '@/server';
-import { Shiso } from '@/components/Shiso';
+import { next } from '@/server';
 
-const contentDir = './src/content/blog';
+const { generateMetadata, generateStaticParams, renderPage } = next('blog', config);
 
-export async function generateStaticParams() {
-  const ids = await getContentIds(contentDir);
+export { generateMetadata, generateStaticParams };
 
-  return ids.map((id: string) => ({
-    id: id.split('/'),
-  }));
-}
-
-export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
-  const name = (await params)?.id?.join('/');
-
-  const content = await getContent(name, contentDir);
-
-  return <Shiso type="blog" content={content} config={config} />;
-}
+export default renderPage;

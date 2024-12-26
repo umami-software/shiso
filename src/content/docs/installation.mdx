@@ -24,22 +24,35 @@ src
 
 In the `page.jsx` file, add the following code:
 
-```javascript
+```js
 import { Shiso } from '@umami/shiso';
 import { getContent, getContentIds } from '@umami/shiso/server';
 import config from 'path/to/shiso.config.json';
 
 const contentDir = './src/content/docs';
 
+export async function generateMetadata({ params }) {
+  const name = (await params)?.id?.join('/');
+
+  const content = await getContent(name, contentDir);
+
+  return {
+    title: {
+      absolute: `${content?.meta?.title} – Title`,
+      default: 'Title'
+    }
+  };
+}
+
 export async function generateStaticParams() {
   const ids = await getContentIds(contentDir);
 
   return ids.map(id => ({
-    id: id.split('/'),
+    id: id.split('/')
   }));
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
+export default async function Page({ params }) {
   const name = (await params)?.id?.join('/');
 
   const content = await getContent(name, contentDir);

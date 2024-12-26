@@ -1,4 +1,4 @@
-import { cache } from 'react';
+import { cache, createElement } from 'react';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -6,6 +6,8 @@ import matter from 'gray-matter';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import recursive from 'recursive-readdir';
+import { Shiso } from '@/components';
+import type { ShisoConfig } from '@/lib/types';
 
 function getId(name: string, folder: string) {
   return name.replace('.mdx', '').replace(folder, '').replace(/\\/g, '/').replace(/^\//, '');
@@ -60,3 +62,38 @@ export const getContentIds = cache(async (folder: string) => {
     return getId(file, dir);
   });
 });
+
+export function next(type: string, config: ShisoConfig) {
+  const dir = path.join(config.contentDir, type);
+
+  async function generateMetadata({ params }: { params: Promise<{ id: string[] }> }) {
+    const name = (await params)?.id?.join('/');
+
+    const content = await getContent(name, dir);
+
+    return {
+      title: {
+        absolute: `${content?.meta?.title} – Shiso`,
+        default: 'Shiso',
+      },
+    };
+  }
+
+  async function generateStaticParams() {
+    const ids = await getContentIds(dir);
+
+    return ids.map((id: string) => ({
+      id: id.split('/'),
+    }));
+  }
+
+  async function renderPage({ params }: { params: Promise<{ id: string[] }> }) {
+    const name = (await params)?.id?.join('/');
+
+    const content = await getContent(name, dir);
+
+    return createElement(Shiso, { type, content, config });
+  }
+
+  return { generateMetadata, generateStaticParams, renderPage };
+}

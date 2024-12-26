@@ -4,12 +4,7 @@ import { MDXProvider } from '@mdx-js/react';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
 import { Blog } from '@/components/Blog';
-
-export interface ShisoConfig {
-  contentDir: string;
-  docs?: { [key: string]: any };
-  blog?: { [key: string]: any };
-}
+import type { ShisoConfig } from '@/lib/types';
 
 export interface ShisoProps {
   content: any;
