@@ -37,7 +37,9 @@ export function PageLinks({ items, offset = 0 }) {
           <a
             key={id}
             href={`#${id}`}
-            className={classNames(styles[`indent-${size}`], { [styles.selected]: hash === id })}
+            className={classNames(styles.link, styles[`indent-${size}`], {
+              [styles.selected]: hash === id,
+            })}
           >
             {name}
           </a>

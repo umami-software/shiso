@@ -9,15 +9,16 @@
   height: max-content;
 }
 
-.links a {
+.links a.link {
   display: block;
   color: var(--font-color-muted);
   text-wrap: nowrap;
   text-decoration: none;
 }
 
-.links a:hover {
+.links a.link:hover {
   color: var(--primary-color);
+  text-decoration: none;
 }
 
 .indent-1 {
