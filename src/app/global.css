@@ -1,0 +1,11 @@
+html,
+body {
+  color: var(--font-color);
+  font-size: var(--font-size);
+  height: 100%;
+}
+
+a, a:active, a:hover {
+  color: var(--font-color);
+  text-decoration: none;
+}

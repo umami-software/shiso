@@ -5,7 +5,7 @@ export function Footer() {
     <Box as="footer" paddingY="8">
       <Text align="center" as="div">
         Built by{' '}
-        <a href="https://umami.is">
+        <a href="https://umami.is?ref=shiso">
           <strong>umami</strong>
         </a>
       </Text>

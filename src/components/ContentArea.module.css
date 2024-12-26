@@ -11,11 +11,12 @@
 .content a {
   color: var(--font-color);
   font-weight: 600;
-  text-decoration: underline var(--font-color-disabled);
+  text-decoration: underline var(--border-color);
   text-underline-offset: 4px;
 }
 
 .content a:hover {
+  color: var(--font-color);
   text-decoration: underline var(--primary-color);
 }
 

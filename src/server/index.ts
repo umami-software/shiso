@@ -1,4 +1,4 @@
-import { cache, createElement, ReactElement } from 'react';
+import { cache, ReactElement } from 'react';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -6,7 +6,6 @@ import matter from 'gray-matter';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import recursive from 'recursive-readdir';
-import { Shiso } from '@/components';
 import type { ShisoConfig } from '@/lib/types';
 
 function getId(name: string, folder: string) {
