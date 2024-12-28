@@ -8,16 +8,16 @@
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
+    "rootDir": "./src",
+    "outDir": "./types",
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
     "lib": ["esnext"],
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "outDir": "./server"
+    }
   },
   "include": ["src/server/**/*"],
   "exclude": ["node_modules"]
 }
-
