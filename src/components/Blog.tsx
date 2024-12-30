@@ -1,6 +1,7 @@
 'use client';
 import styles from './Blog.module.css';
 import { Markdown } from './Markdown';
+import { Blogs } from './Blogs';
 
 export interface BlogProps {
   content: any;
@@ -8,6 +9,10 @@ export interface BlogProps {
 }
 
 export function Blog({ content }: BlogProps) {
+  if (!content) {
+    return <Blogs />;
+  }
+
   return (
     <div className={styles.blog}>
       <div className={styles.main}>

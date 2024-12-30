@@ -18,10 +18,9 @@ export function Docs() {
   content.group = Object.keys(navigation).reduce((name, key) => {
     if (!name) {
       return navigation[key]?.find((section: { pages: any[] }) => {
-        return section.pages.find(
-          page =>
-            page.url === `/docs/${content.id}` || (page.url === `/docs` && content.id === 'index'),
-        );
+        return section.pages.find(page => {
+          return content.path.replace(/(\/index)?\.mdx$/, '').endsWith(page.url);
+        });
       })?.group;
     }
 

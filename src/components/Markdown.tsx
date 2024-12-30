@@ -17,7 +17,7 @@ const parseMdx = (code: string) => {
 
 export function Markdown({ content }: { content: any }) {
   const components = useMDXComponents();
-  const { Component, error } = parseMdx(content.code);
+  const { Component, error } = parseMdx(content?.code);
 
   if (error) {
     return <h1>Error rendering MDX: {error}</h1>;

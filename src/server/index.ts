@@ -8,82 +8,79 @@ import path from 'node:path';
 import recursive from 'recursive-readdir';
 import type { ShisoConfig } from '@/lib/types';
 
-function getId(name: string, folder: string) {
-  return name.replace('.mdx', '').replace(folder, '').replace(/\\/g, '/').replace(/^\//, '');
-}
+export const getContent = cache(async (file: string) => {
+  try {
+    const postContent = await fs.readFile(file, 'utf8');
 
-export const getContent = cache(async (name: string = 'index', folder: string) => {
-  const file = path.join(folder, `${name}.mdx`);
-  const postContent = await fs.readFile(file, 'utf8');
-  const { data: frontmatter, content: mdxContent } = matter(postContent);
+    const { data: frontmatter, content: mdxContent } = matter(postContent);
 
-  const id = getId(name, folder);
-  const anchors: { name: string; id: string; size: number }[] = [];
-  const modifiedContent = mdxContent
-    .split('\n')
-    .map(line => {
-      const match = line.match(/^(#+)\s+(.*)/);
-      if (match) {
-        const [, num, name] = match;
-        const id = name.toLowerCase().replace(/\s+/g, '-');
-        const size = num.length;
+    const anchors: { name: string; id: string; size: number }[] = [];
 
-        anchors.push({ name, id, size });
+    const modifiedContent = mdxContent
+      .split('\n')
+      .map(line => {
+        const match = line.match(/^(#+)\s+(.*)/);
+        if (match) {
+          const [, num, name] = match;
+          const id = name.toLowerCase().replace(/\s+/g, '-');
+          const size = num.length;
 
-        return `<h${size} id="${id}">${name.replace(/\{|\}/g, '')}</h${size}>`;
-      }
-      return line;
-    })
-    .join('\n');
+          anchors.push({ name, id, size });
 
-  const code = String(
-    await compile(modifiedContent, {
-      outputFormat: 'function-body',
-      remarkPlugins: [remarkGfm],
-      rehypePlugins: [rehypeHighlight],
-    }),
-  );
+          return `<h${size} id="${id}">${name.replace(/\{|\}/g, '')}</h${size}>`;
+        }
+        return line;
+      })
+      .join('\n');
 
-  return {
-    id,
-    meta: frontmatter,
-    content: postContent,
-    code: code,
-    anchors,
-  } as any;
-});
+    const code = String(
+      await compile(modifiedContent, {
+        outputFormat: 'function-body',
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [rehypeHighlight],
+      }),
+    );
 
-export const getContentIds = cache(async (folder: string) => {
-  const dir = path.resolve(folder);
-  const files = await recursive(dir);
-
-  return files.map((file: string) => {
-    return getId(file, dir);
-  });
+    return {
+      path: file,
+      meta: frontmatter,
+      content: postContent,
+      code: code,
+      anchors,
+    };
+  } catch {
+    return null;
+  }
 });
 
 export function next(type: string, config: ShisoConfig) {
   const dir = path.join(config.contentDir, type);
+  const { title = 'Shiso' } = config[type];
 
-  async function generateMetadata({ params }: { params: Promise<{ id: string[] }> }) {
-    const name = (await params)?.id?.join('/');
+  async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
+    const name = (await params)?.slug?.join('/') || 'index';
+    const file = path.join(dir, `${name}.mdx`);
 
-    const content = await getContent(name, dir);
+    const content = await getContent(file);
 
     return {
       title: {
-        absolute: `${content?.meta?.title} – Shiso`,
-        default: 'Shiso',
+        absolute: `${content?.meta?.title} – ${title}`,
+        default: title,
       },
     };
   }
 
   async function generateStaticParams() {
-    const ids = await getContentIds(dir);
+    const files = await recursive(dir);
 
-    return ids.map((id: string) => ({
-      id: id.split('/'),
-    }));
+    return files
+      .map((file: string) => {
+        return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
+      })
+      .map((id: string) => ({
+        id: id.split('/'),
+      }));
   }
 
   function renderPage(
@@ -97,10 +94,11 @@ export function next(type: string, config: ShisoConfig) {
       config: ShisoConfig;
     }) => ReactElement,
   ) {
-    return async ({ params }: { params: Promise<{ id: string[] }> }) => {
-      const name = (await params)?.id?.join('/');
+    return async ({ params }: { params: Promise<{ slug: string[] }> }) => {
+      const name = (await params)?.slug?.join('/') || 'index';
+      const file = path.join(dir, `${name}.mdx`);
 
-      const content = await getContent(name, dir);
+      const content = await getContent(file);
 
       return render({ type, content, config });
     };

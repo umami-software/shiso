@@ -1,7 +1,7 @@
 {
   "contentDir": "./src/content",
   "docs": {
-    "title": "Shiso",
+    "title": "Docs - Shiso",
     "tabs": [
       {
         "id": "docs",
@@ -55,5 +55,8 @@
         }
       ]
     }
+  },
+  "blog": {
+    "title": "Blog - Shiso"
   }
 }
