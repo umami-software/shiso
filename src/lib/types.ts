@@ -9,3 +9,10 @@ export interface ShisoConfig {
   docs?: { [key: string]: any };
   blog?: { [key: string]: any };
 }
+
+export interface ShisoContent {
+  meta: { [key: string]: any };
+  path: string;
+  code: string;
+  anchors?: string[];
+}

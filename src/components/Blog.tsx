@@ -19,7 +19,7 @@ export function Blog({ content }: BlogProps) {
         <div className={styles.content}>
           <h1>{content?.meta?.title}</h1>
           <p className={styles.description}>{content?.meta?.description}</p>
-          <Markdown content={content} />
+          <Markdown code={content?.code} />
         </div>
       </div>
     </div>

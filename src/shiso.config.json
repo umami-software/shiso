@@ -17,7 +17,7 @@
     "navigation": {
       "docs": [
         {
-          "group": "Getting started",
+          "section": "Getting started",
           "pages": [
             {
               "label": "Overview",
@@ -34,7 +34,7 @@
           ]
         },
         {
-          "group": "Basics",
+          "section": "Basics",
           "pages": [
             {
               "label": "Writing content",
@@ -45,7 +45,7 @@
       ],
       "components": [
         {
-          "group": "Components",
+          "section": "Components",
           "pages": [
             {
               "label": "Overview",

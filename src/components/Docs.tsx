@@ -5,35 +5,38 @@ import { PageLinks } from './PageLinks';
 import { SideNav } from './SideNav';
 import { TopNav } from './TopNav';
 import { ContentArea } from './ContentArea';
+import { ShisoContent } from '@/lib/types';
 
-function parseContent(content: { [key: string]: any }, config: any = {}) {
+function parseContent(content: ShisoContent, config: any = {}) {
   const { tabs, navigation } = config;
+  const keys = Object.keys(navigation);
 
-  let next,
-    prev,
-    group,
-    prevKey,
-    found = false;
+  let next, prev, section, found;
 
-  for (const key in navigation) {
-    if (!group) {
-      group = navigation[key]?.find((section: { group: string; pages: any[] }, sectionIndex) => {
-        return section.pages.find((page, pageIndex) => {
-          const found = content.path.replace(/(\/index)?\.mdx$/, '').endsWith(page.url);
+  keys.forEach(key => {
+    if (!found) {
+      const groups = navigation[key];
 
-          if (found) {
-            prev = section.pages[pageIndex - 1] || section[prevKey]?.pages?.[sectionIndex - 1];
-            next = section.pages[pageIndex + 1];
+      found = groups?.find((group: { section: string; pages: any[] }, groupIndex) => {
+        return group.pages.find((page, pageIndex) => {
+          const match = content.path.replace(/(\/index)?\.mdx$/, '').endsWith(page.url);
+
+          if (match) {
+            const prevGroup = groups[groupIndex - 1];
+            const nextGroup = groups[groupIndex + 1];
+
+            prev = group.pages[pageIndex - 1] || prevGroup?.pages?.at(-1);
+            next = group.pages[pageIndex + 1] || nextGroup?.pages?.[0];
+            section = group.section;
           }
 
-          return found;
+          return match;
         });
-      })?.group;
-      prevKey = key;
+      });
     }
-  }
+  });
 
-  return { ...content, tabs, navigation, group, next, prev };
+  return { ...content, tabs, navigation, section, next, prev };
 }
 
 export function Docs() {
@@ -43,9 +46,10 @@ export function Docs() {
     return <Heading size="6">Page not found</Heading>;
   }
 
-  const { tabs, navigation, group, next, prev } = parseContent(content, config?.docs);
-
-  console.log({ content, next, prev, group });
+  const { tabs, navigation, code, meta, section, next, prev, anchors } = parseContent(
+    content,
+    config?.docs,
+  );
 
   return (
     <Box flexGrow="1">
@@ -53,14 +57,14 @@ export function Docs() {
       <Grid gap="6" columns="240px 1fr 240px">
         <SideNav tabs={tabs} navigation={navigation} />
         <ContentArea
-          group={group}
-          title={content.meta?.title}
-          description={content.meta?.description}
-          code={content.code}
+          section={section}
+          title={meta?.title}
+          description={meta?.description}
+          code={code}
           next={next}
           prev={prev}
         />
-        <PageLinks items={content?.anchors} offset={150} />
+        <PageLinks items={anchors} offset={150} />
       </Grid>
     </Box>
   );

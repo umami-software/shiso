@@ -19,9 +19,9 @@ export function SideNav({ tabs, navigation }: SideNavProps) {
   return (
     <Box className={styles.nav}>
       <List items={navigation} aria-label="nav">
-        {menu.map(({ group, pages }) => {
+        {menu.map(({ section, pages }) => {
           return (
-            <ListSection title={group} key={group} className={styles.items}>
+            <ListSection title={section} key={section} className={styles.items}>
               {pages.map(({ label: text, url }, index: number) => {
                 return (
                   <ListItem

@@ -4,7 +4,7 @@ import styles from './ContentArea.module.css';
 import Link from 'next/link';
 
 export interface ContentAreaProps {
-  group?: string;
+  section?: string;
   title?: string;
   description?: string;
   code: string;
@@ -12,12 +12,12 @@ export interface ContentAreaProps {
   prev?: any;
 }
 
-export function ContentArea({ group, title, description, code, next, prev }: ContentAreaProps) {
+export function ContentArea({ section, title, description, code, next, prev }: ContentAreaProps) {
   return (
     <Box flexGrow={1}>
-      {group && (
+      {section && (
         <Text color="primary" weight="bold">
-          {group}
+          {section}
         </Text>
       )}
       {title && (
