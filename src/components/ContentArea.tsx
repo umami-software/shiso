@@ -1,24 +1,72 @@
-import { Heading, Box, Text } from '@umami/react-zen';
+import { Heading, Box, Text, Row, Icon, Icons } from '@umami/react-zen';
 import { Markdown } from './Markdown';
 import styles from './ContentArea.module.css';
+import Link from 'next/link';
 
 export interface ContentAreaProps {
-  content: { [key: string]: any };
+  group?: string;
+  title?: string;
+  description?: string;
+  code: string;
+  next?: any;
+  prev?: any;
 }
 
-export function ContentArea({ content }: ContentAreaProps) {
+export function ContentArea({ group, title, description, code, next, prev }: ContentAreaProps) {
   return (
     <Box flexGrow={1}>
-      <Text color="primary" weight="bold">
-        {content.group}
-      </Text>
-      <Heading size="8" as="h1">
-        {content?.meta?.title}
-      </Heading>
-      <Text color="muted">{content?.meta?.description}</Text>
+      {group && (
+        <Text color="primary" weight="bold">
+          {group}
+        </Text>
+      )}
+      {title && (
+        <Heading size="8" as="h1">
+          {title}
+        </Heading>
+      )}
+      {description && <Text color="muted">{description}</Text>}
       <Box className={styles.content}>
-        <Markdown content={content} />
+        <Markdown code={code} />
       </Box>
+      <Row justifyContent="space-between">
+        <NavigationButton {...prev} isPrev />
+        <NavigationButton {...next} />
+      </Row>
     </Box>
   );
 }
+
+const NavigationButton = ({
+  label,
+  url,
+  isPrev,
+}: {
+  label: string;
+  url: string;
+  isPrev?: boolean;
+}) => {
+  if (!url || !label) {
+    return <Box />;
+  }
+
+  return (
+    <Link href={url}>
+      <Row alignItems="center" gap="3" marginY="3">
+        {isPrev && (
+          <Icon size="sm" rotate={180}>
+            <Icons.Chevron />
+          </Icon>
+        )}
+        <Text size="3" weight="bold">
+          {label}
+        </Text>
+        {!isPrev && (
+          <Icon size="sm">
+            <Icons.Chevron />
+          </Icon>
+        )}
+      </Row>
+    </Link>
+  );
+};
