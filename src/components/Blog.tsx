@@ -1,4 +1,5 @@
 'use client';
+import { Column } from '@umami/react-zen';
 import styles from './Blog.module.css';
 import { Markdown } from './Markdown';
 import { Blogs } from './Blogs';
@@ -14,7 +15,7 @@ export function Blog({ content }: BlogProps) {
   }
 
   return (
-    <div className={styles.blog}>
+    <Column className={styles.blog} flexGrow={1}>
       <div className={styles.main}>
         <div className={styles.content}>
           <h1>{content?.meta?.title}</h1>
@@ -22,6 +23,6 @@ export function Blog({ content }: BlogProps) {
           <Markdown code={content?.code} />
         </div>
       </div>
-    </div>
+    </Column>
   );
 }

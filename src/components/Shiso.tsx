@@ -1,6 +1,7 @@
 'use client';
 import { createContext, JSX } from 'react';
 import { MDXProvider } from '@mdx-js/react';
+import { Code } from '@umami/react-zen';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
 import { Blog } from '@/components/Blog';
@@ -38,7 +39,7 @@ export function Shiso({ content, type, config, components, templates }: ShisoPro
 
   return (
     <ShisoContext.Provider value={{ content, type, config }}>
-      <MDXProvider components={{ ...components, pre: CodeBlock }}>
+      <MDXProvider components={{ ...components, pre: CodeBlock, code: Code }}>
         <Component content={content} config={config} />
       </MDXProvider>
     </ShisoContext.Provider>

@@ -26,39 +26,16 @@ In the `page.jsx` file, add the following code:
 
 ```js
 import { Shiso } from '@umami/shiso';
-import { getContent, getContentIds } from '@umami/shiso/server';
+import { next } from '@umami/shiso/server';
 import config from 'path/to/shiso.config.json';
 
-const contentDir = './src/content/docs';
+const { generateMetadata, generateStaticParams, renderPage } = next('docs', config);
 
-export async function generateMetadata({ params }) {
-  const name = (await params)?.id?.join('/');
+export { generateMetadata, generateStaticParams };
 
-  const content = await getContent(name, contentDir);
-
-  return {
-    title: {
-      absolute: `${content?.meta?.title} – Title`,
-      default: 'Title'
-    }
-  };
-}
-
-export async function generateStaticParams() {
-  const ids = await getContentIds(contentDir);
-
-  return ids.map(id => ({
-    id: id.split('/')
-  }));
-}
-
-export default async function Page({ params }) {
-  const name = (await params)?.id?.join('/');
-
-  const content = await getContent(name, contentDir);
-
-  return <Shiso type="docs" content={content} config={config} />;
-}
+export default renderPage(props => {
+  return <Shiso {...props} />;
+});
 ```
 
 ## 3. Write content

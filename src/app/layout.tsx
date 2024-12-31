@@ -1,12 +1,10 @@
 import { ReactNode, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Container, Column } from '@umami/react-zen';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import './global.css';
 import '@umami/react-zen/styles.css';
 import 'highlight.js/styles/github-dark.css';
+import './global.css';
+import { App } from '@/app/App';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,13 +26,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Suspense>
-          <Container>
-            <Column height="100vh" className="ohhyeaaaaa">
-              <Header />
-              {children as any}
-              <Footer />
-            </Column>
-          </Container>
+          <App>{children}</App>
         </Suspense>
       </body>
     </html>
