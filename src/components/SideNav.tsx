@@ -9,16 +9,17 @@ import type { BoxProps } from '@umami/react-zen/Box';
 export interface SideNavProps extends BoxProps {
   tabs: any;
   navigation: any;
+  isSticky?: boolean;
 }
 
-export function SideNav({ tabs, navigation, className, ...props }: SideNavProps) {
+export function SideNav({ tabs, navigation, isSticky, className, ...props }: SideNavProps) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
   const menu = navigation[tab?.id || 'docs'];
 
   return (
-    <Box {...props} className={classNames(styles.nav, className)}>
+    <Box {...props} className={classNames(styles.nav, isSticky && styles.sticky, className)}>
       <List items={navigation} aria-label="nav">
         {menu.map(({ section, pages }) => {
           return (
