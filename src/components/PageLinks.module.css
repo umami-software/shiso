@@ -46,6 +46,6 @@
   margin-left: 40px;
 }
 
-a.selected {
+.links a.selected {
   color: var(--primary-color);
 }

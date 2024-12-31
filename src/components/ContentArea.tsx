@@ -21,7 +21,7 @@ export function ContentArea({ section, title, description, code, next, prev }: C
         </Text>
       )}
       {title && (
-        <Heading size="8" as="h1">
+        <Heading size="2" as="h1">
           {title}
         </Heading>
       )}

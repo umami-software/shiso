@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Box, Heading, Row } from '@umami/react-zen';
+import { Grid, Box, Heading } from '@umami/react-zen';
 import { useShiso } from './hooks/useShiso';
 import { PageLinks } from './PageLinks';
 import { SideNav } from './SideNav';
@@ -51,11 +51,13 @@ export function Docs() {
     config?.docs,
   );
 
+  const { top } = config?.docs || {};
+
   return (
     <Box flexGrow="1">
       {tabs && <TopNav tabs={tabs} />}
       <Grid gap="6" columns="240px 1fr 240px">
-        <SideNav tabs={tabs} navigation={navigation} />
+        <SideNav tabs={tabs} navigation={navigation} style={{ top }} />
         <ContentArea
           section={section}
           title={meta?.title}
@@ -64,7 +66,7 @@ export function Docs() {
           next={next}
           prev={prev}
         />
-        <PageLinks items={anchors} offset={150} />
+        <PageLinks items={anchors} style={{ top }} />
       </Grid>
     </Box>
   );

@@ -38,6 +38,10 @@
   margin: var(--spacing-7) 0 var(--spacing-4) 0;
 }
 
+.content *[id] {
+  scroll-margin-top: var(--spacing-4);
+}
+
 .content ul {
   list-style: disc;
 }

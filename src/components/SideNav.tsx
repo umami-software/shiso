@@ -4,20 +4,21 @@ import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import styles from './SideNav.module.css';
+import type { BoxProps } from '@umami/react-zen/Box';
 
-export interface SideNavProps {
+export interface SideNavProps extends BoxProps {
   tabs: any;
   navigation: any;
 }
 
-export function SideNav({ tabs, navigation }: SideNavProps) {
+export function SideNav({ tabs, navigation, className, ...props }: SideNavProps) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
   const menu = navigation[tab?.id || 'docs'];
 
   return (
-    <Box className={styles.nav}>
+    <Box {...props} className={classNames(styles.nav, className)}>
       <List items={navigation} aria-label="nav">
         {menu.map(({ section, pages }) => {
           return (

@@ -14,5 +14,5 @@ export interface ShisoContent {
   meta: { [key: string]: any };
   path: string;
   code: string;
-  anchors?: string[];
+  anchors?: { id: string; name: string; size: number }[];
 }

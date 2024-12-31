@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, HTMLAttributes } from 'react';
 import { Column, Text } from '@umami/react-zen';
 import classNames from 'classnames';
 import styles from './PageLinks.module.css';
+import type { ColumnProps } from '@umami/react-zen/Column';
 
-export function PageLinks({ items, offset = 0 }) {
+export interface PageLinksProps extends ColumnProps {
+  items?: { name: string; id: string; size: number }[];
+}
+
+export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   const [hash, setHash] = useState(items?.[0]?.id);
 
   useEffect(() => {
     const callback = () => {
       const x = [...items].reverse().find(({ id }) => {
         const rect = document.getElementById(id)?.getBoundingClientRect();
-        return rect && rect.top <= offset;
+        return rect && rect.top <= 0;
       });
 
       if (x) setHash(x.id);
@@ -28,7 +33,7 @@ export function PageLinks({ items, offset = 0 }) {
   }
 
   return (
-    <Column gap="3" minWidth="240px" className={styles.links}>
+    <Column {...props} gap="3" minWidth="240px" className={classNames(styles.links, className)}>
       <Text size="2" weight="bold">
         On this page
       </Text>
