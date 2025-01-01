@@ -35,11 +35,31 @@
           ]
         },
         {
-          "section": "Basics",
+          "section": "Writing content",
           "pages": [
             {
-              "label": "Writing content",
+              "label": "Overview",
               "url": "/docs/writing-content"
+            },
+            {
+              "label": "Metadata",
+              "url": "/docs/metadata"
+            },
+            {
+              "label": "Headers",
+              "url": "/docs/headers"
+            },
+            {
+              "label": "Text",
+              "url": "/docs/text"
+            },
+            {
+              "label": "Lists",
+              "url": "/docs/lists"
+            },
+            {
+              "label": "Code blocks",
+              "url": "/docs/code-blocks"
             }
           ]
         }

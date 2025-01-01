@@ -10,6 +10,7 @@ import {
   Modal,
   DialogTrigger,
   Dialog,
+  MobileMenuButton,
 } from '@umami/react-zen';
 import { useShiso } from './hooks/useShiso';
 import { PageLinks } from './PageLinks';
@@ -77,42 +78,13 @@ export function Docs() {
     xl: 'none',
   };
 
-  const MobileMenu = () => {
-    const handlePress = () => {};
-    return (
-      <Row justifyContent="flex-end" display={menuDisplay}>
-        <DialogTrigger>
-          <Button onPress={handlePress} variant="quiet">
-            <Icon>
-              <Icons.Menu />
-            </Icon>
-          </Button>
-          <Modal>
-            <Dialog>
-              {({ close }) => {
-                return (
-                  <Box minWidth="calc(100vw - 60px)" minHeight="calc(100vh - 60px)">
-                    <Row justifyContent="flex-end">
-                      <Button onPress={() => close()} variant="quiet">
-                        <Icon>
-                          <Icons.Close />
-                        </Icon>
-                      </Button>
-                    </Row>
-                    <SideNav tabs={tabs} navigation={navigation} />
-                  </Box>
-                );
-              }}
-            </Dialog>
-          </Modal>
-        </DialogTrigger>
-      </Row>
-    );
-  };
-
   return (
     <Box flexGrow="1">
-      <MobileMenu />
+      <Row display={menuDisplay} justifyContent="flex-end">
+        <MobileMenuButton>
+          <SideNav tabs={tabs} navigation={navigation} />
+        </MobileMenuButton>
+      </Row>
       {tabs && <TopNav tabs={tabs} />}
       <Grid
         gap="6"
