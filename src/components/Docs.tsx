@@ -55,7 +55,7 @@ export function Docs() {
   const { content, config } = useShiso();
 
   if (!content) {
-    return <Heading size="6">Page not found</Heading>;
+    return <Heading>Page not found</Heading>;
   }
 
   const { tabs, navigation, code, meta, section, next, prev, anchors } = parseContent(
@@ -64,14 +64,16 @@ export function Docs() {
   );
 
   const { top } = config?.docs || {};
+
   const navDisplay = {
     default: 'none',
     xs: 'none',
     sm: 'none',
     md: 'none',
-    lg: 'block',
-    xl: 'block',
+    lg: 'flex',
+    xl: 'flex',
   };
+
   const menuDisplay = {
     default: 'flex',
     lg: 'none',
@@ -90,7 +92,13 @@ export function Docs() {
         gap="6"
         columns={{ xs: '1fr', sm: '1fr', md: '1fr', lg: '240px 1fr 240px', xl: '240px 1fr 240px' }}
       >
-        <SideNav display={navDisplay} tabs={tabs} navigation={navigation} isSticky />
+        <SideNav
+          display={navDisplay}
+          tabs={tabs}
+          navigation={navigation}
+          style={{ top }}
+          isSticky
+        />
         <ContentArea
           section={section}
           title={meta?.title}
