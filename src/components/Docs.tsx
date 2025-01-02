@@ -70,12 +70,12 @@ export function Docs() {
     xs: 'none',
     sm: 'none',
     md: 'none',
-    lg: 'flex',
-    xl: 'flex',
+    lg: 'block',
+    xl: 'block',
   };
 
   const menuDisplay = {
-    default: 'flex',
+    default: 'block',
     lg: 'none',
     xl: 'none',
   };

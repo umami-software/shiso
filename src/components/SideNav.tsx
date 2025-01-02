@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, List, ListItem, ListSection } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
@@ -12,14 +12,28 @@ export interface SideNavProps extends BoxProps {
   isSticky?: boolean;
 }
 
-export function SideNav({ tabs, navigation, isSticky, className, ...props }: SideNavProps) {
+export function SideNav({ tabs, navigation, isSticky, className, style, ...props }: SideNavProps) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
   const menu = navigation[tab?.id || 'docs'];
+  const [height, setHeight] = useState<string | undefined>();
+
+  useEffect(() => {
+    const rect = document.getElementById('shiso_docs_sidenav')?.getBoundingClientRect();
+
+    if (rect) {
+      setHeight(`${window.innerHeight - rect.top - 10}px`);
+    }
+  }, []);
 
   return (
-    <Box {...props} className={classNames(styles.nav, isSticky && styles.sticky, className)}>
+    <Box
+      {...props}
+      id="shiso_docs_sidenav"
+      className={classNames(styles.nav, isSticky && styles.sticky, className)}
+      style={{ ...style, height }}
+    >
       <List items={navigation} aria-label="nav">
         {menu.map(({ section, pages }) => {
           return (

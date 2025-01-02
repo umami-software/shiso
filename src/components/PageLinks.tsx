@@ -1,5 +1,5 @@
 import { useEffect, useState, HTMLAttributes } from 'react';
-import { Column, Text } from '@umami/react-zen';
+import { Column, Text, Box } from '@umami/react-zen';
 import classNames from 'classnames';
 import styles from './PageLinks.module.css';
 import type { ColumnProps } from '@umami/react-zen/Column';
@@ -33,23 +33,25 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   }
 
   return (
-    <Column {...props} gap="3" minWidth="240px" className={classNames(styles.links, className)}>
-      <Text size="2" weight="bold">
-        On this page
-      </Text>
-      {items.map(({ name, id, size }) => {
-        return (
-          <a
-            key={id}
-            href={`#${id}`}
-            className={classNames(styles.link, styles[`indent-${size}`], {
-              [styles.selected]: hash === id,
-            })}
-          >
-            {name}
-          </a>
-        );
-      })}
-    </Column>
+    <Box {...props}>
+      <Column gap="3" minWidth="240px" className={classNames(styles.links, className)}>
+        <Text size="2" weight="bold">
+          On this page
+        </Text>
+        {items.map(({ name, id, size }) => {
+          return (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={classNames(styles.link, styles[`indent-${size}`], {
+                [styles.selected]: hash === id,
+              })}
+            >
+              {name}
+            </a>
+          );
+        })}
+      </Column>
+    </Box>
   );
 }
