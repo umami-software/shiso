@@ -21,11 +21,15 @@ export function ContentArea({ section, title, description, code, next, prev }: C
         </Text>
       )}
       {title && (
-        <Heading size="2" as="h1">
+        <Heading size="2" as="h1" marginY="3">
           {title}
         </Heading>
       )}
-      {description && <Text color="muted">{description}</Text>}
+      {description && (
+        <Text color="muted" size="3">
+          {description}
+        </Text>
+      )}
       <Box className={styles.content}>
         <Markdown code={code} />
       </Box>

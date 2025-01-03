@@ -4,7 +4,7 @@
 }
 
 .content > p {
-  color: var(--font-color-muted);
+  color: var(--font-color);
   line-height: 1.8;
 }
 
