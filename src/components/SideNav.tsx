@@ -10,9 +10,18 @@ export interface SideNavProps extends BoxProps {
   tabs: any;
   navigation: any;
   isSticky?: boolean;
+  autoHeight?: boolean;
 }
 
-export function SideNav({ tabs, navigation, isSticky, className, style, ...props }: SideNavProps) {
+export function SideNav({
+  tabs,
+  navigation,
+  isSticky,
+  autoHeight,
+  className,
+  style,
+  ...props
+}: SideNavProps) {
   const pathname = usePathname();
 
   const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
@@ -20,12 +29,14 @@ export function SideNav({ tabs, navigation, isSticky, className, style, ...props
   const [height, setHeight] = useState<string | undefined>();
 
   useEffect(() => {
-    const rect = document.getElementById('shiso_docs_sidenav')?.getBoundingClientRect();
+    if (autoHeight) {
+      const rect = document.getElementById('shiso_docs_sidenav')?.getBoundingClientRect();
 
-    if (rect) {
-      setHeight(`${window.innerHeight - rect.top - 10}px`);
+      if (rect) {
+        setHeight(`${window.innerHeight - rect.top - 10}px`);
+      }
     }
-  }, []);
+  }, [autoHeight]);
 
   return (
     <Box

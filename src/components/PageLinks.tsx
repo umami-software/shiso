@@ -1,4 +1,4 @@
-import { useEffect, useState, HTMLAttributes } from 'react';
+import { useEffect, useState } from 'react';
 import { Column, Text, Box } from '@umami/react-zen';
 import classNames from 'classnames';
 import styles from './PageLinks.module.css';

@@ -10,7 +10,7 @@ import {
   Modal,
   DialogTrigger,
   Dialog,
-  MobileMenuButton,
+  Text,
 } from '@umami/react-zen';
 import { useShiso } from './hooks/useShiso';
 import { PageLinks } from './PageLinks';
@@ -18,6 +18,7 @@ import { SideNav } from './SideNav';
 import { TopNav } from './TopNav';
 import { ContentArea } from './ContentArea';
 import { ShisoContent } from '@/lib/types';
+import Link from 'next/link';
 
 function parseContent(content: ShisoContent, config: any = {}) {
   const { tabs, navigation } = config;
@@ -80,12 +81,41 @@ export function Docs() {
     xl: 'none',
   };
 
+  const MobileMenuButton = () => (
+    <DialogTrigger>
+      <Button>
+        <Icon>
+          <Icons.Menu />
+        </Icon>
+        <Text>Menu</Text>
+      </Button>
+      <Modal position="bottom" offset="40px">
+        <Dialog variant="sheet">
+          {({ close }) => {
+            return (
+              <>
+                <Row justifyContent="flex-end">
+                  <Button onPress={() => close()} variant="quiet">
+                    <Icon size="sm">
+                      <Icons.Close />
+                    </Icon>
+                  </Button>
+                </Row>
+                <Box height="100%" overflow="auto">
+                  <SideNav tabs={tabs} navigation={navigation} />
+                </Box>
+              </>
+            );
+          }}
+        </Dialog>
+      </Modal>
+    </DialogTrigger>
+  );
+
   return (
     <Box flexGrow="1">
       <Row display={menuDisplay} justifyContent="flex-end">
-        <MobileMenuButton>
-          <SideNav tabs={tabs} navigation={navigation} />
-        </MobileMenuButton>
+        <MobileMenuButton />
       </Row>
       {tabs && <TopNav tabs={tabs} />}
       <Grid
@@ -98,6 +128,7 @@ export function Docs() {
           navigation={navigation}
           style={{ top }}
           isSticky
+          autoHeight
         />
         <ContentArea
           section={section}
