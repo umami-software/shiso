@@ -33,8 +33,8 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   }
 
   return (
-    <Box {...props}>
-      <Column gap="3" minWidth="240px" className={classNames(styles.links, className)}>
+    <Box {...props} className={classNames(styles.links, className)}>
+      <Column gap="3" minWidth="240px">
         <Text size="2" weight="bold">
           On this page
         </Text>

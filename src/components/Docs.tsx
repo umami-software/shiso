@@ -75,8 +75,16 @@ export function Docs() {
     xl: 'block',
   };
 
+  const linksDisplay = {
+    default: 'none',
+    xs: 'none',
+    sm: 'none',
+    md: 'none',
+    lg: 'block',
+    xl: 'block',
+  };
+
   const menuDisplay = {
-    default: 'block',
     lg: 'none',
     xl: 'none',
   };
@@ -138,7 +146,7 @@ export function Docs() {
           next={next}
           prev={prev}
         />
-        <PageLinks display={navDisplay} items={anchors} style={{ top }} />
+        <PageLinks display={linksDisplay} items={anchors} style={{ top }} />
       </Grid>
     </Box>
   );

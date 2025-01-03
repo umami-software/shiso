@@ -2,7 +2,6 @@
   "contentDir": "./src/content",
   "docs": {
     "title": "Docs - Shiso",
-    "top": "30px",
     "tabs": [
       {
         "id": "docs",
