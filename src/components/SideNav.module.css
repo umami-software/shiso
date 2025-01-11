@@ -1,5 +1,8 @@
 .nav {
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--background-color);
+  scrollbar-gutter: stable;
 }
 
 .nav.sticky {
