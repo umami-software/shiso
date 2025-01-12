@@ -1,9 +1,29 @@
 .nav {
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) var(--background-color);
-  scrollbar-gutter: stable;
   min-width: 240px;
+}
+
+.nav::-webkit-scrollbar {
+  width: 15px;
+  background: transparent;
+}
+
+.nav::-webkit-scrollbar-track {
+  border: 7px solid rgba(0, 0, 0, 0);
+  background-color: var(--border-color);
+  background-clip: padding-box;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  border: 7px solid rgba(0, 0, 0, 0);
+  background-color: var(--primary-color);
+  background-clip: padding-box;
+}
+
+.nav::-webkit-scrollbar-thumb:hover {
+  border: 5px solid rgba(0, 0, 0, 0);
+  background-color: var(--primary-color);
+  background-clip: padding-box;
 }
 
 .nav.sticky {

@@ -59,6 +59,8 @@ export function Docs({ content, config }) {
     config?.docs,
   );
 
+  console.log({ tabs, navigation, code, meta, section, next, prev, anchors });
+
   const { top } = config?.docs || {};
 
   const navDisplay = {
