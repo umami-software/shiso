@@ -23,11 +23,13 @@ export function Card({ title, description, date, author, url, image }: CardProps
         <Heading size="4" as="header">
           <Link href={url}>{title}</Link>
         </Heading>
-        <Text as="p">{description}</Text>
-        <Row justifyContent="space-between" marginTop="5">
+        <Row justifyContent="space-between">
           <Text color="muted">{date && format(new Date(date), 'PP')}</Text>
           <Text color="muted">{author}</Text>
         </Row>
+        <Box marginY="5" as="p">
+          <Text size="3">{description}</Text>
+        </Box>
         <Button asChild>
           <Link href={url}>
             <Text>Read more</Text>

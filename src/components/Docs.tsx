@@ -1,6 +1,5 @@
 'use client';
 import {
-  Grid,
   Box,
   Heading,
   Button,
@@ -122,10 +121,7 @@ export function Docs({ content, config }) {
         <MobileMenuButton />
       </Row>
       {tabs && <TopNav tabs={tabs} />}
-      <Grid
-        gap="6"
-        columns={{ xs: '1fr', sm: '1fr', md: '1fr', lg: '240px 1fr 240px', xl: '240px 1fr 240px' }}
-      >
+      <Row gap="6">
         <SideNav
           display={navDisplay}
           tabs={tabs}
@@ -143,7 +139,7 @@ export function Docs({ content, config }) {
           prev={prev}
         />
         <PageLinks display={linksDisplay} items={anchors} style={{ top }} />
-      </Grid>
+      </Row>
     </Box>
   );
 }

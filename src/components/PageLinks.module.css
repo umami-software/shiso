@@ -2,6 +2,7 @@
   position: sticky;
   top: 30px;
   height: max-content;
+  min-width: 240px;
 }
 
 .links a.link {

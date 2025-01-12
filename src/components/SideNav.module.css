@@ -3,6 +3,7 @@
   scrollbar-width: thin;
   scrollbar-color: var(--border-color) var(--background-color);
   scrollbar-gutter: stable;
+  min-width: 240px;
 }
 
 .nav.sticky {
