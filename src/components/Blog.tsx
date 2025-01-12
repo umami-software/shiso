@@ -1,28 +1,41 @@
-'use client';
-import { Column } from '@umami/react-zen';
-import styles from './Blog.module.css';
+import { Heading, Box, Text, Row, Column, Grid, Image, Icon, Icons } from '@umami/react-zen';
+import { format } from 'date-fns';
+import { PageLinks } from '@/components/PageLinks';
 import { Markdown } from './Markdown';
-import { Blogs } from './Blogs';
 
 export interface BlogProps {
-  content: any;
-  config: any;
+  title: string;
+  description?: string;
+  code: string;
+  author?: string;
+  date?: string;
+  image?: string;
+  anchors?: any[];
 }
 
-export function Blog({ content }: BlogProps) {
-  if (!content) {
-    return <Blogs />;
-  }
-
+export function Blog({ title, description, code, author, date, image, anchors }: BlogProps) {
   return (
-    <Column className={styles.blog} flexGrow={1}>
-      <div className={styles.main}>
-        <div className={styles.content}>
-          <h1>{content?.meta?.title}</h1>
-          <p className={styles.description}>{content?.meta?.description}</p>
-          <Markdown code={content?.code} />
-        </div>
-      </div>
+    <Column gap="8" maxWidth="900px" style={{ margin: '0 auto' }}>
+      <Box flexGrow={1}>
+        {title && (
+          <Heading size="1" as="h1" align="center">
+            {title}
+          </Heading>
+        )}
+      </Box>
+      {image && (
+        <Box height="480px">
+          <Image src={image} alt={title} objectFit="cover" borderRadius="3" />
+        </Box>
+      )}
+      <Row justifyContent="space-between">
+        <Text>{author}</Text>
+        <Text>{date && format(new Date(date), 'PP')}</Text>
+      </Row>
+      <Grid columns="1fr 240px" gap="5">
+        <Markdown code={code} />
+        <PageLinks items={anchors} />
+      </Grid>
     </Column>
   );
 }

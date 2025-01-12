@@ -3,12 +3,12 @@ import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
+import recursive from 'recursive-readdir';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import recursive from 'recursive-readdir';
-import type { ShisoConfig } from '@/lib/types';
+import type { ShisoConfig, ShisoRenderProps, ShisoContent } from '@/lib/types';
 
-export const getContent = cache(async (file: string) => {
+export const parseFile = cache(async (file: string): Promise<ShisoContent | null> => {
   try {
     const postContent = await fs.readFile(file, 'utf8');
 
@@ -57,6 +57,16 @@ export function next(type: string, config: ShisoConfig) {
   const dir = path.join(config.contentDir, type);
   const { title = 'Shiso' } = config[type];
 
+  const getContent = async (file: string) => {
+    const content = await parseFile(file);
+
+    if (content) {
+      content['slug'] = getSlug(file, dir);
+    }
+
+    return content;
+  };
+
   async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
     const name = (await params)?.slug?.join('/') || 'index';
     const file = path.join(dir, `${name}.mdx`);
@@ -71,36 +81,31 @@ export function next(type: string, config: ShisoConfig) {
     };
   }
 
+  function getSlug(file: string, dir: string) {
+    return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
+  }
+
   async function generateStaticParams() {
     const files = await recursive(dir);
 
-    return files
-      .map((file: string) => {
-        return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
-      })
-      .map((id: string) => ({
-        id: id.split('/'),
-      }));
+    return files.map((file: string) => ({
+      slug: getSlug(file, dir).split('/'),
+    }));
   }
 
-  function renderPage(
-    render: ({
-      type,
-      content,
-      config,
-    }: {
-      type: string;
-      content: any;
-      config: ShisoConfig;
-    }) => ReactElement,
-  ) {
+  function renderPage(render: (props: ShisoRenderProps) => ReactElement) {
     return async ({ params }: { params: Promise<{ slug: string[] }> }) => {
-      const name = (await params)?.slug?.join('/') || 'index';
-      const file = path.join(dir, `${name}.mdx`);
+      const slug = (await params)?.slug?.join('/') || 'index';
+      const file = path.join(dir, `${slug}.mdx`);
+      const files = await recursive(dir);
 
-      const content = await getContent(file);
+      let content: ShisoContent | ShisoContent[] | null = await getContent(file);
 
-      return render({ type, content, config });
+      if (!content && slug.endsWith('index')) {
+        content = await Promise.all(files.map(file => getContent(file)));
+      }
+
+      return render({ type, config, content });
     };
   }
 

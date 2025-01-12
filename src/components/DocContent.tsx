@@ -1,9 +1,8 @@
 import { Heading, Box, Text, Row, Icon, Icons } from '@umami/react-zen';
-import { Markdown } from './Markdown';
-import styles from './ContentArea.module.css';
 import Link from 'next/link';
+import { Markdown } from './Markdown';
 
-export interface ContentAreaProps {
+export interface DocsContentProps {
   section?: string;
   title?: string;
   description?: string;
@@ -12,7 +11,7 @@ export interface ContentAreaProps {
   prev?: any;
 }
 
-export function ContentArea({ section, title, description, code, next, prev }: ContentAreaProps) {
+export function DocContent({ section, title, description, code, next, prev }: DocsContentProps) {
   return (
     <Box flexGrow={1}>
       {section && (
@@ -30,9 +29,7 @@ export function ContentArea({ section, title, description, code, next, prev }: C
           {description}
         </Text>
       )}
-      <Box className={styles.content}>
-        <Markdown code={code} />
-      </Box>
+      <Markdown code={code} />
       <Row justifyContent="space-between">
         <NavigationButton {...prev} isPrev />
         <NavigationButton {...next} />

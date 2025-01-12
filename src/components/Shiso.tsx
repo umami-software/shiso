@@ -4,13 +4,13 @@ import { MDXProvider } from '@mdx-js/react';
 import { Code } from '@umami/react-zen';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
-import { Blog } from '@/components/Blog';
+import { Blogs } from '@/components/Blogs';
 import type { ShisoConfig, ShisoContent } from '@/lib/types';
 
 export interface ShisoProps {
-  content: ShisoContent;
   type: string;
   config: ShisoConfig;
+  content: ShisoContent;
   components?: { [key: string]: any };
   templates?: { [key: string]: any };
 }
@@ -25,12 +25,12 @@ export type ShisoTemplateComponent = ({
 
 const defaultTemplates = {
   docs: Docs,
-  blog: Blog,
+  blog: Blogs,
 };
 
 export const ShisoContext = createContext(null as any);
 
-export function Shiso({ content, type, config, components, templates }: ShisoProps) {
+export function Shiso({ type, config, content, components, templates }: ShisoProps) {
   const Component: ShisoTemplateComponent | undefined = { ...defaultTemplates, ...templates }[type];
 
   if (!Component) {
@@ -38,9 +38,9 @@ export function Shiso({ content, type, config, components, templates }: ShisoPro
   }
 
   return (
-    <ShisoContext.Provider value={{ content, type, config }}>
+    <ShisoContext.Provider value={{ type, config, content, components, templates }}>
       <MDXProvider components={{ ...components, pre: CodeBlock, code: Code }}>
-        <Component content={content} config={config} />
+        <Component config={config} content={content} />
       </MDXProvider>
     </ShisoContext.Provider>
   );

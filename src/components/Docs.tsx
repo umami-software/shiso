@@ -12,13 +12,11 @@ import {
   Dialog,
   Text,
 } from '@umami/react-zen';
-import { useShiso } from './hooks/useShiso';
+import { ShisoContent } from '@/lib/types';
 import { PageLinks } from './PageLinks';
 import { SideNav } from './SideNav';
 import { TopNav } from './TopNav';
-import { ContentArea } from './ContentArea';
-import { ShisoContent } from '@/lib/types';
-import Link from 'next/link';
+import { DocContent } from './DocContent';
 
 function parseContent(content: ShisoContent, config: any = {}) {
   const { tabs, navigation } = config;
@@ -52,9 +50,7 @@ function parseContent(content: ShisoContent, config: any = {}) {
   return { ...content, tabs, navigation, section, next, prev };
 }
 
-export function Docs() {
-  const { content, config } = useShiso();
-
+export function Docs({ content, config }) {
   if (!content) {
     return <Heading>Page not found</Heading>;
   }
@@ -138,7 +134,7 @@ export function Docs() {
           isSticky
           autoHeight
         />
-        <ContentArea
+        <DocContent
           section={section}
           title={meta?.title}
           description={meta?.description}

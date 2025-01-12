@@ -2,7 +2,9 @@ export interface ShisoDocsConfig {
   tabs?: [];
 }
 
-export interface ShisoBlogConfig {}
+export interface ShisoBlogConfig {
+  title?: string;
+}
 
 export interface ShisoConfig {
   contentDir: string;
@@ -14,5 +16,12 @@ export interface ShisoContent {
   meta: { [key: string]: any };
   path: string;
   code: string;
+  content: string;
   anchors?: { id: string; name: string; size: number }[];
+}
+
+export interface ShisoRenderProps {
+  type: string;
+  content: any;
+  config: ShisoConfig;
 }
