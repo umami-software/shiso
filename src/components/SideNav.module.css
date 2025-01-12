@@ -6,6 +6,11 @@
 .nav::-webkit-scrollbar {
   width: 15px;
   background: transparent;
+  display: none;
+}
+
+.nav:hover::-webkit-scrollbar {
+  display: block;
 }
 
 .nav::-webkit-scrollbar-track {
