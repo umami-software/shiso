@@ -61,7 +61,8 @@
 }
 
 .items {
-  gap: var(--spacing-5);
+  display: grid;
+  gap: var(--spacing-1);
 }
 
 .items header {

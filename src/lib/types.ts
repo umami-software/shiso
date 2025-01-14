@@ -18,6 +18,7 @@ export interface ShisoContent {
   code: string;
   content: string;
   anchors?: { id: string; name: string; size: number }[];
+  slug?: string;
 }
 
 export interface ShisoRenderProps {

@@ -29,7 +29,7 @@ function parseContent(content: ShisoContent, config: any = {}) {
 
       found = groups?.find((group: { section: string; pages: any[] }, groupIndex) => {
         return group.pages.find((page, pageIndex) => {
-          const match = content.path.replace(/(\/index)?\.mdx$/, '').endsWith(page.url);
+          const match = page.url.endsWith(content.slug);
 
           if (match) {
             const prevGroup = groups[groupIndex - 1];
