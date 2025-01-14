@@ -1,6 +1,6 @@
 .links {
   position: sticky;
-  top: 30px;
+  top: var(--spacing-8);
   height: max-content;
   min-width: 240px;
 }

@@ -33,7 +33,7 @@
 
 .nav.sticky {
   position: sticky;
-  top: 30px;
+  top: var(--spacing-8);
 }
 
 .nav .item {
