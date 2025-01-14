@@ -70,7 +70,7 @@ export function next(type: string, config: ShisoConfig) {
 
     return {
       title: {
-        absolute: `${content?.meta?.title} – ${title}`,
+        absolute: content?.meta?.title ? `${content?.meta?.title} – ${title}` : title,
         default: title,
       },
     };
