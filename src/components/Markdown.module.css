@@ -20,6 +20,13 @@
   text-decoration: underline var(--primary-color);
 }
 
+.content img {
+  display: block;
+  max-width: 100%;
+  margin: 4rem auto;
+  box-shadow: 2px 2px 16px rgba(0, 0, 0, .1);
+}
+
 .content h1 {
   font-size: var(--font-size-8);
   letter-spacing: var(--letter-spacing-1);

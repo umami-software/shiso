@@ -1,6 +1,7 @@
 import { cache, ReactElement } from 'react';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
 import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
 import recursive from 'recursive-readdir';
@@ -16,28 +17,22 @@ export const parseFile = cache(async (file: string): Promise<ShisoContent | null
 
     const anchors: { name: string; id: string; size: number }[] = [];
 
-    const modifiedContent = mdxContent
-      .split('\n')
-      .map(line => {
-        const match = line.match(/^(#+)\s+(.*)/);
-        if (match) {
-          const [, num, name] = match;
-          const id = name.toLowerCase().replace(/\s+/g, '-');
-          const size = num.length;
+    mdxContent.split('\n').forEach(line => {
+      const match = line.match(/^(#+)\s+(.*)/);
+      if (match) {
+        const [, num, name] = match;
+        const id = name.toLowerCase().replace(/\s+/g, '-');
+        const size = num.length;
 
-          anchors.push({ name, id, size });
-
-          return `<h${size} id="${id}">${name.replace(/\{|\}/g, '')}</h${size}>`;
-        }
-        return line;
-      })
-      .join('\n');
+        anchors.push({ name, id, size });
+      }
+    });
 
     const code = String(
-      await compile(modifiedContent, {
+      await compile(mdxContent, {
         outputFormat: 'function-body',
         remarkPlugins: [remarkGfm],
-        rehypePlugins: [rehypeHighlight],
+        rehypePlugins: [rehypeHighlight, rehypeSlug],
       }),
     );
 

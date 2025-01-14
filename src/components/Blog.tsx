@@ -43,7 +43,7 @@ export function Blog({ title, description, code, author, date, image, anchors }:
       </Row>
       <Row gap="6">
         <Markdown code={code} />
-        <PageLinks display={linksDisplay} items={anchors} />
+        <PageLinks display={linksDisplay} items={anchors} top={top} />
       </Row>
     </Column>
   );

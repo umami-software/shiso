@@ -41,16 +41,12 @@
               "url": "/docs/writing-content"
             },
             {
-              "label": "Metadata",
-              "url": "/docs/metadata"
-            },
-            {
-              "label": "Headers",
-              "url": "/docs/headers"
-            },
-            {
               "label": "Text",
               "url": "/docs/text"
+            },
+            {
+              "label": "Images",
+              "url": "/docs/images"
             },
             {
               "label": "Lists",
