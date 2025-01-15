@@ -9,7 +9,6 @@
   display: block;
   color: var(--font-color-muted);
   font-size: var(--font-size);
-  text-wrap: nowrap;
   text-decoration: none;
 }
 
