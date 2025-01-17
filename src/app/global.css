@@ -3,9 +3,14 @@ body {
   color: var(--font-color);
   font-size: var(--font-size);
   background-color: var(--background-color);
+  scrollbar-gutter: stable;
 }
 
 a, a:active, a:hover {
   color: var(--font-color);
   text-decoration: none;
+}
+
+:root {
+  --font-color-muted: var(--base-color-600);
 }

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, List, ListItem, ListSection } from '@umami/react-zen';
+import { Box, Column, List, ListItem, ListSection } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import styles from './SideNav.module.css';
 import type { BoxProps } from '@umami/react-zen/Box';
+import styles from './SideNav.module.css';
 
 export interface SideNavProps extends BoxProps {
   tabs: any;
@@ -39,7 +38,7 @@ export function SideNav({
   }, [autoHeight]);
 
   return (
-    <Box
+    <Column
       {...props}
       id="shiso_docs_sidenav"
       className={classNames(styles.nav, isSticky && styles.sticky, className)}
@@ -56,10 +55,9 @@ export function SideNav({
                     className={classNames(styles.item, {
                       [styles.selected]: url === pathname,
                     })}
+                    href={url}
                   >
-                    <Link href={url} prefetch={false}>
-                      {text}
-                    </Link>
+                    {text}
                   </ListItem>
                 );
               })}
@@ -67,6 +65,6 @@ export function SideNav({
           );
         })}
       </List>
-    </Box>
+    </Column>
   );
 }

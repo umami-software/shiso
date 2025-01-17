@@ -19,17 +19,19 @@ export function Card({ title, description, date, author, url, image }: CardProps
           <Image src={image} alt={title} objectFit="cover" />
         </Box>
       )}
-      <Column padding="6" gap="4">
-        <Heading size="4" as="header">
-          <Link href={url}>{title}</Link>
-        </Heading>
-        <Row justifyContent="space-between">
-          <Text color="muted">{date && format(new Date(date), 'PP')}</Text>
-          <Text color="muted">{author}</Text>
-        </Row>
-        <Box marginY="5" as="p">
-          <Text size="3">{description}</Text>
-        </Box>
+      <Column padding="6" gap="4" flexGrow={1}>
+        <Column gap="4" flexGrow={1}>
+          <Heading size="4" as="header">
+            <Link href={url}>{title}</Link>
+          </Heading>
+          <Row justifyContent="space-between">
+            <Text color="muted">{date && format(new Date(date), 'PP')}</Text>
+            <Text color="muted">{author}</Text>
+          </Row>
+          <Box marginY="5" as="p">
+            <Text size="3">{description}</Text>
+          </Box>
+        </Column>
         <Button asChild>
           <Link href={url}>
             <Text>Read more</Text>

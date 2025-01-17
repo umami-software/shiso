@@ -49,7 +49,7 @@ export const parseFile = cache(async (file: string): Promise<ShisoContent | null
 });
 
 export function next(type: string, config: ShisoConfig) {
-  const dir = path.join(config.contentDir, type);
+  const dir = path.resolve(config.contentDir, type);
   const { title = 'Shiso' } = config[type];
 
   const getContent = async (file: string) => {

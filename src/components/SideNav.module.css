@@ -38,8 +38,9 @@
 
 .nav .item {
   color: var(--font-color-muted);
-  padding: 0;
   border-radius: 0;
+  border-left: 1px solid var(--border-color);
+  outline: none;
 }
 
 .nav .item a {
@@ -55,14 +56,10 @@
 
 .nav .item.selected {
   color: var(--font-color);
-  font-weight: 600;
+  font-weight: 500;
   border-color: var(--primary-color);
   background-color: var(--highlight-color);
-}
-
-.items {
-  display: grid;
-  gap: var(--spacing-1);
+  border-left: 1px solid var(--primary-color);
 }
 
 .items header {
