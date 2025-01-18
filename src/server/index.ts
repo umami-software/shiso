@@ -92,17 +92,22 @@ export function next(type: string, config: ShisoConfig) {
     return async ({ params }: { params: Promise<{ slug: string[] }> }) => {
       const slug = (await params)?.slug?.join('/') || 'index';
       const file = path.join(dir, `${slug}.mdx`);
-      const files = await recursive(dir);
 
-      let content: ShisoContent | ShisoContent[] | null = await getContent(file);
-
-      if (!content && slug.endsWith('index')) {
-        content = await Promise.all(files.map(file => getContent(file)));
-      }
+      const content: ShisoContent | ShisoContent[] | null = await getContent(file);
 
       return render({ type, config, content });
     };
   }
 
-  return { generateMetadata, generateStaticParams, renderPage };
+  function renderCollection(render: (props: ShisoRenderProps) => ReactElement) {
+    return async () => {
+      const files = await recursive(dir);
+
+      const content = await Promise.all(files.map((file: string) => getContent(file)));
+
+      return render({ type, config, content });
+    };
+  }
+
+  return { generateMetadata, generateStaticParams, renderPage, renderCollection };
 }
