@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Column, List, ListItem, ListSection } from '@umami/react-zen';
+import { Text, Box, Column, List, ListItem, ListSection, Menu, MenuItem } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import type { BoxProps } from '@umami/react-zen/Box';
@@ -44,13 +44,16 @@ export function SideNav({
       className={classNames(styles.nav, isSticky && styles.sticky, className)}
       style={{ ...style, height }}
     >
-      <List items={navigation} aria-label="nav">
+      <Column aria-label="nav" gap="6">
         {menu.map(({ section, pages }) => {
           return (
-            <ListSection title={section} key={section} className={styles.items}>
+            <Column title={section} key={section} className={styles.items}>
+              <Text weight="bold" className={styles.header}>
+                {section}
+              </Text>
               {pages.map(({ label: text, url }, index: number) => {
                 return (
-                  <ListItem
+                  <a
                     key={index}
                     className={classNames(styles.item, {
                       [styles.selected]: url === pathname,
@@ -58,13 +61,13 @@ export function SideNav({
                     href={url}
                   >
                     {text}
-                  </ListItem>
+                  </a>
                 );
               })}
-            </ListSection>
+            </Column>
           );
         })}
-      </List>
+      </Column>
     </Column>
   );
 }

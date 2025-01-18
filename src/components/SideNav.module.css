@@ -38,19 +38,12 @@
 
 .nav .item {
   color: var(--font-color-muted);
-  border-radius: 0;
   border-left: 1px solid var(--border-color);
-  outline: none;
-}
-
-.nav .item a {
-  color: currentColor;
-  width: 100%;
-  padding: var(--padding-y) var(--padding-x);
+  padding: var(--padding);
   text-decoration: none;
 }
 
-.nav .item a:hover {
+.nav .item:hover {
   color: var(--primary-color);
 }
 
@@ -59,9 +52,8 @@
   font-weight: 500;
   border-color: var(--primary-color);
   background-color: var(--highlight-color);
-  border-left: 1px solid var(--primary-color);
 }
 
-.items header {
+.header {
   padding: var(--padding-y) 0;
 }

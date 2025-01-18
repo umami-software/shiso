@@ -29,23 +29,23 @@ export function Blog({ title, code, author, date, image, anchors }: BlogProps) {
   };
 
   return (
-    <Column gap="8" maxWidth="900px" style={{ margin: '0 auto' }}>
-      <Box flexGrow={1}>
+    <Column gap="8" maxWidth="960px" style={{ margin: '0 auto' }}>
+      <Box flexGrow="1" paddingY="6">
         {title && (
           <Heading size="1" as="h1" align="center">
             {title}
           </Heading>
         )}
       </Box>
+      <Row justifyContent="space-between">
+        <Text color="muted">{date && format(new Date(date), 'PPP')}</Text>
+        <Text color="muted">Posted by {author}</Text>
+      </Row>
       {image && (
         <Box height="480px">
           <Image src={image} alt={title} objectFit="cover" borderRadius="3" />
         </Box>
       )}
-      <Row justifyContent="space-between">
-        <Text>{author}</Text>
-        <Text>{date && format(new Date(date), 'PP')}</Text>
-      </Row>
       <Row gap="6">
         <Markdown code={code} />
         <PageLinks display={linksDisplay} items={anchors} style={{ top }} />

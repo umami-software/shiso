@@ -4,7 +4,7 @@ import { Leaf } from '@/components/icons';
 
 export default function Home() {
   return (
-    <Column gap="3" style={{ margin: '0 auto' }} flexGrow={1}>
+    <Column gap="3" style={{ margin: '0 auto' }} flexGrow="1">
       <Heading size="5">shiso</Heading>
       <Icon size="lg">
         <Leaf />

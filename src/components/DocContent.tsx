@@ -13,7 +13,7 @@ export interface DocsContentProps {
 
 export function DocContent({ section, title, description, code, next, prev }: DocsContentProps) {
   return (
-    <Box flexGrow={1}>
+    <Box flexGrow="1">
       {section && (
         <Text color="primary" weight="bold">
           {section}
