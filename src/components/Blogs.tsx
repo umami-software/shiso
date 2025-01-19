@@ -8,8 +8,6 @@ export function Blogs({ content, config }) {
     return <Blog {...meta} code={code} anchors={anchors} />;
   }
 
-  console.log({ content });
-
   return (
     <Grid gap="5" columns="repeat(auto-fit, minmax(400px, 1fr)">
       {content

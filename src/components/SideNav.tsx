@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Box, Column, List, ListItem, ListSection, Menu, MenuItem } from '@umami/react-zen';
+import { Text, Column } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import type { BoxProps } from '@umami/react-zen/Box';
+import Link from 'next/link';
 import styles from './SideNav.module.css';
 
 export interface SideNavProps extends BoxProps {
@@ -53,7 +54,7 @@ export function SideNav({
               </Text>
               {pages.map(({ label: text, url }, index: number) => {
                 return (
-                  <a
+                  <Link
                     key={index}
                     className={classNames(styles.item, {
                       [styles.selected]: url === pathname,
@@ -61,7 +62,7 @@ export function SideNav({
                     href={url}
                   >
                     {text}
-                  </a>
+                  </Link>
                 );
               })}
             </Column>

@@ -1,5 +1,6 @@
 import { usePathname } from 'next/navigation';
 import { Tabs, TabList, Tab } from '@umami/react-zen';
+import Link from 'next/link';
 
 export function TopNav({ tabs }) {
   const pathname = usePathname();
@@ -12,8 +13,8 @@ export function TopNav({ tabs }) {
       <TabList items={tabs}>
         {({ id, label, url }) => {
           return (
-            <Tab id={id} href={url}>
-              {label}
+            <Tab id={id}>
+              <Link href={url}>{label}</Link>
             </Tab>
           );
         }}
