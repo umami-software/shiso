@@ -22,6 +22,7 @@
 /dist
 /types
 /server
+/styles.css
 
 # misc
 .DS_Store

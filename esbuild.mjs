@@ -5,7 +5,7 @@ import pkg from './package.json' with { type: 'json' };
 const { dependencies } = pkg;
 
 const config = {
-  entryPoints: ['src/components/index.ts'],
+  entryPoints: ['src/index.ts'],
   bundle: true,
   external: Object.keys(dependencies),
   jsx: 'automatic',
@@ -18,6 +18,7 @@ esbuild
     ...config,
     outfile: 'dist/index.js',
     format: 'cjs',
+    loader: { '.css': 'css' },
   })
   .catch(e => {
     console.error(e);
@@ -29,6 +30,7 @@ esbuild
     ...config,
     outfile: 'dist/index.mjs',
     format: 'esm',
+    loader: { '.css': 'css' },
   })
   .catch(e => {
     console.error(e);

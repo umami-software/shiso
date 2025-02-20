@@ -39,7 +39,7 @@ export function Shiso({ type, config, content, components, templates }: ShisoPro
 
   return (
     <ShisoContext.Provider value={{ type, config, content, components, templates }}>
-      <MDXProvider components={{ ...components, pre: CodeBlock, code: Code }}>
+      <MDXProvider components={{ pre: CodeBlock, code: Code, ...components }}>
         <Component config={config} content={content} />
       </MDXProvider>
     </ShisoContext.Provider>
