@@ -1,6 +1,6 @@
 import config from '@/shiso.config.json';
 import { next } from '@/server';
-import { Shiso } from '@/components';
+import { Shiso } from '@/components/Shiso';
 
 const { generateMetadata, generateStaticParams, renderCollection } = next('blog', config);
 
