@@ -91,5 +91,11 @@
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-recommended": "^14.0.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
