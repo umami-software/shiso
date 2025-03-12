@@ -28,6 +28,11 @@ const defaultTemplates = {
   blog: Blogs,
 };
 
+const shisoComponents = {
+  pre: CodeBlock,
+  code: Code,
+};
+
 export const ShisoContext = createContext(null as any);
 
 export function Shiso({ type, config, content, components, templates }: ShisoProps) {
@@ -39,7 +44,7 @@ export function Shiso({ type, config, content, components, templates }: ShisoPro
 
   return (
     <ShisoContext.Provider value={{ type, config, content, components, templates }}>
-      <MDXProvider components={{ pre: CodeBlock, code: Code, ...components }}>
+      <MDXProvider components={{ ...shisoComponents, ...components }}>
         <Component config={config} content={content} />
       </MDXProvider>
     </ShisoContext.Provider>

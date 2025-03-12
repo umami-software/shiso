@@ -1,3 +1,4 @@
+import { Button } from '@umami/react-zen';
 import config from '@/shiso.config.json';
 import { next } from '@/server';
 import { Shiso } from '@/components/Shiso';
@@ -7,5 +8,5 @@ const { generateMetadata, generateStaticParams, renderPage } = next('docs', conf
 export { generateMetadata, generateStaticParams };
 
 export default renderPage(props => {
-  return <Shiso {...props} />;
+  return <Shiso {...props} components={{ Button }} />;
 });

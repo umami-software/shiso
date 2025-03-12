@@ -24,7 +24,7 @@ export default function RootLayout({
         <title>shiso</title>
         <link rel="icon" type="image/png" href="/leaf.png" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Suspense>
           <App>{children}</App>
         </Suspense>
