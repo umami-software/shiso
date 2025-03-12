@@ -70,6 +70,6 @@
   color: var(--font-color);
   padding: var(--spacing-1);
   border-radius: var(--border-radius);
-  background: var(--base-color-50);
+  background: var(--base-color-1);
   font-weight: var(--font-weight-bold);
 }
