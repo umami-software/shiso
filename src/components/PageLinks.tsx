@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { Column, Text, Box } from '@umami/react-zen';
 import classNames from 'classnames';

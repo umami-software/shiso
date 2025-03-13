@@ -1,8 +1,10 @@
-import { Heading, Box, Text, Row, Column, Image } from '@umami/react-zen';
+'use client';
+import { Heading, Box, Text, Row, Column, Image, Icon, Icons, Button } from '@umami/react-zen';
 import { format } from 'date-fns';
 import { PageLinks } from '@/components/PageLinks';
 import { useShiso } from '@/components/hooks/useShiso';
 import { Markdown } from './Markdown';
+import Link from 'next/link';
 
 export interface BlogProps {
   title: string;
@@ -12,9 +14,10 @@ export interface BlogProps {
   date?: string;
   image?: string;
   anchors?: any[];
+  backUrl?: string;
 }
 
-export function Blog({ title, code, author, date, image, anchors }: BlogProps) {
+export function Blog({ title, code, author, date, image, anchors, backUrl }: BlogProps) {
   const { config } = useShiso();
 
   const { top } = config?.blog || {};
@@ -50,6 +53,18 @@ export function Blog({ title, code, author, date, image, anchors }: BlogProps) {
         <Markdown code={code} />
         <PageLinks display={linksDisplay} items={anchors} style={{ top }} />
       </Row>
+      {backUrl && (
+        <Row justifyContent="flex-start">
+          <Button style={{ width: 'auto' }} asChild>
+            <Link href={backUrl}>
+              <Icon rotate={180}>
+                <Icons.Arrow />
+              </Icon>
+              <Text>Back</Text>
+            </Link>
+          </Button>
+        </Row>
+      )}
     </Column>
   );
 }

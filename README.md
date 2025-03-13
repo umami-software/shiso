@@ -20,7 +20,7 @@ In your `app` folder, create a folder for the content section you wish to add. I
 src
 ├── app
 │   └── docs
-│       └── [[...id]]
+│       └── [[...slug]]
 │           └── page.jsx
 ```
 

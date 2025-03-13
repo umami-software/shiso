@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Icon, Icons } from '@umami/react-zen';
 import styles from './CodeBlock.module.css';
+import classNames from 'classnames';
 
 export function CodeBlock(props: any) {
   const textInput = useRef<any>(null);
@@ -17,7 +18,7 @@ export function CodeBlock(props: any) {
   };
 
   return (
-    <pre ref={textInput} className={styles.container}>
+    <pre ref={textInput} className={classNames(styles.container, 'dark-theme')}>
       {props.children}
       <button aria-label="Copy code" className={styles.button} onClick={handleCopy}>
         <Icon size="sm" className={copied ? styles.check : styles.copy}>
