@@ -21,7 +21,10 @@ export const parseFile = cache(async (file: string): Promise<ShisoContent | null
       const match = line.match(/^(#+)\s+(.*)/);
       if (match) {
         const [, num, name] = match;
-        const id = name.toLowerCase().replace(/\W+/g, '-');
+        const id = name
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]+/g, '');
         const size = num.length;
 
         anchors.push({ name, id, size });
