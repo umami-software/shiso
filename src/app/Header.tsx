@@ -1,6 +1,6 @@
 import { Row, Text, ThemeButton, Button, Icon } from '@umami/react-zen';
 import Link from 'next/link';
-import { Github } from '@/components/icons';
+import { Github } from '@/components/svg';
 
 export function Header() {
   return (
