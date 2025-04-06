@@ -2,7 +2,7 @@
   "name": "@umami/shiso",
   "version": "0.50.0",
   "description": "A content layer for Next.js",
-  "homepage": "https://umami.is/shiso",
+  "homepage": "https://shiso.umami.is",
   "repository": {
     "type": "git",
     "url": "https://github.com/umami-software/shiso.git"
