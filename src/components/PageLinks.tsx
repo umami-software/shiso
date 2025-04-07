@@ -15,8 +15,10 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   useEffect(() => {
     const callback = () => {
       const x = [...items].reverse().find(({ id }) => {
-        const rect = document.getElementById(id)?.getBoundingClientRect();
-        return rect && rect.top <= 0;
+        const contentSection = document.getElementById(id);
+        const rect = contentSection?.getBoundingClientRect();
+        const scrollMarginTop = contentSection?.style?.scrollMarginTop ?? 0;
+        return rect && rect.top <= scrollMarginTop;
       });
 
       if (x) setHash(x.id);
