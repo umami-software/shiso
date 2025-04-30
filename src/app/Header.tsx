@@ -16,7 +16,7 @@ export function Header() {
         <ThemeButton />
         <Button variant="quiet" asChild>
           <Link href="https://github.com/umami-software/react-zen" target="_blank">
-            <Icon>
+            <Icon fillColor="currentColor">
               <Github />
             </Icon>
           </Link>

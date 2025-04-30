@@ -13,7 +13,7 @@ export interface CardProps {
 
 export function Card({ title, description, date, author, url, image }: CardProps) {
   return (
-    <Column borderSize="1" borderRadius="3" overflow="hidden">
+    <Column border borderRadius="3" overflow="hidden">
       {image && (
         <Box height="240px">
           <Image src={image} alt={title} objectFit="cover" />
