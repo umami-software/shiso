@@ -1,6 +1,6 @@
 {
   "name": "@umami/shiso",
-  "version": "0.50.0",
+  "version": "0.51.0",
   "description": "A content layer for Next.js",
   "homepage": "https://shiso.umami.is",
   "repository": {
