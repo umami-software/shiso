@@ -5,7 +5,9 @@ import { Leaf } from '@/components/svg';
 export default function Home() {
   return (
     <Column gap="3" style={{ margin: '0 auto' }} flexGrow="1">
-      <Heading size="5">shiso</Heading>
+      <Heading size="3" as="h1">
+        shiso
+      </Heading>
       <Icon size="lg">
         <Leaf />
       </Icon>

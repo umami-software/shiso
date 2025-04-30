@@ -25,7 +25,7 @@ export function Card({ title, description, date, author, url, image }: CardProps
           <Text color="muted">Posted by {author}</Text>
         </Row>
         <Column gap="4" flexGrow="1">
-          <Heading size="4" as="header">
+          <Heading size="3" as="header">
             <Link href={url}>{title}</Link>
           </Heading>
           <Box marginY="5" as="p">

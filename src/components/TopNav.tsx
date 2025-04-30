@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation';
-import { Tabs, TabList, Tab } from '@umami/react-zen';
+import { Box, Tabs, TabList, Tab } from '@umami/react-zen';
 import Link from 'next/link';
 
 export function TopNav({ tabs }) {
@@ -9,16 +9,18 @@ export function TopNav({ tabs }) {
   const selected = tab?.id || 'docs';
 
   return (
-    <Tabs selectedKey={selected}>
-      <TabList items={tabs}>
-        {({ id, label, url }) => {
-          return (
-            <Tab id={id}>
-              <Link href={url}>{label}</Link>
-            </Tab>
-          );
-        }}
-      </TabList>
-    </Tabs>
+    <Box marginBottom="6">
+      <Tabs selectedKey={selected}>
+        <TabList items={tabs}>
+          {({ id, label, url }) => {
+            return (
+              <Tab id={id}>
+                <Link href={url}>{label}</Link>
+              </Tab>
+            );
+          }}
+        </TabList>
+      </Tabs>
+    </Box>
   );
 }

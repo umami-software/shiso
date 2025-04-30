@@ -35,7 +35,7 @@ export function Blog({ title, code, author, date, image, anchors, backUrl }: Blo
     <Column gap="8" maxWidth="960px" style={{ margin: '0 auto' }}>
       <Box flexGrow="1" paddingY="6">
         {title && (
-          <Heading size="1" as="h1" align="center">
+          <Heading size="6" as="h1" align="center">
             {title}
           </Heading>
         )}

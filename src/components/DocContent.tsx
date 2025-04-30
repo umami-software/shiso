@@ -20,7 +20,7 @@ export function DocContent({ section, title, description, code, next, prev }: Do
         </Text>
       )}
       {title && (
-        <Heading size="2" as="h1" marginY="3">
+        <Heading size="5" as="h1" marginY="3">
           {title}
         </Heading>
       )}
