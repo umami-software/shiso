@@ -21,13 +21,13 @@
 
 .nav::-webkit-scrollbar-thumb {
   border: 7px solid rgba(0, 0, 0, 0);
-  background-color: var(--primary-color);
+  background-color: var(--font-color);
   background-clip: padding-box;
 }
 
 .nav::-webkit-scrollbar-thumb:hover {
   border: 5px solid rgba(0, 0, 0, 0);
-  background-color: var(--primary-color);
+  background-color: var(--font-color);
   background-clip: padding-box;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .nav .item:hover {
-  color: var(--primary-color);
+  color: var(--font-color);
 }
 
 .nav .item.selected {
