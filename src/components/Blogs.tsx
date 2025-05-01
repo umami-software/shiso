@@ -14,7 +14,7 @@ export function Blogs({ content, config, ...props }) {
   );
 
   return (
-    <Grid gap="5" columns="repeat(auto-fit, minmax(400px, 1fr)">
+    <Grid gap="5" columns={{ xs: '1fr', lg: 'repeat(auto-fit, minmax(400px, 1fr))' }}>
       {items?.map(({ meta, slug }) => <Card key={slug} url={`/blog/${slug}`} {...meta} />)}
     </Grid>
   );

@@ -6,6 +6,7 @@ import {
   Icon,
   Icons,
   Row,
+  Column,
   Modal,
   DialogTrigger,
   Dialog,
@@ -64,26 +65,17 @@ export function Docs({ content, config }) {
   const { top } = config?.docs || {};
 
   const navDisplay = {
-    default: 'none',
     xs: 'none',
-    sm: 'none',
-    md: 'none',
     lg: 'block',
-    xl: 'block',
   };
 
   const linksDisplay = {
-    default: 'none',
     xs: 'none',
-    sm: 'none',
-    md: 'none',
     lg: 'block',
-    xl: 'block',
   };
 
   const menuDisplay = {
     lg: 'none',
-    xl: 'none',
   };
 
   const MobileMenuButton = () => (
@@ -94,22 +86,13 @@ export function Docs({ content, config }) {
         </Icon>
         <Text>Menu</Text>
       </Button>
-      <Modal position="bottom" offset="40px">
+      <Modal position="left" offset="70px">
         <Dialog variant="sheet">
           {({ close }) => {
             return (
-              <>
-                <Row justifyContent="flex-end">
-                  <Button onPress={() => close()} variant="quiet">
-                    <Icon size="sm">
-                      <Icons.Close />
-                    </Icon>
-                  </Button>
-                </Row>
-                <Box height="100%" overflow="auto">
-                  <SideNav tabs={tabs} navigation={navigation} />
-                </Box>
-              </>
+              <Box overflow="auto" padding="4" onClick={close}>
+                <SideNav tabs={tabs} navigation={navigation} />
+              </Box>
             );
           }}
         </Dialog>
@@ -118,11 +101,11 @@ export function Docs({ content, config }) {
   );
 
   return (
-    <Box flexGrow="1">
+    <Column gap="6">
+      {tabs && <TopNav tabs={tabs} />}
       <Row display={menuDisplay} justifyContent="flex-end">
         <MobileMenuButton />
       </Row>
-      {tabs && <TopNav tabs={tabs} />}
       <Row gap="6">
         <SideNav
           display={navDisplay}
@@ -142,6 +125,6 @@ export function Docs({ content, config }) {
         />
         <PageLinks display={linksDisplay} items={anchors} style={{ top }} />
       </Row>
-    </Box>
+    </Column>
   );
 }

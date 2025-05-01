@@ -12,6 +12,21 @@
         "id": "components",
         "label": "Components",
         "url": "/docs/components"
+      },
+      {
+        "id": "components2",
+        "label": "API",
+        "url": "/docs/components"
+      },
+      {
+        "id": "components3",
+        "label": "Reports",
+        "url": "/docs/components"
+      },
+      {
+        "id": "components4",
+        "label": "Guides",
+        "url": "/docs/components"
       }
     ],
     "navigation": {

@@ -23,12 +23,8 @@ export function Blog({ title, code, author, date, image, anchors, backUrl }: Blo
   const { top } = config?.blog || {};
 
   const linksDisplay = {
-    default: 'none',
     xs: 'none',
-    sm: 'none',
-    md: 'none',
     lg: 'block',
-    xl: 'block',
   };
 
   return (

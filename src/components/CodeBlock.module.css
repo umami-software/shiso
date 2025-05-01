@@ -11,6 +11,7 @@
 pre.container code {
   font-family: var(--font-family-code);
   color: var(--font-color);
+  font-size: var(--font-size);
   padding: 0;
   border: 0;
   background: transparent;

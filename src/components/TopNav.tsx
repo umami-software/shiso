@@ -9,7 +9,7 @@ export function TopNav({ tabs }) {
   const selected = tab?.id || 'docs';
 
   return (
-    <Box marginBottom="6">
+    <Box maxWidth="100vw" overflowX="auto" overflowY="hidden">
       <Tabs selectedKey={selected}>
         <TabList items={tabs}>
           {({ id, label, url }) => {
