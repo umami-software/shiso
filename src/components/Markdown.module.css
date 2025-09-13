@@ -46,7 +46,7 @@
 }
 
 .content *[id] {
-  scroll-margin-top: var(--spacing-4);
+  scroll-margin-top: 70px; /* same as the navbar height */
 }
 
 .content ul {
