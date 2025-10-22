@@ -1,32 +1,18 @@
 'use client';
-import { createContext, JSX } from 'react';
+import * as zenComponents from '@umami/react-zen';
+import { createContext, cloneElement, ReactElement } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { Code } from '@umami/react-zen';
-import { CodeBlock } from '@/components/CodeBlock';
-import { Docs } from '@/components/Docs';
-import { Blogs } from '@/components/Blogs';
-import type { ShisoConfig, ShisoContent } from '@/lib/types';
+import { CodeBlock } from '@/components/common/CodeBlock';
+import type { ShisoConfig, Content, ComponentProps } from '@/lib/types';
 
 export interface ShisoProps {
-  type: string;
   config: ShisoConfig;
-  content: ShisoContent;
-  components?: { [key: string]: any };
-  templates?: { [key: string]: any };
+  content?: Content;
+  collection?: Content[];
+  components?: Record<any, any>;
+  component: ReactElement<ComponentProps<ShisoConfig>>;
 }
-
-export type ShisoTemplateComponent = ({
-  content,
-  config,
-}: {
-  content: any;
-  config: ShisoConfig;
-}) => JSX.Element;
-
-const defaultTemplates = {
-  docs: Docs,
-  blog: Blogs,
-};
 
 const shisoComponents = {
   pre: CodeBlock,
@@ -35,17 +21,11 @@ const shisoComponents = {
 
 export const ShisoContext = createContext(null as any);
 
-export function Shiso({ type, config, content, components, templates }: ShisoProps) {
-  const Component: ShisoTemplateComponent | undefined = { ...defaultTemplates, ...templates }[type];
-
-  if (!Component) {
-    return <h1>{`Component not found for type: ${type}`}</h1>;
-  }
-
+export function Shiso({ config, content, collection, components, component }: ShisoProps) {
   return (
-    <ShisoContext.Provider value={{ type, config, content, components, templates }}>
-      <MDXProvider components={{ ...shisoComponents, ...components }}>
-        <Component config={config} content={content} />
+    <ShisoContext.Provider value={{ config, content, components }}>
+      <MDXProvider components={{ ...zenComponents, ...shisoComponents, ...components } as any}>
+        {cloneElement(component, { config, content, collection })}
       </MDXProvider>
     </ShisoContext.Provider>
   );

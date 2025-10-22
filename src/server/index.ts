@@ -1,65 +1,27 @@
-import { cache, ReactElement } from 'react';
-import { compile } from '@mdx-js/mdx';
-import remarkGfm from 'remark-gfm';
-import rehypeSlug from 'rehype-slug';
-import rehypeHighlight from 'rehype-highlight';
-import matter from 'gray-matter';
-import recursive from 'recursive-readdir';
-import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { ShisoConfig, ShisoRenderProps, ShisoContent } from '@/lib/types';
+import { ReactNode } from 'react';
+import recursive from 'recursive-readdir';
+import { Content, ShisoConfig } from '@/lib/types';
+import { parseMdxFile, getSlug } from '@/lib/content';
 
-export const parseFile = cache(async (file: string): Promise<ShisoContent | null> => {
-  try {
-    const postContent = await fs.readFile(file, 'utf8');
+export interface RenderPageProps {
+  config: ShisoConfig;
+  content?: Content;
+  collection?: Content[];
+}
 
-    const { data: frontmatter, content: mdxContent } = matter(postContent);
-
-    const anchors: { name: string; id: string; size: number }[] = [];
-
-    mdxContent.split('\n').forEach(line => {
-      const match = line.match(/^(#+)\s+(.*)/);
-      if (match) {
-        const [, num, name] = match;
-        const id = name
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^\w-]+/g, '');
-        const size = num.length;
-
-        anchors.push({ name, id, size });
-      }
-    });
-
-    const code = String(
-      await compile(mdxContent, {
-        outputFormat: 'function-body',
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [rehypeHighlight, rehypeSlug],
-      }),
-    );
-
-    return {
-      path: file,
-      meta: frontmatter,
-      content: postContent,
-      code: code,
-      anchors,
-    };
-  } catch {
-    return null;
-  }
-});
-
-export function next(type: string, config: ShisoConfig) {
-  const dir = path.resolve(config.contentDir, type);
-  const { title = 'Shiso' } = config[type];
+export function next(config: ShisoConfig) {
+  const dir = path.resolve(config.contentDir);
 
   const getContent = async (file: string) => {
-    const content = await parseFile(file);
+    const files = await recursive(dir);
+
+    console.log({ files });
+
+    const content = await parseMdxFile(file);
 
     if (content) {
-      content['slug'] = getSlug(file, dir);
+      content['slug'] = getSlug(file, path.resolve(config.contentDir));
     }
 
     return content;
@@ -70,6 +32,7 @@ export function next(type: string, config: ShisoConfig) {
     const file = path.join(dir, `${name}.mdx`);
 
     const content = await getContent(file);
+    const { title } = config;
 
     return {
       title: {
@@ -77,10 +40,6 @@ export function next(type: string, config: ShisoConfig) {
         default: title,
       },
     };
-  }
-
-  function getSlug(file: string, dir: string) {
-    return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
   }
 
   async function generateStaticParams() {
@@ -91,24 +50,25 @@ export function next(type: string, config: ShisoConfig) {
     }));
   }
 
-  function renderPage(render: (props: ShisoRenderProps) => ReactElement) {
+  function renderPage(render: (props: RenderPageProps) => ReactNode) {
     return async ({ params }: { params: Promise<{ slug: string[] }> }) => {
       const slug = (await params)?.slug?.join('/') || 'index';
       const file = path.join(dir, `${slug}.mdx`);
 
-      const content: ShisoContent | ShisoContent[] | null = await getContent(file);
+      const content: any = await getContent(file);
 
-      return render({ type, config, content });
+      return render({ config, content });
     };
   }
 
-  function renderCollection(render: (props: ShisoRenderProps) => ReactElement) {
+  function renderCollection(render: (props: RenderPageProps) => ReactNode) {
     return async () => {
       const files = await recursive(dir);
+      console.log({ files });
 
-      const content = await Promise.all(files.map((file: string) => getContent(file)));
+      const collection: any = await Promise.all(files.map((file: string) => getContent(file)));
 
-      return render({ type, config, content });
+      return render({ config, collection });
     };
   }
 

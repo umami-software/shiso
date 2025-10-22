@@ -1,8 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Column, Text, Box } from '@umami/react-zen';
+import { Column, ColumnProps, Text, Box } from '@umami/react-zen';
 import classNames from 'classnames';
-import type { ColumnProps } from '@umami/react-zen/Column';
 import styles from './PageLinks.module.css';
 
 export interface PageLinksProps extends ColumnProps {
@@ -34,7 +33,7 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   }
 
   return (
-    <Box {...props} className={classNames(styles.links, className)}>
+    <Column {...props} className={classNames(styles.links, className)}>
       <Column gap="3" minWidth="240px">
         <Text size="2" weight="bold">
           On this page
@@ -53,6 +52,6 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
           );
         })}
       </Column>
-    </Box>
+    </Column>
   );
 }

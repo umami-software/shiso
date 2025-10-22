@@ -1,19 +1,29 @@
-export interface ShisoDocsConfig {
-  tabs?: [];
+export type Page = string;
+
+export interface Group {
+  group: string;
+  icon?: string;
+  href?: string;
+  pages: Page[];
 }
 
-export interface ShisoBlogConfig {
-  title?: string;
+export interface Tab {
+  tab: string;
+  icon?: string;
+  href?: string;
+  groups?: Group[];
+  pages?: Page[];
 }
 
-export interface ShisoConfig {
-  contentDir: string;
-  docs?: { [key: string]: any };
-  blog?: { [key: string]: any };
+export interface Navigation {
+  pages?: Page[];
+  groups?: Group[];
+  tabs?: Tab[];
+  top: number | string;
 }
 
-export interface ShisoContent {
-  meta: { [key: string]: any };
+export interface Content {
+  meta: Record<string, any>;
   path: string;
   code: string;
   content: string;
@@ -21,8 +31,29 @@ export interface ShisoContent {
   slug?: string;
 }
 
-export interface ShisoRenderProps {
-  type: string;
-  content: any;
-  config: ShisoConfig;
+export interface ComponentProps<T> {
+  config?: T;
+  content?: Content;
+  collection?: Content[];
+}
+
+export type ShisoConfig = DocsConfig | BlogConfig;
+
+export interface DocsConfig {
+  contentDir: string;
+  title: string;
+  navigation: Navigation;
+}
+
+export interface BlogConfig {
+  contentDir: string;
+  title: string;
+}
+
+export interface BlogMetadata {
+  title: string;
+  description: string;
+  author: string;
+  date: string;
+  image: string;
 }

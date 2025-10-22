@@ -5,7 +5,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
 
-export async function parseFile(file: string) {
+export async function parseMdxFile(file: string) {
   try {
     const postContent = await fs.readFile(file, 'utf8');
 

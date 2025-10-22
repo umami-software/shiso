@@ -1,6 +1,7 @@
-import { Box, Image, Column, Row, Heading, Text, Button, Icon, Icons } from '@umami/react-zen';
+import { Box, Image, Column, Row, Heading, Text, Button, Icon } from '@umami/react-zen';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { ArrowRight } from 'lucide-react';
 
 export interface CardProps {
   title: string;
@@ -38,7 +39,7 @@ export function Card({ title, description, date, author, url, image }: CardProps
           <Link href={url}>
             <Text>Read more</Text>
             <Icon>
-              <Icons.Arrow />
+              <ArrowRight />
             </Icon>
           </Link>
         </Button>

@@ -1,11 +1,12 @@
-import config from '@/shiso.config.json';
 import { next } from '@/server';
 import { Shiso } from '@/components/Shiso';
+import { Blog } from '@/components/blog/Blog';
+import config from '@/shiso.config.json';
 
-const { generateMetadata, generateStaticParams, renderCollection } = next('blog', config);
+const { generateMetadata, generateStaticParams, renderCollection } = next(config.blog);
 
 export { generateMetadata, generateStaticParams };
 
 export default renderCollection(props => {
-  return <Shiso {...props} />;
+  return <Shiso {...props} component={<Blog />} />;
 });

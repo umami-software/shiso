@@ -1,78 +1,37 @@
 {
-  "contentDir": "./src/content",
   "docs": {
+    "contentDir": "src/content/docs",
     "title": "Docs - Shiso",
-    "tabs": [
-      {
-        "id": "docs",
-        "label": "Documentation",
-        "url": "/docs"
-      },
-      {
-        "id": "components",
-        "label": "Components",
-        "url": "/docs/components"
-      }
-    ],
     "navigation": {
-      "docs": [
+      "tabs": [
         {
-          "section": "Getting started",
-          "pages": [
+          "tab": "Documentation",
+          "groups": [
             {
-              "label": "Overview",
-              "url": "/docs"
+              "group": "Getting started",
+              "pages": ["docs", "docs/installation", "docs/configuration"]
             },
             {
-              "label": "Installation",
-              "url": "/docs/installation"
-            },
-            {
-              "label": "Configuration",
-              "url": "/docs/configuration"
+              "group": "Writing content",
+              "pages": [
+                "docs/writing-content",
+                "docs/text",
+                "docs/images",
+                "docs/lists",
+                "docs/code-blocks"
+              ]
             }
           ]
         },
         {
-          "section": "Writing content",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs/writing-content"
-            },
-            {
-              "label": "Text",
-              "url": "/docs/text"
-            },
-            {
-              "label": "Images",
-              "url": "/docs/images"
-            },
-            {
-              "label": "Lists",
-              "url": "/docs/lists"
-            },
-            {
-              "label": "Code blocks",
-              "url": "/docs/code-blocks"
-            }
-          ]
-        }
-      ],
-      "components": [
-        {
-          "section": "Components",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs/components"
-            }
-          ]
+          "tab": "Components",
+          "pages": ["docs/components", "docs/callout"]
         }
       ]
     }
   },
   "blog": {
+    "contentDir": "src/content/blog",
     "title": "Blog - Shiso"
   }
 }
