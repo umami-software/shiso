@@ -1,0 +1,63 @@
+---
+title: Configuration
+---
+
+## Config file
+
+The `shiso.config.json` file contains the configuration options for your project.
+
+The file has the following schema:
+
+```typescript
+interface ShisoConfig {
+  contentDir: string;
+  docs: DocsConfig;
+  blog: BlogConfig;
+}
+```
+
+At the root level, the properties represent the different content sections of your project.
+Shiso currently supports `docs` and `blog` content.
+
+## Docs configuration
+
+```json
+{
+  "title": "Docs - Shiso",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["docs", "docs/installation", "docs/configuration"]
+          },
+          {
+            "group": "Writing content",
+            "pages": [
+              "docs/writing-content",
+              "docs/text",
+              "docs/images",
+              "docs/lists",
+              "docs/code-blocks"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "pages": ["docs/components", "docs/components/callout"]
+      }
+    ]
+  }
+}
+```
+
+## Blog configuration
+
+```json
+{
+  "title": "Blog - Shiso"
+}
+```

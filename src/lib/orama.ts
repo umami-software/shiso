@@ -1,13 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import { create, insert } from '@orama/orama';
-import recursive from 'recursive-readdir';
+import { Content } from '@/lib/types';
 
 let db: any | null = null;
 
-export async function getDB(dir: string) {
-  if (db) return db;
+export async function getDB(data: Content[]) {
+  //if (db) return db;
 
   db = create({
     schema: {
@@ -18,21 +15,10 @@ export async function getDB(dir: string) {
     },
   });
 
-  console.log({ dir });
+  for (const row of data) {
+    const { meta = {}, content, slug } = row;
 
-  const files = await recursive(dir);
-
-  console.log({ files });
-
-  for (const file of files) {
-    if (!file.endsWith('.md') && !file.endsWith('.mdx')) continue;
-
-    const filePath = path.join(dir, file);
-    const raw = fs.readFileSync(filePath, 'utf8');
-    const { data, content } = matter(raw);
-
-    const title = data.title || file.replace(/\.mdx?$/, '').replace(/-/g, ' ');
-    const slug = file.replace(/\.mdx?$/, '');
+    const { title } = meta;
 
     insert(db, {
       id: slug,
@@ -41,8 +27,6 @@ export async function getDB(dir: string) {
       slug,
     });
   }
-
-  console.log({ files, db });
 
   return db;
 }

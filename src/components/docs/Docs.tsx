@@ -27,6 +27,8 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
     return null;
   }
 
+  console.log({ content, config });
+
   const { code, meta, anchors } = content;
   const { navigation } = config;
   const { top } = navigation;

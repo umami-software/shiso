@@ -1,6 +1,6 @@
 {
+  "contentDir": "content",
   "docs": {
-    "contentDir": "src/content/docs",
     "title": "Docs - Shiso",
     "navigation": {
       "tabs": [
@@ -25,13 +25,12 @@
         },
         {
           "tab": "Components",
-          "pages": ["docs/components", "docs/callout"]
+          "pages": ["docs/components", "docs/components/callout"]
         }
       ]
     }
   },
   "blog": {
-    "contentDir": "src/content/blog",
     "title": "Blog - Shiso"
   }
 }

@@ -9,8 +9,6 @@ export function getNavigationMenu(
   if (tabs) {
     const tab = getActiveTab(pathname, tabs);
 
-    console.log('activeTab', { tab });
-
     return tab?.groups || tab?.pages;
   }
 
@@ -19,17 +17,12 @@ export function getNavigationMenu(
 
 export function getActiveTab(pathname: string, tabs: Tab[]) {
   return tabs.find(tab => {
-    const found = tab.groups
+    return tab.groups
       ? tab.groups?.find(({ pages }) => pages.find(page => pathname === `/${page}`))
       : tab.pages?.find(page => {
-            console.log(pathname, '===', `/${page}`);
             return pathname === `/${page}`;
           })
         ? tab.pages
         : null;
-
-    console.log({ tab, found, pathname });
-
-    return found;
   });
 }

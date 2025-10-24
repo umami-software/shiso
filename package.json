@@ -51,6 +51,7 @@
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@orama/orama": "^3.1.16",
+    "@tanstack/react-query": "^5.90.5",
     "@umami/react-zen": "^0.203.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",

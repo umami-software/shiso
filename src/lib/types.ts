@@ -19,16 +19,17 @@ export interface Navigation {
   pages?: Page[];
   groups?: Group[];
   tabs?: Tab[];
-  top: number | string;
+  top?: number | string;
 }
 
 export interface Content {
+  file: string;
   meta: Record<string, any>;
   path: string;
   code: string;
   content: string;
   anchors?: { id: string; name: string; size: number }[];
-  slug?: string;
+  slug: string;
 }
 
 export interface ComponentProps<T> {
@@ -37,16 +38,23 @@ export interface ComponentProps<T> {
   collection?: Content[];
 }
 
-export type ShisoConfig = DocsConfig | BlogConfig;
+export interface ShisoConfig {
+  contentDir: string;
+  docs: DocsConfig;
+  blog: BlogConfig;
+}
 
 export interface DocsConfig {
-  contentDir: string;
   title: string;
   navigation: Navigation;
 }
 
+export interface DocsMetadata {
+  title: string;
+  description: string;
+}
+
 export interface BlogConfig {
-  contentDir: string;
   title: string;
 }
 

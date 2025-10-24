@@ -25,16 +25,20 @@ src
 In the `page.jsx` file, add the following code:
 
 ```js
-import { Shiso } from '@umami/shiso';
+import { Shiso, Docs } from '@umami/shiso';
 import { next } from '@umami/shiso/server';
 import config from 'path/to/shiso.config.json';
 
-const { generateMetadata, generateStaticParams, renderPage } = next('docs', config);
+const { generateMetadata, generateStaticParams, renderPage } = next(config, 'docs');
 
 export { generateMetadata, generateStaticParams };
 
 export default renderPage(props => {
-  return <Shiso {...props} />;
+  return (
+    <Shiso {...props}>
+      <Docs />
+    </Shiso>
+  );
 });
 ```
 

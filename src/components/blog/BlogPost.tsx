@@ -8,8 +8,6 @@ import { Markdown } from '@/components/common/Markdown';
 import { BlogConfig, ComponentProps, Content } from '@/lib/types';
 
 export function BlogPost({ content, config }: ComponentProps<BlogConfig>) {
-  console.log({ content, config });
-
   const {
     meta: { title, description, author, date, image, anchors },
     code,

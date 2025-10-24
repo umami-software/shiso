@@ -8,8 +8,6 @@ export function TopNav({ tabs }) {
 
   const activeTab = getActiveTab(pathname, tabs);
 
-  console.log({ activeTab });
-
   return (
     <Box maxWidth="100vw" overflowX="auto" overflowY="hidden">
       <Tabs selectedKey={activeTab?.toString()}>
@@ -18,7 +16,7 @@ export function TopNav({ tabs }) {
             const url = href || groups?.[0]?.pages?.[0] || pages?.[0];
 
             return (
-              <Tab id={tab}>
+              <Tab key={tab} id={tab}>
                 <Link href={`/${url}`}>{tab}</Link>
               </Tab>
             );

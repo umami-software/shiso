@@ -10,19 +10,16 @@ export interface RenderPageProps {
   collection?: Content[];
 }
 
-export function next(config: ShisoConfig) {
-  const dir = path.resolve(config.contentDir);
+export function next(config: ShisoConfig, type: string) {
+  const { contentDir } = config;
+  const typeConfig = config[type];
+
+  const dir = path.resolve(contentDir, type);
 
   const getContent = async (file: string) => {
-    const files = await recursive(dir);
+    const content = await parseMdxFile(file, dir, type);
 
-    console.log({ files });
-
-    const content = await parseMdxFile(file);
-
-    if (content) {
-      content['slug'] = getSlug(file, path.resolve(config.contentDir));
-    }
+    console.log({ content });
 
     return content;
   };
@@ -32,7 +29,7 @@ export function next(config: ShisoConfig) {
     const file = path.join(dir, `${name}.mdx`);
 
     const content = await getContent(file);
-    const { title } = config;
+    const { title } = config[type];
 
     return {
       title: {
@@ -57,18 +54,17 @@ export function next(config: ShisoConfig) {
 
       const content: any = await getContent(file);
 
-      return render({ config, content });
+      return render({ config: typeConfig, content });
     };
   }
 
   function renderCollection(render: (props: RenderPageProps) => ReactNode) {
     return async () => {
       const files = await recursive(dir);
-      console.log({ files });
 
       const collection: any = await Promise.all(files.map((file: string) => getContent(file)));
 
-      return render({ config, collection });
+      return render({ config: typeConfig, collection });
     };
   }
 

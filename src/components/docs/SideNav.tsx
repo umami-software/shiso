@@ -3,10 +3,12 @@ import { Text, Column, type ColumnProps } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Search } from './Search';
-import styles from './SideNav.module.css';
 import { Navigation, Page, Group } from '@/lib/types';
 import { getNavigationMenu } from '@/lib/navigation';
+import { SearchButton } from './SearchButton';
+import styles from './SideNav.module.css';
+
+const SIDENAV_ID = 'shiso_docs_sidenav';
 
 export interface SideNavProps extends ColumnProps {
   navigation: Navigation;
@@ -27,11 +29,9 @@ export function SideNav({
 
   const menu = getNavigationMenu(pathname, navigation);
 
-  console.log({ menu });
-
   useEffect(() => {
     if (autoHeight) {
-      const rect = document.getElementById('shiso_docs_sidenav')?.getBoundingClientRect();
+      const rect = document.getElementById(SIDENAV_ID)?.getBoundingClientRect();
 
       if (rect) {
         setHeight(`${window.innerHeight - rect.top - 10}px`);
@@ -44,11 +44,12 @@ export function SideNav({
   return (
     <Column
       {...props}
-      id="shiso_docs_sidenav"
+      id={SIDENAV_ID}
       className={classNames(styles.nav, isSticky && styles.sticky, className)}
+      gap
       style={{ ...style, height }}
     >
-      <Search />
+      <SearchButton />
 
       {isGroup && (
         <Column aria-label="nav" gap="6">
@@ -71,8 +72,6 @@ export function SideNav({
 }
 
 const Items = ({ items, selected }: { items: Page[]; selected: string }) => {
-  console.log({ items, selected });
-
   return (
     <Column className={styles.items}>
       {items?.map((page: string, index: number) => {
