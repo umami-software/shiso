@@ -11,14 +11,18 @@ import {
   Dialog,
   Text,
 } from '@umami/react-zen';
-import { Content, DocsConfig, ComponentProps } from '@/lib/types';
+import { usePathname } from 'next/navigation';
+import { DocsConfig, ComponentProps } from '@/lib/types';
 import { Menu } from '@/components/icons';
 import { PageLinks } from '@/components/common/PageLinks';
 import { SideNav } from './SideNav';
 import { TopNav } from './TopNav';
 import { DocContent } from './DocContent';
+import { getNavigationDetails } from '@/lib/navigation';
 
 export function Docs({ content, config }: ComponentProps<DocsConfig>) {
+  const pathname = usePathname();
+
   if (!content) {
     return <Heading>Page not found</Heading>;
   }
@@ -32,7 +36,9 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
   const { code, meta, anchors } = content;
   const { navigation } = config;
   const { top } = navigation;
-  const { section, next, prev } = parseContent(content, config);
+  const { groupName, nextPage, prevPage } = getNavigationDetails(pathname, navigation);
+
+  console.log({ groupName, nextPage, prevPage });
 
   const MobileMenuButton = () => (
     <DialogTrigger>
@@ -74,12 +80,12 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
           autoHeight
         />
         <DocContent
-          section={section}
+          section={groupName}
           title={meta?.title}
           description={meta?.description}
           code={code}
-          next={next}
-          prev={prev}
+          nextPage={nextPage}
+          prevPage={prevPage}
         />
         <PageLinks
           display={{
@@ -92,12 +98,4 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
       </Row>
     </Column>
   );
-}
-
-function parseContent(content: Content, config?: DocsConfig) {
-  const { navigation } = config || {};
-
-  let next, prev, section, found;
-
-  return { navigation, section, next, prev };
 }

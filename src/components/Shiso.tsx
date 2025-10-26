@@ -23,6 +23,7 @@ export interface ShisoProps {
   content?: Content;
   collection?: Content[];
   components?: Record<any, any>;
+  mdxFiles?: Content[];
   children: ReactElement<ComponentProps<ShisoConfig>>;
 }
 
@@ -34,12 +35,12 @@ const shisoComponents = {
 
 export const ShisoContext = createContext(null as any);
 
-export function Shiso({ config, content, collection, components, children }: ShisoProps) {
+export function Shiso({ config, content, collection, components, mdxFiles, children }: ShisoProps) {
   return (
-    <ShisoContext.Provider value={{ config, content, components }}>
+    <ShisoContext.Provider value={{ config, content, components, mdxFiles }}>
       <QueryClientProvider client={client}>
         <MDXProvider components={{ ...zenComponents, ...shisoComponents, ...components } as any}>
-          {cloneElement(children, { config, content, collection })}
+          {cloneElement(children, { config, content, collection, mdxFiles })}
         </MDXProvider>
       </QueryClientProvider>
     </ShisoContext.Provider>

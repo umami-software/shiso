@@ -5,6 +5,7 @@ export interface Group {
   icon?: string;
   href?: string;
   pages: Page[];
+  menu?: any[];
 }
 
 export interface Tab {
@@ -36,6 +37,7 @@ export interface ComponentProps<T> {
   config?: T;
   content?: Content;
   collection?: Content[];
+  mdxFiles?: Content[];
 }
 
 export interface ShisoConfig {

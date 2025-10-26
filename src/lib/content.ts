@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -6,23 +7,31 @@ import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
 import recursive from 'recursive-readdir';
 
-export async function loadMdxFiles(dir: string, type: string) {
+export async function loadMdxFiles(dir: string) {
   const files = await recursive(dir);
 
-  console.log({ files, dir });
+  //console.log({ files, dir });
 
-  return Promise.all(
+  const pages = await Promise.all(
     files
       .map(async (file: string) => {
         if (/\.mdx?$/.test(file)) {
-          return await parseMdxFile(file, dir, type);
+          const data = await parseMdxFile(file);
+
+          if (data) {
+            data['slug'] = getSlug(file, dir);
+          }
+
+          return data;
         }
       })
       .filter(Boolean),
   );
+
+  return pages;
 }
 
-export async function parseMdxFile(file: string, dir: string, type: string) {
+export async function parseMdxFile(file: string) {
   try {
     const postContent = await fs.readFile(file, 'utf8');
 
@@ -34,7 +43,6 @@ export async function parseMdxFile(file: string, dir: string, type: string) {
       content: mdxContent,
       code: await getCode(mdxContent),
       anchors: getAnchors(mdxContent),
-      slug: `${type}/${getSlug(file, dir)}`,
     };
   } catch {
     return null;
@@ -72,5 +80,10 @@ export async function getCode(content: string) {
 }
 
 export function getSlug(file: string, dir: string) {
-  return file.replace('.mdx', '').replace(dir, '').replace(/\\/g, '/').replace(/^\//, '');
+  return file
+    .replace('.mdx', '')
+    .replace(path.dirname(dir), '')
+    .replace(/\/index(\.mdx?)?$/, '')
+    .replace(/\\/g, '/')
+    .replace(/^\//, '');
 }

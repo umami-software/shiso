@@ -2,17 +2,29 @@ import { Heading, Box, Text, Row, Icon } from '@umami/react-zen';
 import Link from 'next/link';
 import { Markdown } from '@/components/common/Markdown';
 import { ChevronRight } from '@/components/icons';
+import { useShiso } from '@/components';
 
 export interface DocsContentProps {
   section?: string;
   title?: string;
   description?: string;
   code: string;
-  next?: any;
-  prev?: any;
+  nextPage?: any;
+  prevPage?: any;
 }
 
-export function DocContent({ section, title, description, code, next, prev }: DocsContentProps) {
+export function DocContent({
+  section,
+  title,
+  description,
+  code,
+  nextPage,
+  prevPage,
+}: DocsContentProps) {
+  const { mdxFiles } = useShiso();
+  const next = mdxFiles.find(page => page.slug === nextPage);
+  const prev = mdxFiles.find(page => page.slug === prevPage);
+
   return (
     <Box flexGrow="1">
       {section && (
@@ -32,8 +44,8 @@ export function DocContent({ section, title, description, code, next, prev }: Do
       )}
       <Markdown code={code} />
       <Row justifyContent="space-between">
-        <NavigationButton {...prev} isPrev />
-        <NavigationButton {...next} />
+        <NavigationButton label={prev?.meta?.title} url={`/${prev?.slug}`} isPrev />
+        <NavigationButton label={next?.meta?.title} url={`/${next?.slug}`} />
       </Row>
     </Box>
   );

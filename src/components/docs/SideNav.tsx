@@ -7,6 +7,7 @@ import { Navigation, Page, Group } from '@/lib/types';
 import { getNavigationMenu } from '@/lib/navigation';
 import { SearchButton } from './SearchButton';
 import styles from './SideNav.module.css';
+import { useShiso } from '@/components';
 
 const SIDENAV_ID = 'shiso_docs_sidenav';
 
@@ -29,6 +30,8 @@ export function SideNav({
 
   const menu = getNavigationMenu(pathname, navigation);
 
+  console.log({ menu, pathname });
+
   useEffect(() => {
     if (autoHeight) {
       const rect = document.getElementById(SIDENAV_ID)?.getBoundingClientRect();
@@ -40,6 +43,7 @@ export function SideNav({
   }, [autoHeight]);
 
   const isGroup = !!(menu?.[0] as Group)?.pages;
+  const selected = pathname.slice(1);
 
   return (
     <Column
@@ -59,19 +63,21 @@ export function SideNav({
                 <Text weight="bold" className={styles.header}>
                   {group}
                 </Text>
-                <Items items={pages || []} selected={pathname} />
+                <Items items={pages || []} selected={selected} />
               </Column>
             );
           })}
         </Column>
       )}
 
-      {!isGroup && <Items items={menu as string[]} selected={pathname} />}
+      {!isGroup && <Items items={menu as string[]} selected={selected} />}
     </Column>
   );
 }
 
 const Items = ({ items, selected }: { items: Page[]; selected: string }) => {
+  const { mdxFiles } = useShiso();
+
   return (
     <Column className={styles.items}>
       {items?.map((page: string, index: number) => {
@@ -79,11 +85,11 @@ const Items = ({ items, selected }: { items: Page[]; selected: string }) => {
           <Link
             key={index}
             className={classNames(styles.item, {
-              [styles.selected]: `/${page}` === selected,
+              [styles.selected]: page === selected,
             })}
             href={`/${page}`}
           >
-            {page}
+            {mdxFiles.find(({ slug }) => slug === page)?.meta?.title || page}
           </Link>
         );
       })}
