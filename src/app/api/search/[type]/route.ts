@@ -9,14 +9,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ type: st
   const { searchParams } = new URL(req.url);
   const q = searchParams.get('q') || '';
 
-  const data = await loadMdxFiles(path.resolve(`content`, type), type);
+  const data = await loadMdxFiles(path.resolve(`content`, type));
 
   const db = await getDB(data);
 
   const results = await search(db, {
     term: q,
-    properties: ['title', 'content'],
-    limit: 10,
+    properties: ['id', 'title', 'content'],
+    limit: 20,
   });
 
   return NextResponse.json(results.hits);

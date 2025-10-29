@@ -6,13 +6,12 @@ import rehypeSlug from 'rehype-slug';
 import rehypeHighlight from 'rehype-highlight';
 import matter from 'gray-matter';
 import recursive from 'recursive-readdir';
+import { formatBookmark } from '@/lib/utils';
 
 export async function loadMdxFiles(dir: string) {
   const files = await recursive(dir);
 
-  //console.log({ files, dir });
-
-  const pages = await Promise.all(
+  return Promise.all(
     files
       .map(async (file: string) => {
         if (/\.mdx?$/.test(file)) {
@@ -27,8 +26,6 @@ export async function loadMdxFiles(dir: string) {
       })
       .filter(Boolean),
   );
-
-  return pages;
 }
 
 export async function parseMdxFile(file: string) {
@@ -42,31 +39,11 @@ export async function parseMdxFile(file: string) {
       meta: frontmatter,
       content: mdxContent,
       code: await getCode(mdxContent),
-      anchors: getAnchors(mdxContent),
+      toc: getToc(mdxContent),
     };
   } catch {
     return null;
   }
-}
-
-export function getAnchors(content: string) {
-  const anchors: { name: string; id: string; size: number }[] = [];
-
-  content.split('\n').forEach(line => {
-    const match = line.match(/^(#+)\s+(.*)/);
-    if (match) {
-      const [, num, name] = match;
-      const size = num.length;
-      const id = name
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]+/g, '');
-
-      anchors.push({ name, id, size });
-    }
-  });
-
-  return anchors;
 }
 
 export async function getCode(content: string) {
@@ -86,4 +63,21 @@ export function getSlug(file: string, dir: string) {
     .replace(/\/index(\.mdx?)?$/, '')
     .replace(/\\/g, '/')
     .replace(/^\//, '');
+}
+
+export function getToc(content: string) {
+  const anchors: { name: string; id: string; size: number }[] = [];
+
+  content.split('\n').forEach(line => {
+    const match = line.match(/^(#+)\s+(.*)/);
+    if (match) {
+      const [, num, name] = match;
+      const size = num.length;
+      const id = formatBookmark(name);
+
+      anchors.push({ name, id, size });
+    }
+  });
+
+  return anchors;
 }

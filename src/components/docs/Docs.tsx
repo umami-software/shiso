@@ -33,7 +33,7 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
 
   console.log({ content, config });
 
-  const { code, meta, anchors } = content;
+  const { code, meta, toc } = content;
   const { navigation } = config;
   const { top } = navigation;
   const { groupName, nextPage, prevPage } = getNavigationDetails(pathname, navigation);
@@ -92,7 +92,7 @@ export function Docs({ content, config }: ComponentProps<DocsConfig>) {
             xs: 'none',
             lg: 'flex',
           }}
-          items={anchors}
+          items={toc}
           style={{ top }}
         />
       </Row>

@@ -29,7 +29,7 @@ export interface Content {
   path: string;
   code: string;
   content: string;
-  anchors?: { id: string; name: string; size: number }[];
+  toc?: { id: string; name: string; size: number }[];
   slug: string;
 }
 
