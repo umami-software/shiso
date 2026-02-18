@@ -1,0 +1,225 @@
+@import 'tailwindcss';
+
+/* Theme configuration for Tailwind v4 */
+@theme {
+  /* Font families */
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Font sizes - mapping from existing design system */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+  --font-size-6xl: 60px;
+  --font-size-7xl: 72px;
+  --font-size-8xl: 96px;
+
+  /* Spacing scale */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 40px;
+  --spacing-8: 48px;
+  --spacing-9: 64px;
+  --spacing-10: 80px;
+  --spacing-11: 96px;
+  --spacing-12: 128px;
+
+  /* Border radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Accent colors */
+  --color-gray: #8d8d8d;
+  --color-gold: #978365;
+  --color-bronze: #a18072;
+  --color-brown: #ad7f58;
+  --color-yellow: #ffe629;
+  --color-amber: #ffc53d;
+  --color-orange: #f76b15;
+  --color-tomato: #e54d2e;
+  --color-red: #e5484d;
+  --color-ruby: #e54666;
+  --color-crimson: #e93d82;
+  --color-pink: #d6409f;
+  --color-plum: #ab4aba;
+  --color-purple: #8e4ec6;
+  --color-violet: #6e56cf;
+  --color-iris: #5b5bd6;
+  --color-indigo: #3e63dd;
+  --color-blue: #0090ff;
+  --color-cyan: #00a2c7;
+  --color-teal: #12a594;
+  --color-jade: #29a383;
+  --color-green: #30a46c;
+  --color-grass: #46a758;
+  --color-lime: #bdee63;
+  --color-mint: #86ead4;
+  --color-sky: #7ce2fe;
+
+  /* Base colors - Light theme defaults */
+  --color-base-1: #fcfcfc;
+  --color-base-2: #f9f9f9;
+  --color-base-3: #f0f0f0;
+  --color-base-4: #e8e8e8;
+  --color-base-5: #e0e0e0;
+  --color-base-6: #d9d9d9;
+  --color-base-7: #cecece;
+  --color-base-8: #bbbbbb;
+  --color-base-9: #8d8d8d;
+  --color-base-10: #838383;
+  --color-base-11: #646464;
+  --color-base-12: #202020;
+
+  /* Semantic colors */
+  --color-background: #fff;
+  --color-foreground: #202020;
+  --color-muted: #838383;
+  --color-border: #d9d9d9;
+  --color-primary: #202020;
+  --color-primary-foreground: #fcfcfc;
+  --color-success: #30a46c;
+  --color-success-foreground: #fcfcfc;
+  --color-danger: #e5484d;
+  --color-danger-foreground: #fcfcfc;
+  --color-warning: #f76b15;
+  --color-warning-foreground: #fcfcfc;
+  --color-info: #0090ff;
+  --color-info-foreground: #fcfcfc;
+}
+
+/* Dark theme overrides using CSS custom properties */
+:root {
+  --tw-background: var(--color-background);
+  --tw-foreground: var(--color-foreground);
+  --tw-muted: var(--color-muted);
+  --tw-border: var(--color-border);
+}
+
+html[data-theme='dark'],
+.dark-theme {
+  --color-base-1: #111111;
+  --color-base-2: #191919;
+  --color-base-3: #222222;
+  --color-base-4: #2a2a2a;
+  --color-base-5: #313131;
+  --color-base-6: #3a3a3a;
+  --color-base-7: #484848;
+  --color-base-8: #606060;
+  --color-base-9: #6e6e6e;
+  --color-base-10: #7b7b7b;
+  --color-base-11: #b4b4b4;
+  --color-base-12: #eeeeee;
+
+  --color-background: #0f0f0f;
+  --color-foreground: #eeeeee;
+  --color-muted: #7b7b7b;
+  --color-border: #3a3a3a;
+  --color-primary: #eeeeee;
+  --color-primary-foreground: #111111;
+}
+
+/* Base layer for global styles */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-foreground);
+    font-size: var(--font-size-sm);
+    background-color: var(--color-background);
+    scrollbar-gutter: stable;
+    line-height: 1.5;
+  }
+
+  a,
+  a:active,
+  a:hover {
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-primary);
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    color: currentColor;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+    line-height: 1.25;
+    text-wrap: balance;
+    letter-spacing: -0.05ch;
+  }
+
+  p {
+    margin-block: 1em;
+  }
+
+  ol,
+  ul {
+    list-style: none;
+    padding-inline-start: 1.5em;
+  }
+
+  li {
+    margin-block: 0.5em;
+  }
+
+  :where(*) {
+    outline-color: var(--color-primary);
+  }
+}
