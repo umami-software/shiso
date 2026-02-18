@@ -4,7 +4,6 @@ import { MDXProvider } from '@mdx-js/react';
 import { Code } from '@umami/react-zen';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
-import { Blogs } from '@/components/Blogs';
 import type { ShisoConfig, ShisoContent } from '@/lib/types';
 
 export interface ShisoProps {
@@ -25,7 +24,6 @@ export type ShisoTemplateComponent = ({
 
 const defaultTemplates = {
   docs: Docs,
-  blog: Blogs,
 };
 
 const shisoComponents = {

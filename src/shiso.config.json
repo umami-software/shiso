@@ -3,8 +3,5 @@
   "docsConfigPath": "./src/docs.json",
   "docs": {
     "title": "Docs - Shiso"
-  },
-  "blog": {
-    "title": "Blog - Shiso"
   }
 }

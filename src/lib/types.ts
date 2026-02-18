@@ -2,15 +2,10 @@ export interface ShisoDocsConfig {
   top?: string | number;
 }
 
-export interface ShisoBlogConfig {
-  title?: string;
-}
-
 export interface ShisoConfig {
   contentDir: string;
   docsConfigPath?: string;
   docs?: ShisoDocsConfig & { [key: string]: any };
-  blog?: ShisoBlogConfig & { [key: string]: any };
 }
 
 export interface ShisoContent {

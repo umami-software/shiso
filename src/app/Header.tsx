@@ -10,7 +10,6 @@ export function Header() {
           <Link href="/">shiso</Link>
         </Text>
         <Link href="/docs">docs</Link>
-        <Link href="/blog">blog</Link>
       </Row>
       <Row gap="2" alignItems="center">
         <ThemeButton />
