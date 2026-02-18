@@ -1,5 +1,5 @@
 export interface ShisoDocsConfig {
-  tabs?: [];
+  top?: string | number;
 }
 
 export interface ShisoBlogConfig {
@@ -8,8 +8,9 @@ export interface ShisoBlogConfig {
 
 export interface ShisoConfig {
   contentDir: string;
-  docs?: { [key: string]: any };
-  blog?: { [key: string]: any };
+  docsConfigPath?: string;
+  docs?: ShisoDocsConfig & { [key: string]: any };
+  blog?: ShisoBlogConfig & { [key: string]: any };
 }
 
 export interface ShisoContent {
@@ -25,4 +26,30 @@ export interface ShisoRenderProps {
   type: string;
   content: any;
   config: ShisoConfig;
+}
+
+export type MintlifyPageItem = string | MintlifyGroupItem;
+
+export interface MintlifyGroupItem {
+  group: string;
+  pages: MintlifyPageItem[];
+}
+
+export interface MintlifyTabItem {
+  tab: string;
+  groups?: MintlifyGroupItem[];
+  pages?: MintlifyPageItem[];
+}
+
+export interface MintlifyNavigation {
+  tabs?: MintlifyTabItem[];
+  groups?: MintlifyGroupItem[];
+  pages?: MintlifyPageItem[];
+}
+
+export interface MintlifyDocsConfig {
+  $schema?: string;
+  theme?: string;
+  name?: string;
+  navigation: MintlifyNavigation;
 }
