@@ -20,6 +20,13 @@ export interface ShisoContent {
   content: string;
   anchors?: { id: string; name: string; size: number }[];
   slug?: string;
+  tabs?: DocsTab[];
+  navigation?: Record<string, DocsNavSection[]>;
+  section?: string;
+  prev?: { label: string; url: string } | null;
+  next?: { label: string; url: string } | null;
+  url?: string;
+  tabId?: string;
 }
 
 export interface ShisoRenderProps {
@@ -52,4 +59,42 @@ export interface MintlifyDocsConfig {
   theme?: string;
   name?: string;
   navigation: MintlifyNavigation;
+}
+
+export interface DocsTab {
+  id: string;
+  label: string;
+  url: string;
+}
+
+export interface DocsPageLink {
+  label: string;
+  slug: string;
+  url: string;
+}
+
+export interface DocsNavSection {
+  section: string;
+  pages: DocsPageLink[];
+}
+
+export interface NormalizedDocsPage {
+  slug: string;
+  fileSlug: string;
+  label: string;
+  url: string;
+  section: string;
+  tabId: string;
+  tabLabel: string;
+  order: number;
+  filePath: string;
+}
+
+export interface NormalizedDocsConfig {
+  name?: string;
+  tabs: DocsTab[];
+  navigation: Record<string, DocsNavSection[]>;
+  pages: NormalizedDocsPage[];
+  pageBySlug: Record<string, NormalizedDocsPage>;
+  pageByLookupSlug: Record<string, NormalizedDocsPage>;
 }

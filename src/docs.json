@@ -1,0 +1,31 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Shiso",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation", "configuration"]
+          },
+          {
+            "group": "Writing content",
+            "pages": ["writing-content", "text", "images", "lists", "code-blocks"]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Components",
+            "pages": ["components/index"]
+          }
+        ]
+      }
+    ]
+  }
+}

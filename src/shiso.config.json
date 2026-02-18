@@ -1,76 +1,8 @@
 {
   "contentDir": "./src/content",
+  "docsConfigPath": "./src/docs.json",
   "docs": {
-    "title": "Docs - Shiso",
-    "tabs": [
-      {
-        "id": "docs",
-        "label": "Documentation",
-        "url": "/docs"
-      },
-      {
-        "id": "components",
-        "label": "Components",
-        "url": "/docs/components"
-      }
-    ],
-    "navigation": {
-      "docs": [
-        {
-          "section": "Getting started",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs"
-            },
-            {
-              "label": "Installation",
-              "url": "/docs/installation"
-            },
-            {
-              "label": "Configuration",
-              "url": "/docs/configuration"
-            }
-          ]
-        },
-        {
-          "section": "Writing content",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs/writing-content"
-            },
-            {
-              "label": "Text",
-              "url": "/docs/text"
-            },
-            {
-              "label": "Images",
-              "url": "/docs/images"
-            },
-            {
-              "label": "Lists",
-              "url": "/docs/lists"
-            },
-            {
-              "label": "Code blocks",
-              "url": "/docs/code-blocks"
-            }
-          ]
-        }
-      ],
-      "components": [
-        {
-          "section": "Components",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs/components"
-            }
-          ]
-        }
-      ]
-    }
+    "title": "Docs - Shiso"
   },
   "blog": {
     "title": "Blog - Shiso"
