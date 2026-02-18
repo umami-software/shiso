@@ -3,12 +3,13 @@ import { Text, Column } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import type { BoxProps } from '@umami/react-zen/Box';
+import type { DocsTab } from '@/lib/types';
 import Link from 'next/link';
 import styles from './SideNav.module.css';
 
 export interface SideNavProps extends BoxProps {
-  tabs: any;
-  navigation: any;
+  tabs: DocsTab[];
+  navigation: Record<string, { section: string; pages: { label: string; url: string }[] }[]>;
   isSticky?: boolean;
   autoHeight?: boolean;
 }
@@ -24,8 +25,10 @@ export function SideNav({
 }: SideNavProps) {
   const pathname = usePathname();
 
-  const tab = tabs?.find(({ url, id }) => (id !== 'docs' ? pathname.startsWith(url) : false));
-  const menu = navigation[tab?.id || 'docs'];
+  const tab = [...(tabs || [])]
+    .sort((a, b) => b.url.length - a.url.length)
+    .find(({ url }) => pathname === url || pathname.startsWith(`${url}/`));
+  const menu = navigation[tab?.id || tabs?.[0]?.id] || [];
   const [height, setHeight] = useState<string | undefined>();
 
   useEffect(() => {

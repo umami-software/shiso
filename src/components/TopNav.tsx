@@ -1,12 +1,15 @@
 import { usePathname } from 'next/navigation';
 import { Box, Tabs, TabList, Tab } from '@umami/react-zen';
+import type { DocsTab } from '@/lib/types';
 import Link from 'next/link';
 
-export function TopNav({ tabs }) {
+export function TopNav({ tabs }: { tabs: DocsTab[] }) {
   const pathname = usePathname();
 
-  const tab = tabs?.find(({ id, url }) => (id !== 'docs' ? pathname.startsWith(url) : false));
-  const selected = tab?.id || 'docs';
+  const tab = [...(tabs || [])]
+    .sort((a, b) => b.url.length - a.url.length)
+    .find(({ url }) => pathname === url || pathname.startsWith(`${url}/`));
+  const selected = tab?.id || tabs?.[0]?.id;
 
   return (
     <Box maxWidth="100vw" overflowX="auto" overflowY="hidden">
