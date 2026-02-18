@@ -4,78 +4,66 @@ title: Configuration
 
 ## Config file
 
-The `shiso.config.json` file contains the configuration options for your project.
+Shiso uses two configuration files:
 
-The file has the following schema:
+- `shiso.config.json` for app-level settings
+- `docs.json` (Mintlify format) for docs navigation
+
+## App configuration (`shiso.config.json`)
 
 ```json
 {
   "contentDir": "/path/to/content",
-  "docs": {},
+  "docsConfigPath": "./src/docs.json",
+  "docs": {
+    "title": "Docs - Shiso"
+  },
   "blog": {}
 }
 ```
 
-At the root level, the properties represent the different content sections of your project.
-Shiso currently supports `docs` and `blog` content.
+## Docs configuration (`docs.json`)
 
-## Docs configuration
+`docs.json` uses Mintlify's navigation format:
 
 ```json
 {
-  "docs": {
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Shiso",
+  "navigation": {
     "tabs": [
       {
-        "id": "docs",
-        "label": "Documentation",
-        "url": "/docs"
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation", "configuration"]
+          },
+          {
+            "group": "Writing content",
+            "pages": ["writing-content", "text", "images", "lists", "code-blocks"]
+          }
+        ]
       },
       {
-        "id": "components",
-        "label": "Components",
-        "url": "/docs/components"
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Components",
+            "pages": ["components/index"]
+          }
+        ]
       }
-    ],
-    "navigation": {
-      "docs": [
-        {
-          "group": "Getting started",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs"
-            },
-            {
-              "label": "Installation",
-              "url": "/docs/installation"
-            }
-          ]
-        },
-        {
-          "group": "Basics",
-          "pages": [
-            {
-              "label": "Writing content",
-              "url": "/docs/writing-content"
-            }
-          ]
-        }
-      ],
-      "components": [
-        {
-          "group": "Components",
-          "pages": [
-            {
-              "label": "Overview",
-              "url": "/docs/components"
-            }
-          ]
-        }
-      ]
-    }
+    ]
   }
 }
 ```
+
+Each page entry maps to a file under `contentDir/docs`:
+
+- `"index"` -> `src/content/docs/index.mdx`
+- `"installation"` -> `src/content/docs/installation.mdx`
+- `"components/index"` -> `src/content/docs/components/index.mdx`
 
 ## Blog configuration
 

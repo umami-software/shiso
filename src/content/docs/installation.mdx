@@ -38,6 +38,30 @@ export default renderPage(props => {
 });
 ```
 
-## 3. Write content
+## 3. Add `docs.json`
+
+Create a Mintlify-style docs config and point `docsConfigPath` in `shiso.config.json` to it:
+
+```json
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "My Docs",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## 4. Write content
 
 In the folder you specified, start adding `.mdx` files.

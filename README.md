@@ -28,27 +28,19 @@ In the `page.jsx` file, add the following code:
 
 ```javascript
 import { Shiso } from '@umami/shiso';
-import { getContent, getContentIds } from '@@umami/shiso/server';
+import { next } from '@umami/shiso/server';
 import config from 'path/to/shiso.config.json';
 
-export async function generateStaticParams() {
-  const ids = await getContentIds('./src/content/docs');
+const { generateMetadata, generateStaticParams, renderPage } = next('docs', config);
 
-  return ids.map((id: string) => ({
-    id: id.split('/')
-  }));
-}
+export { generateMetadata, generateStaticParams };
 
-export default async function Page({ params }: { params: Promise<{ id: string[] }> }) {
-  const content = await getContent(await params, './src/content/docs');
-
-  return <Shiso type="docs" content={content} config={config} />;
-}
+export default renderPage(props => <Shiso {...props} />);
 ```
 
 ### 3. Write content
 
-In the folder you specified, start adding `.mdx` files.
+In `shiso.config.json`, set `docsConfigPath` to your Mintlify-style `docs.json` file. Then add `.mdx` files under `contentDir/docs` and reference them in `docs.json` navigation.
 
 ## License
 
