@@ -87,9 +87,9 @@ a:hover {
   margin: 1.25rem 0;
   padding: 1.25rem;
   overflow: auto;
-  border: 1px solid var(--border-default, #d4d4d8);
+  border: 1px solid #30363d;
   border-radius: var(--radius-default, 0.375rem);
-  background: var(--surface-base, #ffffff);
+  background: #0d1117;
 }
 
 .markdown pre.markdown-codeblock code,
@@ -99,6 +99,7 @@ a:hover {
     "Courier New", monospace;
   font-size: 0.875rem;
   line-height: 1.6;
+  color: #c9d1d9;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -106,7 +107,56 @@ a:hover {
 }
 
 .markdown pre.markdown-codeblock .hljs {
+  display: block;
+  color: #c9d1d9;
   background: transparent;
+}
+
+.markdown pre.markdown-codeblock .hljs-comment,
+.markdown pre.markdown-codeblock .hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.markdown pre.markdown-codeblock .hljs-keyword,
+.markdown pre.markdown-codeblock .hljs-selector-tag,
+.markdown pre.markdown-codeblock .hljs-subst {
+  color: #ff7b72;
+}
+
+.markdown pre.markdown-codeblock .hljs-string,
+.markdown pre.markdown-codeblock .hljs-doctag,
+.markdown pre.markdown-codeblock .hljs-regexp,
+.markdown pre.markdown-codeblock .hljs-template-variable {
+  color: #a5d6ff;
+}
+
+.markdown pre.markdown-codeblock .hljs-title,
+.markdown pre.markdown-codeblock .hljs-section,
+.markdown pre.markdown-codeblock .hljs-name,
+.markdown pre.markdown-codeblock .hljs-attr,
+.markdown pre.markdown-codeblock .hljs-attribute,
+.markdown pre.markdown-codeblock .hljs-symbol,
+.markdown pre.markdown-codeblock .hljs-bullet,
+.markdown pre.markdown-codeblock .hljs-addition,
+.markdown pre.markdown-codeblock .hljs-literal,
+.markdown pre.markdown-codeblock .hljs-type {
+  color: #79c0ff;
+}
+
+.markdown pre.markdown-codeblock .hljs-number,
+.markdown pre.markdown-codeblock .hljs-meta,
+.markdown pre.markdown-codeblock .hljs-built_in,
+.markdown pre.markdown-codeblock .hljs-builtin-name {
+  color: #d2a8ff;
+}
+
+.markdown pre.markdown-codeblock .hljs-variable,
+.markdown pre.markdown-codeblock .hljs-template-tag,
+.markdown pre.markdown-codeblock .hljs-link,
+.markdown pre.markdown-codeblock .hljs-selector-id,
+.markdown pre.markdown-codeblock .hljs-selector-class {
+  color: #ffa657;
 }
 
 .markdown .markdown-codeblock-copy {
@@ -117,11 +167,11 @@ a:hover {
   padding: 0;
   cursor: pointer;
   background: transparent;
-  color: var(--text-muted, #71717a);
+  color: #8b949e;
 }
 
 .markdown .markdown-codeblock-copy:hover {
-  color: var(--text-primary, #111827);
+  color: #f0f6fc;
 }
 
 .markdown .markdown-codeblock-check {
