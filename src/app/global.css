@@ -1,3 +1,7 @@
+:root {
+  --font-family: var(--font-inter);
+}
+
 html,
 body {
   font-family: var(--font-family);

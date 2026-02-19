@@ -8,9 +8,9 @@ export function Header() {
     <Row justifyContent="space-between" alignItems="center">
       <Row paddingY="5" gap="5" alignItems="center">
         <Text
-          size="5"
+          size="xl"
           weight="bold"
-          spacing="1"
+          spacing="tighter"
           render={(props) => (
             <Link href="/" {...props}>
               shiso
@@ -25,7 +25,7 @@ export function Header() {
           variant="quiet"
           render={(props) => <Link href="https://github.com/umami-software/react-zen" target="_blank" {...props} />}
         >
-          <Icon fillColor="currentColor">
+          <Icon fillColor="strong">
             <Github />
           </Icon>
         </Button>

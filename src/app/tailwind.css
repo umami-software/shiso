@@ -1,5 +1,4 @@
 @import 'tailwindcss';
 
-/* Include local source files and react-zen component classes for utility generation. */
+/* Include local source files for utility generation. */
 @source '../**/*.{js,jsx,ts,tsx,md,mdx}';
-@source '../../node_modules/@umami/react-zen/dist/**/*.{js,mjs}';
