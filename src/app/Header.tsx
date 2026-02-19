@@ -7,19 +7,27 @@ export function Header() {
   return (
     <Row justifyContent="space-between" alignItems="center">
       <Row paddingY="5" gap="5" alignItems="center">
-        <Text size="5" weight="bold" spacing="1" asChild>
-          <Link href="/">shiso</Link>
-        </Text>
+        <Text
+          size="5"
+          weight="bold"
+          spacing="1"
+          render={(props) => (
+            <Link href="/" {...props}>
+              shiso
+            </Link>
+          )}
+        />
         <Link href="/docs">docs</Link>
       </Row>
       <Row gap="2" alignItems="center">
         <ThemeButton />
-        <Button variant="quiet" asChild>
-          <Link href="https://github.com/umami-software/react-zen" target="_blank">
-            <Icon fillColor="currentColor">
-              <Github />
-            </Icon>
-          </Link>
+        <Button
+          variant="quiet"
+          render={(props) => <Link href="https://github.com/umami-software/react-zen" target="_blank" {...props} />}
+        >
+          <Icon fillColor="currentColor">
+            <Github />
+          </Icon>
         </Button>
       </Row>
     </Row>

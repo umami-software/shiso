@@ -16,11 +16,11 @@ export default function Home() {
         Publish content using MDX.
       </Text>
       <Row gap="3">
-        <Button variant="primary" asChild>
-          <Link href="/docs">Get started</Link>
+        <Button variant="primary" render={(props) => <Link href="/docs" {...props} />}>
+          Get started
         </Button>
-        <Button asChild>
-          <Link href="https://github.com/umami-software/shiso">View code</Link>
+        <Button render={(props) => <Link href="https://github.com/umami-software/shiso" {...props} />}>
+          View code
         </Button>
       </Row>
     </Column>
