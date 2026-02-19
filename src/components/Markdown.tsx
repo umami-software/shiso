@@ -1,8 +1,6 @@
-import { Box } from '@umami/react-zen';
 import { runSync } from '@mdx-js/mdx';
 import { useMDXComponents } from '@mdx-js/react';
 import * as runtime from 'react/jsx-runtime';
-import styles from './Markdown.module.css';
 
 const parseMdx = (code: string) => {
   try {
@@ -30,8 +28,8 @@ export function Markdown({ code }: { code: any }) {
   }
 
   return (
-    <Box className={styles.content}>
+    <div className="markdown">
       <Component components={components} />
-    </Box>
+    </div>
   );
 }

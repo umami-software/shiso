@@ -1,8 +1,7 @@
 'use client';
-import { createContext, JSX } from 'react';
 import { MDXProvider } from '@mdx-js/react';
-import { Code } from '@umami/react-zen';
 import * as zenComponents from '@umami/react-zen';
+import { createContext, JSX } from 'react';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
 import type { ShisoConfig, ShisoContent } from '@/lib/types';
@@ -29,7 +28,6 @@ const defaultTemplates = {
 
 const shisoComponents = {
   pre: CodeBlock,
-  code: Code,
 };
 
 const defaultZenComponents = Object.fromEntries(

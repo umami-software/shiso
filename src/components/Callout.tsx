@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import classNames from 'classnames';
-import styles from './Callout.module.css';
 
 export interface CalloutProps {
   variant: 'note' | 'warning' | 'info' | 'tip';
@@ -9,10 +8,5 @@ export interface CalloutProps {
 }
 
 export default function Callout({ variant = 'note', icon, children }: CalloutProps) {
-  return (
-    <div className={classNames(styles[variant])}>
-      {icon}
-      {children}
-    </div>
-  );
+  return <div className={classNames('shiso-callout', `shiso-callout-${variant}`)}>{icon}{children}</div>;
 }

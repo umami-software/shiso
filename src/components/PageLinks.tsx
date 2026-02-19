@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Column, Text, Box } from '@umami/react-zen';
 import classNames from 'classnames';
 import type { BoxProps } from '@umami/react-zen';
-import styles from './PageLinks.module.css';
 
 export interface PageLinksProps extends BoxProps {
   items?: { name: string; id: string; size: number }[];
@@ -34,7 +33,7 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   }
 
   return (
-    <Box {...props} className={classNames(styles.links, className)}>
+    <Box {...props} className={classNames('shiso-page-links', className)}>
       <Column gap="3" minWidth="240px">
         <Text size="sm" weight="bold">
           On this page
@@ -44,8 +43,8 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
             <a
               key={id}
               href={`#${id}`}
-              className={classNames(styles.link, styles[`indent-${size}`], {
-                [styles.selected]: hash === id,
+              className={classNames('shiso-page-link', `shiso-page-link-indent-${size}`, {
+                'is-selected': hash === id,
               })}
             >
               {name}

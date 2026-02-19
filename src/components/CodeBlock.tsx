@@ -1,17 +1,16 @@
-import { useState, useRef } from 'react';
-import classNames from 'classnames';
+import { type ComponentPropsWithoutRef, useRef, useState } from 'react';
 import { Icon } from '@umami/react-zen';
 import { CheckIcon, Copy } from '@/components/icons';
-import styles from './CodeBlock.module.css';
 
-export function CodeBlock(props: any) {
-  const textInput = useRef<any>(null);
+type CodeBlockProps = ComponentPropsWithoutRef<'pre'>;
+
+export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
+  const textInput = useRef<HTMLPreElement>(null);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     setCopied(true);
-
-    navigator?.clipboard?.writeText(textInput?.current?.textContent);
+    navigator?.clipboard?.writeText(textInput.current?.textContent || '');
 
     setTimeout(() => {
       setCopied(false);
@@ -19,10 +18,10 @@ export function CodeBlock(props: any) {
   };
 
   return (
-    <pre ref={textInput} className={classNames(styles.container, 'dark-theme')}>
-      {props.children}
-      <button aria-label="Copy code" className={styles.button} onClick={handleCopy}>
-        <Icon size="sm" className={copied ? styles.check : styles.copy}>
+    <pre ref={textInput} className={['markdown-codeblock', className].filter(Boolean).join(' ')} {...props}>
+      {children}
+      <button type="button" aria-label="Copy code" className="markdown-codeblock-copy" onClick={handleCopy}>
+        <Icon size="sm" className={copied ? 'markdown-codeblock-check' : 'markdown-codeblock-copy-icon'}>
           {copied ? <CheckIcon /> : <Copy />}
         </Icon>
       </button>

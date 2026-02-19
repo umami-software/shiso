@@ -22,7 +22,9 @@
     "dev": "dotenv next dev --port 8001 --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
+    "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
+    "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "icons": "svgr ./src/assets --out-dir src/components/svg --typescript",
     "components": "tsc -p tsconfig.components.json",
     "server": "tsc -p tsconfig.server.json",
@@ -32,16 +34,8 @@
     "bundle": "npm-run-all components server dts esbuild css"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint"
-    ],
-    "**/*.css": [
-      "stylelint --fix",
-      "prettier --write"
-    ],
-    "**/*.json": [
-      "prettier --write"
+    "**/*.{js,jsx,ts,tsx,mjs,cjs,css,json}": [
+      "biome check --write"
     ]
   },
   "dependencies": {
@@ -68,6 +62,7 @@
     "thenby": "^1.3.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.2",
     "@svgr/cli": "^8.1.0",
     "@tailwindcss/postcss": "^4.2.0",
     "@types/css-modules": "^1.0.5",
@@ -80,21 +75,11 @@
     "dts-bundle": "^0.7.3",
     "esbuild": "^0.25.3",
     "esbuild-plugin-css-modules": "^0.3.0",
-    "eslint": "^9.25.1",
-    "eslint-config-next": "15.1.3",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^5.2.6",
     "husky": "^9.1.1",
     "lint-staged": "^15.5.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.2.5",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
-    "stylelint": "^15.10.1",
-    "stylelint-config-prettier": "^9.0.5",
-    "stylelint-config-recommended": "^14.0.1",
     "tailwindcss": "^4.2.0",
     "typescript": "^5.9.3"
   },
