@@ -2,6 +2,7 @@
 import { createContext, JSX } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 import { Code } from '@umami/react-zen';
+import * as zenComponents from '@umami/react-zen';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Docs } from '@/components/Docs';
 import type { ShisoConfig, ShisoContent } from '@/lib/types';
@@ -31,6 +32,12 @@ const shisoComponents = {
   code: Code,
 };
 
+const defaultZenComponents = Object.fromEntries(
+  Object.entries(zenComponents).filter(([name, component]) => {
+    return /^[A-Z]/.test(name) && typeof component === 'function';
+  }),
+);
+
 export const ShisoContext = createContext(null as any);
 
 export function Shiso({ type, config, content, components, templates }: ShisoProps) {
@@ -42,7 +49,7 @@ export function Shiso({ type, config, content, components, templates }: ShisoPro
 
   return (
     <ShisoContext.Provider value={{ type, config, content, components, templates }}>
-      <MDXProvider components={{ ...shisoComponents, ...components }}>
+      <MDXProvider components={{ ...defaultZenComponents, ...shisoComponents, ...components }}>
         <Component config={config} content={content} />
       </MDXProvider>
     </ShisoContext.Provider>

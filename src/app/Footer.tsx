@@ -1,3 +1,4 @@
+'use client';
 import { Box, Text } from '@umami/react-zen';
 
 export function Footer() {

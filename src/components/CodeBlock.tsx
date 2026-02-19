@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import classNames from 'classnames';
-import { Icon, Icons } from '@umami/react-zen';
+import { Icon } from '@umami/react-zen';
+import { CheckIcon, Copy } from '@/components/icons';
 import styles from './CodeBlock.module.css';
 
 export function CodeBlock(props: any) {
@@ -22,7 +23,7 @@ export function CodeBlock(props: any) {
       {props.children}
       <button aria-label="Copy code" className={styles.button} onClick={handleCopy}>
         <Icon size="sm" className={copied ? styles.check : styles.copy}>
-          {copied ? <Icons.Check /> : <Icons.Copy />}
+          {copied ? <CheckIcon /> : <Copy />}
         </Icon>
       </button>
     </pre>

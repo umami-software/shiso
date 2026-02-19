@@ -1,3 +1,4 @@
+'use client';
 import { Heading, Text, Row, Column, Icon, Button } from '@umami/react-zen';
 import Link from 'next/link';
 import { Leaf } from '@/components/svg';

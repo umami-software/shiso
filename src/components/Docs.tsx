@@ -4,7 +4,6 @@ import {
   Heading,
   Button,
   Icon,
-  Icons,
   Row,
   Column,
   Modal,
@@ -13,6 +12,7 @@ import {
   Text,
 } from '@umami/react-zen';
 import type { ShisoContent } from '@/lib/types';
+import { Menu } from '@/components/icons';
 import { PageLinks } from './PageLinks';
 import { SideNav } from './SideNav';
 import { TopNav } from './TopNav';
@@ -28,29 +28,21 @@ export function Docs({ content, config }: { content: ShisoContent | null; config
 
   const { top } = config?.docs || {};
 
-  const navDisplay = {
-    xs: 'none',
-    lg: 'block',
-  };
+  const navDisplay = { base: 'none', lg: 'flex' } as const;
 
-  const linksDisplay = {
-    xs: 'none',
-    lg: 'block',
-  };
+  const linksDisplay = { base: 'none', lg: 'block' } as const;
 
-  const menuDisplay = {
-    lg: 'none',
-  };
+  const menuDisplay = { base: 'flex', lg: 'none' } as const;
 
   const MobileMenuButton = () => (
     <DialogTrigger>
       <Button>
         <Icon>
-          <Icons.Menu />
+          <Menu />
         </Icon>
         <Text>Menu</Text>
       </Button>
-      <Modal position="left" offset="70px">
+      <Modal>
         <Dialog variant="sheet">
           {({ close }) => {
             return (

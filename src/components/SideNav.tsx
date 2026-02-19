@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Text, Column } from '@umami/react-zen';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
-import type { BoxProps } from '@umami/react-zen/Box';
+import type { ColumnProps } from '@umami/react-zen';
 import type { DocsTab } from '@/lib/types';
 import Link from 'next/link';
 import styles from './SideNav.module.css';
 
-export interface SideNavProps extends BoxProps {
+export interface SideNavProps extends ColumnProps {
   tabs: DocsTab[];
   navigation: Record<string, { section: string; pages: { label: string; url: string }[] }[]>;
   isSticky?: boolean;

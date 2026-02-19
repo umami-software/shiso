@@ -1,5 +1,6 @@
-import { Heading, Box, Text, Row, Icon, Icons } from '@umami/react-zen';
+import { Heading, Box, Text, Row, Icon } from '@umami/react-zen';
 import Link from 'next/link';
+import { ChevronRight } from '@/components/icons';
 import { Markdown } from './Markdown';
 
 export interface DocsContentProps {
@@ -20,12 +21,14 @@ export function DocContent({ section, title, description, code, next, prev }: Do
         </Text>
       )}
       {title && (
-        <Heading size="5" as="h1" marginY="3">
-          {title}
-        </Heading>
+        <Box marginY="3">
+          <Heading size="4xl" as="h1">
+            {title}
+          </Heading>
+        </Box>
       )}
       {description && (
-        <Text color="muted" size="3">
+        <Text color="muted" size="lg">
           {description}
         </Text>
       )}
@@ -56,15 +59,15 @@ const NavigationButton = ({
       <Row alignItems="center" gap="3" marginY="3">
         {isPrev && (
           <Icon size="sm" rotate={180}>
-            <Icons.Chevron />
+            <ChevronRight />
           </Icon>
         )}
-        <Text size="3" weight="bold">
+        <Text size="lg" weight="bold">
           {label}
         </Text>
         {!isPrev && (
           <Icon size="sm">
-            <Icons.Chevron />
+            <ChevronRight />
           </Icon>
         )}
       </Row>

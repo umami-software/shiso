@@ -1,3 +1,4 @@
+'use client';
 import { Row, Text, ThemeButton, Button, Icon } from '@umami/react-zen';
 import Link from 'next/link';
 import { Github } from '@/components/svg';
