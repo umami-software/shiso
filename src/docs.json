@@ -22,7 +22,21 @@
         "groups": [
           {
             "group": "Components",
-            "pages": ["components/index"]
+            "pages": [
+              "components/index",
+              "components/accordion",
+              "components/callout",
+              "components/card",
+              "components/code-group",
+              "components/expandable",
+              "components/frame",
+              "components/param-field",
+              "components/request-example",
+              "components/response-field",
+              "components/steps",
+              "components/tabs",
+              "components/tooltip"
+            ]
           }
         ]
       }

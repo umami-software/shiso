@@ -1,0 +1,25 @@
+---
+title: Param Field
+---
+
+Use `ParamField` and `Param` to describe request parameters.
+
+## Basic usage
+
+```tsx
+<ParamField name="limit" query="limit" type="number" required>
+  Maximum number of records to return.
+</ParamField>
+```
+
+<ParamField name="limit" query="limit" type="number" required>
+  Maximum number of records to return.
+</ParamField>
+
+## Inline parameter names
+
+Use `Param` inline when referencing parameter names in text.
+
+<Note>
+  Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+</Note>

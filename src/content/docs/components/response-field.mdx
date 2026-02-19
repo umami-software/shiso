@@ -1,0 +1,23 @@
+---
+title: Response Field
+---
+
+Use `ResponseField` to document object properties and schema fields.
+
+## Basic usage
+
+```tsx
+<ResponseField name="id" type="string" required>
+  Unique identifier for the resource.
+</ResponseField>
+```
+
+<ResponseField name="id" type="string" required>
+  Unique identifier for the resource.
+</ResponseField>
+
+## Optional and deprecated fields
+
+<ResponseField name="legacyField" type="number" deprecated>
+  This field is deprecated and will be removed in a future release.
+</ResponseField>

@@ -1,6 +1,24 @@
-import { Box, Row, Tag, Text, Code as ZenCode } from '@umami/react-zen';
+import { Box, Row, Text, Code as ZenCode } from '@umami/react-zen';
 import type { ReactNode } from 'react';
 import { decodeHtmlEntities } from './utils';
+
+function Badge({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'primary' }) {
+  return (
+    <Box
+      as="span"
+      border
+      borderColor={tone === 'primary' ? 'primary' : 'muted'}
+      borderRadius="full"
+      paddingX="2"
+      paddingY="0.5"
+      backgroundColor={tone === 'primary' ? 'surface-sunken' : 'surface-raised'}
+    >
+      <Text size="xs" weight="medium" color={tone === 'primary' ? 'primary' : 'muted'}>
+        {children}
+      </Text>
+    </Box>
+  );
+}
 
 export interface ParamFieldProps {
   name?: string;
@@ -37,13 +55,13 @@ export function ParamField({
     >
       <Row alignItems="center" gap="2" wrap="wrap">
         <ZenCode>{label}</ZenCode>
-        {location ? <Tag variant="outline">{location}</Tag> : null}
+        {location ? <Badge>{location}</Badge> : null}
         {type ? (
           <Text color="muted" size="sm">
             {decodeHtmlEntities(type)}
           </Text>
         ) : null}
-        {required ? <Tag variant="primary">required</Tag> : null}
+        {required ? <Badge tone="primary">required</Badge> : null}
       </Row>
       {children ? <Box marginTop="3">{children}</Box> : null}
     </Box>

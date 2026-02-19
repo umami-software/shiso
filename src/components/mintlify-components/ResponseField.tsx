@@ -1,8 +1,26 @@
-import { Box, Row, Tag, Text, Code as ZenCode } from '@umami/react-zen';
+import { Box, Row, Text, Code as ZenCode } from '@umami/react-zen';
 import type { ReactNode } from 'react';
 import { decodeHtmlEntities } from './utils';
 
 type MintlifyValue = string | number | boolean | null | undefined;
+
+function Badge({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'primary' }) {
+  return (
+    <Box
+      as="span"
+      border
+      borderColor={tone === 'primary' ? 'primary' : 'muted'}
+      borderRadius="full"
+      paddingX="2"
+      paddingY="0.5"
+      backgroundColor={tone === 'primary' ? 'surface-sunken' : 'surface-raised'}
+    >
+      <Text size="xs" weight="medium" color={tone === 'primary' ? 'primary' : 'muted'}>
+        {children}
+      </Text>
+    </Box>
+  );
+}
 
 export interface ResponseFieldProps {
   name: string;
@@ -36,8 +54,8 @@ export function ResponseField({ name, type, required, deprecated, children }: Re
             {normalizedType}
           </Text>
         ) : null}
-        {required ? <Tag variant="primary">required</Tag> : null}
-        {deprecated ? <Tag variant="outline">deprecated</Tag> : null}
+        {required ? <Badge tone="primary">required</Badge> : null}
+        {deprecated ? <Badge>deprecated</Badge> : null}
       </Row>
       {children ? <Box marginTop="3">{children}</Box> : null}
     </Box>

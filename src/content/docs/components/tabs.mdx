@@ -1,0 +1,38 @@
+---
+title: Tabs
+---
+
+Use `Tabs` and `Tab` to show alternate content in the same space.
+
+## Basic usage
+
+```tsx
+<Tabs>
+  <Tab title="JavaScript">
+    <p>Install with npm.</p>
+  </Tab>
+  <Tab title="Python">
+    <p>Install with pip.</p>
+  </Tab>
+</Tabs>
+```
+
+<Tabs>
+  <Tab title="JavaScript">
+    <p>Install with npm.</p>
+  </Tab>
+  <Tab title="Python">
+    <p>Install with pip.</p>
+  </Tab>
+</Tabs>
+
+## Persist selection with `group`
+
+Tabs with the same `group` share selection via local storage.
+
+```tsx
+<Tabs group="language">
+  <Tab title="Node">...</Tab>
+  <Tab title="Go">...</Tab>
+</Tabs>
+```
