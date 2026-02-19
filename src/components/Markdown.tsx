@@ -1,5 +1,6 @@
 import { runSync } from '@mdx-js/mdx';
 import { useMDXComponents } from '@mdx-js/react';
+import { Box } from '@umami/react-zen';
 import * as runtime from 'react/jsx-runtime';
 
 const parseMdx = (code: string) => {
@@ -10,12 +11,12 @@ const parseMdx = (code: string) => {
     });
 
     return { Component: result.default };
-  } catch (err: any) {
-    return { error: err.message };
+  } catch (err: unknown) {
+    return { error: err instanceof Error ? err.message : 'Unknown MDX rendering error' };
   }
 };
 
-export function Markdown({ code }: { code: any }) {
+export function Markdown({ code }: { code: string }) {
   const components = useMDXComponents();
   const { Component, error } = parseMdx(code);
 
@@ -28,8 +29,8 @@ export function Markdown({ code }: { code: any }) {
   }
 
   return (
-    <div className="markdown">
+    <Box marginBottom="10">
       <Component components={components} />
-    </div>
+    </Box>
   );
 }

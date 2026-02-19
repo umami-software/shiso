@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Text, Column } from '@umami/react-zen';
-import classNames from 'classnames';
-import { usePathname } from 'next/navigation';
 import type { ColumnProps } from '@umami/react-zen';
-import type { DocsTab } from '@/lib/types';
+import { Column, Text } from '@umami/react-zen';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import type { DocsTab } from '@/lib/types';
 
 export interface SideNavProps extends ColumnProps {
   tabs: DocsTab[];
@@ -44,26 +43,38 @@ export function SideNav({
     <Column
       {...props}
       id="shiso_docs_sidenav"
-      className={classNames('shiso-side-nav', isSticky && 'is-sticky', className)}
+      className={className}
+      position={isSticky ? 'sticky' : undefined}
+      overflowY="auto"
+      minWidth="240px"
       style={{ ...style, height }}
     >
       <Column aria-label="nav" gap="6">
         {menu.map(({ section, pages }) => {
           return (
-            <Column title={section} key={section} className="shiso-side-nav-items">
-              <Text weight="bold" className="shiso-side-nav-header">
-                {section}
-              </Text>
-              {pages.map(({ label: text, url }, index: number) => {
+            <Column title={section} key={section}>
+              <Column paddingY="2">
+                <Text weight="bold">{section}</Text>
+              </Column>
+              {pages.map(({ label: text, url }) => {
+                const selected = url === pathname;
+
                 return (
-                  <Link
-                    key={index}
-                    className={classNames('shiso-side-nav-item', {
-                      'is-selected': url === pathname,
-                    })}
-                    href={url}
-                  >
-                    {text}
+                  <Link key={url} href={url} style={{ textDecoration: 'none' }}>
+                    <Column
+                      border="left"
+                      borderColor={selected ? 'primary' : 'muted'}
+                      backgroundColor={selected ? 'surface-sunken' : 'transparent'}
+                      paddingY="2"
+                      paddingX="3"
+                    >
+                      <Text
+                        color={selected ? 'strong' : 'muted'}
+                        weight={selected ? 'medium' : 'normal'}
+                      >
+                        {text}
+                      </Text>
+                    </Column>
                   </Link>
                 );
               })}
