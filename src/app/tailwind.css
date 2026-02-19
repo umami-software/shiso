@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Include local source files for utility generation. */
-@source '../**/*.{js,jsx,ts,tsx,md,mdx}';
+@source "../**/*.{js,jsx,ts,tsx,md,mdx}";
