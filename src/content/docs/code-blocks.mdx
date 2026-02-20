@@ -4,16 +4,15 @@ title: Code blocks
 
 ## Inline Code
 
-To display text as `inline code`, wrap the text in backticks (`).
+Use backticks for inline code.
 
 ```text
-To display text as `inline code`, wrap the text in backticks (`).
+Use `inline code` in normal text.
 ```
 
-## Code Block
+## Fenced code blocks
 
-To display text as a code block, use three backticks before and after your content.
-Include the programming language in the first line to get syntax highlighting.
+Use triple backticks and include a language for syntax highlighting:
 
 ```javascript
 function hello(name) {
@@ -29,9 +28,32 @@ function hello(name) {
 ```
 ````
 
-## Preview
+## Highlighting behavior
 
-<Button>Button</Button>
+This app uses:
+
+- `rehype-highlight` for tokenized code output
+- a Highlight.js stylesheet imported in `src/app/layout.tsx`
+
+Code colors come from the imported Highlight.js theme.
+
+## Code groups
+
+Use `CodeGroup` when you want tabbed snippets:
+
+````mdx
+<CodeGroup>
+  ```bash npm
+  npm install @umami/shiso
+  ```
+
+  ```bash pnpm
+  pnpm add @umami/shiso
+  ```
+</CodeGroup>
+````
+
+## Live component snippets
 
 ```jsx
 import { Button } from '@umami/react-zen';
@@ -40,3 +62,5 @@ export function ButtonExample() {
   return <Button>Button</Button>;
 }
 ```
+
+<Button>Button</Button>

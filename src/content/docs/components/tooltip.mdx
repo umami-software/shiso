@@ -4,6 +4,11 @@ title: Tooltip
 
 Use `Tooltip` to provide short inline hints.
 
+## Supported props
+
+- `tip?: string`
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -11,3 +16,7 @@ Use `Tooltip` to provide short inline hints.
 ```
 
 The value of <Tooltip tip="Used to identify the current API key">API key</Tooltip> must be kept secret.
+
+## Behavior notes
+
+- tooltip text is rendered via native `title` attribute

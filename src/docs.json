@@ -9,7 +9,11 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index", "installation", "configuration"]
+            "pages": ["index", "installation"]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["configuration", "docs-json-support", "runtime-behavior"]
           },
           {
             "group": "Writing content",

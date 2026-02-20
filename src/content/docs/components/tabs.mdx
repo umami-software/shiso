@@ -4,6 +4,18 @@ title: Tabs
 
 Use `Tabs` and `Tab` to show alternate content in the same space.
 
+## Supported props
+
+### `Tabs`
+
+- `group?: string`
+- `children?: ReactNode`
+
+### `Tab`
+
+- `title?: ReactNode`
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -36,3 +48,8 @@ Tabs with the same `group` share selection via local storage.
   <Tab title="Go">...</Tab>
 </Tabs>
 ```
+
+## Behavior notes
+
+- tab selection is stored under `localStorage` key `shiso-tabs:<group>`
+- one tab child renders as plain content (no tab UI)

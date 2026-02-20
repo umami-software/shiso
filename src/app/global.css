@@ -6,7 +6,7 @@ html,
 body {
   font-family: var(--font-family);
   color: var(--text-primary, #111827);
-  font-size: 16px;
+  font-size: 14px;
   background-color: var(--surface-base, #ffffff);
   scrollbar-gutter: stable;
 }

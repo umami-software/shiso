@@ -2,18 +2,16 @@
 title: Configuration
 ---
 
-## Config file
+Shiso uses two configuration layers:
 
-Shiso uses two configuration files:
+- `shiso.config.json` for runtime setup
+- `docs.json` for docs navigation structure
 
-- `shiso.config.json` for app-level settings
-- `docs.json` (Mintlify format) for docs navigation
-
-## App configuration (`shiso.config.json`)
+## `shiso.config.json` (app config)
 
 ```json
 {
-  "contentDir": "/path/to/content",
+  "contentDir": "./src/content",
   "docsConfigPath": "./src/docs.json",
   "docs": {
     "title": "Docs - Shiso"
@@ -21,9 +19,36 @@ Shiso uses two configuration files:
 }
 ```
 
-## Docs configuration (`docs.json`)
+### Supported keys
 
-`docs.json` uses Mintlify's navigation format:
+- `contentDir` (required): root folder containing section folders such as `docs`
+- `docsConfigPath` (optional): path to docs config file; defaults to `./docs.json`
+- `docs.title` (optional): used as metadata title suffix
+- `docs.top` (optional): top offset for sticky docs side panels
+
+### Conformance review: current app
+
+`src/shiso.config.json` conforms to the supported shape:
+
+```json
+{
+  "contentDir": "./src/content",
+  "docsConfigPath": "./src/docs.json",
+  "docs": {
+    "title": "Docs - Shiso"
+  }
+}
+```
+
+Notes:
+
+- `contentDir` points at `./src/content`
+- `docsConfigPath` points at `./src/docs.json`
+- `docs.title` is present and valid
+
+## `docs.json` (Mintlify-style navigation config)
+
+This app consumes Mintlify-style navigation and resolves docs pages from file slugs.
 
 ```json
 {
@@ -49,7 +74,11 @@ Shiso uses two configuration files:
         "groups": [
           {
             "group": "Components",
-            "pages": ["components/index"]
+            "pages": [
+              "components/index",
+              "components/accordion",
+              "components/callout"
+            ]
           }
         ]
       }
@@ -58,8 +87,25 @@ Shiso uses two configuration files:
 }
 ```
 
-Each page entry maps to a file under `contentDir/docs`:
+### Page reference mapping
 
-- `"index"` -> `src/content/docs/index.mdx`
+Each `pages` entry maps to a file under `contentDir/docs`:
+
+- `"index"` -> `src/content/docs/index.mdx` (or `.md`)
 - `"installation"` -> `src/content/docs/installation.mdx`
 - `"components/index"` -> `src/content/docs/components/index.mdx`
+
+Routes are generated as:
+
+- `index` -> `/docs`
+- `components/index` -> `/docs/components`
+- `components/callout` -> `/docs/components/callout`
+
+## What this app uses from `docs.json`
+
+- navigation hierarchy for docs pages
+- tab labels (for top nav)
+- group labels (for side nav sections)
+- page order (for prev/next)
+
+For full shape details and unsupported entries, see [docs.json support](/docs/docs-json-support).

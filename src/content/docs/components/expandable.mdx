@@ -4,6 +4,12 @@ title: Expandable
 
 Use `Expandable` for collapsible sections.
 
+## Supported props
+
+- `title: ReactNode`
+- `defaultOpen?: boolean`
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -22,6 +28,10 @@ Use `Expandable` for collapsible sections.
 <Expandable title="Open section" defaultOpen>
   This section starts expanded.
 </Expandable>
+
+## Behavior notes
+
+- each `Expandable` is rendered as a single-item accordion
 ```
 
 <Expandable title="Open section" defaultOpen>

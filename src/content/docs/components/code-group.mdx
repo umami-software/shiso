@@ -4,6 +4,13 @@ title: Code Group
 
 Use `CodeGroup` to render multiple code snippets behind tabs.
 
+## Supported props
+
+- `children?: ReactNode`
+
+Each child code block can optionally define a `title` prop. If omitted, Shiso attempts to infer a label
+from `language-*` class names.
+
 ## Basic usage
 
 ````tsx
@@ -27,3 +34,8 @@ Use `CodeGroup` to render multiple code snippets behind tabs.
   pnpm add @umami/shiso
   ```
 </CodeGroup>
+
+## Behavior notes
+
+- one child renders as plain content (no tabs)
+- duplicate labels are auto-suffixed (`bash`, `bash 2`, ...)

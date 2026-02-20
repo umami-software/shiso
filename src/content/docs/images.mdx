@@ -2,20 +2,31 @@
 title: Images
 ---
 
-<img src="/images/sample.jpg" width="640" />
+Use standard Markdown or HTML image tags in MDX.
 
-## Markdown
+## Markdown syntax
 
-You can add images using Markdown syntax.
-
-```text
-![title](/path/to/image.jpg)
+```mdx
+![Sample image](/images/sample.jpg)
 ```
 
-## HTML
+![Sample image](/images/sample.jpg)
 
-You can also use regular HTML.
+## HTML syntax
 
 ```html
-<img src="/path/to/image.jpg" />
+<img src="/images/sample.jpg" width="640" />
 ```
+
+<img src="/images/sample.jpg" width="640" />
+
+## Where image assets should live
+
+- place assets under `public/`
+- reference them as absolute site paths (`/images/sample.jpg`)
+
+## Tips
+
+- always include meaningful alt text in Markdown syntax
+- avoid very large images for docs readability and load performance
+- use explicit width/height on `<img>` when layout stability matters

@@ -2,17 +2,22 @@
 title: Installation
 ---
 
-These instructions show how to set up Shiso in a Next.js project.
+This guide wires Shiso docs into a Next.js App Router project.
 
-## 1. Install the package
+## Prerequisites
+
+- Next.js App Router project
+- A `src/content/docs` folder (or equivalent) for docs files
+
+## 1. Install Shiso
 
 ```shell
 npm install @umami/shiso
 ```
 
-## 2. Create page
+## 2. Create a docs route
 
-In your `app` folder, create a folder for the content section you wish to add. In this case we are creating a section for `docs`.
+Add a catch-all route:
 
 ```text
 src
@@ -22,7 +27,7 @@ src
 │           └── page.jsx
 ```
 
-In the `page.jsx` file, add the following code:
+`page.jsx`:
 
 ```js
 import { Shiso } from '@umami/shiso';
@@ -38,9 +43,23 @@ export default renderPage(props => {
 });
 ```
 
-## 3. Add `docs.json`
+## 3. Add `shiso.config.json`
 
-Create a Mintlify-style docs config and point `docsConfigPath` in `shiso.config.json` to it:
+Point Shiso at your content and docs config:
+
+```json
+{
+  "contentDir": "./src/content",
+  "docsConfigPath": "./src/docs.json",
+  "docs": {
+    "title": "Docs - My App"
+  }
+}
+```
+
+## 4. Add `docs.json`
+
+Define navigation with Mintlify-style structure:
 
 ```json
 {
@@ -62,6 +81,24 @@ Create a Mintlify-style docs config and point `docsConfigPath` in `shiso.config.
 }
 ```
 
-## 4. Write content
+## 5. Create matching content files
 
-In the folder you specified, start adding `.mdx` files.
+Each page slug in `docs.json` must resolve to a file under `contentDir/docs`:
+
+```text
+src/content/docs/index.mdx
+src/content/docs/installation.mdx
+```
+
+## 6. Run locally
+
+```shell
+npm run dev
+```
+
+Then open `/docs` and confirm:
+
+1. docs page renders
+2. side navigation matches `docs.json`
+3. prev/next links follow your page order
+4. heading anchors appear in "On this page"

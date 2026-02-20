@@ -2,9 +2,9 @@
 title: Text
 ---
 
-## Headers
+## Headings
 
-You can define headers by using the `#` symbol.
+Use `#` levels to structure your page and generate anchor navigation.
 
 ```text
 # Title
@@ -14,22 +14,50 @@ You can define headers by using the `#` symbol.
 ### Subsection
 ```
 
-## Text Formatting
+## Emphasis
 
-To make text **bold**, wrap the text with `**` characters.
-
-```markdown
-To make text **bold**, wrap the text with `**` characters.
-```
-
-To make text _italic_, wrap the text with `_` characters.
+Use standard Markdown emphasis:
 
 ```markdown
-To make text _italic_, wrap the text with `_` characters.
+Use **bold** for strong emphasis.
 ```
-
-To make text ~strikethrough~, wrap the text with `~` characters.
 
 ```markdown
-To make text ~strikethrough~, wrap the text with `~` characters.
+Use _italic_ for light emphasis.
 ```
+
+```markdown
+Use ~~strikethrough~~ when something is outdated.
+```
+
+## Links
+
+```markdown
+[Link text](/docs/configuration)
+```
+
+[Link text](/docs/configuration)
+
+## Blockquotes
+
+```markdown
+> This is a blockquote.
+```
+
+> This is a blockquote.
+
+## Tables
+
+GitHub-flavored markdown tables are supported:
+
+```markdown
+| Name | Type |
+| ---- | ---- |
+| id   | string |
+| age  | number |
+```
+
+| Name | Type |
+| ---- | ---- |
+| id   | string |
+| age  | number |

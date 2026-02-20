@@ -30,21 +30,57 @@ export interface ShisoRenderProps {
   config: ShisoConfig;
 }
 
-export type MintlifyPageItem = string | MintlifyGroupItem;
+export interface MintlifyPageObjectItem {
+  page: string;
+  title?: string;
+  label?: string;
+}
+
+export type MintlifyPageItem = string | MintlifyGroupItem | MintlifyPageObjectItem;
 
 export interface MintlifyGroupItem {
   group: string;
+  root?: string;
   pages: MintlifyPageItem[];
+}
+
+export interface MintlifyDropdownItem {
+  dropdown: string;
+  groups?: MintlifyGroupItem[];
+  pages?: MintlifyPageItem[];
 }
 
 export interface MintlifyTabItem {
   tab: string;
   groups?: MintlifyGroupItem[];
   pages?: MintlifyPageItem[];
+  dropdowns?: MintlifyDropdownItem[];
+}
+
+export interface MintlifyVersionItem {
+  version: string;
+  default?: boolean;
+  tabs?: MintlifyTabItem[];
+  dropdowns?: MintlifyDropdownItem[];
+  groups?: MintlifyGroupItem[];
+  pages?: MintlifyPageItem[];
+}
+
+export interface MintlifyLanguageItem {
+  language: string;
+  default?: boolean;
+  versions?: MintlifyVersionItem[];
+  tabs?: MintlifyTabItem[];
+  dropdowns?: MintlifyDropdownItem[];
+  groups?: MintlifyGroupItem[];
+  pages?: MintlifyPageItem[];
 }
 
 export interface MintlifyNavigation {
   tabs?: MintlifyTabItem[];
+  dropdowns?: MintlifyDropdownItem[];
+  versions?: MintlifyVersionItem[];
+  languages?: MintlifyLanguageItem[];
   groups?: MintlifyGroupItem[];
   pages?: MintlifyPageItem[];
 }

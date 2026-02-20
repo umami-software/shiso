@@ -4,6 +4,14 @@ title: Response Field
 
 Use `ResponseField` to document object properties and schema fields.
 
+## Supported props
+
+- `name: string`
+- `type?: string | number | boolean | null`
+- `required?: boolean`
+- `deprecated?: boolean`
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -21,3 +29,7 @@ Use `ResponseField` to document object properties and schema fields.
 <ResponseField name="legacyField" type="number" deprecated>
   This field is deprecated and will be removed in a future release.
 </ResponseField>
+
+## Behavior notes
+
+- HTML entities in string `type` values are decoded before rendering

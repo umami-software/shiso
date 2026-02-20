@@ -4,6 +4,23 @@ title: Param Field
 
 Use `ParamField` and `Param` to describe request parameters.
 
+## Supported props
+
+### `ParamField`
+
+- `name?: string`
+- `query?: string`
+- `path?: string`
+- `header?: string`
+- `body?: string`
+- `type?: string`
+- `required?: boolean`
+- `children?: ReactNode`
+
+### `Param`
+
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -23,3 +40,8 @@ Use `Param` inline when referencing parameter names in text.
 <Note>
   Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
 </Note>
+
+## Behavior notes
+
+- parameter location badge is inferred from `query`, `path`, `header`, or `body`
+- if multiple location props are set, precedence is `query` -> `path` -> `header` -> `body`

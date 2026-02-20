@@ -4,6 +4,21 @@ title: Card
 
 Use `Card` and `CardGroup` to present grouped links or summaries.
 
+## Supported props
+
+### `Card`
+
+- `title?: ReactNode`
+- `href?: string`
+- `icon?: ReactNode`
+- `arrow?: boolean` (defaults to `true` when `href` exists)
+- `children?: ReactNode`
+
+### `CardGroup`
+
+- `cols?: 1 | 2 | 3 | 4` (defaults to `2`)
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -26,3 +41,8 @@ Use `Card` and `CardGroup` to present grouped links or summaries.
     Browse all docs components.
   </Card>
 </CardGroup>
+
+## Behavior notes
+
+- cards with `href` render as links
+- cards without `href` render as static containers

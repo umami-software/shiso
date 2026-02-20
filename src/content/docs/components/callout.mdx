@@ -4,6 +4,22 @@ title: Callout
 
 Use callouts to highlight important content blocks.
 
+## Supported components
+
+- `Callout`
+- `Note`
+- `Tip`
+- `Warning`
+- `Info`
+- `Check`
+
+## `Callout` props
+
+- `variant?: 'note' | 'tip' | 'warning' | 'info' | 'check'`
+- `title?: ReactNode`
+- `icon?: ReactNode`
+- `children?: ReactNode`
+
 ## Generic callout
 
 ```tsx
@@ -37,3 +53,8 @@ Use callouts to highlight important content blocks.
 ### Check
 
 <Check>Use this for success or completion states.</Check>
+
+## Behavior notes
+
+- `Note`, `Tip`, `Warning`, `Info`, and `Check` are wrappers around `Callout`
+- if no `title` is provided, only the body content is rendered

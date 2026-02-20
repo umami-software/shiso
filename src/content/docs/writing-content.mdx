@@ -2,14 +2,54 @@
 title: Writing content
 ---
 
-Writing content in Shiso is done by writing [Markdown](https://www.markdownguide.org/) in MDX files.
+Write docs as `.mdx` (or `.md`) files under `contentDir/docs` and reference them in `docs.json`.
 
-```text
+## File format
+
+Each docs page usually starts with frontmatter:
+
+```mdx
 ---
 title: "Title of page"
+description: "Optional description"
 ---
 
 Welcome to Shiso.
 ```
 
-The file starts with a [frontmatter](https://mdxjs.com/guides/frontmatter/) section fenced between `---` characters.
+## Recommended frontmatter keys
+
+- `title`: used for page heading and metadata fallback
+- `description`: optional intro text shown near the title
+
+## MDX support
+
+You can use standard Markdown plus React components directly in content:
+
+```mdx
+<Note>
+  You can mix Markdown and components in the same page.
+</Note>
+```
+
+## Available component surface in MDX
+
+Shiso injects both:
+
+- all exported `@umami/react-zen` components
+- built-in Mintlify-style docs components (`Tabs`, `Callout`, `ResponseField`, etc.)
+
+## Heading anchors and right rail
+
+Heading IDs are generated and used for:
+
+- anchor links
+- right-side "On this page" navigation
+
+Use meaningful heading text so anchors are readable.
+
+## File organization conventions
+
+- keep one concept per page
+- use nested folders for nested routes (`components/tabs.mdx` -> `/docs/components/tabs`)
+- prefer stable file slugs to avoid broken internal links

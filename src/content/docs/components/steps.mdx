@@ -4,6 +4,17 @@ title: Steps
 
 Use `Steps` and `Step` for ordered walkthroughs.
 
+## Supported props
+
+### `Steps`
+
+- `children?: ReactNode`
+
+### `Step`
+
+- `title?: ReactNode`
+- `children?: ReactNode`
+
 ## Basic usage
 
 ```tsx
@@ -12,6 +23,10 @@ Use `Steps` and `Step` for ordered walkthroughs.
   <Step title="Configure docs">Set your `docsConfigPath` and content directory.</Step>
   <Step title="Start the app">Run the local development server.</Step>
 </Steps>
+
+## Behavior notes
+
+- if no `title` is provided, fallback titles are `Step 1`, `Step 2`, ...
 ```
 
 <Steps>

@@ -1,16 +1,59 @@
 ---
 title: Overview
-description: Welcome to the Shiso documentation!
+description: What this Shiso app supports and how to use it.
 ---
 
-## What is Shiso?
+Shiso in this app is an MDX docs renderer for Next.js App Router. It reads a Mintlify-style
+`docs.json`, resolves content files, compiles MDX, and renders documentation with tab/group navigation.
 
-Shiso is a lightweight framework that helps you build websites effortlessly by letting you focus on
-what matters most—your content. It handles the design, layout, and functionality for you, so all
-you need to do is write in Markdown.
+## Supported today
 
-With built-in support for MDX, you can seamlessly embed React components within your content,
-making it easy to add interactive elements.
+### Content and rendering
 
-Right out of the box, Shiso provides pre-designed templates for **documentation**, and it
-integrates smoothly with [Next.js](https://nextjs.org/) for a fast, modern development experience.
+- `.mdx` and `.md` files in `contentDir/docs`
+- frontmatter fields such as `title` and `description`
+- GitHub-flavored Markdown via `remark-gfm`
+- heading IDs and on-page anchors
+- syntax highlighting via `rehype-highlight`
+- Zen components directly in MDX (`@umami/react-zen`)
+
+### Navigation from `docs.json`
+
+- `navigation.tabs`
+- `navigation.dropdowns`
+- `navigation.groups` + `navigation.pages`
+- `navigation.versions` (chooses `default: true`, otherwise first)
+- `navigation.languages` (chooses `default: true`, otherwise first)
+- nested groups inside `pages`
+- prev/next links from normalized page order
+
+### Built-in docs components
+
+This app ships a Mintlify-style MDX component set:
+
+- `Accordion`, `AccordionGroup`
+- `Callout`, `Note`, `Tip`, `Warning`, `Info`, `Check`
+- `Card`, `CardGroup`
+- `CodeGroup`
+- `Expandable`
+- `Frame`
+- `Param`, `ParamField`
+- `RequestExample`
+- `ResponseField`
+- `Tabs`, `Tab`
+- `Steps`, `Step`
+- `Tooltip`
+
+## Out of scope in this app
+
+This implementation does not attempt to reproduce Mintlify hosted platform features (for example hosted
+theme presets, analytics integrations, or OpenAPI-driven reference generation). It focuses on local docs
+rendering and navigation.
+
+## Recommended reading order
+
+1. [Installation](/docs/installation)
+2. [Configuration](/docs/configuration)
+3. [docs.json support](/docs/docs-json-support)
+4. [Runtime behavior](/docs/runtime-behavior)
+5. [Components](/docs/components)

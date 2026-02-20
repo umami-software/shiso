@@ -1,0 +1,143 @@
+---
+title: docs.json Support
+---
+
+This page documents the `docs.json` structures currently supported by this app.
+
+## Overview
+
+Shiso resolves docs navigation from `navigation` and supports these entry points:
+
+- `navigation.tabs`
+- `navigation.dropdowns`
+- `navigation.groups` + `navigation.pages`
+- `navigation.versions` (selects `default: true` or first)
+- `navigation.languages` (selects `default: true` or first)
+
+## Supported page item types
+
+The parser supports:
+
+- page strings, such as `"installation"` or `"components/tabs"`
+- page objects:
+
+```json
+{ "page": "installation", "title": "Install" }
+```
+
+- group blocks:
+
+```json
+{
+  "group": "Getting started",
+  "root": "index",
+  "pages": ["index", "installation"]
+}
+```
+
+- nested groups inside `pages` arrays
+
+## Supported navigation examples
+
+### Tabs
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "groups": [
+          { "group": "Basics", "pages": ["index", "installation"] }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Dropdowns
+
+```json
+{
+  "navigation": {
+    "dropdowns": [
+      {
+        "dropdown": "Docs",
+        "pages": ["index", "configuration"]
+      }
+    ]
+  }
+}
+```
+
+### Versions
+
+```json
+{
+  "navigation": {
+    "versions": [
+      {
+        "version": "v2",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Docs",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Languages
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Docs",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Validation behavior
+
+Shiso fails fast when:
+
+- `navigation` is missing
+- no pages are discovered
+- duplicate page file slugs exist
+- duplicate route slugs exist
+- referenced docs files do not exist in `contentDir/docs`
+
+## Normalization details
+
+- `.md` and `.mdx` extensions are optional in `pages` entries
+- `docs/` prefix is accepted and removed during normalization
+- trailing `/index` collapses to the parent route slug
+- `"index"` always maps to route `/docs`
+
+## Currently unsupported `docs.json` areas
+
+These structures are not consumed by this app's docs renderer:
+
+- `navigation.global`
+- `anchors` entries
+- OpenAPI/AsyncAPI references in navigation
+- hosted UI/customization/integrations fields outside docs page navigation
+
+If these entries appear where a page list is expected, validation raises an explicit error so unsupported
+shapes do not silently render incorrect navigation.
