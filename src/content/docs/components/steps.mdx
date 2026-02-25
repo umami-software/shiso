@@ -20,17 +20,17 @@ Use `Steps` and `Step` for ordered walkthroughs.
 ```tsx
 <Steps>
   <Step title="Install dependencies">Run your package manager install command.</Step>
-  <Step title="Configure docs">Set your `docsConfigPath` and content directory.</Step>
+  <Step title="Configure docs">Set navigation in `shiso.config.json`.</Step>
+  <Step title="Start the app">Run the local development server.</Step>
+</Steps>
+```
+
+<Steps>
+  <Step title="Install dependencies">Run your package manager install command.</Step>
+  <Step title="Configure docs">Set navigation in `shiso.config.json`.</Step>
   <Step title="Start the app">Run the local development server.</Step>
 </Steps>
 
 ## Behavior notes
 
 - if no `title` is provided, fallback titles are `Step 1`, `Step 2`, ...
-```
-
-<Steps>
-  <Step title="Install dependencies">Run your package manager install command.</Step>
-  <Step title="Configure docs">Set your `docsConfigPath` and content directory.</Step>
-  <Step title="Start the app">Run the local development server.</Step>
-</Steps>

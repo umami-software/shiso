@@ -2,9 +2,8 @@ export interface ShisoDocsConfig {
   top?: string | number;
 }
 
-export interface ShisoConfig {
-  contentDir: string;
-  docsConfigPath?: string;
+export interface ShisoConfig extends Partial<MintlifyDocsConfig> {
+  contentDir?: string;
   docs?: ShisoDocsConfig & { [key: string]: any };
 }
 

@@ -1,12 +1,12 @@
-import { cache, ReactElement } from 'react';
-import { compile } from '@mdx-js/mdx';
-import remarkGfm from 'remark-gfm';
-import rehypeSlug from 'rehype-slug';
-import rehypeHighlight from 'rehype-highlight';
-import matter from 'gray-matter';
-import recursive from 'recursive-readdir';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { compile } from '@mdx-js/mdx';
+import matter from 'gray-matter';
+import { cache, type ReactElement } from 'react';
+import recursive from 'recursive-readdir';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 import { loadNormalizedDocsConfig } from '@/lib/docs-config';
 import type {
   NormalizedDocsConfig,
@@ -23,13 +23,19 @@ interface MdNode {
   children?: MdNode[];
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
 function walkTree(node: MdNode | undefined, visitor: (node: MdNode) => void) {
   if (!node || typeof node !== 'object') {
     return;
   }
 
   visitor(node);
-  node.children?.forEach(child => walkTree(child, visitor));
+  node.children?.forEach(child => {
+    walkTree(child, visitor);
+  });
 }
 
 function headingText(node: MdNode): string {
@@ -164,9 +170,10 @@ export const parseFile = cache(async (file: string): Promise<ShisoContent | null
 });
 
 export function next(type: string, config: ShisoConfig) {
-  const dir = path.resolve(config.contentDir, type);
-  const sectionConfig = ((config as any)[type] || {}) as { title?: string };
-  const title = sectionConfig.title || 'Shiso';
+  const contentDir = config.contentDir || './src/content';
+  const dir = path.resolve(contentDir, type);
+  const sectionConfig = isRecord(config[type]) ? (config[type] as { title?: string }) : {};
+  const title = sectionConfig.title || config.name || 'Shiso';
   const docsConfigPromise = type === 'docs' ? loadNormalizedDocsConfig(config) : null;
 
   const getContent = async (file: string) => {
@@ -194,7 +201,7 @@ export function next(type: string, config: ShisoConfig) {
     const name = (await params)?.slug?.join('/') || 'index';
 
     if (type === 'docs') {
-      const { docsConfig, page } = await getDocsPage(name);
+      const { page } = await getDocsPage(name);
       const content = page ? await parseFile(page.filePath) : null;
       const pageTitle = content?.meta?.title || page?.label;
 
@@ -227,7 +234,10 @@ export function next(type: string, config: ShisoConfig) {
 
   async function generateStaticParams() {
     if (type === 'docs') {
-      const docsConfig = await docsConfigPromise!;
+      const docsConfig = docsConfigPromise ? await docsConfigPromise : null;
+      if (!docsConfig) {
+        return [];
+      }
       return docsConfig.pages.map(page => ({
         slug: page.slug.split('/'),
       }));
@@ -245,8 +255,11 @@ export function next(type: string, config: ShisoConfig) {
 
       if (type === 'docs') {
         const { docsConfig, page } = await getDocsPage(slug);
+        if (!docsConfig) {
+          return render({ type, config, content: null });
+        }
         const content = page ? await parseFile(page.filePath) : null;
-        return render({ type, config, content: applyDocsContext(content, docsConfig!, page) });
+        return render({ type, config, content: applyDocsContext(content, docsConfig, page) });
       }
 
       const file = path.join(dir, `${slug}.mdx`);
@@ -258,9 +271,14 @@ export function next(type: string, config: ShisoConfig) {
   function renderCollection(render: (props: ShisoRenderProps) => ReactElement) {
     return async () => {
       if (type === 'docs') {
-        const docsConfig = await docsConfigPromise!;
+        const docsConfig = docsConfigPromise ? await docsConfigPromise : null;
+        if (!docsConfig) {
+          return render({ type, config, content: [] });
+        }
         const content = await Promise.all(
-          docsConfig.pages.map(async page => applyDocsContext(await parseFile(page.filePath), docsConfig, page)),
+          docsConfig.pages.map(async page =>
+            applyDocsContext(await parseFile(page.filePath), docsConfig, page),
+          ),
         );
         return render({ type, config, content });
       }

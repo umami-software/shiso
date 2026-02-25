@@ -2,94 +2,46 @@
 title: Configuration
 ---
 
-Shiso uses two configuration layers:
+Shiso uses a single configuration file: `shiso.config.json`.
+That file uses the Mintlify `docs.json` schema directly.
 
-- `shiso.config.json` for runtime setup
-- `docs.json` for docs navigation structure
-
-## `shiso.config.json` (app config)
-
-```json
-{
-  "contentDir": "./src/content",
-  "docsConfigPath": "./src/docs.json",
-  "docs": {
-    "title": "Docs - Shiso"
-  }
-}
-```
-
-### Supported keys
-
-- `contentDir` (required): root folder containing section folders such as `docs`
-- `docsConfigPath` (optional): path to docs config file; defaults to `./docs.json`
-- `docs.title` (optional): used as metadata title suffix
-- `docs.top` (optional): top offset for sticky docs side panels
-
-### Conformance review: current app
-
-`src/shiso.config.json` conforms to the supported shape:
-
-```json
-{
-  "contentDir": "./src/content",
-  "docsConfigPath": "./src/docs.json",
-  "docs": {
-    "title": "Docs - Shiso"
-  }
-}
-```
-
-Notes:
-
-- `contentDir` points at `./src/content`
-- `docsConfigPath` points at `./src/docs.json`
-- `docs.title` is present and valid
-
-## `docs.json` (Mintlify-style navigation config)
-
-This app consumes Mintlify-style navigation and resolves docs pages from file slugs.
+## Example
 
 ```json
 {
   "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
   "name": "Shiso",
   "navigation": {
     "tabs": [
       {
         "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": ["index", "installation", "configuration"]
-          },
-          {
-            "group": "Writing content",
-            "pages": ["writing-content", "text", "images", "lists", "code-blocks"]
-          }
-        ]
-      },
-      {
-        "tab": "Components",
-        "groups": [
-          {
-            "group": "Components",
-            "pages": [
-              "components/index",
-              "components/accordion",
-              "components/callout"
-            ]
-          }
-        ]
+        "groups": [{ "group": "Getting started", "pages": ["index", "installation"] }]
       }
     ]
   }
 }
 ```
 
-### Page reference mapping
+## Supported keys
 
-Each `pages` entry maps to a file under `contentDir/docs`:
+### Mintlify schema keys used in this app
+
+- `$schema`
+- `theme`
+- `name`
+- `navigation`
+
+## Current app conformance
+
+`src/shiso.config.json` is the source of truth for navigation and conforms to this model:
+
+- it includes Mintlify navigation schema fields directly
+- no separate `docs.json` file is required
+
+## Page reference mapping
+
+Each page slug in `navigation` maps to a file under `src/content/docs`:
 
 - `"index"` -> `src/content/docs/index.mdx` (or `.md`)
 - `"installation"` -> `src/content/docs/installation.mdx`
@@ -101,11 +53,4 @@ Routes are generated as:
 - `components/index` -> `/docs/components`
 - `components/callout` -> `/docs/components/callout`
 
-## What this app uses from `docs.json`
-
-- navigation hierarchy for docs pages
-- tab labels (for top nav)
-- group labels (for side nav sections)
-- page order (for prev/next)
-
-For full shape details and unsupported entries, see [docs.json support](/docs/docs-json-support).
+For supported navigation shapes and limits, see [docs.json support](/docs/docs-json-support).

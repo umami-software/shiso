@@ -40,7 +40,9 @@ export default renderPage(props => <Shiso {...props} />);
 
 ### 3. Write content
 
-In `shiso.config.json`, set `docsConfigPath` to your Mintlify-style `docs.json` file. Then add `.mdx` files under `contentDir/docs` and reference them in `docs.json` navigation.
+Use a single `shiso.config.json` file that includes Mintlify `docs.json` navigation fields (`$schema`,
+`name`, `navigation`, etc). Then add `.mdx` files under `src/content/docs` and reference them from
+`navigation`.
 
 ## License
 

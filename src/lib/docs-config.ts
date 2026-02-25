@@ -12,51 +12,33 @@ import type {
   ShisoConfig,
 } from '@/lib/types';
 
-const DEFAULT_DOCS_CONFIG_PATH = 'docs.json';
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
 
 function assertMintlifyDocsConfig(
   value: unknown,
-  filePath: string,
+  sourceName: string,
 ): asserts value is MintlifyDocsConfig {
   if (!isRecord(value)) {
-    throw new Error(`Invalid docs config at "${filePath}": expected a JSON object.`);
+    throw new Error(`Invalid docs config in "${sourceName}": expected a JSON object.`);
   }
 
-  // Common mistake: using the Mintlify JSON schema document itself, not a project docs.json config.
+  // Common mistake: using the Mintlify JSON schema document itself, not an actual config object.
   if ('anyOf' in value && 'definitions' in value && !('navigation' in value)) {
     throw new Error(
-      `Invalid docs config at "${filePath}": this looks like the Mintlify schema, not a project docs.json file.`,
+      `Invalid docs config in "${sourceName}": this looks like the Mintlify schema, not a project config object.`,
     );
   }
 
   if (!isRecord(value.navigation)) {
-    throw new Error(`Invalid docs config at "${filePath}": missing "navigation" object.`);
+    throw new Error(`Invalid docs config in "${sourceName}": missing "navigation" object.`);
   }
 }
 
 export async function loadDocsConfig(config: ShisoConfig): Promise<MintlifyDocsConfig> {
-  const configPath = path.resolve(config.docsConfigPath || DEFAULT_DOCS_CONFIG_PATH);
-  const raw = await fs.readFile(configPath, 'utf8');
-
-  let parsed: unknown;
-
-  try {
-    parsed = JSON.parse(raw);
-  } catch (error) {
-    throw new Error(
-      `Invalid docs config at "${configPath}": failed to parse JSON. ${
-        error instanceof Error ? error.message : ''
-      }`.trim(),
-    );
-  }
-
-  assertMintlifyDocsConfig(parsed, configPath);
-
-  return parsed;
+  assertMintlifyDocsConfig(config, 'shiso.config.json');
+  return config;
 }
 
 function slugifyId(value: string, fallback: string): string {
@@ -279,6 +261,7 @@ export async function normalizeDocsConfig(
   config: ShisoConfig,
   docsConfig: MintlifyDocsConfig,
 ): Promise<NormalizedDocsConfig> {
+  const contentDir = config.contentDir || './src/content';
   const tabs = getTabs(docsConfig);
   const pending: PendingPage[] = [];
   const orderRef = { value: 0 };
@@ -381,7 +364,7 @@ export async function normalizeDocsConfig(
   const filePathBySlug = new Map(
     await Promise.all(
       [...seenFileSlugs].map(async fileSlug => {
-        return [fileSlug, await resolveDocFile(config.contentDir, fileSlug)] as const;
+        return [fileSlug, await resolveDocFile(contentDir, fileSlug)] as const;
       }),
     ),
   );

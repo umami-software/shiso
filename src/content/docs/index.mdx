@@ -3,21 +3,21 @@ title: Overview
 description: What this Shiso app supports and how to use it.
 ---
 
-Shiso in this app is an MDX docs renderer for Next.js App Router. It reads a Mintlify-style
-`docs.json`, resolves content files, compiles MDX, and renders documentation with tab/group navigation.
+Shiso in this app is an MDX docs renderer for Next.js App Router. It reads Mintlify-style navigation
+schema from `shiso.config.json`, resolves content files, compiles MDX, and renders tab/group navigation.
 
 ## Supported today
 
 ### Content and rendering
 
-- `.mdx` and `.md` files in `contentDir/docs`
+- `.mdx` and `.md` files in `src/content/docs`
 - frontmatter fields such as `title` and `description`
 - GitHub-flavored Markdown via `remark-gfm`
 - heading IDs and on-page anchors
 - syntax highlighting via `rehype-highlight`
 - Zen components directly in MDX (`@umami/react-zen`)
 
-### Navigation from `docs.json`
+### Navigation from `shiso.config.json`
 
 - `navigation.tabs`
 - `navigation.dropdowns`

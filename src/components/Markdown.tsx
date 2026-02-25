@@ -29,7 +29,7 @@ export function Markdown({ code }: { code: string }) {
   }
 
   return (
-    <Box marginBottom="10">
+    <Box className="docs-markdown">
       <Component components={components} />
     </Box>
   );
