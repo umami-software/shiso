@@ -1,22 +1,12 @@
 {
-  "name": "@umami/shiso",
+  "name": "shiso-docs-app",
   "version": "0.55.0",
-  "description": "A documentation site generator using Next.js and MDX.",
+  "private": true,
+  "description": "A standalone documentation app using Next.js and MDX.",
   "homepage": "https://shiso.umami.is",
   "repository": {
     "type": "git",
     "url": "https://github.com/umami-software/shiso.git"
-  },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "server",
-    "styles.css"
-  ],
-  "publishConfig": {
-    "access": "public"
   },
   "scripts": {
     "dev": "dotenv next dev --port 8001 --turbo",
@@ -25,13 +15,7 @@
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
-    "icons": "svgr ./src/assets --out-dir src/components/svg --typescript",
-    "components": "tsc -p tsconfig.components.json",
-    "server": "tsc -p tsconfig.server.json",
-    "esbuild": "node esbuild.mjs",
-    "dts": "node dts.mjs",
-    "css": "node css.mjs",
-    "bundle": "npm-run-all components server dts esbuild css"
+    "icons": "svgr ./src/assets --out-dir src/components/svg --typescript"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,mjs,cjs,css,json}": [
@@ -70,14 +54,9 @@
     "@types/node": "^25.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@umami/esbuild-plugin-css-modules": "^0.4.0",
     "dotenv-cli": "^11.0.0",
-    "dts-bundle": "^0.7.3",
-    "esbuild": "^0.25.3",
-    "esbuild-plugin-css-modules": "^0.3.0",
     "husky": "^9.1.1",
     "lint-staged": "^15.5.1",
-    "npm-run-all": "^4.1.5",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "tailwindcss": "^4.2.0",

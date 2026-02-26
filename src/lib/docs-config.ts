@@ -37,7 +37,7 @@ function assertMintlifyDocsConfig(
 }
 
 export async function loadDocsConfig(config: ShisoConfig): Promise<MintlifyDocsConfig> {
-  assertMintlifyDocsConfig(config, 'shiso.config.json');
+  assertMintlifyDocsConfig(config, 'src/docs.json');
   return config;
 }
 

@@ -7,6 +7,7 @@ import './tailwind.css';
 import '@umami/react-zen/styles.full.css';
 import './global.css';
 import { App } from '@/app/App';
+import docsConfig from '@/docs.json';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Shiso',
-  description: 'MDX powered content',
+  title: docsConfig.name || 'Shiso',
+  description: 'Standalone docs app powered by Next.js and MDX.',
 };
 
 export default function RootLayout({
@@ -28,7 +29,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <title>shiso</title>
         <link rel="icon" type="image/png" href="/leaf.png" />
       </head>
       <body>

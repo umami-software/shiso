@@ -1,56 +1,64 @@
 ---
 title: Configuration
+description: Set your docs name, navigation, and page structure.
 ---
 
-Shiso uses a single configuration file: `shiso.config.json`.
-That file uses the Mintlify `docs.json` schema directly.
+Shiso uses one docs config file: `src/docs.json`.
+For most teams, setup is just naming the docs site and defining page navigation.
 
-## Example
+## Minimal example
 
 ```json
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Shiso",
+  "name": "My Docs",
   "navigation": {
     "tabs": [
       {
         "tab": "Documentation",
-        "groups": [{ "group": "Getting started", "pages": ["index", "installation"] }]
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation", "configuration"]
+          }
+        ]
       }
     ]
   }
 }
 ```
 
-## Supported keys
+If you want editor autocomplete, you can also add:
 
-### Mintlify schema keys used in this app
+```json
+{
+  "$schema": "https://mintlify.com/docs.json"
+}
+```
 
-- `$schema`
-- `theme`
-- `name`
-- `navigation`
+## Fields you will actually edit
 
-## Current app conformance
+- `name`: your docs/site title
+- `navigation`: the sidebar and top-level sections
+- `theme`: keep `"mint"` unless you have a reason to change it
+- `contentDir` (optional): defaults to `./src/content`
 
-`src/shiso.config.json` is the source of truth for navigation and conforms to this model:
+## How page slugs map to files
 
-- it includes Mintlify navigation schema fields directly
-- no separate `docs.json` file is required
-
-## Page reference mapping
-
-Each page slug in `navigation` maps to a file under `src/content/docs`:
+Every value in `navigation...pages` must match a file in `src/content/docs`.
 
 - `"index"` -> `src/content/docs/index.mdx` (or `.md`)
-- `"installation"` -> `src/content/docs/installation.mdx`
-- `"components/index"` -> `src/content/docs/components/index.mdx`
+- `"installation"` -> `src/content/docs/installation.mdx` (or `.md`)
+- `"components/index"` -> `src/content/docs/components/index.mdx` (or `.md`)
 
-Routes are generated as:
+Those slugs become routes like:
 
 - `index` -> `/docs`
 - `components/index` -> `/docs/components`
 - `components/callout` -> `/docs/components/callout`
 
-For supported navigation shapes and limits, see [docs.json support](/docs/docs-json-support).
+## Common setup issues
+
+- A page is listed in navigation but the file does not exist.
+- A file exists but was never added to `navigation`.
+- A nested slug path does not match the folder structure.

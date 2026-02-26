@@ -23,7 +23,7 @@ export function Header() {
         <ThemeButton />
         <Button
           variant="quiet"
-          render={(props) => <Link href="https://github.com/umami-software/react-zen" target="_blank" {...props} />}
+          render={(props) => <Link href="https://github.com/umami-software/shiso" target="_blank" {...props} />}
         >
           <Icon fillColor="strong">
             <Github />

@@ -197,7 +197,7 @@ export function next(type: string, config: ShisoConfig) {
     return { docsConfig, page };
   }
 
-  async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
+  async function generateMetadata({ params }: { params: Promise<{ slug?: string[] }> }) {
     const name = (await params)?.slug?.join('/') || 'index';
 
     if (type === 'docs') {
@@ -239,7 +239,7 @@ export function next(type: string, config: ShisoConfig) {
         return [];
       }
       return docsConfig.pages.map(page => ({
-        slug: page.slug.split('/'),
+        slug: page.slug === 'index' ? [] : page.slug.split('/'),
       }));
     }
 
@@ -250,7 +250,7 @@ export function next(type: string, config: ShisoConfig) {
   }
 
   function renderPage(render: (props: ShisoRenderProps) => ReactElement) {
-    return async ({ params }: { params: Promise<{ slug: string[] }> }) => {
+    return async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
       const slug = (await params)?.slug?.join('/') || 'index';
 
       if (type === 'docs') {

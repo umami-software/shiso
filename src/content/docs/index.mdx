@@ -1,59 +1,34 @@
 ---
 title: Overview
-description: What this Shiso app supports and how to use it.
+description: A simple guide to getting your docs site running.
 ---
 
-Shiso in this app is an MDX docs renderer for Next.js App Router. It reads Mintlify-style navigation
-schema from `shiso.config.json`, resolves content files, compiles MDX, and renders tab/group navigation.
+Shiso is a standalone docs app powered by Markdown and MDX.
+You edit content files, define navigation once, and the site renders your docs at `/docs`.
 
-## Supported today
+## What you can do
 
-### Content and rendering
+- Write docs pages in Markdown or MDX
+- Organize pages with one navigation file
+- Use built-in docs UI components like callouts, tabs, steps, and cards
+- Preview everything locally at `/docs`
 
-- `.mdx` and `.md` files in `src/content/docs`
-- frontmatter fields such as `title` and `description`
-- GitHub-flavored Markdown via `remark-gfm`
-- heading IDs and on-page anchors
-- syntax highlighting via `rehype-highlight`
-- Zen components directly in MDX (`@umami/react-zen`)
+## Quick setup path
 
-### Navigation from `shiso.config.json`
+1. Follow [Installation](/docs/installation) to run the app locally.
+2. Use [Configuration](/docs/configuration) to set your docs name and navigation.
+3. Add content files under `src/content/docs`.
+4. Run locally and confirm your pages and sidebar look right.
 
-- `navigation.tabs`
-- `navigation.dropdowns`
-- `navigation.groups` + `navigation.pages`
-- `navigation.versions` (chooses `default: true`, otherwise first)
-- `navigation.languages` (chooses `default: true`, otherwise first)
-- nested groups inside `pages`
-- prev/next links from normalized page order
+## Daily workflow
 
-### Built-in docs components
+1. Create or edit a page in `src/content/docs`.
+2. Add that page slug to `src/docs.json`.
+3. Refresh `/docs` and verify page order and links.
 
-This app ships a Mintlify-style MDX component set:
-
-- `Accordion`, `AccordionGroup`
-- `Callout`, `Note`, `Tip`, `Warning`, `Info`, `Check`
-- `Card`, `CardGroup`
-- `CodeGroup`
-- `Expandable`
-- `Frame`
-- `Param`, `ParamField`
-- `RequestExample`
-- `ResponseField`
-- `Tabs`, `Tab`
-- `Steps`, `Step`
-- `Tooltip`
-
-## Out of scope in this app
-
-This implementation does not attempt to reproduce Mintlify hosted platform features (for example hosted
-theme presets, analytics integrations, or OpenAPI-driven reference generation). It focuses on local docs
-rendering and navigation.
-
-## Recommended reading order
+## Continue
 
 1. [Installation](/docs/installation)
 2. [Configuration](/docs/configuration)
-3. [docs.json support](/docs/docs-json-support)
-4. [Runtime behavior](/docs/runtime-behavior)
-5. [Components](/docs/components)
+3. [Writing content](/docs/writing-content)
+4. [Components](/docs/components)

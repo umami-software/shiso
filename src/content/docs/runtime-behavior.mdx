@@ -6,14 +6,14 @@ This page explains how Shiso resolves, compiles, and renders docs content at run
 
 ## Route generation (`generateStaticParams`)
 
-For the `docs` section, routes are generated from normalized navigation slugs in `shiso.config.json`.
+For the `docs` section, routes are generated from normalized navigation slugs in `src/docs.json`.
 
-- `index` -> `/docs`
+- `index` -> `/docs` (empty optional catch-all params)
 - `a/b` -> `/docs/a/b`
 
 ## Content loading and file resolution
 
-For each page reference in `shiso.config.json` navigation, Shiso resolves one of:
+For each page reference in `src/docs.json` navigation, Shiso resolves one of:
 
 - `src/content/docs/<slug>.mdx`
 - `src/content/docs/<slug>.md`
@@ -48,7 +48,7 @@ For docs pages, metadata title resolves as:
 1. frontmatter `title` (if present), else
 2. normalized page label from slug
 
-Then appends docs title from `shiso.config.json`:
+Then appends docs title from `src/docs.json`:
 
 - `name` when present
 - otherwise `Shiso`
@@ -57,7 +57,7 @@ Then appends docs title from `shiso.config.json`:
 
 Build fails early when:
 
-- `shiso.config.json` is missing valid navigation
+- `src/docs.json` is missing valid navigation
 - `navigation` is missing or contains no pages
 - duplicate page slugs are detected
 - page file references cannot be resolved from `src/content/docs`

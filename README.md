@@ -1,48 +1,33 @@
 # Shiso
 
-A content layer for [Next.js](https://nextjs.org/).
+Shiso is a standalone docs app built with [Next.js](https://nextjs.org/) and MDX.
+It is designed to run as your docs site directly (similar to Fumadocs/Nextra workflows), not as an embeddable package.
 
-[Learn more](https://shiso.umami.is)
+## Quick start
 
-## Usage
-
-### 1. Install the package
-
-```shell
-npm install @umami/shiso
+```bash
+pnpm install
+pnpm dev
 ```
 
-### 2. Create page
+Open `http://localhost:8001/docs`.
 
-In your `app` folder, create a folder for the content section you wish to add. In this case we are creating a section for `docs`.
+## How it works
 
-```text
-src
-├── app
-│   └── docs
-│       └── [[...slug]]
-│           └── page.jsx
+- Docs navigation lives in `src/docs.json`
+- Docs content lives in `src/content/docs/**/*.mdx` (or `.md`)
+- The docs route is `src/app/docs/[[...slug]]/page.tsx`
+
+Every page in `src/docs.json` navigation must map to a real file in `src/content/docs`.
+
+## Common commands
+
+```bash
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
 ```
-
-In the `page.jsx` file, add the following code:
-
-```javascript
-import { Shiso } from '@umami/shiso';
-import { next } from '@umami/shiso/server';
-import config from 'path/to/shiso.config.json';
-
-const { generateMetadata, generateStaticParams, renderPage } = next('docs', config);
-
-export { generateMetadata, generateStaticParams };
-
-export default renderPage(props => <Shiso {...props} />);
-```
-
-### 3. Write content
-
-Use a single `shiso.config.json` file that includes Mintlify `docs.json` navigation fields (`$schema`,
-`name`, `navigation`, etc). Then add `.mdx` files under `src/content/docs` and reference them from
-`navigation`.
 
 ## License
 
