@@ -1,0 +1,56 @@
+---
+title: Troubleshooting
+---
+
+Use this page when something in your docs is not rendering as expected.
+
+## A page does not show up
+
+Check these first:
+
+1. The page slug is listed in `src/docs.json`.
+2. The file exists under `content/docs`.
+3. The slug matches the file path.
+
+Examples:
+
+- `"installation"` -> `content/docs/installation.mdx`
+- `"components/tabs"` -> `content/docs/components/tabs.mdx`
+
+## The sidebar is wrong or empty
+
+Usually this means a navigation typo.
+
+Check:
+
+1. `navigation` exists in `src/docs.json`.
+2. Each tab/group has valid `pages`.
+3. No duplicate page slugs.
+
+## Build fails after editing `src/docs.json`
+
+Common causes:
+
+- Missing page file referenced in `pages`
+- Duplicate slug entries
+- Invalid object structure in navigation
+
+## "On this page" links are missing
+
+This section appears only when the page has headings.
+
+Add headings like:
+
+```md
+## Section title
+### Subsection
+```
+
+## Page title is not what I expect
+
+Title priority is:
+
+1. frontmatter `title`
+2. page label in `src/docs.json`
+
+If neither is set, the slug is used.

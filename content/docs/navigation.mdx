@@ -1,32 +1,49 @@
 ---
-title: docs.json Support
+title: Navigation
 ---
 
-This page documents the Mintlify `docs.json` schema shapes currently supported by this app.
-These shapes are read from `src/docs.json`.
+Use `src/docs.json` to control tabs, sidebar groups, and page order.
+Start simple, then add structure only if you need it.
 
-## Overview
+## Quick start
 
-Shiso resolves docs navigation from `navigation` and supports these entry points:
+Use one tab with one group:
 
-- `navigation.tabs`
-- `navigation.dropdowns`
-- `navigation.groups` + `navigation.pages`
-- `navigation.versions` (selects `default: true` or first)
-- `navigation.languages` (selects `default: true` or first)
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "groups": [
+          { "group": "Getting started", "pages": ["index", "installation"] }
+        ]
+      }
+    ]
+  }
+}
+```
 
-## Supported page item types
+## When to use each pattern
 
-The parser supports:
+- `navigation.tabs`: best default for most docs sites
+- `navigation.dropdowns`: useful when you want top-level categories without full tabs
+- `navigation.groups` + `navigation.pages`: good for a single simple section
+- `navigation.versions`: use when you publish multiple product versions
+- `navigation.languages`: use when your docs are translated
 
-- page strings, such as `"installation"` or `"components/tabs"`
-- page objects:
+## Page entries you can add
+
+Inside `pages`, you can use:
+
+- string slugs, such as `"installation"` or `"components/tabs"`
+- page objects when you want a custom label:
 
 ```json
 { "page": "installation", "title": "Install" }
 ```
 
-- group blocks:
+- group blocks when you want nested sections:
 
 ```json
 {
@@ -36,9 +53,7 @@ The parser supports:
 }
 ```
 
-- nested groups inside `pages` arrays
-
-## Supported navigation examples
+## More examples
 
 ### Tabs
 
@@ -114,9 +129,9 @@ The parser supports:
 }
 ```
 
-## Validation behavior
+## Common mistakes
 
-Shiso fails fast when:
+You will see a config error when:
 
 - `navigation` is missing
 - no pages are discovered
@@ -124,21 +139,9 @@ Shiso fails fast when:
 - duplicate route slugs exist
 - referenced docs files do not exist in `content/docs`
 
-## Normalization details
+## Slug tips
 
 - `.md` and `.mdx` extensions are optional in `pages` entries
-- `docs/` prefix is accepted and removed during normalization
+- `docs/` prefix is accepted and removed
 - trailing `/index` collapses to the parent route slug
-- `"index"` always maps to route `/docs`
-
-## Currently unsupported `docs.json` areas
-
-These structures are not consumed by this app's docs renderer:
-
-- `navigation.global`
-- `anchors` entries
-- OpenAPI/AsyncAPI references in navigation
-- hosted UI/customization/integrations fields outside docs page navigation
-
-If these entries appear where a page list is expected, validation raises an explicit error so unsupported
-shapes do not silently render incorrect navigation.
+- `"index"` maps to `/docs`
