@@ -2,7 +2,7 @@
   "name": "shiso-docs-app",
   "version": "0.55.0",
   "private": true,
-  "description": "A standalone documentation app using Next.js and MDX.",
+  "description": "Documentation using Next.js and MDX.",
   "homepage": "https://shiso.umami.is",
   "repository": {
     "type": "git",

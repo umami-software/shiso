@@ -2,7 +2,7 @@
 title: Installation
 ---
 
-This guide sets up Shiso as a standalone docs app.
+This guide sets up Shiso.
 
 ## Prerequisites
 
@@ -18,15 +18,16 @@ pnpm install
 ## 2. Confirm key files
 
 ```text
-src
-├── app
-│   └── docs
-│       └── [[...slug]]
-│           └── page.tsx
+.
 ├── content
 │   └── docs
 │       └── index.mdx
-└── docs.json
+└── src
+    ├── app
+    │   └── docs
+    │       └── [[...slug]]
+    │           └── page.tsx
+    └── docs.json
 ```
 
 ## 3. Configure navigation
@@ -56,11 +57,11 @@ Edit `src/docs.json`:
 
 ## 4. Create matching content files
 
-Each page slug in `navigation` must map to a file in `src/content/docs`:
+Each page slug in `navigation` must map to a file in `content/docs`:
 
 ```text
-src/content/docs/index.mdx
-src/content/docs/installation.mdx
+content/docs/index.mdx
+content/docs/installation.mdx
 ```
 
 ## 5. Run locally

@@ -18,7 +18,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: docsConfig.name || 'Shiso',
-  description: 'Standalone docs app powered by Next.js and MDX.',
+  description: 'Documentation powered by Next.js and MDX.',
 };
 
 export default function RootLayout({

@@ -15,8 +15,8 @@ For the `docs` section, routes are generated from normalized navigation slugs in
 
 For each page reference in `src/docs.json` navigation, Shiso resolves one of:
 
-- `src/content/docs/<slug>.mdx`
-- `src/content/docs/<slug>.md`
+- `content/docs/<slug>.mdx`
+- `content/docs/<slug>.md`
 
 Missing files fail the build early.
 
@@ -60,4 +60,4 @@ Build fails early when:
 - `src/docs.json` is missing valid navigation
 - `navigation` is missing or contains no pages
 - duplicate page slugs are detected
-- page file references cannot be resolved from `src/content/docs`
+- page file references cannot be resolved from `content/docs`

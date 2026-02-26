@@ -170,7 +170,7 @@ export const parseFile = cache(async (file: string): Promise<ShisoContent | null
 });
 
 export function next(type: string, config: ShisoConfig) {
-  const contentDir = config.contentDir || './src/content';
+  const contentDir = config.contentDir || './content';
   const dir = path.resolve(contentDir, type);
   const sectionConfig = isRecord(config[type]) ? (config[type] as { title?: string }) : {};
   const title = sectionConfig.title || config.name || 'Shiso';

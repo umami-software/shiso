@@ -261,7 +261,7 @@ export async function normalizeDocsConfig(
   config: ShisoConfig,
   docsConfig: MintlifyDocsConfig,
 ): Promise<NormalizedDocsConfig> {
-  const contentDir = config.contentDir || './src/content';
+  const contentDir = config.contentDir || './content';
   const tabs = getTabs(docsConfig);
   const pending: PendingPage[] = [];
   const orderRef = { value: 0 };
