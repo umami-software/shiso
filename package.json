@@ -17,11 +17,6 @@
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "icons": "svgr ./src/assets --out-dir src/components/svg --typescript"
   },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,mjs,cjs,css,json}": [
-      "biome check --write"
-    ]
-  },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.5",
     "@mdx-js/loader": "^3.1.1",
@@ -55,8 +50,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "dotenv-cli": "^11.0.0",
-    "husky": "^9.1.1",
-    "lint-staged": "^15.5.1",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "tailwindcss": "^4.2.0",
