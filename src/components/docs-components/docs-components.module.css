@@ -1,0 +1,372 @@
+/* Shared styles for the built-in MDX docs components. */
+
+/* Accordion / Expandable */
+
+.accordionGroup {
+  margin: 1rem 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.accordionGroup > details {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.accordionGroup > details + details {
+  border-top: 1px solid var(--color-border);
+}
+
+.details {
+  margin: 0.75rem 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.details[open] > .summary::before {
+  transform: rotate(45deg);
+}
+
+.detailsBody {
+  padding: 0 1rem 1rem;
+}
+
+/* Callout */
+
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border: 1px solid;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.callout svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.calloutBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.calloutTitle {
+  font-weight: 600;
+}
+
+.note {
+  background: var(--callout-note-bg);
+  border-color: var(--callout-note-border);
+  color: var(--callout-note-text);
+}
+
+.info {
+  background: var(--callout-info-bg);
+  border-color: var(--callout-info-border);
+  color: var(--callout-info-text);
+}
+
+.warning {
+  background: var(--callout-warning-bg);
+  border-color: var(--callout-warning-border);
+  color: var(--callout-warning-text);
+}
+
+.tip {
+  background: var(--callout-tip-bg);
+  border-color: var(--callout-tip-border);
+  color: var(--callout-tip-text);
+}
+
+.check {
+  background: var(--callout-check-bg);
+  border-color: var(--callout-check-border);
+  color: var(--callout-check-text);
+}
+
+/* Card */
+
+.card {
+  display: block;
+  height: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: 1rem;
+}
+
+a.card:hover {
+  border-color: var(--color-border-strong);
+}
+
+.cardInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.cardMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.cardBody {
+  color: var(--color-text-muted);
+}
+
+.cardArrow {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.cardGroup {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+@media (min-width: 768px) {
+  .cardGroupCols1 {
+    grid-template-columns: 1fr;
+  }
+
+  .cardGroupCols2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cardGroupCols3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cardGroupCols4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tabs / CodeGroup */
+
+.tabs {
+  margin: 1rem 0;
+}
+
+.tabList {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabButton {
+  padding: 0.5rem 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+
+.tabButton:hover {
+  color: var(--color-text-strong);
+}
+
+.tabSelected {
+  color: var(--color-text-strong);
+  border-bottom-color: var(--color-primary);
+}
+
+.tabPanel {
+  padding-top: 1rem;
+}
+
+/* Frame */
+
+.frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-sunken);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.frameCaption {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* ParamField / ResponseField */
+
+.field {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.fieldBody {
+  margin-top: 0.75rem;
+}
+
+.fieldType {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.code {
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--color-text-strong);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.badgePrimary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-surface-sunken);
+}
+
+/* RequestExample */
+
+.requestExample {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-sunken);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.requestExampleHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.requestExampleBody {
+  margin-top: 0.75rem;
+}
+
+/* Steps */
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1rem 0;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.stepTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+/* Tooltip */
+
+.tooltip {
+  cursor: help;
+  border-bottom: 1px dotted var(--color-text-muted);
+}

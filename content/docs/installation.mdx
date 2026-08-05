@@ -22,21 +22,16 @@ pnpm install
 ├── content
 │   └── docs
 │       └── index.mdx
+├── docs.json
 └── src
-    ├── app
-    │   └── docs
-    │       └── [[...slug]]
-    │           └── page.tsx
-    └── docs.json
 ```
 
 ## 3. Configure navigation
 
-Edit `src/docs.json`:
+Edit `docs.json`:
 
 ```json
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "My Docs",
   "navigation": {
@@ -73,6 +68,6 @@ pnpm dev
 Open `/docs` and confirm:
 
 1. content renders
-2. side navigation matches `src/docs.json`
+2. side navigation matches `docs.json`
 3. prev/next links follow navigation order
 4. heading anchors appear in "On this page"

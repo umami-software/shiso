@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "docs.schema.json",
+  "title": "Shiso docs.json",
+  "description": "Configuration for a Shiso docs site. This schema is the source of truth for every option Shiso supports and must stay in sync with src/lib/types.ts and src/lib/docs-config.ts.",
+  "type": "object",
+  "required": ["navigation"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path or URL to this schema, for editor autocomplete."
+    },
+    "theme": {
+      "type": "string",
+      "description": "Theme name. Currently only \"mint\" is supported.",
+      "default": "mint"
+    },
+    "name": {
+      "type": "string",
+      "description": "Site name, shown in the header and the page title."
+    },
+    "description": {
+      "type": "string",
+      "description": "Default meta description for pages without one."
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "string",
+          "description": "Primary accent color (any CSS color)."
+        },
+        "light": {
+          "type": "string",
+          "description": "Accent color used in dark mode."
+        },
+        "dark": {
+          "type": "string",
+          "description": "Accent color used in light mode."
+        }
+      }
+    },
+    "logo": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Path to the logo image, relative to the public directory."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "light": {
+              "type": "string",
+              "description": "Logo shown in light mode."
+            },
+            "dark": {
+              "type": "string",
+              "description": "Logo shown in dark mode."
+            },
+            "href": {
+              "type": "string",
+              "description": "URL the logo links to. Defaults to the docs root."
+            }
+          }
+        }
+      ]
+    },
+    "favicon": {
+      "type": "string",
+      "description": "Path to the favicon, relative to the public directory."
+    },
+    "navigation": {
+      "type": "object",
+      "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
+      "additionalProperties": false,
+      "properties": {
+        "tabs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/tab" }
+        },
+        "dropdowns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dropdown" }
+        },
+        "versions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/version" }
+        },
+        "languages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/language" }
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/group" }
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "pageItem": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Page reference relative to content/docs, without extension (e.g. \"components/tabs\")."
+        },
+        { "$ref": "#/definitions/pageObject" },
+        { "$ref": "#/definitions/group" }
+      ]
+    },
+    "pageObject": {
+      "type": "object",
+      "required": ["page"],
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "type": "string",
+          "description": "Page reference relative to content/docs, without extension."
+        },
+        "title": {
+          "type": "string",
+          "description": "Custom sidebar label. Overrides the label derived from the file name."
+        },
+        "label": {
+          "type": "string",
+          "description": "Custom sidebar label. Takes precedence over title."
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "required": ["group", "pages"],
+      "additionalProperties": false,
+      "properties": {
+        "group": {
+          "type": "string",
+          "description": "Group heading shown in the sidebar."
+        },
+        "root": {
+          "type": "string",
+          "description": "Optional page reference rendered as the first page of the group."
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        }
+      }
+    },
+    "dropdown": {
+      "type": "object",
+      "required": ["dropdown"],
+      "additionalProperties": false,
+      "properties": {
+        "dropdown": {
+          "type": "string",
+          "description": "Dropdown label. Rendered as a tab."
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/group" }
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        }
+      }
+    },
+    "tab": {
+      "type": "object",
+      "required": ["tab"],
+      "additionalProperties": false,
+      "properties": {
+        "tab": {
+          "type": "string",
+          "description": "Tab label shown in the top navigation."
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/group" }
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        },
+        "dropdowns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dropdown" }
+        }
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": ["version"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version label. Only the default (or first) version is rendered."
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Marks this version as the one to render."
+        },
+        "tabs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/tab" }
+        },
+        "dropdowns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dropdown" }
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/group" }
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        }
+      }
+    },
+    "language": {
+      "type": "object",
+      "required": ["language"],
+      "additionalProperties": false,
+      "properties": {
+        "language": {
+          "type": "string",
+          "description": "Language code or label. Only the default (or first) language is rendered."
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Marks this language as the one to render."
+        },
+        "versions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/version" }
+        },
+        "tabs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/tab" }
+        },
+        "dropdowns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/dropdown" }
+        },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/group" }
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pageItem" }
+        }
+      }
+    }
+  }
+}

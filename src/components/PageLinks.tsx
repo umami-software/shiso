@@ -1,25 +1,27 @@
-'use client';
-import type { BoxProps } from '@umami/react-zen';
-import { Box, Column, Text } from '@umami/react-zen';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import type { TocEntry } from '@/lib/types';
+import styles from './PageLinks.module.css';
 
-export interface PageLinksProps extends BoxProps {
-  items?: { name: string; id: string; size: number }[];
+export interface PageLinksProps {
+  items?: TocEntry[];
 }
 
-export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
+export function PageLinks({ items = [] }: PageLinksProps) {
   const [hash, setHash] = useState(items?.[0]?.id);
 
   useEffect(() => {
     setHash(items?.[0]?.id);
 
     const callback = () => {
-      const x = [...items].reverse().find(({ id }) => {
+      const found = [...items].reverse().find(({ id }) => {
         const rect = document.getElementById(id)?.getBoundingClientRect();
         return rect && rect.top <= 0;
       });
 
-      if (x) setHash(x.id);
+      if (found) {
+        setHash(found.id);
+      }
     };
 
     window.addEventListener('scroll', callback, false);
@@ -42,23 +44,17 @@ export function PageLinks({ items = [], className, ...props }: PageLinksProps) {
   };
 
   return (
-    <Box {...props} className={className} position="sticky" height="max-content" minWidth="240px">
-      <Column gap="3" minWidth="240px">
-        <Text size="sm" weight="bold">
-          On this page
-        </Text>
-        {items.map(({ name, id, size }) => {
-          const selected = hash === id;
-
-          return (
-            <a key={id} href={`#${id}`} style={{ textDecoration: 'none' }}>
-              <Text size="sm" color={selected ? 'primary' : 'muted'}>
-                <span style={{ marginLeft: indent(size), display: 'block' }}>{name}</span>
-              </Text>
-            </a>
-          );
-        })}
-      </Column>
-    </Box>
+    <div className={styles.container}>
+      <div className={styles.title}>On this page</div>
+      {items.map(({ name, id, size }) => (
+        <a
+          key={id}
+          href={`#${id}`}
+          className={classNames(styles.link, { [styles.selected]: hash === id })}
+        >
+          <span style={{ marginLeft: indent(size), display: 'block' }}>{name}</span>
+        </a>
+      ))}
+    </div>
   );
 }

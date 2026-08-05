@@ -6,7 +6,8 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "includes": ["**", "!docs.schema.json"]
   },
   "formatter": {
     "enabled": true,
@@ -49,7 +50,19 @@
   },
   "css": {
     "parser": {
-      "tailwindDirectives": true
+      "cssModules": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/svg/**", "src/assets/**", "public/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    }
+  ]
 }

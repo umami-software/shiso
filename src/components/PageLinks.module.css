@@ -1,0 +1,27 @@
+.container {
+  position: sticky;
+  top: 1rem;
+  height: max-content;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-strong);
+}
+
+.link {
+  color: var(--color-text-muted);
+}
+
+.link:hover {
+  color: var(--color-text-strong);
+}
+
+.selected {
+  color: var(--color-primary);
+}

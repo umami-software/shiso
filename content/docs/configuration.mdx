@@ -3,7 +3,7 @@ title: Configuration
 description: Set your docs name, navigation, and page structure.
 ---
 
-Shiso uses one docs config file: `src/docs.json`.
+Shiso uses one docs config file: `docs.json`.
 For most teams, setup is just naming the docs site and defining page navigation.
 
 ## Minimal example
@@ -28,20 +28,32 @@ For most teams, setup is just naming the docs site and defining page navigation.
 }
 ```
 
-If you want editor autocomplete, you can also add:
-
-```json
-{
-  "$schema": "https://mintlify.com/docs.json"
-}
-```
-
 ## Fields you will actually edit
 
 - `name`: your docs/site title
 - `navigation`: the sidebar and top-level sections
 - `theme`: keep `"mint"` unless you have a reason to change it
-- `contentDir` (optional): defaults to `./content`
+- `colors`: `primary` (light mode) and `light` (dark mode) accent colors
+- `logo`: a path like `"/logo.svg"`, or `{ "light": "...", "dark": "..." }`
+- `favicon`: a path like `"/favicon.png"`
+
+## Schema and validation
+
+The full config format is described by `docs.schema.json` in the project root.
+Point your editor at it for autocomplete and inline validation:
+
+```json
+{
+  "$schema": "./docs.schema.json"
+}
+```
+
+The build validates `docs.json` against the schema and fails on unknown or
+malformed fields. You can also run the check on its own:
+
+```bash
+pnpm check:config
+```
 
 ## How page slugs map to files
 

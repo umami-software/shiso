@@ -1,44 +1,41 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import type {
-  MintlifyDocsConfig,
-  MintlifyDropdownItem,
-  MintlifyLanguageItem,
-  MintlifyPageItem,
-  MintlifyTabItem,
-  MintlifyVersionItem,
+  DocsConfig,
+  DropdownItem,
+  GroupItem,
+  LanguageItem,
   NormalizedDocsConfig,
   NormalizedDocsPage,
-  ShisoConfig,
+  PageItem,
+  TabItem,
+  VersionItem,
 } from '@/lib/types';
+
+/**
+ * Resolves a page reference from docs.json (e.g. "components/tabs") to the
+ * module key of a real content file (e.g. "/content/docs/components/tabs.mdx").
+ * Returns undefined when no file exists for the reference.
+ */
+export type DocFileResolver = (fileSlug: string) => string | undefined;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
 
-function assertMintlifyDocsConfig(
-  value: unknown,
-  sourceName: string,
-): asserts value is MintlifyDocsConfig {
+export function assertDocsConfig(value: unknown, sourceName: string): asserts value is DocsConfig {
   if (!isRecord(value)) {
     throw new Error(`Invalid docs config in "${sourceName}": expected a JSON object.`);
   }
 
-  // Common mistake: using the Mintlify JSON schema document itself, not an actual config object.
+  // Common mistake: pointing at a JSON schema document instead of an actual config object.
   if ('anyOf' in value && 'definitions' in value && !('navigation' in value)) {
     throw new Error(
-      `Invalid docs config in "${sourceName}": this looks like the Mintlify schema, not a project config object.`,
+      `Invalid docs config in "${sourceName}": this looks like a JSON schema, not a project config object.`,
     );
   }
 
   if (!isRecord(value.navigation)) {
     throw new Error(`Invalid docs config in "${sourceName}": missing "navigation" object.`);
   }
-}
-
-export async function loadDocsConfig(config: ShisoConfig): Promise<MintlifyDocsConfig> {
-  assertMintlifyDocsConfig(config, 'src/docs.json');
-  return config;
 }
 
 function slugifyId(value: string, fallback: string): string {
@@ -96,7 +93,7 @@ function pickDefaultItem<T extends { default?: boolean }>(items: T[]): T {
   return items.find(item => item.default) || items[0];
 }
 
-function dropdownsToTabs(dropdowns: MintlifyDropdownItem[]): MintlifyTabItem[] {
+function dropdownsToTabs(dropdowns: DropdownItem[]): TabItem[] {
   return dropdowns.map((dropdown, index) => {
     const label = dropdown.dropdown?.trim() || `Section ${index + 1}`;
     return {
@@ -107,14 +104,16 @@ function dropdownsToTabs(dropdowns: MintlifyDropdownItem[]): MintlifyTabItem[] {
   });
 }
 
-function getTabsFromContainer(
-  container:
-    | MintlifyDocsConfig['navigation']
-    | MintlifyVersionItem
-    | MintlifyLanguageItem
-    | MintlifyTabItem,
-  fallbackLabel = 'Documentation',
-): MintlifyTabItem[] {
+interface NavContainer {
+  tabs?: TabItem[];
+  dropdowns?: DropdownItem[];
+  groups?: GroupItem[];
+  pages?: PageItem[];
+  versions?: VersionItem[];
+  languages?: LanguageItem[];
+}
+
+function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Documentation'): TabItem[] {
   if (Array.isArray(container.tabs) && container.tabs.length) {
     return container.tabs;
   }
@@ -150,24 +149,8 @@ function getTabsFromContainer(
   );
 }
 
-function getTabs(config: MintlifyDocsConfig): MintlifyTabItem[] {
+function getTabs(config: DocsConfig): TabItem[] {
   return getTabsFromContainer(config.navigation);
-}
-
-async function resolveDocFile(contentDir: string, fileSlug: string): Promise<string> {
-  const docsDir = path.resolve(contentDir, 'docs');
-  const candidates = [path.join(docsDir, `${fileSlug}.mdx`), path.join(docsDir, `${fileSlug}.md`)];
-
-  for (const candidate of candidates) {
-    try {
-      await fs.access(candidate);
-      return candidate;
-    } catch {
-      // Continue searching possible file extensions.
-    }
-  }
-
-  throw new Error(`Missing docs page file for "${fileSlug}" under "${docsDir}".`);
 }
 
 interface PendingPage {
@@ -202,7 +185,7 @@ function pushPendingPage(
 }
 
 function collectPages(
-  items: MintlifyPageItem[],
+  items: PageItem[],
   context: { tabId: string; tabLabel: string; section: string },
   pages: PendingPage[],
   orderRef: { value: number },
@@ -257,11 +240,10 @@ function collectPages(
   });
 }
 
-export async function normalizeDocsConfig(
-  config: ShisoConfig,
-  docsConfig: MintlifyDocsConfig,
-): Promise<NormalizedDocsConfig> {
-  const contentDir = config.contentDir || './content';
+export function normalizeDocsConfig(
+  docsConfig: DocsConfig,
+  resolveDocFile: DocFileResolver,
+): NormalizedDocsConfig {
   const tabs = getTabs(docsConfig);
   const pending: PendingPage[] = [];
   const orderRef = { value: 0 };
@@ -362,11 +344,17 @@ export async function normalizeDocsConfig(
   }
 
   const filePathBySlug = new Map(
-    await Promise.all(
-      [...seenFileSlugs].map(async fileSlug => {
-        return [fileSlug, await resolveDocFile(contentDir, fileSlug)] as const;
-      }),
-    ),
+    [...seenFileSlugs].map(fileSlug => {
+      const filePath = resolveDocFile(fileSlug);
+
+      if (!filePath) {
+        throw new Error(
+          `Missing docs page file for "${fileSlug}": expected "content/docs/${fileSlug}.mdx" or ".md".`,
+        );
+      }
+
+      return [fileSlug, filePath] as const;
+    }),
   );
 
   const pageBySlug: Record<string, NormalizedDocsPage> = {};
@@ -436,9 +424,4 @@ export async function normalizeDocsConfig(
     pageBySlug,
     pageByLookupSlug,
   };
-}
-
-export async function loadNormalizedDocsConfig(config: ShisoConfig): Promise<NormalizedDocsConfig> {
-  const docsConfig = await loadDocsConfig(config);
-  return normalizeDocsConfig(config, docsConfig);
 }

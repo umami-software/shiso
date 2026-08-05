@@ -1,0 +1,42 @@
+.sidenav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 240px;
+  overflow-y: auto;
+}
+
+.sticky {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  color: var(--color-text-strong);
+  padding: 0.5rem 0;
+}
+
+.link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.link:hover {
+  color: var(--color-text-strong);
+}
+
+.selected {
+  color: var(--color-text-strong);
+  font-weight: 500;
+  border-left-color: var(--color-primary);
+  background: var(--color-surface-sunken);
+}

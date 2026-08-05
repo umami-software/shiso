@@ -7,6 +7,9 @@ export {
   Info as InfoIcon,
   Lightbulb,
   Menu,
+  Moon,
   Search,
+  Sun,
   TriangleAlert,
+  X,
 } from 'lucide-react';

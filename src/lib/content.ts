@@ -1,0 +1,28 @@
+import type { DocModule } from '@/lib/types';
+
+/**
+ * Eagerly imports every content file at build time. Each module exports:
+ * - default: the compiled MDX component
+ * - frontmatter: parsed YAML frontmatter
+ * - toc: heading anchors injected by the remark-toc plugin
+ *
+ * Eager loading keeps server prerendering and client hydration in sync
+ * without Suspense, at the cost of bundling all pages together.
+ */
+export const docModules = import.meta.glob('/content/docs/**/*.{md,mdx}', {
+  eager: true,
+}) as Record<string, DocModule>;
+
+/**
+ * Resolves a docs.json page reference (e.g. "components/tabs") to a module
+ * key (e.g. "/content/docs/components/tabs.mdx"). Returns undefined when the
+ * file does not exist, which makes config normalization fail at startup/build.
+ */
+export function resolveDocFile(fileSlug: string): string | undefined {
+  const candidates = [`/content/docs/${fileSlug}.mdx`, `/content/docs/${fileSlug}.md`];
+  return candidates.find(candidate => candidate in docModules);
+}
+
+export function getDocModule(filePath: string): DocModule | undefined {
+  return docModules[filePath];
+}

@@ -1,64 +1,52 @@
 {
-  "name": "shiso-docs-app",
-  "version": "0.55.0",
+  "name": "shiso",
+  "version": "0.61.0",
   "private": true,
-  "description": "Documentation using Next.js and MDX.",
+  "description": "Open-source docs site generator built with Vite, React, and MDX. Configured with a single docs.json file.",
   "homepage": "https://shiso.umami.is",
   "repository": {
     "type": "git",
     "url": "https://github.com/umami-software/shiso.git"
   },
+  "type": "module",
   "scripts": {
-    "dev": "dotenv next dev --port 8001 --turbo",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite --port 8001",
+    "check:config": "node scripts/validate-config.mjs",
+    "build": "node scripts/validate-config.mjs && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs",
+    "preview": "vite preview --outDir dist/client",
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "icons": "svgr ./src/assets --out-dir src/components/svg --typescript"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",
-    "@mdx-js/loader": "^3.1.1",
-    "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@umami/react-zen": "^0.245.0",
     "classnames": "^2.5.1",
-    "date-fns": "^4.1.0",
-    "glob": "^10.5.0",
-    "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
-    "lucide-react": "^0.574.0",
-    "next": "16.1.6",
-    "next-mdx-remote": "^6.0.0",
+    "lucide-react": "^1.28.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "recursive-readdir": "^2.2.3",
+    "react-router": "^8.3.0",
     "rehype-highlight": "^7.0.1",
     "rehype-slug": "^6.0.0",
-    "remark-gfm": "^4.0.0",
-    "tailwind-variants": "^3.2.2",
-    "thenby": "^1.3.4"
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",
+    "@mdx-js/rollup": "^3.1.1",
     "@svgr/cli": "^8.1.0",
-    "@tailwindcss/postcss": "^4.2.0",
     "@types/css-modules": "^1.0.5",
     "@types/mdx": "^2.0.11",
-    "@types/node": "^25.3.0",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "dotenv-cli": "^11.0.0",
+    "@vitejs/plugin-react": "^6.0.5",
+    "ajv": "^8.20.0",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
-    "tailwindcss": "^4.2.0",
-    "typescript": "^5.9.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0"
   }
 }
