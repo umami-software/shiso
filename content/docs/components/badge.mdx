@@ -1,0 +1,30 @@
+---
+title: Badge
+---
+
+Use `Badge` for short inline labels such as status or version markers.
+
+## Supported props
+
+- `tone?: 'muted' | 'primary'` (defaults to `'muted'`)
+- `children?: ReactNode`
+
+## Basic usage
+
+```tsx
+<Badge>beta</Badge> <Badge tone="primary">new</Badge>
+```
+
+<Badge>beta</Badge> <Badge tone="primary">new</Badge>
+
+## In headings
+
+```tsx
+### Streaming responses <Badge tone="primary">new</Badge>
+```
+
+### Streaming responses <Badge tone="primary">new</Badge>
+
+## Behavior notes
+
+- `ParamField` and `ResponseField` use the same badge for their `required` and `deprecated` markers

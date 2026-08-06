@@ -1,17 +1,21 @@
 import { cloneElement, type ReactNode } from 'react';
 import styles from './docs-components.module.css';
-import { toElementArray } from './utils';
+import { resolveIcon, toElementArray } from './utils';
 
 export interface AccordionProps {
   title?: ReactNode;
+  icon?: ReactNode | string;
   defaultOpen?: boolean;
   children?: ReactNode;
 }
 
-export function Accordion({ title, defaultOpen, children }: AccordionProps) {
+export function Accordion({ title, icon, defaultOpen, children }: AccordionProps) {
   return (
     <details className={styles.details} open={defaultOpen}>
-      <summary className={styles.summary}>{title}</summary>
+      <summary className={styles.summary}>
+        {resolveIcon(icon)}
+        {title}
+      </summary>
       <div className={styles.detailsBody}>{children}</div>
     </details>
   );

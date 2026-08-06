@@ -31,7 +31,9 @@ The full `docs.json` standard is described in [`docs.schema.json`](./docs.schema
 
 ## Components
 
-Markdown content can use the built-in docs components without imports: `Accordion`, `AccordionGroup`, `Callout`, `Note`, `Tip`, `Warning`, `Info`, `Check`, `Card`, `CardGroup`, `CodeGroup`, `Expandable`, `Frame`, `ParamField`, `Param`, `RequestExample`, `ResponseField`, `Steps`, `Step`, `Tabs`, `Tab`, `Tooltip`.
+Markdown content can use the built-in docs components without imports: `Accordion`, `AccordionGroup`, `Badge`, `Callout`, `Note`, `Tip`, `Warning`, `Info`, `Check`, `Danger`, `Card`, `CardGroup`, `CodeGroup`, `Columns`, `Column`, `Expandable`, `Frame`, `Icon`, `ParamField`, `Param`, `RequestExample`, `ResponseExample`, `ResponseField`, `Steps`, `Step`, `Tabs`, `Tab`, `Tooltip`.
+
+`Icon`, `Card`, `Callout`, and `Accordion` accept [lucide](https://lucide.dev/icons) icon names (`icon="rocket"`). Names are collected from your content at build time into `src/lib/icon-registry.generated.ts` — regenerated automatically by the dev server and build, or manually with `pnpm icons:registry`.
 
 ## Common commands
 

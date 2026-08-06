@@ -1,0 +1,49 @@
+---
+title: Icon
+---
+
+Use `Icon` to render an icon inline, or pass an icon name to any component that accepts an `icon` prop.
+
+## Supported props
+
+- `icon?: string` (a [lucide](https://lucide.dev/icons) icon name)
+- `src?: string` (image path or URL, used instead of `icon`)
+- `color?: string`
+- `size?: number` (defaults to `16`)
+- `className?: string`
+
+## Basic usage
+
+```tsx
+Deploy your site <Icon icon="rocket" /> in one command.
+```
+
+Deploy your site <Icon icon="rocket" /> in one command.
+
+## Sizing and color
+
+```tsx
+<Icon icon="circle-check" size={24} color="#16a34a" />
+```
+
+<Icon icon="circle-check" size={24} color="#16a34a" />
+
+## Icon names on other components
+
+`Card`, `Callout`, and `Accordion` accept the same names on their `icon` prop.
+
+```tsx
+<Card title="Quickstart" icon="rocket" href="/docs/installation">
+  Install and configure Shiso.
+</Card>
+```
+
+<Card title="Quickstart" icon="rocket" href="/docs/installation">
+  Install and configure Shiso.
+</Card>
+
+## Behavior notes
+
+- names are case-insensitive and accept `circle-check`, `circle_check`, or `CircleCheck`
+- icon names are collected from your content at build time, so only names that appear in a source file are bundled
+- an unrecognized name renders nothing and logs a warning in development

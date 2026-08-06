@@ -37,6 +37,9 @@
   --callout-check-bg: #ecfdf5;
   --callout-check-border: #6ee7b7;
   --callout-check-text: #065f46;
+  --callout-danger-bg: #fef2f2;
+  --callout-danger-border: #fca5a5;
+  --callout-danger-text: #991b1b;
 }
 
 [data-theme="dark"] {
@@ -68,4 +71,7 @@
   --callout-check-bg: rgba(16, 185, 129, 0.1);
   --callout-check-border: rgba(16, 185, 129, 0.4);
   --callout-check-text: #6ee7b7;
+  --callout-danger-bg: rgba(239, 68, 68, 0.1);
+  --callout-danger-border: rgba(239, 68, 68, 0.4);
+  --callout-danger-text: #fca5a5;
 }

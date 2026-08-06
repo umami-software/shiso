@@ -10,7 +10,10 @@ Use `Card` and `CardGroup` to present grouped links or summaries.
 
 - `title?: ReactNode`
 - `href?: string`
-- `icon?: ReactNode`
+- `icon?: ReactNode | string` (an icon name such as `"rocket"`)
+- `img?: string` (image shown above the card content)
+- `cta?: string` (label shown next to the arrow)
+- `horizontal?: boolean` (lays the icon, title, and body out in a row)
 - `arrow?: boolean` (defaults to `true` when `href` exists)
 - `children?: ReactNode`
 
@@ -22,27 +25,36 @@ Use `Card` and `CardGroup` to present grouped links or summaries.
 ## Basic usage
 
 ```tsx
-<Card title="API Reference" href="/docs/components/response-field">
+<Card title="API Reference" icon="code" href="/docs/components/response-field">
   Learn how to model response schemas.
 </Card>
 ```
 
-<Card title="API Reference" href="/docs/components/response-field">
+<Card title="API Reference" icon="code" href="/docs/components/response-field">
   Learn how to model response schemas.
 </Card>
 
 ## Card group
 
 <CardGroup cols={2}>
-  <Card title="Getting Started" href="/docs/installation">
+  <Card title="Getting Started" icon="rocket" href="/docs/installation">
     Install and configure Shiso.
   </Card>
-  <Card title="Components" href="/docs/components">
+  <Card title="Components" icon="book-open" href="/docs/components">
     Browse all docs components.
   </Card>
 </CardGroup>
+
+## Horizontal card
+
+```tsx
+<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
+```
+
+<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
 
 ## Behavior notes
 
 - cards with `href` render as links
 - cards without `href` render as static containers
+- external `href` values open in a new tab

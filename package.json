@@ -17,7 +17,8 @@
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
-    "icons": "svgr ./src/assets --out-dir src/components/svg --typescript"
+    "icons": "svgr ./src/assets --out-dir src/components/svg --typescript",
+    "icons:registry": "node scripts/generate-icon-registry.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.5",

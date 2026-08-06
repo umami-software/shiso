@@ -1,16 +1,9 @@
 import type { ReactNode } from 'react';
+import { Badge } from './Badge';
 import styles from './docs-components.module.css';
 import { decodeHtmlEntities } from './utils';
 
 type FieldValue = string | number | boolean | null | undefined;
-
-function Badge({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'primary' }) {
-  return (
-    <span className={`${styles.badge} ${tone === 'primary' ? styles.badgePrimary : ''}`}>
-      {children}
-    </span>
-  );
-}
 
 export interface ResponseFieldProps {
   name: string;

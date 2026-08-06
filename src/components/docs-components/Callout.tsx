@@ -7,12 +7,13 @@ import {
   TriangleAlert,
 } from '@/components/icons';
 import styles from './docs-components.module.css';
+import { resolveIcon } from './utils';
 
 export interface CalloutProps {
   title?: ReactNode;
-  icon?: ReactNode;
+  icon?: ReactNode | string;
   children?: ReactNode;
-  variant?: 'note' | 'tip' | 'warning' | 'info' | 'check';
+  variant?: 'note' | 'tip' | 'warning' | 'info' | 'check' | 'danger';
 }
 
 const CALLOUT_ICONS = {
@@ -21,12 +22,13 @@ const CALLOUT_ICONS = {
   warning: <TriangleAlert size={14} />,
   tip: <Lightbulb size={14} />,
   check: <CheckIcon size={14} />,
+  danger: <CircleAlert size={14} />,
 } as const;
 
 export function Callout({ title, icon, children, variant = 'note' }: CalloutProps) {
   return (
     <div className={`${styles.callout} ${styles[variant]}`}>
-      {icon || CALLOUT_ICONS[variant]}
+      {resolveIcon(icon) || CALLOUT_ICONS[variant]}
       <div className={styles.calloutBody}>
         {title ? <div className={styles.calloutTitle}>{title}</div> : null}
         <div>{children}</div>
@@ -53,6 +55,10 @@ export function Info({ children }: { children?: ReactNode }) {
 
 export function Check({ children }: { children?: ReactNode }) {
   return <Callout variant="check">{children}</Callout>;
+}
+
+export function Danger({ children }: { children?: ReactNode }) {
+  return <Callout variant="danger">{children}</Callout>;
 }
 
 export function WarningBanner({ children }: { children?: ReactNode }) {

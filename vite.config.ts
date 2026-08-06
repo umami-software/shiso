@@ -7,7 +7,30 @@ import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import { defineConfig, type Plugin } from 'vite';
 import docsConfig from './docs.json';
+import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { remarkToc } from './src/lib/remark-toc';
+
+/**
+ * Keeps src/lib/icon-registry.generated.ts in sync with the `icon="name"` values
+ * used in content, so string icon names resolve without bundling all of lucide.
+ */
+function shisoIconRegistry(): Plugin {
+  return {
+    name: 'shiso-icon-registry',
+    async buildStart() {
+      const { unknown } = await generateIconRegistry();
+
+      if (unknown.length) {
+        this.warn(`Unknown icon names (not in lucide): ${unknown.join(', ')}`);
+      }
+    },
+    async handleHotUpdate({ file }) {
+      if (/\.(md|mdx|tsx)$/.test(file)) {
+        await generateIconRegistry();
+      }
+    },
+  };
+}
 
 /**
  * Injects site-level metadata from docs.json into index.html:
@@ -53,6 +76,7 @@ function shisoHtml(): Plugin {
 
 export default defineConfig({
   plugins: [
+    shisoIconRegistry(),
     shisoHtml(),
     {
       // Must run before vite:react-babel so MDX is compiled to JSX first.

@@ -1,4 +1,5 @@
-import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
+import { Children, createElement, isValidElement, type ReactElement, type ReactNode } from 'react';
+import { getIcon } from '@/lib/icons';
 
 interface NodeWithClassName {
   className?: string;
@@ -7,6 +8,20 @@ interface NodeWithClassName {
 
 export function toElementArray<T>(children: ReactNode): ReactElement<T>[] {
   return Children.toArray(children).filter(isValidElement) as ReactElement<T>[];
+}
+
+/**
+ * Icon props accept either a rendered node or a lucide icon name, since MDX authors
+ * write `icon="rocket"` while first-party components pass elements directly.
+ */
+export function resolveIcon(icon: ReactNode | string, size = 14): ReactNode {
+  if (typeof icon !== 'string') {
+    return icon;
+  }
+
+  const Component = getIcon(icon);
+
+  return Component ? createElement(Component, { size }) : null;
 }
 
 export function slugify(value: ReactNode, fallback: string): string {
@@ -18,6 +33,20 @@ export function slugify(value: ReactNode, fallback: string): string {
     .replace(/^-+|-+$/g, '');
 
   return normalized || fallback;
+}
+
+const GRID_COLS_CLASSES = {
+  1: 'gridCols1',
+  2: 'gridCols2',
+  3: 'gridCols3',
+  4: 'gridCols4',
+} as const;
+
+/** Shared by CardGroup and Columns: clamps a column count to a CSS module class name. */
+export function gridColsClass(cols: number): (typeof GRID_COLS_CLASSES)[1 | 2 | 3 | 4] {
+  const columns = Math.min(Math.max(Math.round(cols) || 1, 1), 4) as 1 | 2 | 3 | 4;
+
+  return GRID_COLS_CLASSES[columns];
 }
 
 export function decodeHtmlEntities(value: string): string {

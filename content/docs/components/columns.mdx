@@ -1,0 +1,66 @@
+---
+title: Columns
+---
+
+Use `Columns` to place any content side by side in a responsive grid.
+
+## Supported props
+
+### `Columns`
+
+- `cols?: 1 | 2 | 3 | 4` (defaults to `2`)
+- `children?: ReactNode`
+
+### `Column`
+
+- `children?: ReactNode`
+
+## Basic usage
+
+````tsx
+<Columns cols={2}>
+  <Column>
+    **Install**
+    ```bash
+    pnpm install
+    ```
+  </Column>
+  <Column>
+    **Run**
+    ```bash
+    pnpm dev
+    ```
+  </Column>
+</Columns>
+````
+
+<Columns cols={2}>
+  <Column>
+    **Install**
+    ```bash
+    pnpm install
+    ```
+  </Column>
+  <Column>
+    **Run**
+    ```bash
+    pnpm dev
+    ```
+  </Column>
+</Columns>
+
+## With cards
+
+`Columns` also works as a layout wrapper for cards.
+
+<Columns cols={3}>
+  <Card title="Install" icon="rocket" href="/docs/installation" />
+  <Card title="Configure" icon="settings" href="/docs/configuration" />
+  <Card title="Write" icon="book-open" href="/docs/writing-content" />
+</Columns>
+
+## Behavior notes
+
+- columns collapse to a single column below 768px
+- `cols` is clamped to the range 1–4
+- `CardGroup` uses the same grid, so prefer it when every child is a `Card`

@@ -119,6 +119,12 @@
   color: var(--callout-check-text);
 }
 
+.danger {
+  background: var(--callout-danger-bg);
+  border-color: var(--callout-danger-border);
+  color: var(--callout-danger-text);
+}
+
 /* Card */
 
 .card {
@@ -164,34 +170,82 @@ a.card:hover {
   color: var(--color-text-muted);
 }
 
+.cardCta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
 .cardArrow {
   color: var(--color-text-muted);
   flex-shrink: 0;
 }
 
-.cardGroup {
+.cardImage {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+}
+
+.cardHorizontal .cardMain {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardHorizontal .cardBody {
+  margin: 0;
+}
+
+/* Grid — shared by CardGroup and Columns */
+
+.grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
   margin: 1rem 0;
 }
 
+.column {
+  min-width: 0;
+}
+
+.column > :first-child {
+  margin-top: 0;
+}
+
+.column > :last-child {
+  margin-bottom: 0;
+}
+
 @media (min-width: 768px) {
-  .cardGroupCols1 {
+  .gridCols1 {
     grid-template-columns: 1fr;
   }
 
-  .cardGroupCols2 {
+  .gridCols2 {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .cardGroupCols3 {
+  .gridCols3 {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .cardGroupCols4 {
+  .gridCols4 {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* Icon */
+
+.icon {
+  display: inline-block;
+  vertical-align: -0.145em;
 }
 
 /* Tabs / CodeGroup */
@@ -298,9 +352,9 @@ a.card:hover {
   background: var(--color-surface-sunken);
 }
 
-/* RequestExample */
+/* RequestExample / ResponseExample */
 
-.requestExample {
+.example {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface-sunken);
@@ -308,7 +362,7 @@ a.card:hover {
   margin: 1rem 0;
 }
 
-.requestExampleHeader {
+.exampleHeader {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -316,7 +370,7 @@ a.card:hover {
   color: var(--color-text-strong);
 }
 
-.requestExampleBody {
+.exampleBody {
   margin-top: 0.75rem;
 }
 
@@ -367,6 +421,44 @@ a.card:hover {
 /* Tooltip */
 
 .tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipTrigger {
   cursor: help;
+  border: none;
   border-bottom: 1px dotted var(--color-text-muted);
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.tooltipBubble {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: max-content;
+  max-width: 18rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease;
+}
+
+.tooltip:hover .tooltipBubble,
+.tooltipTrigger:focus-visible + .tooltipBubble {
+  opacity: 1;
+  visibility: visible;
 }

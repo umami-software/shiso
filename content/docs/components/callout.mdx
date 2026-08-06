@@ -12,12 +12,13 @@ Use callouts to highlight important content blocks.
 - `Warning`
 - `Info`
 - `Check`
+- `Danger`
 
 ## `Callout` props
 
-- `variant?: 'note' | 'tip' | 'warning' | 'info' | 'check'`
+- `variant?: 'note' | 'tip' | 'warning' | 'info' | 'check' | 'danger'`
 - `title?: ReactNode`
-- `icon?: ReactNode`
+- `icon?: ReactNode | string` (an icon name such as `"flame"`)
 - `children?: ReactNode`
 
 ## Generic callout
@@ -54,7 +55,24 @@ Use callouts to highlight important content blocks.
 
 <Check>Use this for success or completion states.</Check>
 
+### Danger
+
+<Danger>Use this for irreversible actions and data loss.</Danger>
+
+## Custom icon
+
+```tsx
+<Callout variant="tip" icon="flame" title="Hot path">
+  This request is on the critical path.
+</Callout>
+```
+
+<Callout variant="tip" icon="flame" title="Hot path">
+  This request is on the critical path.
+</Callout>
+
 ## Behavior notes
 
-- `Note`, `Tip`, `Warning`, `Info`, and `Check` are wrappers around `Callout`
+- `Note`, `Tip`, `Warning`, `Info`, `Check`, and `Danger` are wrappers around `Callout`
 - if no `title` is provided, only the body content is rendered
+- `icon` accepts an icon name or a rendered element, and overrides the variant default

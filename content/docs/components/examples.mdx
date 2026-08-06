@@ -1,0 +1,61 @@
+---
+title: Examples
+---
+
+Use `RequestExample` and `ResponseExample` to wrap API request and response payloads.
+
+## Supported props
+
+Both components accept the same props:
+
+- `title?: ReactNode` (defaults to `"Request example"` / `"Response example"`)
+- `children?: ReactNode`
+
+## Request example
+
+````tsx
+<RequestExample title="Create user request">
+  ```json
+  {
+    "email": "user@example.com",
+    "name": "Ada Lovelace"
+  }
+  ```
+</RequestExample>
+````
+
+<RequestExample title="Create user request">
+  ```json
+  {
+    "email": "user@example.com",
+    "name": "Ada Lovelace"
+  }
+  ```
+</RequestExample>
+
+## Response example
+
+````tsx
+<ResponseExample>
+  ```json
+  {
+    "id": "usr_1",
+    "email": "user@example.com"
+  }
+  ```
+</ResponseExample>
+````
+
+<ResponseExample>
+  ```json
+  {
+    "id": "usr_1",
+    "email": "user@example.com"
+  }
+  ```
+</ResponseExample>
+
+## Behavior notes
+
+- pair them under an endpoint heading to document a request and its response
+- use `CodeGroup` inside either component to show multiple languages
