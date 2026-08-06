@@ -2,84 +2,15 @@
  * Remark plugin that collects headings from the document and injects
  * `export const toc = [{ name, id, size }, ...]` into the compiled MDX module.
  *
- * The slug algorithm must stay in sync with `rehype-slug` (github-slugger)
- * so TOC anchor ids match the heading ids rendered in the page.
+ * Anchor ids come from `src/lib/slug.ts`, the same github-slugger instance
+ * `rehype-slug` uses, so TOC links always match the rendered heading ids.
  */
-
-export interface TocEntry {
-  name: string;
-  id: string;
-  size: number;
-}
-
-interface MdNode {
-  type?: string;
-  depth?: number;
-  value?: string;
-  children?: MdNode[];
-  data?: Record<string, unknown>;
-}
-
-function walkTree(node: MdNode | undefined, visitor: (node: MdNode) => void) {
-  if (!node || typeof node !== 'object') {
-    return;
-  }
-
-  visitor(node);
-  node.children?.forEach(child => {
-    walkTree(child, visitor);
-  });
-}
-
-function headingText(node: MdNode): string {
-  if (!node) {
-    return '';
-  }
-
-  if (typeof node.value === 'string') {
-    return node.value;
-  }
-
-  return (node.children || []).map(headingText).join('');
-}
-
-function slugifyHeading(value: string, countBySlug: Map<string, number>): string {
-  const base = value
-    .trim()
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-  const slug = base || 'section';
-  const count = countBySlug.get(slug) || 0;
-  countBySlug.set(slug, count + 1);
-  return count ? `${slug}-${count}` : slug;
-}
-
-function valueToEstree(value: unknown): Record<string, unknown> {
-  if (Array.isArray(value)) {
-    return { type: 'ArrayExpression', elements: value.map(valueToEstree) };
-  }
-
-  if (value && typeof value === 'object') {
-    return {
-      type: 'ObjectExpression',
-      properties: Object.entries(value).map(([key, val]) => ({
-        type: 'Property',
-        kind: 'init',
-        method: false,
-        shorthand: false,
-        computed: false,
-        key: { type: 'Identifier', name: key },
-        value: valueToEstree(val),
-      })),
-    };
-  }
-
-  return { type: 'Literal', value };
-}
+import { valueToEstree } from 'estree-util-value-to-estree';
+// Relative imports: this module is also loaded by vite.config.ts, which esbuild
+// bundles without applying the "@/" resolve alias.
+import { headingText, type MdNode, walkTree } from './mdast.ts';
+import { createSlugger } from './slug.ts';
+import type { TocEntry } from './types.ts';
 
 function tocExportNode(toc: TocEntry[]): MdNode {
   return {
@@ -111,29 +42,30 @@ function tocExportNode(toc: TocEntry[]): MdNode {
   };
 }
 
+/** Extracts the heading outline from an mdast tree. Shared with the search indexer. */
+export function collectToc(tree: MdNode): TocEntry[] {
+  const toc: TocEntry[] = [];
+  const slugger = createSlugger();
+
+  walkTree(tree, node => {
+    if (node.type !== 'heading' || typeof node.depth !== 'number') {
+      return;
+    }
+
+    const name = headingText(node);
+
+    if (!name) {
+      return;
+    }
+
+    toc.push({ name, id: slugger.slug(name), size: node.depth });
+  });
+
+  return toc;
+}
+
 export function remarkToc() {
   return (tree: MdNode) => {
-    const toc: TocEntry[] = [];
-    const countBySlug = new Map<string, number>();
-
-    walkTree(tree, node => {
-      if (node.type !== 'heading' || typeof node.depth !== 'number') {
-        return;
-      }
-
-      const name = headingText(node).trim();
-
-      if (!name) {
-        return;
-      }
-
-      toc.push({
-        name,
-        id: slugifyHeading(name, countBySlug),
-        size: node.depth,
-      });
-    });
-
-    tree.children?.unshift(tocExportNode(toc));
+    tree.children?.unshift(tocExportNode(collectToc(tree)));
   };
 }

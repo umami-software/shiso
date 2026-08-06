@@ -14,6 +14,8 @@
     "check:config": "node scripts/validate-config.mjs",
     "build": "node scripts/validate-config.mjs && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs",
     "preview": "vite preview --outDir dist/client",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
@@ -25,17 +27,21 @@
     "@fontsource/jetbrains-mono": "^5.2.5",
     "@mdx-js/react": "^3.1.1",
     "classnames": "^2.5.1",
+    "estree-util-value-to-estree": "^3.5.0",
+    "github-slugger": "^2.0.0",
     "highlight.js": "^11.11.1",
     "lucide-react": "^1.28.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router": "^8.3.0",
+    "rehype-autolink-headings": "^7.1.0",
     "rehype-highlight": "^7.0.1",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",
+    "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/rollup": "^3.1.1",
     "@svgr/cli": "^8.1.0",
     "@types/css-modules": "^1.0.5",
@@ -48,6 +54,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.2.0",
     "typescript": "^7.0.2",
-    "vite": "^8.2.0"
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
   }
 }

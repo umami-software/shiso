@@ -2,29 +2,50 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "docs.schema.json",
   "title": "Shiso docs.json",
-  "description": "Configuration for a Shiso docs site. This schema is the source of truth for every option Shiso supports and must stay in sync with src/lib/types.ts and src/lib/docs-config.ts.",
+  "description": "Configuration for a Shiso docs site. Every key of the docs.json standard is declared here and annotated with \"x-shiso\": \"supported\" (implemented, strictly validated) or \"x-shiso\": \"reserved\" (part of the standard, accepted and ignored, loosely validated). Keys absent from this file are rejected. See scripts/validate-config.mjs.",
   "type": "object",
   "required": ["navigation"],
   "additionalProperties": false,
   "properties": {
     "$schema": {
+      "x-shiso": "supported",
       "type": "string",
       "description": "Path or URL to this schema, for editor autocomplete."
     },
-    "theme": {
-      "type": "string",
-      "description": "Theme name. Currently only \"mint\" is supported.",
-      "default": "mint"
+    "$shiso": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Shiso-only options. Namespaced so the rest of the file stays portable.",
+      "additionalProperties": false,
+      "properties": {
+        "docsPrefix": {
+          "type": "string",
+          "description": "Route prefix for docs pages. Defaults to \"/docs\"; use \"\" to serve docs at the site root.",
+          "default": "/docs"
+        },
+        "contentDir": {
+          "type": "string",
+          "description": "Content directory relative to the project root.",
+          "default": "content/docs"
+        },
+        "siteUrl": {
+          "type": "string",
+          "description": "Absolute site origin (e.g. \"https://docs.example.com\"). Required for canonical, og:url, and structured data."
+        }
+      }
     },
     "name": {
+      "x-shiso": "supported",
       "type": "string",
       "description": "Site name, shown in the header and the page title."
     },
     "description": {
+      "x-shiso": "supported",
       "type": "string",
       "description": "Default meta description for pages without one."
     },
     "colors": {
+      "x-shiso": "supported",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -38,11 +59,12 @@
         },
         "dark": {
           "type": "string",
-          "description": "Accent color used in light mode."
+          "description": "Accent color used in light mode. Not implemented yet."
         }
       }
     },
     "logo": {
+      "x-shiso": "supported",
       "oneOf": [
         {
           "type": "string",
@@ -52,14 +74,8 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "light": {
-              "type": "string",
-              "description": "Logo shown in light mode."
-            },
-            "dark": {
-              "type": "string",
-              "description": "Logo shown in dark mode."
-            },
+            "light": { "type": "string", "description": "Logo shown in light mode." },
+            "dark": { "type": "string", "description": "Logo shown in dark mode." },
             "href": {
               "type": "string",
               "description": "URL the logo links to. Defaults to the docs root."
@@ -69,49 +85,69 @@
       ]
     },
     "favicon": {
+      "x-shiso": "supported",
       "type": "string",
       "description": "Path to the favicon, relative to the public directory."
     },
     "navigation": {
+      "x-shiso": "supported",
       "type": "object",
       "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
       "additionalProperties": false,
       "properties": {
-        "tabs": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/tab" }
+        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
+        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        "anchors": { "type": "array", "items": { "$ref": "#/definitions/anchor" } },
+        "versions": { "type": "array", "items": { "$ref": "#/definitions/version" } },
+        "languages": { "type": "array", "items": { "$ref": "#/definitions/language" } },
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        "global": {
+          "x-shiso": "reserved",
+          "type": "object",
+          "description": "Navigation items shown across every tab and version."
         },
-        "dropdowns": {
+        "products": {
+          "x-shiso": "reserved",
           "type": "array",
-          "items": { "$ref": "#/definitions/dropdown" }
-        },
-        "versions": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/version" }
-        },
-        "languages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/language" }
-        },
-        "groups": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/group" }
-        },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
+          "description": "Product switcher entries."
         }
       }
-    }
+    },
+
+    "theme": {
+      "x-shiso": "reserved",
+      "type": "string",
+      "description": "Layout theme name. Shiso currently ships a single theme."
+    },
+    "thumbnails": { "x-shiso": "reserved", "type": "object" },
+    "styling": { "x-shiso": "reserved", "type": "object" },
+    "icons": { "x-shiso": "reserved", "type": "object" },
+    "fonts": { "x-shiso": "reserved", "type": "object" },
+    "appearance": { "x-shiso": "reserved", "type": "object" },
+    "background": { "x-shiso": "reserved", "type": "object" },
+    "navbar": { "x-shiso": "reserved", "type": "object" },
+    "interaction": { "x-shiso": "reserved", "type": "object" },
+    "metadata": { "x-shiso": "reserved", "type": "object" },
+    "footer": { "x-shiso": "reserved", "type": "object" },
+    "banner": { "x-shiso": "reserved", "type": "object" },
+    "redirects": { "x-shiso": "reserved", "type": "array" },
+    "contextual": { "x-shiso": "reserved", "type": "object" },
+    "api": { "x-shiso": "reserved", "type": "object" },
+    "seo": { "x-shiso": "reserved", "type": "object" },
+    "search": { "x-shiso": "reserved", "type": "object" },
+    "integrations": { "x-shiso": "reserved", "type": "object" },
+    "errors": { "x-shiso": "reserved", "type": "object" }
   },
   "definitions": {
     "pageItem": {
       "oneOf": [
         {
           "type": "string",
-          "description": "Page reference relative to content/docs, without extension (e.g. \"components/tabs\")."
+          "description": "Page reference relative to the content directory, without extension (e.g. \"components/tabs\")."
         },
         { "$ref": "#/definitions/pageObject" },
+        { "$ref": "#/definitions/linkItem" },
         { "$ref": "#/definitions/group" }
       ]
     },
@@ -122,7 +158,7 @@
       "properties": {
         "page": {
           "type": "string",
-          "description": "Page reference relative to content/docs, without extension."
+          "description": "Page reference relative to the content directory, without extension."
         },
         "title": {
           "type": "string",
@@ -131,6 +167,46 @@
         "label": {
           "type": "string",
           "description": "Custom sidebar label. Takes precedence over title."
+        },
+        "icon": { "type": "string", "description": "Icon name shown beside the label." },
+        "tag": { "type": "string", "description": "Short label shown after the page name." },
+        "hidden": {
+          "type": "boolean",
+          "description": "Hide from the sidebar and search. The page is still built and reachable by URL."
+        }
+      }
+    },
+    "linkItem": {
+      "type": "object",
+      "description": "An external link in the navigation tree.",
+      "required": ["href"],
+      "additionalProperties": false,
+      "properties": {
+        "href": { "type": "string", "description": "Destination URL." },
+        "label": { "type": "string", "description": "Link text." },
+        "anchor": { "type": "string", "description": "Alias for label." },
+        "icon": { "type": "string", "description": "Icon name shown beside the label." },
+        "hidden": { "type": "boolean", "description": "Hide from the sidebar." }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["anchor"],
+      "additionalProperties": false,
+      "properties": {
+        "anchor": { "type": "string", "description": "Anchor label." },
+        "href": { "type": "string", "description": "Destination URL." },
+        "icon": { "type": "string", "description": "Icon name shown beside the label." },
+        "hidden": { "type": "boolean", "description": "Hide the anchor." },
+        "groups": {
+          "x-shiso": "reserved",
+          "type": "array",
+          "description": "Anchors that contain pages are not implemented yet."
+        },
+        "pages": {
+          "x-shiso": "reserved",
+          "type": "array",
+          "description": "Anchors that contain pages are not implemented yet."
         }
       }
     },
@@ -139,17 +215,21 @@
       "required": ["group", "pages"],
       "additionalProperties": false,
       "properties": {
-        "group": {
-          "type": "string",
-          "description": "Group heading shown in the sidebar."
-        },
+        "group": { "type": "string", "description": "Group heading shown in the sidebar." },
         "root": {
           "type": "string",
           "description": "Optional page reference rendered as the first page of the group."
         },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        "icon": { "type": "string", "description": "Icon name shown beside the heading." },
+        "expanded": {
+          "x-shiso": "reserved",
+          "type": "boolean",
+          "description": "Collapsible groups are not implemented yet; groups always render expanded."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Hide the group and its pages from the sidebar."
         }
       }
     },
@@ -160,16 +240,12 @@
       "properties": {
         "dropdown": {
           "type": "string",
-          "description": "Dropdown label. Rendered as a tab."
+          "description": "Dropdown label. Currently rendered as a tab."
         },
-        "groups": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/group" }
-        },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
-        }
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        "icon": { "type": "string", "description": "Icon name shown beside the label." },
+        "hidden": { "type": "boolean", "description": "Hide the dropdown." }
       }
     },
     "tab": {
@@ -177,22 +253,12 @@
       "required": ["tab"],
       "additionalProperties": false,
       "properties": {
-        "tab": {
-          "type": "string",
-          "description": "Tab label shown in the top navigation."
-        },
-        "groups": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/group" }
-        },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
-        },
-        "dropdowns": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/dropdown" }
-        }
+        "tab": { "type": "string", "description": "Tab label shown in the top navigation." },
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        "icon": { "type": "string", "description": "Icon name shown beside the tab label." },
+        "hidden": { "type": "boolean", "description": "Hide the tab from the top navigation." }
       }
     },
     "version": {
@@ -204,26 +270,12 @@
           "type": "string",
           "description": "Version label. Only the default (or first) version is rendered."
         },
-        "default": {
-          "type": "boolean",
-          "description": "Marks this version as the one to render."
-        },
-        "tabs": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/tab" }
-        },
-        "dropdowns": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/dropdown" }
-        },
-        "groups": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/group" }
-        },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
-        }
+        "default": { "type": "boolean", "description": "Marks this version as the one to render." },
+        "hidden": { "type": "boolean", "description": "Hide this version." },
+        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
+        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } }
       }
     },
     "language": {
@@ -239,26 +291,12 @@
           "type": "boolean",
           "description": "Marks this language as the one to render."
         },
-        "versions": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/version" }
-        },
-        "tabs": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/tab" }
-        },
-        "dropdowns": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/dropdown" }
-        },
-        "groups": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/group" }
-        },
-        "pages": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/pageItem" }
-        }
+        "hidden": { "type": "boolean", "description": "Hide this language." },
+        "versions": { "type": "array", "items": { "$ref": "#/definitions/version" } },
+        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
+        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } }
       }
     }
   }

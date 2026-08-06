@@ -11,6 +11,7 @@ import { Navigate, Route, Routes } from 'react-router';
 import { CodeBlock } from '@/components/CodeBlock';
 import * as docsComponents from '@/components/docs-components';
 import { Layout } from '@/components/Layout';
+import { DOCS_PREFIX } from '@/lib/paths';
 import { DocPage } from '@/pages/DocPage';
 
 const mdxComponents = {
@@ -23,8 +24,8 @@ export function App() {
     <MDXProvider components={mdxComponents}>
       <Layout>
         <Routes>
-          <Route path="/" element={<Navigate to="/docs" replace />} />
-          <Route path="/docs/*" element={<DocPage />} />
+          {/* When docs are mounted at the site root there is nothing to redirect. */}
+          {DOCS_PREFIX ? <Route path="/" element={<Navigate to={DOCS_PREFIX} replace />} /> : null}
           <Route path="*" element={<DocPage />} />
         </Routes>
       </Layout>

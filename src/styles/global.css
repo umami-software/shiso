@@ -66,6 +66,22 @@ pre {
   scroll-margin-top: 1rem;
 }
 
+/* Permalink appended to every heading by rehype-autolink-headings.
+   Hidden until the heading is hovered, or the link itself is focused. */
+.docs-markdown .heading-anchor {
+  margin-left: 0.4rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.docs-markdown :where(h1, h2, h3, h4, h5, h6):hover .heading-anchor,
+.docs-markdown .heading-anchor:focus-visible {
+  opacity: 1;
+}
+
 .docs-markdown h2 {
   margin-top: 2.25rem;
   margin-bottom: 1rem;

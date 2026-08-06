@@ -17,14 +17,35 @@
   flex-direction: column;
 }
 
+/* Nested groups indent under their parent instead of starting a new section. */
+.subsection {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0.75rem;
+}
+
 .sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-weight: 700;
   color: var(--color-text-strong);
   padding: 0.5rem 0;
 }
 
+.subsection .sectionTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sectionLink {
+  color: var(--color-text-strong);
+}
+
 .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.5rem 0.75rem;
   border-left: 1px solid var(--color-border);
   color: var(--color-text-muted);
@@ -32,6 +53,22 @@
 
 .link:hover {
   color: var(--color-text-strong);
+}
+
+.externalIcon {
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.tag {
+  margin-left: auto;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-surface-sunken);
+  padding: 0.05rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
 }
 
 .selected {

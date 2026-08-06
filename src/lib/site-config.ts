@@ -1,5 +1,6 @@
 import { resolveDocFile } from '@/lib/content';
 import { assertDocsConfig, normalizeDocsConfig } from '@/lib/docs-config';
+import { stripBase, stripDocsPrefix } from '@/lib/paths';
 import type { DocsConfig, NormalizedDocsConfig, NormalizedDocsPage } from '@/lib/types';
 import rawConfig from '../../docs.json';
 
@@ -46,7 +47,7 @@ export function normalizeParamSlug(slug: string): string {
 }
 
 export function getPageByPathname(pathname: string): NormalizedDocsPage | null {
-  const slug = normalizeParamSlug(pathname.replace(/^\/docs/, ''));
+  const slug = normalizeParamSlug(stripDocsPrefix(stripBase(pathname)));
   return docsConfig.pageByLookupSlug[slug] || null;
 }
 
@@ -55,11 +56,14 @@ export interface PageNavLink {
   url: string;
 }
 
+/** Hidden pages are routable but stay out of the pager. */
+const pagerPages = docsConfig.pages.filter(page => !page.hidden);
+
 export function getPrevNext(slug: string): {
   prev: PageNavLink | null;
   next: PageNavLink | null;
 } {
-  const { pages } = docsConfig;
+  const pages = pagerPages;
   const index = pages.findIndex(page => page.slug === slug);
   const prev = index > 0 ? pages[index - 1] : null;
   const next = index >= 0 && index < pages.length - 1 ? pages[index + 1] : null;

@@ -4,6 +4,7 @@ export {
   ChevronRight,
   CircleAlert,
   Copy,
+  ExternalLink,
   Info as InfoIcon,
   Lightbulb,
   Menu,

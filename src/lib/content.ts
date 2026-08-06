@@ -1,3 +1,4 @@
+import { CONTENT_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
 
 /**
@@ -8,8 +9,13 @@ import type { DocModule } from '@/lib/types';
  *
  * Eager loading keeps server prerendering and client hydration in sync
  * without Suspense, at the cost of bundling all pages together.
+ *
+ * The glob pattern must be a literal for Vite to statically analyze it, so it
+ * covers all of `content/` and the configured `$shiso.contentDir` is applied at
+ * lookup time instead. That also lets later versioned/localized content roots
+ * (`content/v2`, `content/es`) work without touching this glob.
  */
-export const docModules = import.meta.glob('/content/docs/**/*.{md,mdx}', {
+export const docModules = import.meta.glob('/content/**/*.{md,mdx}', {
   eager: true,
 }) as Record<string, DocModule>;
 
@@ -18,8 +24,8 @@ export const docModules = import.meta.glob('/content/docs/**/*.{md,mdx}', {
  * key (e.g. "/content/docs/components/tabs.mdx"). Returns undefined when the
  * file does not exist, which makes config normalization fail at startup/build.
  */
-export function resolveDocFile(fileSlug: string): string | undefined {
-  const candidates = [`/content/docs/${fileSlug}.mdx`, `/content/docs/${fileSlug}.md`];
+export function resolveDocFile(fileSlug: string, contentDir = CONTENT_DIR): string | undefined {
+  const candidates = [`/${contentDir}/${fileSlug}.mdx`, `/${contentDir}/${fileSlug}.md`];
   return candidates.find(candidate => candidate in docModules);
 }
 

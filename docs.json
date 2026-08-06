@@ -1,7 +1,10 @@
 {
   "$schema": "./docs.schema.json",
-  "theme": "mint",
+  "$shiso": {
+    "siteUrl": "https://shiso.dev"
+  },
   "name": "Shiso",
+  "description": "Open-source docs site generator built with Vite, React, and MDX.",
   "navigation": {
     "tabs": [
       {

@@ -1,46 +1,30 @@
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import { App } from '@/App';
-import { getDocModule } from '@/lib/content';
-import { docsConfig, getPageTitle, siteConfig, siteName } from '@/lib/site-config';
+import { buildHead, renderHeadToString } from '@/lib/head';
+import { BASE_URL } from '@/lib/paths';
+import { docsConfig, siteName } from '@/lib/site-config';
 
 export interface RenderResult {
   html: string;
   head: string;
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
+/** Base-relative routes. The prerenderer prepends the deploy base itself. */
 export function getRoutes(): string[] {
   return docsConfig.pages.map(page => page.url);
 }
 
 export function render(url: string): RenderResult {
+  // basename must match the client's BrowserRouter, or every <Link> in the
+  // prerendered HTML would omit the deploy base and mismatch on hydration.
   const html = renderToString(
-    <StaticRouter location={url}>
+    <StaticRouter basename={BASE_URL || undefined} location={`${BASE_URL}${url}`}>
       <App />
     </StaticRouter>,
   );
 
-  const page = docsConfig.pages.find(item => item.url === url);
-  const doc = page ? getDocModule(page.filePath) : undefined;
-  const title = getPageTitle(doc?.frontmatter?.title || page?.label);
-  const description = doc?.frontmatter?.description || siteConfig.description;
-
-  const head = [
-    `<title>${escapeHtml(title)}</title>`,
-    description ? `<meta name="description" content="${escapeHtml(description)}" />` : '',
-  ]
-    .filter(Boolean)
-    .join('\n    ');
-
-  return { html, head };
+  return { html, head: renderHeadToString(buildHead(url)) };
 }
 
 export { siteName };

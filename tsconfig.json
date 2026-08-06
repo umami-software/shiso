@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -18,6 +19,14 @@
     },
     "target": "es2022"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "docs.json"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "mdx.config.ts",
+    "docs.json"
+  ],
   "exclude": ["node_modules", "dist"]
 }

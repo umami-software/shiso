@@ -1,10 +1,18 @@
+import { DOCS_PREFIX } from '@/lib/paths';
+import { slugifyId } from '@/lib/slug';
 import type {
+  AnchorItem,
   DocsConfig,
   DropdownItem,
   GroupItem,
   LanguageItem,
+  NavGroupNode,
+  NavLinkNode,
+  NavNode,
+  NavPageNode,
   NormalizedDocsConfig,
   NormalizedDocsPage,
+  NormalizeOptions,
   PageItem,
   TabItem,
   VersionItem,
@@ -19,6 +27,24 @@ export type DocFileResolver = (fileSlug: string) => string | undefined;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
+/**
+ * Config keys that belong to the standard but that Shiso does not implement.
+ * Policy: warn once and skip. Never fail a build over an unimplemented feature —
+ * the same rule the schema validator applies to top-level keys.
+ */
+const RESERVED_PAGE_KEYS = ['openapi', 'api', 'asyncapi', 'graphql', 'menu', 'product'];
+
+const warned = new Set<string>();
+
+function warnOnce(message: string) {
+  if (warned.has(message)) {
+    return;
+  }
+
+  warned.add(message);
+  console.warn(`[shiso] ${message}`);
 }
 
 export function assertDocsConfig(value: unknown, sourceName: string): asserts value is DocsConfig {
@@ -36,16 +62,6 @@ export function assertDocsConfig(value: unknown, sourceName: string): asserts va
   if (!isRecord(value.navigation)) {
     throw new Error(`Invalid docs config in "${sourceName}": missing "navigation" object.`);
   }
-}
-
-function slugifyId(value: string, fallback: string): string {
-  const id = value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-  return id || fallback;
 }
 
 function toLabel(value: string): string {
@@ -85,8 +101,9 @@ function getDefaultLabel(fileSlug: string): string {
   return toLabel(leaf);
 }
 
-function pageToUrl(slug: string): string {
-  return slug === 'index' ? '/docs' : `/docs/${slug}`;
+function pageToUrl(slug: string, docsPrefix: string): string {
+  const base = docsPrefix || '';
+  return slug === 'index' ? base || '/' : `${base}/${slug}`;
 }
 
 function pickDefaultItem<T extends { default?: boolean }>(items: T[]): T {
@@ -100,6 +117,8 @@ function dropdownsToTabs(dropdowns: DropdownItem[]): TabItem[] {
       tab: label,
       groups: dropdown.groups || [],
       pages: dropdown.pages || [],
+      icon: dropdown.icon,
+      hidden: dropdown.hidden,
     };
   });
 }
@@ -113,6 +132,13 @@ interface NavContainer {
   languages?: LanguageItem[];
 }
 
+/**
+ * Resolves a navigation container down to a flat list of tabs.
+ *
+ * Versions and languages collapse to their default entry for now. That is a
+ * real limitation, so the skipped entries are reported rather than silently
+ * dropped; Phases 6 and 7 replace this by normalizing once per version/locale.
+ */
 function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Documentation'): TabItem[] {
   if (Array.isArray(container.tabs) && container.tabs.length) {
     return container.tabs;
@@ -134,14 +160,32 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Document
 
   if (Array.isArray(container.versions) && container.versions.length) {
     const version = pickDefaultItem(container.versions);
-    const versionLabel = version.version?.trim() || fallbackLabel;
-    return getTabsFromContainer(version, versionLabel);
+    const skipped = container.versions.filter(item => item !== version).map(item => item.version);
+
+    if (skipped.length) {
+      warnOnce(
+        `Only the default version "${version.version}" is rendered; skipped: ${skipped.join(', ')}. ` +
+          'Multi-version output is not implemented yet.',
+      );
+    }
+
+    return getTabsFromContainer(version, version.version?.trim() || fallbackLabel);
   }
 
   if (Array.isArray(container.languages) && container.languages.length) {
     const language = pickDefaultItem(container.languages);
-    const languageLabel = language.language?.trim() || fallbackLabel;
-    return getTabsFromContainer(language, languageLabel);
+    const skipped = container.languages
+      .filter(item => item !== language)
+      .map(item => item.language);
+
+    if (skipped.length) {
+      warnOnce(
+        `Only the default language "${language.language}" is rendered; skipped: ${skipped.join(', ')}. ` +
+          'Multi-language output is not implemented yet.',
+      );
+    }
+
+    return getTabsFromContainer(language, language.language?.trim() || fallbackLabel);
   }
 
   throw new Error(
@@ -149,9 +193,13 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Document
   );
 }
 
-function getTabs(config: DocsConfig): TabItem[] {
-  return getTabsFromContainer(config.navigation);
-}
+/* ---------------------------------------------------------------------------
+ * Pass 1 — walk the config into a tree of pending nodes
+ *
+ * Pages cannot be fully normalized during the walk because their file paths are
+ * resolved (and validated) in one batch afterwards. So the walk records page
+ * references by `order`, and pass 2 swaps in the resolved pages.
+ * ------------------------------------------------------------------------- */
 
 interface PendingPage {
   fileSlug: string;
@@ -161,93 +209,184 @@ interface PendingPage {
   tabId: string;
   tabLabel: string;
   order: number;
+  hidden?: boolean;
+  icon?: string;
+  tag?: string;
 }
 
-function pushPendingPage(
-  pageRef: string,
-  context: { tabId: string; tabLabel: string; section: string },
-  pages: PendingPage[],
-  orderRef: { value: number },
-  label?: string,
-) {
-  const { fileSlug, slug } = normalizePageReference(pageRef);
-  const normalizedLabel = label?.trim() || getDefaultLabel(fileSlug);
+type PendingNode =
+  | { kind: 'page'; order: number }
+  | NavLinkNode
+  | {
+      kind: 'group';
+      label: string;
+      rootOrder?: number;
+      children: PendingNode[];
+      icon?: string;
+      expanded?: boolean;
+      hidden?: boolean;
+    };
 
-  pages.push({
+interface WalkContext {
+  tabId: string;
+  tabLabel: string;
+  section: string;
+  /** Set when an ancestor group is hidden, so descendants inherit it. */
+  hidden?: boolean;
+}
+
+interface WalkState {
+  pages: PendingPage[];
+  order: { value: number };
+}
+
+function addPage(
+  pageRef: string,
+  context: WalkContext,
+  state: WalkState,
+  extra: { label?: string; icon?: string; tag?: string; hidden?: boolean } = {},
+): number {
+  const { fileSlug, slug } = normalizePageReference(pageRef);
+  const order = state.order.value++;
+
+  state.pages.push({
     fileSlug,
     slug,
-    label: normalizedLabel,
+    label: extra.label?.trim() || getDefaultLabel(fileSlug),
     section: context.section,
     tabId: context.tabId,
     tabLabel: context.tabLabel,
-    order: orderRef.value++,
+    order,
+    hidden: extra.hidden || context.hidden || undefined,
+    icon: extra.icon,
+    tag: extra.tag,
   });
+
+  return order;
 }
 
-function collectPages(
-  items: PageItem[],
-  context: { tabId: string; tabLabel: string; section: string },
-  pages: PendingPage[],
-  orderRef: { value: number },
-) {
+function collectPages(items: PageItem[], context: WalkContext, state: WalkState): PendingNode[] {
+  const nodes: PendingNode[] = [];
+
   items.forEach(item => {
     if (typeof item === 'string') {
-      pushPendingPage(item, context, pages, orderRef);
+      nodes.push({ kind: 'page', order: addPage(item, context, state) });
       return;
     }
 
-    if (isRecord(item) && typeof item.page === 'string') {
-      const customLabel =
-        (typeof item.label === 'string' && item.label) ||
-        (typeof item.title === 'string' && item.title) ||
-        undefined;
-      pushPendingPage(item.page, context, pages, orderRef, customLabel);
-      return;
-    }
-
-    if (
-      item &&
-      typeof item === 'object' &&
-      'group' in item &&
-      typeof item.group === 'string' &&
-      Array.isArray(item.pages)
-    ) {
-      const groupSection = item.group.trim() || context.section;
-
-      if (typeof item.root === 'string' && item.root.trim()) {
-        pushPendingPage(item.root, { ...context, section: groupSection }, pages, orderRef);
-      }
-
-      collectPages(item.pages, { ...context, section: groupSection }, pages, orderRef);
-      return;
-    }
-
-    if (isRecord(item)) {
-      const keys = Object.keys(item);
-      const unsupportedKey =
-        keys.find(key => ['href', 'anchor', 'openapi', 'api', 'menu', 'product'].includes(key)) ||
-        keys[0] ||
-        'object';
-
+    if (!isRecord(item)) {
       throw new Error(
-        `Invalid docs config: unsupported page item "${unsupportedKey}". Supported items are strings, { page }, or { group, pages } blocks.`,
+        'Invalid docs config: page items must be strings, { page }, { href }, or { group, pages } blocks.',
       );
     }
 
+    // External link: { href, label | anchor }
+    if (typeof item.href === 'string' && item.href) {
+      const label =
+        (typeof item.label === 'string' && item.label.trim()) ||
+        (typeof item.anchor === 'string' && item.anchor.trim()) ||
+        item.href;
+
+      nodes.push({
+        kind: 'link',
+        label,
+        href: item.href,
+        icon: typeof item.icon === 'string' ? item.icon : undefined,
+        hidden: item.hidden === true || context.hidden || undefined,
+      });
+      return;
+    }
+
+    // Page reference: { page, title | label }
+    if (typeof item.page === 'string') {
+      const label =
+        (typeof item.label === 'string' && item.label) ||
+        (typeof item.title === 'string' && item.title) ||
+        undefined;
+
+      nodes.push({
+        kind: 'page',
+        order: addPage(item.page, context, state, {
+          label,
+          icon: typeof item.icon === 'string' ? item.icon : undefined,
+          tag: typeof item.tag === 'string' ? item.tag : undefined,
+          hidden: item.hidden === true,
+        }),
+      });
+      return;
+    }
+
+    // Nested group: { group, pages, root }
+    if (typeof item.group === 'string' && Array.isArray(item.pages)) {
+      const label = item.group.trim() || context.section;
+      const hidden = item.hidden === true || context.hidden || undefined;
+      const childContext: WalkContext = { ...context, section: label, hidden };
+
+      nodes.push({
+        kind: 'group',
+        label,
+        rootOrder:
+          typeof item.root === 'string' && item.root.trim()
+            ? addPage(item.root, childContext, state)
+            : undefined,
+        children: collectPages(item.pages as PageItem[], childContext, state),
+        icon: typeof item.icon === 'string' ? item.icon : undefined,
+        expanded: item.expanded === true || undefined,
+        hidden,
+      });
+      return;
+    }
+
+    const reservedKey = Object.keys(item).find(key => RESERVED_PAGE_KEYS.includes(key));
+
+    if (reservedKey) {
+      warnOnce(
+        `Navigation item with "${reservedKey}" is part of the config standard but is not ` +
+          'implemented yet — it will be skipped.',
+      );
+      return;
+    }
+
     throw new Error(
-      'Invalid docs config: page items must be string paths, { page } objects, or { group, pages } blocks.',
+      `Invalid docs config: unrecognized page item with keys [${Object.keys(item).join(', ')}]. ` +
+        'Supported items are strings, { page }, { href }, or { group, pages } blocks.',
     );
   });
+
+  return nodes;
 }
+
+function collectAnchors(anchors: AnchorItem[] | undefined): NavLinkNode[] {
+  if (!Array.isArray(anchors)) {
+    return [];
+  }
+
+  return anchors
+    .filter(anchor => isRecord(anchor) && typeof anchor.href === 'string' && anchor.href)
+    .map(anchor => ({
+      kind: 'link' as const,
+      label: anchor.anchor?.trim() || (anchor.href as string),
+      href: anchor.href as string,
+      icon: anchor.icon,
+      hidden: anchor.hidden || undefined,
+    }));
+}
+
+/* ---------------------------------------------------------------------------
+ * Normalization
+ * ------------------------------------------------------------------------- */
 
 export function normalizeDocsConfig(
   docsConfig: DocsConfig,
   resolveDocFile: DocFileResolver,
+  options: NormalizeOptions = {},
 ): NormalizedDocsConfig {
-  const tabs = getTabs(docsConfig);
-  const pending: PendingPage[] = [];
-  const orderRef = { value: 0 };
+  const docsPrefix = options.docsPrefix ?? DOCS_PREFIX;
+  const tabs = getTabsFromContainer(docsConfig.navigation);
+  const state: WalkState = { pages: [], order: { value: 0 } };
+  const treeByTab = new Map<string, PendingNode[]>();
   const seenTabIds = new Set<string>();
+  const tabIds: string[] = [];
 
   tabs.forEach((tab, index) => {
     const tabLabel = tab.tab?.trim();
@@ -257,13 +396,24 @@ export function normalizeDocsConfig(
     }
 
     const tabId = slugifyId(tabLabel, `tab-${index + 1}`);
+
     if (seenTabIds.has(tabId)) {
       throw new Error(
         `Invalid docs config: duplicate tab label "${tabLabel}" resolves to duplicate id "${tabId}".`,
       );
     }
+
     seenTabIds.add(tabId);
-    const tabStartCount = pending.length;
+    tabIds.push(tabId);
+
+    const context: WalkContext = {
+      tabId,
+      tabLabel,
+      section: tabLabel,
+      hidden: tab.hidden || undefined,
+    };
+    const nodes: PendingNode[] = [];
+    const pagesBefore = state.pages.length;
 
     if (Array.isArray(tab.groups)) {
       tab.groups.forEach(group => {
@@ -271,18 +421,19 @@ export function normalizeDocsConfig(
           throw new Error(`Invalid docs config: tab "${tabLabel}" has an invalid group entry.`);
         }
 
-        collectPages(
-          group.pages,
-          { tabId, tabLabel, section: group.group.trim() || tabLabel },
-          pending,
-          orderRef,
-        );
+        nodes.push(...collectPages([group], context, state));
       });
     }
 
     if (Array.isArray(tab.dropdowns)) {
       tab.dropdowns.forEach((dropdown, dropdownIndex) => {
         const dropdownLabel = dropdown?.dropdown?.trim() || `Section ${dropdownIndex + 1}`;
+        const children: PendingNode[] = [];
+        const dropdownContext: WalkContext = {
+          ...context,
+          section: dropdownLabel,
+          hidden: dropdown.hidden || context.hidden || undefined,
+        };
 
         if (Array.isArray(dropdown.groups)) {
           dropdown.groups.forEach(group => {
@@ -292,36 +443,38 @@ export function normalizeDocsConfig(
               );
             }
 
-            collectPages(
-              group.pages,
-              { tabId, tabLabel, section: group.group.trim() || dropdownLabel },
-              pending,
-              orderRef,
-            );
+            children.push(...collectPages([group], dropdownContext, state));
           });
         }
 
         if (Array.isArray(dropdown.pages) && dropdown.pages.length) {
-          collectPages(
-            dropdown.pages,
-            { tabId, tabLabel, section: dropdownLabel },
-            pending,
-            orderRef,
-          );
+          children.push(...collectPages(dropdown.pages, dropdownContext, state));
         }
+
+        nodes.push({
+          kind: 'group',
+          label: dropdownLabel,
+          children,
+          icon: dropdown.icon,
+          hidden: dropdownContext.hidden,
+        });
       });
     }
 
     if (Array.isArray(tab.pages) && tab.pages.length) {
-      collectPages(tab.pages, { tabId, tabLabel, section: tabLabel }, pending, orderRef);
+      nodes.push(...collectPages(tab.pages, context, state));
     }
 
-    if (pending.length === tabStartCount) {
+    if (state.pages.length === pagesBefore) {
       throw new Error(
         `Invalid docs config: tab "${tabLabel}" does not contain any supported page entries.`,
       );
     }
+
+    treeByTab.set(tabId, nodes);
   });
+
+  const pending = state.pages;
 
   if (!pending.length) {
     throw new Error('Invalid docs config: no pages found in navigation.');
@@ -349,7 +502,7 @@ export function normalizeDocsConfig(
 
       if (!filePath) {
         throw new Error(
-          `Missing docs page file for "${fileSlug}": expected "content/docs/${fileSlug}.mdx" or ".md".`,
+          `Missing docs page file for "${fileSlug}": expected "${fileSlug}.mdx" or ".md".`,
         );
       }
 
@@ -359,60 +512,77 @@ export function normalizeDocsConfig(
 
   const pageBySlug: Record<string, NormalizedDocsPage> = {};
   const pageByLookupSlug: Record<string, NormalizedDocsPage> = {};
-  const navigation: NormalizedDocsConfig['navigation'] = {};
+  const pageByOrder = new Map<number, NormalizedDocsPage>();
   const pages: NormalizedDocsPage[] = [];
-  const firstPageByTab = new Map<string, NormalizedDocsPage>();
 
   for (const page of pending) {
     const filePath = filePathBySlug.get(page.fileSlug);
+
     if (!filePath) {
       throw new Error(`Invalid docs config: failed to resolve file for "${page.fileSlug}".`);
     }
 
     const normalized: NormalizedDocsPage = {
       ...page,
-      url: pageToUrl(page.slug),
+      url: pageToUrl(page.slug, docsPrefix),
       filePath,
     };
 
     pages.push(normalized);
-    if (!firstPageByTab.has(normalized.tabId)) {
-      firstPageByTab.set(normalized.tabId, normalized);
-    }
-
+    pageByOrder.set(normalized.order, normalized);
     pageBySlug[normalized.slug] = normalized;
     pageByLookupSlug[normalized.slug] = normalized;
     pageByLookupSlug[normalized.fileSlug] = normalized;
     pageByLookupSlug[normalized.fileSlug.replace(/\/index$/, '') || 'index'] = normalized;
+  }
 
-    const existingSections = navigation[normalized.tabId];
-    const tabSections = existingSections || [];
-    if (!existingSections) {
-      navigation[normalized.tabId] = tabSections;
-    }
-    let section = tabSections.find(item => item.section === normalized.section);
-
-    if (!section) {
-      section = { section: normalized.section, pages: [] };
-      tabSections.push(section);
+  // Pass 2: swap resolved pages into the pending tree.
+  function materialize(node: PendingNode): NavNode | null {
+    if (node.kind === 'link') {
+      return node;
     }
 
-    section.pages.push({
-      label: normalized.label,
-      slug: normalized.slug,
-      url: normalized.url,
-    });
+    if (node.kind === 'page') {
+      const page = pageByOrder.get(node.order);
+      return page ? ({ kind: 'page', page } satisfies NavPageNode) : null;
+    }
+
+    const root = node.rootOrder === undefined ? undefined : pageByOrder.get(node.rootOrder);
+
+    return {
+      kind: 'group',
+      label: node.label,
+      root: root ? { kind: 'page', page: root } : undefined,
+      children: node.children.map(materialize).filter((child): child is NavNode => !!child),
+      icon: node.icon,
+      expanded: node.expanded,
+      hidden: node.hidden,
+    } satisfies NavGroupNode;
+  }
+
+  const navigation: NormalizedDocsConfig['navigation'] = {};
+
+  for (const [tabId, nodes] of treeByTab) {
+    navigation[tabId] = nodes.map(materialize).filter((node): node is NavNode => !!node);
+  }
+
+  const firstVisiblePageByTab = new Map<string, NormalizedDocsPage>();
+
+  for (const page of pages) {
+    if (!page.hidden && !firstVisiblePageByTab.has(page.tabId)) {
+      firstVisiblePageByTab.set(page.tabId, page);
+    }
   }
 
   const normalizedTabs = tabs.map((tab, index) => {
-    const tabLabel = tab.tab?.trim() || `Tab ${index + 1}`;
-    const tabId = slugifyId(tabLabel, `tab-${index + 1}`);
-    const firstPage = firstPageByTab.get(tabId);
+    const tabId = tabIds[index];
+    const firstPage = firstVisiblePageByTab.get(tabId);
 
     return {
       id: tabId,
-      label: tabLabel,
-      url: firstPage?.url || '/docs',
+      label: tab.tab?.trim() || `Tab ${index + 1}`,
+      url: firstPage?.url || pageToUrl('index', docsPrefix),
+      icon: tab.icon,
     };
   });
 
@@ -420,8 +590,41 @@ export function normalizeDocsConfig(
     name: docsConfig.name,
     tabs: normalizedTabs,
     navigation,
+    anchors: collectAnchors(docsConfig.navigation.anchors),
     pages,
     pageBySlug,
     pageByLookupSlug,
   };
+}
+
+/** Flattens a navigation tree to the routed pages it contains, in document order. */
+export function flattenNav(nodes: NavNode[]): NormalizedDocsPage[] {
+  const pages: NormalizedDocsPage[] = [];
+
+  for (const node of nodes) {
+    if (node.kind === 'page') {
+      pages.push(node.page);
+    } else if (node.kind === 'group') {
+      if (node.root) {
+        pages.push(node.root.page);
+      }
+
+      pages.push(...flattenNav(node.children));
+    }
+  }
+
+  return pages;
+}
+
+/** True when a node (or all of its descendants) should be omitted from the sidebar. */
+export function isNodeHidden(node: NavNode): boolean {
+  if (node.kind === 'page') {
+    return !!node.page.hidden;
+  }
+
+  if (node.kind === 'link') {
+    return !!node.hidden;
+  }
+
+  return !!node.hidden || node.children.every(isNodeHidden);
 }
