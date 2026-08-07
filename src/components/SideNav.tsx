@@ -24,8 +24,8 @@ function containsPage(node: NavGroupNode, pathname: string): boolean {
 }
 
 /**
- * A nested, collapsible group. Expansion starts open when the config says so
- * or when the current page is inside; navigating into the group reopens it.
+ * Collapsible group. Top-level groups start expanded; nested groups start
+ * collapsed unless `expanded: true` or the current page is inside.
  *
  * Click behavior follows `interaction.drilldown`:
  * - true: expanding also navigates to the group's root or first page
@@ -44,7 +44,8 @@ function CollapsibleGroup({
   const navigate = useNavigate();
   const drilldown = getDrilldown();
   const active = containsPage(node, pathname);
-  const [expanded, setExpanded] = useState(!!node.expanded || active);
+  // Top-level sections stay open by default so the sidebar is usable on first load.
+  const [expanded, setExpanded] = useState(depth === 0 || !!node.expanded || active);
 
   useEffect(() => {
     if (active) {
@@ -70,16 +71,20 @@ function CollapsibleGroup({
     />
   );
 
+  const isTopLevel = depth === 0;
+  const rootSelected = node.root?.page.url === pathname;
+  const headerClass = isTopLevel ? styles.sectionHeader : styles.nestedHeader;
+
   // Navigating headers keep a separate chevron button so collapse stays reachable.
   const header =
     drilldown !== false && node.root ? (
-      <div className={styles.collapsibleHeader}>
-        <Link
-          to={node.root.page.url}
-          className={classNames(styles.sectionTitle, styles.sectionLink, {
-            [styles.selected]: node.root.page.url === pathname,
-          })}
-        >
+      <div
+        className={classNames(headerClass, styles.collapsibleHeader, {
+          [styles.selected]: rootSelected && !isTopLevel,
+          [styles.sectionSelected]: rootSelected && isTopLevel,
+        })}
+      >
+        <Link to={node.root.page.url} className={isTopLevel ? styles.sectionLabel : styles.groupLabel}>
           {resolveIcon(node.icon)}
           {node.label}
         </Link>
@@ -96,7 +101,9 @@ function CollapsibleGroup({
     ) : (
       <button
         type="button"
-        className={classNames(styles.sectionTitle, styles.collapsibleTitle)}
+        className={classNames(headerClass, styles.groupToggle, {
+          [styles.sectionToggle]: isTopLevel,
+        })}
         onClick={handleToggle}
         aria-expanded={expanded}
       >
@@ -107,14 +114,17 @@ function CollapsibleGroup({
     );
 
   return (
-    <div className={styles.subsection}>
+    <div className={isTopLevel ? styles.section : styles.subsection}>
       {header}
-      {expanded && <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />}
+      {expanded ? (
+        <div className={isTopLevel ? styles.sectionChildren : styles.subsectionChildren}>
+          <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
+        </div>
+      ) : null}
     </div>
   );
 }
 
-/** Depth 0 groups get a static section heading; deeper groups collapse. */
 function NavNodes({
   nodes,
   pathname,
@@ -165,38 +175,8 @@ function NavNodes({
       return;
     }
 
-    if (depth > 0) {
-      rendered.push(
-        <CollapsibleGroup
-          key={`group-${node.label}`}
-          node={node}
-          pathname={pathname}
-          depth={depth}
-        />,
-      );
-      return;
-    }
-
     rendered.push(
-      <div key={`group-${node.label}`} className={styles.section}>
-        {node.root ? (
-          <Link
-            to={node.root.page.url}
-            className={classNames(styles.sectionTitle, styles.sectionLink, {
-              [styles.selected]: node.root.page.url === pathname,
-            })}
-          >
-            {resolveIcon(node.icon)}
-            {node.label}
-          </Link>
-        ) : (
-          <div className={styles.sectionTitle}>
-            {resolveIcon(node.icon)}
-            {node.label}
-          </div>
-        )}
-        <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
-      </div>,
+      <CollapsibleGroup key={`group-${node.label}`} node={node} pathname={pathname} depth={depth} />,
     );
   });
 

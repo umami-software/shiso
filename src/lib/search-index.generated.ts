@@ -181,7 +181,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'Collapsible groups',
     id: 'collapsible-groups',
-    text: 'Top-level groups render as static section headings. Nested groups are collapsible: they start collapsed unless expanded: true is set or the current page is inside them, and they reopen when you navigate into them. The interaction.drilldown key controls what clicking a nested group header does: { "interaction": { "drilldown": true } } true: expanding a group also navigates to its root (or first) page false: the header only expands and collapses unset: headers with a root page navigate; others just toggle',
+    text: 'Every group is collapsible and shows a chevron: Top-level groups start expanded Nested groups start collapsed unless expanded: true is set or the current page is inside them Navigating into a group reopens it. The interaction.drilldown key controls what clicking a group header does: { "interaction": { "drilldown": true } } true: expanding a group also navigates to its root (or first) page false: the header only expands and collapses unset: headers with a root page navigate (title is a link; chevron toggles); others only expand/collapse',
   },
   {
     url: '/docs/navigation',

@@ -17,48 +17,120 @@
   flex-direction: column;
 }
 
-/* Nested groups indent under their parent instead of starting a new section. */
+.sectionChildren {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top-level group headers: bold section titles with a trailing chevron. */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-strong);
+}
+
+.sectionLabel {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.25rem 0.5rem 0;
+  color: inherit;
+  font-weight: 700;
+}
+
+.sectionToggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+  color: var(--color-text-strong);
+  font-weight: 700;
+  text-align: left;
+}
+
+.sectionToggle .chevron {
+  margin-left: auto;
+}
+
+.sectionSelected .sectionLabel {
+  color: var(--color-primary);
+}
+
+/*
+ * Nested groups sit in the page list (same left rail as sibling links), not as
+ * mini section headers. Children indent further under the group row.
+ */
 .subsection {
   display: flex;
   flex-direction: column;
-  margin-left: 0.75rem;
 }
 
-.sectionTitle {
+.subsectionChildren {
+  display: flex;
+  flex-direction: column;
+}
+
+.subsectionChildren .link,
+.subsectionChildren .nestedHeader {
+  padding-left: 1.5rem;
+}
+
+.nestedHeader {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-weight: 700;
-  color: var(--color-text-strong);
-  padding: 0.5rem 0;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-muted);
 }
 
-.subsection .sectionTitle {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.sectionLink {
+.nestedHeader:hover {
   color: var(--color-text-strong);
 }
 
 .collapsibleHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.groupLabel {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+  color: inherit;
+  font-weight: 500;
+}
+
+.groupToggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.nestedHeader.groupToggle {
+  padding: 0.5rem 0.75rem;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.nestedHeader.groupToggle:hover {
+  color: var(--color-text-strong);
+}
+
+.nestedHeader.groupToggle .chevron {
+  margin-left: auto;
 }
 
 .chevron {
   transition: transform 0.15s ease;
-}
-
-.collapsibleTitle {
-  width: 100%;
-  text-align: left;
-}
-
-.collapsibleTitle .chevron {
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .chevronButton {
@@ -69,6 +141,14 @@
   height: 1.5rem;
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
+}
+
+.sectionHeader .chevronButton {
+  margin-right: 0;
+}
+
+.nestedHeader .chevronButton {
+  margin-right: 0.35rem;
 }
 
 .chevronButton:hover {

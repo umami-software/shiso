@@ -574,14 +574,13 @@
         "group": { "type": "string", "description": "Group heading shown in the sidebar." },
         "root": {
           "type": "string",
-          "description": "Optional page reference rendered as the first page of the group."
+          "description": "Optional landing page for the group. When set, the group title links to this page (chevron still expands/collapses)."
         },
         "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
         "icon": { "type": "string", "description": "Icon name shown beside the heading." },
         "expanded": {
-          "x-shiso": "reserved",
           "type": "boolean",
-          "description": "Collapsible groups are not implemented yet; groups always render expanded."
+          "description": "When true, nested groups start expanded. Top-level groups start expanded by default. Groups that contain the current page always expand."
         },
         "hidden": {
           "type": "boolean",

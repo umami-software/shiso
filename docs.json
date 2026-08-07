@@ -32,12 +32,13 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index", "installation"]
+            "root": "index",
+            "pages": ["installation"]
           },
           {
             "group": "Configuration",
+            "root": "configuration",
             "pages": [
-              "configuration",
               "navigation",
               "customization",
               "navbar-and-footer",
@@ -48,33 +49,28 @@
           },
           {
             "group": "Writing content",
+            "root": "writing-content",
+            "pages": ["text", "images", "lists", "code-blocks"]
+          },
+          {
+            "group": "Components",
+            "root": "components/index",
             "pages": [
-              "writing-content",
-              "text",
-              "images",
-              "lists",
-              "code-blocks",
-              {
-                "group": "Components",
-                "root": "components/index",
-                "pages": [
-                  "components/accordion",
-                  "components/badge",
-                  "components/callout",
-                  "components/card",
-                  "components/code-group",
-                  "components/columns",
-                  "components/examples",
-                  "components/expandable",
-                  "components/frame",
-                  "components/icon",
-                  "components/param-field",
-                  "components/response-field",
-                  "components/steps",
-                  "components/tabs",
-                  "components/tooltip"
-                ]
-              }
+              "components/accordion",
+              "components/badge",
+              "components/callout",
+              "components/card",
+              "components/code-group",
+              "components/columns",
+              "components/examples",
+              "components/expandable",
+              "components/frame",
+              "components/icon",
+              "components/param-field",
+              "components/response-field",
+              "components/steps",
+              "components/tabs",
+              "components/tooltip"
             ]
           }
         ]
