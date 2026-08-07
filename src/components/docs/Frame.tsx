@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import styles from './docs-components.module.css';
+import styles from './docs.module.css';
 
 export interface FrameProps {
   caption?: ReactNode;

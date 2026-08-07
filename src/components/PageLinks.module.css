@@ -1,6 +1,6 @@
 .container {
   position: sticky;
-  top: 1rem;
+  top: 0;
   height: max-content;
   min-width: 240px;
   display: flex;

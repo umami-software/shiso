@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ChevronRight } from '@/components/icons';
-import styles from './docs-components.module.css';
+import styles from './docs.module.css';
 import { gridColsClass, resolveIcon } from './utils';
 
 export interface CardProps {

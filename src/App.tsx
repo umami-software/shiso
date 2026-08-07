@@ -9,7 +9,7 @@ import '@/styles/global.css';
 import { MDXProvider } from '@mdx-js/react';
 import { Navigate, Route, Routes } from 'react-router';
 import { CodeBlock } from '@/components/CodeBlock';
-import * as docsComponents from '@/components/docs-components';
+import * as docsComponents from '@/components/docs/index';
 import { Layout } from '@/components/Layout';
 import { DOCS_PREFIX } from '@/lib/paths';
 import { DocPage } from '@/pages/DocPage';

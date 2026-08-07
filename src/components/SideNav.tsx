@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { resolveIcon } from '@/components/docs-components/utils';
+import { resolveIcon } from '@/components/docs/utils';
 import { ChevronRight, ExternalLink } from '@/components/icons';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
 import { getDrilldown } from '@/lib/site-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
@@ -84,7 +85,10 @@ function CollapsibleGroup({
           [styles.sectionSelected]: rootSelected && isTopLevel,
         })}
       >
-        <Link to={node.root.page.url} className={isTopLevel ? styles.sectionLabel : styles.groupLabel}>
+        <Link
+          to={node.root.page.url}
+          className={isTopLevel ? styles.sectionLabel : styles.groupLabel}
+        >
           {resolveIcon(node.icon)}
           {node.label}
         </Link>
@@ -176,7 +180,12 @@ function NavNodes({
     }
 
     rendered.push(
-      <CollapsibleGroup key={`group-${node.label}`} node={node} pathname={pathname} depth={depth} />,
+      <CollapsibleGroup
+        key={`group-${node.label}`}
+        node={node}
+        pathname={pathname}
+        depth={depth}
+      />,
     );
   });
 
@@ -192,11 +201,10 @@ export function SideNav({ tabs, navigation, isSticky }: SideNavProps) {
   const nodes = navigation[tab?.id || tabs?.[0]?.id] || [];
 
   return (
-    <nav
-      className={classNames(styles.sidenav, { [styles.sticky]: isSticky })}
-      aria-label="Documentation"
-    >
-      <NavNodes nodes={nodes} pathname={pathname} depth={0} />
-    </nav>
+    <ScrollArea className={classNames(styles.sidenav, { [styles.sticky]: isSticky })}>
+      <nav className={styles.nav} aria-label="Documentation">
+        <NavNodes nodes={nodes} pathname={pathname} depth={0} />
+      </nav>
+    </ScrollArea>
   );
 }

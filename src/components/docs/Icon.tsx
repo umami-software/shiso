@@ -1,5 +1,5 @@
 import { getIcon } from '@/lib/icons';
-import styles from './docs-components.module.css';
+import styles from './docs.module.css';
 
 export interface IconProps {
   icon?: string;

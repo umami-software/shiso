@@ -25,6 +25,7 @@
     "search:index": "node scripts/generate-search-index.mjs"
   },
   "dependencies": {
+    "@base-ui/react": "^1.7.0",
     "@fontsource/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",
     "@mdx-js/react": "^3.1.1",

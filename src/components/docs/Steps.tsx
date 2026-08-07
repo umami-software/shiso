@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import styles from './docs-components.module.css';
+import styles from './docs.module.css';
 import { toElementArray } from './utils';
 
 interface StepChildProps {
