@@ -5,28 +5,31 @@ description: Short inline labels for status, version, or emphasis.
 
 Use `Badge` for compact markers next to headings or inline text.
 
-## Props
-
-- `tone?: 'muted' | 'primary'` (defaults to `'muted'`)
-- `children?: ReactNode`
-
 ## Basic usage
+
+<Badge>beta</Badge> <Badge tone="primary">new</Badge>
 
 ```tsx
 <Badge>beta</Badge> <Badge tone="primary">new</Badge>
 ```
-
-<Badge>beta</Badge> <Badge tone="primary">new</Badge>
 
 ## In headings
 
+### Streaming responses <Badge tone="primary">new</Badge>
+
 ```tsx
 ### Streaming responses <Badge tone="primary">new</Badge>
 ```
 
-### Streaming responses <Badge tone="primary">new</Badge>
+`ParamField` and `ResponseField` reuse the same badge styles for `required`
+and `deprecated` markers.
 
-## Behavior notes
+## Properties
 
-- `ParamField` and `ResponseField` reuse the same badge styles for
-  `required` and `deprecated` markers
+<ResponseField name="tone" type="'muted' | 'primary'" default="muted">
+  Visual emphasis. `primary` uses the accent color.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Badge label.
+</ResponseField>

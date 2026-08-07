@@ -6,34 +6,28 @@ description: Document request parameters with location and type badges.
 Use `ParamField` for query, path, header, or body parameters, and `Param` for
 inline parameter names.
 
-## Props
-
-### `ParamField`
-
-- `name?: string`
-- `query?: string` / `path?: string` / `header?: string` / `body?: string`
-- `type?: string`
-- `required?: boolean`
-- `children?: ReactNode`
-
-### `Param`
-
-- `children?: ReactNode`
-
 ## Basic usage
+
+<ParamField name="limit" query="limit" type="number" required>
+  Maximum number of records to return.
+</ParamField>
 
 ```tsx
 <ParamField name="limit" query="limit" type="number" required>
   Maximum number of records to return.
 </ParamField>
 ```
-
-<ParamField name="limit" query="limit" type="number" required>
-  Maximum number of records to return.
-</ParamField>
 
 ## Location variants
 
+<ParamField path="userId" type="string" required>
+  User id in the URL path.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token.
+</ParamField>
+
 ```tsx
 <ParamField path="userId" type="string" required>
   User id in the URL path.
@@ -44,26 +38,57 @@ inline parameter names.
 </ParamField>
 ```
 
-<ParamField path="userId" type="string" required>
-  User id in the URL path.
-</ParamField>
-
-<ParamField header="Authorization" type="string" required>
-  Bearer token.
-</ParamField>
+The location badge is inferred from `query`, `path`, `header`, or `body`. If
+several are set, precedence is `query` → `path` → `header` → `body`. The
+display label is `name`, or the first location prop value when `name` is
+omitted.
 
 ## Inline parameter names
 
+Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+
 ```tsx
 Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
 ```
 
-Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+## Properties
 
-## Behavior notes
+### ParamField
 
-- the location badge is inferred from `query`, `path`, `header`, or `body`
-- if several location props are set, precedence is
-  `query` → `path` → `header` → `body`
-- the display label is `name`, or the first location prop value when `name` is
-  omitted
+<ResponseField name="name" type="string">
+  Display label for the parameter.
+</ResponseField>
+
+<ResponseField name="query" type="string">
+  Query parameter name. Marks the field as a query param.
+</ResponseField>
+
+<ResponseField name="path" type="string">
+  Path parameter name. Marks the field as a path param.
+</ResponseField>
+
+<ResponseField name="header" type="string">
+  Header name. Marks the field as a header param.
+</ResponseField>
+
+<ResponseField name="body" type="string">
+  Body field name. Marks the field as a body param.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Type label shown next to the name.
+</ResponseField>
+
+<ResponseField name="required" type="boolean" default="false">
+  Shows a required badge.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Parameter description.
+</ResponseField>
+
+### Param
+
+<ResponseField name="children" type="ReactNode">
+  Inline parameter name rendered as code.
+</ResponseField>

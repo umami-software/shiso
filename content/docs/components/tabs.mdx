@@ -4,21 +4,19 @@ description: Switch between alternate content panes, with optional persistence.
 ---
 
 Use `Tabs` and `Tab` when readers should choose among alternatives in the same
-space — languages, platforms, or product modes.
-
-## Props
-
-### `Tabs`
-
-- `group?: string` — share selection across tab sets via `localStorage`
-- `children?: ReactNode` — one or more `Tab` children
-
-### `Tab`
-
-- `title?: ReactNode` — tab label (falls back to `Tab 1`, `Tab 2`, …)
-- `children?: ReactNode`
+space — languages, platforms, or product modes. For tabbed **code** only,
+prefer [Code Group](/docs/components/code-group).
 
 ## Basic usage
+
+<Tabs>
+  <Tab title="JavaScript">
+    Install with npm.
+  </Tab>
+  <Tab title="Python">
+    Install with pip.
+  </Tab>
+</Tabs>
 
 ```tsx
 <Tabs>
@@ -30,15 +28,6 @@ space — languages, platforms, or product modes.
   </Tab>
 </Tabs>
 ```
-
-<Tabs>
-  <Tab title="JavaScript">
-    Install with npm.
-  </Tab>
-  <Tab title="Python">
-    Install with pip.
-  </Tab>
-</Tabs>
 
 ## Persist selection with `group`
 
@@ -52,7 +41,26 @@ Tabs that share a `group` id restore the last selected tab from
 </Tabs>
 ```
 
-## Behavior notes
+A single `Tab` child renders as plain content with no tab chrome.
 
-- a single `Tab` child renders as plain content with no tab chrome
-- for tabbed **code** only, prefer [Code Group](/docs/components/code-group)
+## Properties
+
+### Tabs
+
+<ResponseField name="group" type="string">
+  Shared id for persisting the selected tab across tab sets.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  One or more `Tab` children.
+</ResponseField>
+
+### Tab
+
+<ResponseField name="title" type="ReactNode">
+  Tab label. Falls back to `Tab 1`, `Tab 2`, and so on.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Panel content.
+</ResponseField>

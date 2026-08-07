@@ -4,23 +4,23 @@ description: Short hover and keyboard-focus hints.
 ---
 
 Use `Tooltip` for brief definitions or clarifications without leaving the
-sentence.
-
-## Props
-
-- `tip?: ReactNode` — the hint text
-- `children?: ReactNode` — the trigger content
+sentence. The tip appears on hover and keyboard focus. Keep tips short — no
+links or block content.
 
 ## Basic usage
+
+The value of <Tooltip tip="Used to identify the current API key">API key</Tooltip> must be kept secret.
 
 ```tsx
 <Tooltip tip="Used to identify the current API key">API key</Tooltip>
 ```
 
-The value of <Tooltip tip="Used to identify the current API key">API key</Tooltip> must be kept secret.
+## Properties
 
-## Behavior notes
+<ResponseField name="tip" type="ReactNode">
+  Hint text shown in the tooltip bubble.
+</ResponseField>
 
-- the tip appears on hover and keyboard focus
-- the trigger is focusable and linked with `aria-describedby`
-- keep tips short — no links or block content
+<ResponseField name="children" type="ReactNode">
+  Trigger content. The trigger is focusable and linked with `aria-describedby`.
+</ResponseField>

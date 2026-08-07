@@ -6,12 +6,11 @@ description: Border and caption for screenshots or other media.
 Use `Frame` to visually contain media or custom content with an optional
 caption.
 
-## Props
-
-- `caption?: ReactNode`
-- `children?: ReactNode`
-
 ## Basic usage
+
+<Frame caption="Docs layout preview">
+  ![Sample](/images/sample.jpg)
+</Frame>
 
 ```mdx
 <Frame caption="Docs layout preview">
@@ -19,11 +18,11 @@ caption.
 </Frame>
 ```
 
-<Frame caption="Docs layout preview">
-  ![Sample](/images/sample.jpg)
-</Frame>
-
 ## With code or other children
+
+<Frame caption="Environment variables in `.env`">
+  <code>VITE_API_URL=https://api.example.com</code>
+</Frame>
 
 ```tsx
 <Frame caption="Environment variables in `.env`">
@@ -31,6 +30,12 @@ caption.
 </Frame>
 ```
 
-<Frame caption="Environment variables in `.env`">
-  <code>VITE_API_URL=https://api.example.com</code>
-</Frame>
+## Properties
+
+<ResponseField name="caption" type="ReactNode">
+  Optional caption below the framed content.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Media or other content to frame.
+</ResponseField>

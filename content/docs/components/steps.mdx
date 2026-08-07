@@ -3,20 +3,16 @@ title: Steps
 description: Numbered walkthroughs for procedures and setup guides.
 ---
 
-Use `Steps` and `Step` for ordered how-tos.
-
-## Props
-
-### `Steps`
-
-- `children?: ReactNode` — one or more `Step` children
-
-### `Step`
-
-- `title?: ReactNode` — falls back to `Step 1`, `Step 2`, …
-- `children?: ReactNode`
+Use `Steps` and `Step` for ordered how-tos. Step numbers are assigned
+automatically in document order.
 
 ## Basic usage
+
+<Steps>
+  <Step title="Install dependencies">Run your package manager install command.</Step>
+  <Step title="Configure docs">Set navigation in `docs.json`.</Step>
+  <Step title="Start the app">Run the local development server.</Step>
+</Steps>
 
 ```tsx
 <Steps>
@@ -26,13 +22,20 @@ Use `Steps` and `Step` for ordered how-tos.
 </Steps>
 ```
 
-<Steps>
-  <Step title="Install dependencies">Run your package manager install command.</Step>
-  <Step title="Configure docs">Set navigation in `docs.json`.</Step>
-  <Step title="Start the app">Run the local development server.</Step>
-</Steps>
+## Properties
 
-## Behavior notes
+### Steps
 
-- step numbers are assigned automatically in document order
-- empty groups render nothing
+<ResponseField name="children" type="ReactNode">
+  One or more `Step` children. Empty groups render nothing.
+</ResponseField>
+
+### Step
+
+<ResponseField name="title" type="ReactNode">
+  Step heading. Falls back to `Step 1`, `Step 2`, and so on.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Step body content.
+</ResponseField>

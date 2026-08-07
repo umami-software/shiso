@@ -5,29 +5,20 @@ description: Highlight notes, tips, warnings, and other admonitions.
 
 Use callouts to pull important information out of the main flow.
 
-## Components
-
-- `Callout` — generic, with a `variant` prop
-- `Note`, `Tip`, `Warning`, `Info`, `Check`, `Danger` — fixed-variant wrappers
-
-## `Callout` props
-
-- `variant?: 'note' | 'tip' | 'warning' | 'info' | 'check' | 'danger'`
-- `title?: ReactNode`
-- `icon?: ReactNode | string` — lucide name or element; overrides the variant default
-- `children?: ReactNode`
+You can use the generic `Callout` component, or the fixed-variant wrappers
+`Note`, `Tip`, `Warning`, `Info`, `Check`, and `Danger`.
 
 ## Generic callout
+
+<Callout variant="note" title="Heads up">
+  This is a custom callout body.
+</Callout>
 
 ```tsx
 <Callout variant="note" title="Heads up">
   This is a custom callout body.
 </Callout>
 ```
-
-<Callout variant="note" title="Heads up">
-  This is a custom callout body.
-</Callout>
 
 ## Variants
 
@@ -35,27 +26,55 @@ Use callouts to pull important information out of the main flow.
 
 <Note>Neutral supplemental information.</Note>
 
+```tsx
+<Note>Neutral supplemental information.</Note>
+```
+
 ### Tip
 
 <Tip>Best practices and helpful shortcuts.</Tip>
+
+```tsx
+<Tip>Best practices and helpful shortcuts.</Tip>
+```
 
 ### Warning
 
 <Warning>Risky operations or destructive behavior.</Warning>
 
+```tsx
+<Warning>Risky operations or destructive behavior.</Warning>
+```
+
 ### Info
 
 <Info>Contextual details readers should know.</Info>
+
+```tsx
+<Info>Contextual details readers should know.</Info>
+```
 
 ### Check
 
 <Check>Success or completion states.</Check>
 
+```tsx
+<Check>Success or completion states.</Check>
+```
+
 ### Danger
 
 <Danger>Irreversible actions and data loss.</Danger>
 
+```tsx
+<Danger>Irreversible actions and data loss.</Danger>
+```
+
 ## Custom icon
+
+<Callout variant="tip" icon="flame" title="Hot path">
+  This request is on the critical path.
+</Callout>
 
 ```tsx
 <Callout variant="tip" icon="flame" title="Hot path">
@@ -63,12 +82,27 @@ Use callouts to pull important information out of the main flow.
 </Callout>
 ```
 
-<Callout variant="tip" icon="flame" title="Hot path">
-  This request is on the critical path.
-</Callout>
+## Properties
 
-## Behavior notes
+### Callout
 
-- shortcut components are thin wrappers around `Callout`
-- without a `title`, only the body is shown
-- `icon` accepts a lucide name string or a rendered element
+<ResponseField name="variant" type="'note' | 'tip' | 'warning' | 'info' | 'check' | 'danger'" default="note">
+  Visual style and default icon.
+</ResponseField>
+
+<ResponseField name="title" type="ReactNode">
+  Optional heading above the body. Without a title, only the body is shown.
+</ResponseField>
+
+<ResponseField name="icon" type="ReactNode | string">
+  Lucide name or element. Overrides the variant default icon.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Callout body content.
+</ResponseField>
+
+### Shortcut components
+
+`Note`, `Tip`, `Warning`, `Info`, `Check`, and `Danger` accept only
+`children` and map to the matching `variant`.

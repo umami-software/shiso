@@ -4,18 +4,21 @@ description: Request and response payload blocks for API reference pages.
 ---
 
 Use `RequestExample` and `ResponseExample` to wrap sample payloads under an
-endpoint heading.
-
-## Props
-
-Both components accept:
-
-- `title?: ReactNode` — defaults to `"Request example"` /
-  `"Response example"`
-- `children?: ReactNode`
+endpoint heading. Pair them under the same heading to document a request and
+its response. Nest [Code Group](/docs/components/code-group) inside either
+component to show multiple languages.
 
 ## Request example
 
+<RequestExample title="Create user request">
+  ```json
+  {
+    "email": "user@example.com",
+    "name": "Ada Lovelace"
+  }
+  ```
+</RequestExample>
+
 ````mdx
 <RequestExample title="Create user request">
   ```json
@@ -26,18 +29,18 @@ Both components accept:
   ```
 </RequestExample>
 ````
-
-<RequestExample title="Create user request">
-  ```json
-  {
-    "email": "user@example.com",
-    "name": "Ada Lovelace"
-  }
-  ```
-</RequestExample>
 
 ## Response example
 
+<ResponseExample>
+  ```json
+  {
+    "id": "usr_1",
+    "email": "user@example.com"
+  }
+  ```
+</ResponseExample>
+
 ````mdx
 <ResponseExample>
   ```json
@@ -49,17 +52,14 @@ Both components accept:
 </ResponseExample>
 ````
 
-<ResponseExample>
-  ```json
-  {
-    "id": "usr_1",
-    "email": "user@example.com"
-  }
-  ```
-</ResponseExample>
+## Properties
 
-## Behavior notes
+Both components accept the same props:
 
-- pair them under the same heading to document a request and its response
-- nest [Code Group](/docs/components/code-group) inside either component to
-  show multiple languages
+<ResponseField name="title" type="ReactNode">
+  Header label. Defaults to `"Request example"` or `"Response example"`.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Payload content, usually a fenced code block.
+</ResponseField>

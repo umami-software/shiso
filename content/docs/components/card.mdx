@@ -5,38 +5,29 @@ description: Linked or static summary cards, alone or in a grid.
 
 Use `Card` and `CardGroup` for scannable links or feature summaries.
 
-## Props
-
-### `Card`
-
-- `title?: ReactNode`
-- `href?: string`
-- `icon?: ReactNode | string` — lucide name or element
-- `img?: string` — image shown above the body
-- `cta?: string` — label shown next to the arrow
-- `horizontal?: boolean` — icon, title, and body in a row
-- `arrow?: boolean` — defaults to `true` when `href` is set
-- `children?: ReactNode`
-
-### `CardGroup`
-
-- `cols?: 1 | 2 | 3 | 4` (defaults to `2`)
-- `children?: ReactNode`
-
 ## Basic usage
+
+<Card title="API Reference" icon="code" href="/docs/components/response-field">
+  Learn how to model response schemas.
+</Card>
 
 ```tsx
 <Card title="API Reference" icon="code" href="/docs/components/response-field">
   Learn how to model response schemas.
 </Card>
 ```
-
-<Card title="API Reference" icon="code" href="/docs/components/response-field">
-  Learn how to model response schemas.
-</Card>
 
 ## Card group
 
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
+    Run Shiso and make your first change.
+  </Card>
+  <Card title="Components" icon="book-open" href="/docs/components">
+    Browse all docs components.
+  </Card>
+</CardGroup>
+
 ```tsx
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
@@ -47,26 +38,61 @@ Use `Card` and `CardGroup` for scannable links or feature summaries.
   </Card>
 </CardGroup>
 ```
-
-<CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
-    Run Shiso and make your first change.
-  </Card>
-  <Card title="Components" icon="book-open" href="/docs/components">
-    Browse all docs components.
-  </Card>
-</CardGroup>
 
 ## Horizontal card
 
+<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
+
 ```tsx
 <Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
 ```
 
-<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
+Cards with `href` render as links; without it they are static containers.
+External `href` values open in a new tab. For mixed content side by side, use
+[Columns](/docs/components/columns).
 
-## Behavior notes
+## Properties
 
-- cards with `href` render as links; without it they are static containers
-- external `href` values open in a new tab
-- for mixed content side by side, use [Columns](/docs/components/columns)
+### Card
+
+<ResponseField name="title" type="ReactNode">
+  Card heading.
+</ResponseField>
+
+<ResponseField name="href" type="string">
+  Optional link destination. When set, the card is interactive.
+</ResponseField>
+
+<ResponseField name="icon" type="ReactNode | string">
+  Lucide icon name or element.
+</ResponseField>
+
+<ResponseField name="img" type="string">
+  Image shown above the body.
+</ResponseField>
+
+<ResponseField name="cta" type="string">
+  Label shown next to the arrow.
+</ResponseField>
+
+<ResponseField name="horizontal" type="boolean" default="false">
+  Lay out icon, title, and body in a row.
+</ResponseField>
+
+<ResponseField name="arrow" type="boolean">
+  Show a trailing arrow. Defaults to `true` when `href` is set.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Body content.
+</ResponseField>
+
+### CardGroup
+
+<ResponseField name="cols" type="1 | 2 | 3 | 4" default="2">
+  Number of columns in the grid.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  One or more `Card` children.
+</ResponseField>

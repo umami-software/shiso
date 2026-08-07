@@ -4,41 +4,50 @@ description: Document object properties and schema fields.
 ---
 
 Use `ResponseField` for response body fields, object properties, and similar
-schema documentation.
-
-## Props
-
-- `name: string`
-- `type?: string | number | boolean | null`
-- `required?: boolean`
-- `deprecated?: boolean`
-- `children?: ReactNode`
+schema documentation. Nest fields under headings to document nested objects.
 
 ## Basic usage
 
+<ResponseField name="id" type="string" required>
+  Unique identifier for the resource.
+</ResponseField>
+
 ```tsx
 <ResponseField name="id" type="string" required>
   Unique identifier for the resource.
 </ResponseField>
 ```
-
-<ResponseField name="id" type="string" required>
-  Unique identifier for the resource.
-</ResponseField>
 
 ## Optional and deprecated fields
 
+<ResponseField name="legacyField" type="number" deprecated>
+  Removed in a future release.
+</ResponseField>
+
 ```tsx
 <ResponseField name="legacyField" type="number" deprecated>
   Removed in a future release.
 </ResponseField>
 ```
 
-<ResponseField name="legacyField" type="number" deprecated>
-  Removed in a future release.
+## Properties
+
+<ResponseField name="name" type="string" required>
+  Field name.
 </ResponseField>
 
-## Behavior notes
+<ResponseField name="type" type="string | number | boolean | null">
+  Type label. HTML entities in string values are decoded before rendering.
+</ResponseField>
 
-- HTML entities in string `type` values are decoded before rendering
-- nest `ResponseField` under headings to document nested objects
+<ResponseField name="required" type="boolean" default="false">
+  Shows a required badge.
+</ResponseField>
+
+<ResponseField name="deprecated" type="boolean" default="false">
+  Shows a deprecated badge.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Field description.
+</ResponseField>

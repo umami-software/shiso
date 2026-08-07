@@ -6,37 +6,43 @@ description: A single collapsible section.
 Use `Expandable` for one optional block of content. For a list of related
 items, prefer [Accordion](/docs/components/accordion).
 
-## Props
-
-- `title: ReactNode`
-- `defaultOpen?: boolean` (defaults to `false`)
-- `children?: ReactNode`
-
 ## Basic usage
+
+<Expandable title="Advanced settings">
+  These settings are optional and can be left at defaults.
+</Expandable>
 
 ```tsx
 <Expandable title="Advanced settings">
   These settings are optional and can be left at defaults.
 </Expandable>
 ```
-
-<Expandable title="Advanced settings">
-  These settings are optional and can be left at defaults.
-</Expandable>
 
 ## Open by default
 
+<Expandable title="Open section" defaultOpen>
+  This section starts expanded.
+</Expandable>
+
 ```tsx
 <Expandable title="Open section" defaultOpen>
   This section starts expanded.
 </Expandable>
 ```
 
-<Expandable title="Open section" defaultOpen>
-  This section starts expanded.
-</Expandable>
+Each expandable is a single `<details>` element and does not coordinate open
+state with siblings.
 
-## Behavior notes
+## Properties
 
-- rendered as a single `<details>` element
-- does not coordinate open state with siblings
+<ResponseField name="title" type="ReactNode" required>
+  Summary label.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  Whether the section starts expanded.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Content revealed when open.
+</ResponseField>

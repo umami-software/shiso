@@ -174,6 +174,13 @@
   padding: 1rem;
 }
 
+/* Cards are often <a>/<Link> inside .docs-markdown, which underlines links. */
+a.card,
+a.card:hover,
+a.card:active {
+  text-decoration: none;
+}
+
 a.card:hover {
   border-color: var(--color-border-strong);
 }

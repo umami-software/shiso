@@ -6,22 +6,31 @@ description: Expandable FAQ-style sections, alone or in a group.
 Use `Accordion` for a single expandable block, or wrap several in
 `AccordionGroup`.
 
-## Props
+## Single accordion
 
-### `Accordion`
+<Accordion title="Deploy" icon="rocket">
+  Run `pnpm build` and publish `dist/client`.
+</Accordion>
 
-- `title?: ReactNode` — summary label
-- `icon?: ReactNode | string` — lucide name or element shown before the title
-- `defaultOpen?: boolean` — start expanded
-- `children?: ReactNode`
+```tsx
+<Accordion title="Deploy" icon="rocket">
+  Run `pnpm build` and publish `dist/client`.
+</Accordion>
+```
 
-### `AccordionGroup`
+## Accordion groups
 
-- `defaultOpen?: boolean` — when `true`, opens the first child that does not
-  set its own `defaultOpen`
-- `children?: ReactNode` — one or more `Accordion` items
+Group related items with `AccordionGroup`. Set `defaultOpen` to expand the
+first item (unless a child sets its own `defaultOpen`).
 
-## Basic usage
+<AccordionGroup defaultOpen>
+  <Accordion title="What is Shiso?">
+    A docs site generator powered by Vite, React, and MDX.
+  </Accordion>
+  <Accordion title="What does it support?">
+    Navigation, branding, SEO, and built-in MDX components.
+  </Accordion>
+</AccordionGroup>
 
 ```tsx
 <AccordionGroup defaultOpen>
@@ -34,30 +43,35 @@ Use `Accordion` for a single expandable block, or wrap several in
 </AccordionGroup>
 ```
 
-<AccordionGroup defaultOpen>
-  <Accordion title="What is Shiso?">
-    A docs site generator powered by Vite, React, and MDX.
-  </Accordion>
-  <Accordion title="What does it support?">
-    Navigation, branding, SEO, and built-in MDX components.
-  </Accordion>
-</AccordionGroup>
+For a single collapsible without group styling, use
+[Expandable](/docs/components/expandable).
 
-## With icons
+## Properties
 
-```tsx
-<Accordion title="Deploy" icon="rocket">
-  Run `pnpm build` and publish `dist/client`.
-</Accordion>
-```
+### Accordion
 
-<Accordion title="Deploy" icon="rocket">
-  Run `pnpm build` and publish `dist/client`.
-</Accordion>
+<ResponseField name="title" type="ReactNode">
+  Summary label shown in the header.
+</ResponseField>
 
-## Behavior notes
+<ResponseField name="icon" type="ReactNode | string">
+  Lucide icon name or element shown before the title.
+</ResponseField>
 
-- each item is a native `<details>` element
-- empty groups render nothing
-- for a single collapsible without group styling, use
-  [Expandable](/docs/components/expandable)
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  Whether the accordion starts expanded.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Content revealed when open.
+</ResponseField>
+
+### AccordionGroup
+
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  When `true`, opens the first child that does not set its own `defaultOpen`.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  One or more `Accordion` items. Empty groups render nothing.
+</ResponseField>

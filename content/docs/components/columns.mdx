@@ -4,20 +4,27 @@ description: Place any content side by side in a responsive grid.
 ---
 
 Use `Columns` and `Column` for multi-column layouts that are not pure card
-grids.
-
-## Props
-
-### `Columns`
-
-- `cols?: 1 | 2 | 3 | 4` (defaults to `2`)
-- `children?: ReactNode`
-
-### `Column`
-
-- `children?: ReactNode`
+grids. Columns collapse to a single column below 768px. Prefer
+[CardGroup](/docs/components/card) when every child is a `Card`.
 
 ## Basic usage
+
+<Columns cols={2}>
+  <Column>
+    **Install**
+
+    ```bash
+    pnpm install
+    ```
+  </Column>
+  <Column>
+    **Run**
+
+    ```bash
+    pnpm dev
+    ```
+  </Column>
+</Columns>
 
 ````mdx
 <Columns cols={2}>
@@ -38,24 +45,13 @@ grids.
 </Columns>
 ````
 
-<Columns cols={2}>
-  <Column>
-    **Install**
-
-    ```bash
-    pnpm install
-    ```
-  </Column>
-  <Column>
-    **Run**
-
-    ```bash
-    pnpm dev
-    ```
-  </Column>
-</Columns>
-
 ## With cards
+
+<Columns cols={3}>
+  <Card title="Quickstart" icon="rocket" href="/docs/quickstart" />
+  <Card title="Configure" icon="settings" href="/docs/configuration" />
+  <Card title="Write" icon="book-open" href="/docs/writing-content" />
+</Columns>
 
 ```tsx
 <Columns cols={3}>
@@ -65,14 +61,20 @@ grids.
 </Columns>
 ```
 
-<Columns cols={3}>
-  <Card title="Quickstart" icon="rocket" href="/docs/quickstart" />
-  <Card title="Configure" icon="settings" href="/docs/configuration" />
-  <Card title="Write" icon="book-open" href="/docs/writing-content" />
-</Columns>
+## Properties
 
-## Behavior notes
+### Columns
 
-- columns collapse to a single column below 768px
-- `cols` is clamped to the range 1–4
-- prefer [CardGroup](/docs/components/card) when every child is a `Card`
+<ResponseField name="cols" type="1 | 2 | 3 | 4" default="2">
+  Number of columns. Clamped to the range 1–4.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Column content. Prefer wrapping each cell in `Column`.
+</ResponseField>
+
+### Column
+
+<ResponseField name="children" type="ReactNode">
+  Content for one column.
+</ResponseField>
