@@ -40,8 +40,8 @@
           },
           {
             "group": "Configuration",
-            "root": "configuration",
             "pages": [
+              { "page": "configuration", "title": "Overview" },
               "navigation",
               "customization",
               "navbar-and-footer",
@@ -52,13 +52,18 @@
           },
           {
             "group": "Writing content",
-            "root": "writing-content",
-            "pages": ["text", "images", "lists", "code-blocks"]
+            "pages": [
+              { "page": "writing-content", "title": "Overview" },
+              "text",
+              "images",
+              "lists",
+              "code-blocks"
+            ]
           },
           {
             "group": "Components",
-            "root": "components/index",
             "pages": [
+              { "page": "components/index", "title": "Overview" },
               "components/accordion",
               "components/badge",
               "components/callout",

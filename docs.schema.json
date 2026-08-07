@@ -118,8 +118,9 @@
     "theme": {
       "x-shiso": "supported",
       "type": "string",
+      "enum": ["shiso"],
       "default": "shiso",
-      "description": "Layout theme name. The built-in theme is \"shiso\". Other values from the docs.json standard are accepted for portability and currently render the same."
+      "description": "Layout theme name. Only \"shiso\" is implemented."
     },
     "thumbnails": { "x-shiso": "reserved", "type": "object" },
     "styling": {

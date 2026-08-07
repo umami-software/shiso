@@ -1,5 +1,5 @@
 ---
-title: Configuration
+title: Overview
 description: How docs.json works, what Shiso implements, and the Shiso-only options.
 ---
 
@@ -60,9 +60,7 @@ Reserved (accepted, ignored): `thumbnails`, `icons`, `api`, and `integrations`.
 
 ## Core fields
 
-- `theme`: layout theme name. The built-in theme is `"shiso"`. Other values
-  from the docs.json standard (for example `"mint"`) are accepted for
-  portability and currently render the same
+- `theme`: layout theme. Only `"shiso"` is implemented (the default)
 - `name`: site title, shown in the header and page titles
 - `description`: default meta description for pages without one
 - `logo`: a path like `"/logo.svg"`, or per-mode paths with an optional link:
