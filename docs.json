@@ -3,6 +3,7 @@
   "$shiso": {
     "siteUrl": "https://shiso.dev"
   },
+  "theme": "shiso",
   "name": "Shiso",
   "description": "Open-source docs site generator built with Vite, React, and MDX.",
   "navbar": {
@@ -32,8 +33,10 @@
         "groups": [
           {
             "group": "Getting started",
-            "root": "index",
-            "pages": ["installation"]
+            "pages": [
+              { "page": "index", "title": "Introduction" },
+              "quickstart"
+            ]
           },
           {
             "group": "Configuration",

@@ -70,8 +70,9 @@ the subset of features Shiso implements today.
 
 Keys that are part of the docs.json standard but not implemented yet are
 **accepted and skipped** with a build notice — they do not fail the build.
-That includes things like `api`, `integrations`, `thumbnails`, most `theme`
-variants, and MCP-based `contextual` options.
+That includes things like `api`, `integrations`, `thumbnails`, and MCP-based
+`contextual` options. A non-`shiso` `theme` value is accepted and currently
+renders the same as the built-in theme.
 
 See [Configuration](/docs/configuration#how-shiso-treats-config-keys) for the
 supported / reserved / unknown tier policy.

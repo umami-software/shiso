@@ -377,19 +377,39 @@ a.card:hover {
 /* Steps */
 
 .steps {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   margin: 1rem 0;
 }
 
+/* Continuous rail through the center of the number badges. */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  width: 1px;
+  background: var(--color-border);
+  transform: translateX(-50%);
+}
+
+.steps:has(.step:only-child)::before {
+  display: none;
+}
+
 .step {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
 }
 
 .stepNumber {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;

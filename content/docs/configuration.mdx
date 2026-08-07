@@ -12,7 +12,7 @@ platform builds here as-is.
 ```json
 {
   "$schema": "./docs.schema.json",
-  "theme": "mint",
+  "theme": "shiso",
   "name": "My Docs",
   "colors": {
     "primary": "#16a34a"
@@ -24,7 +24,7 @@ platform builds here as-is.
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index", "installation", "configuration"]
+            "pages": ["index", "quickstart", "configuration"]
           }
         ]
       }
@@ -49,18 +49,20 @@ The reserved tier is the point: a `docs.json` written against the full standard
 builds here using the subset Shiso implements, instead of failing on the first
 feature that isn't written yet.
 
-Supported today: `name`, `description`, `colors`, `logo`, `favicon`,
+Supported today: `theme`, `name`, `description`, `colors`, `logo`, `favicon`,
 `navigation` and [`interaction`](/docs/navigation#collapsible-groups),
 [`navbar`, `footer`, `banner`](/docs/navbar-and-footer),
 [`appearance`, `fonts`, `styling`, `background`](/docs/customization),
 [`redirects`, `seo`, `errors`, `metadata`](/docs/seo), and
 [`search`, `contextual`](/docs/search-and-ai).
 
-Reserved (accepted, ignored): `theme` variants, `thumbnails`, `icons`,
-`api`, and `integrations`.
+Reserved (accepted, ignored): `thumbnails`, `icons`, `api`, and `integrations`.
 
 ## Core fields
 
+- `theme`: layout theme name. The built-in theme is `"shiso"`. Other values
+  from the docs.json standard (for example `"mint"`) are accepted for
+  portability and currently render the same
 - `name`: site title, shown in the header and page titles
 - `description`: default meta description for pages without one
 - `logo`: a path like `"/logo.svg"`, or per-mode paths with an optional link:
@@ -136,7 +138,7 @@ pnpm check:config
 Every value in `navigation...pages` must match a file in `content/docs`.
 
 - `"index"` -> `content/docs/index.mdx` (or `.md`)
-- `"installation"` -> `content/docs/installation.mdx` (or `.md`)
+- `"quickstart"` -> `content/docs/quickstart.mdx` (or `.md`)
 - `"components/index"` -> `content/docs/components/index.mdx` (or `.md`)
 
 Those slugs become routes like:

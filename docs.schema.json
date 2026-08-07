@@ -116,9 +116,10 @@
     },
 
     "theme": {
-      "x-shiso": "reserved",
+      "x-shiso": "supported",
       "type": "string",
-      "description": "Layout theme name. Shiso currently ships a single theme."
+      "default": "shiso",
+      "description": "Layout theme name. The built-in theme is \"shiso\". Other values from the docs.json standard are accepted for portability and currently render the same."
     },
     "thumbnails": { "x-shiso": "reserved", "type": "object" },
     "styling": {
