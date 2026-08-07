@@ -28,10 +28,12 @@ const CALLOUT_ICONS = {
 export function Callout({ title, icon, children, variant = 'note' }: CalloutProps) {
   return (
     <div className={`${styles.callout} ${styles[variant]}`}>
-      {resolveIcon(icon) || CALLOUT_ICONS[variant]}
+      <span className={styles.calloutIcon} aria-hidden={true}>
+        {resolveIcon(icon) || CALLOUT_ICONS[variant]}
+      </span>
       <div className={styles.calloutBody}>
         {title ? <div className={styles.calloutTitle}>{title}</div> : null}
-        <div>{children}</div>
+        {children}
       </div>
     </div>
   );
