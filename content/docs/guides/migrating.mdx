@@ -1,0 +1,126 @@
+---
+title: Migrating from Mintlify
+description: Bring an existing Mintlify docs.json and content tree into Shiso.
+---
+
+Shiso reads the same `docs.json` shape as Mintlify. Most sites can move over by
+pointing Shiso at their existing config and markdown files, then adjusting for
+the subset of features Shiso implements today.
+
+## What carries over as-is
+
+- **Navigation**: tabs, groups, pages, nested groups, page objects
+  (`title` / `label`, `icon`, `tag`, `hidden`), external links, anchors
+- **Branding**: `name`, `description`, `logo`, `favicon`, `colors`
+- **Chrome**: `navbar`, `footer`, `banner`
+- **Appearance**: `appearance`, `fonts`, `styling.eyebrows`, `background`
+- **SEO**: `seo.metatags`, `seo.indexing`, `redirects` (exact sources only)
+- **Content**: `.md` / `.mdx` pages under your content directory
+- **Components**: callouts, tabs, steps, cards, code groups, accordions,
+  param/response fields, and the other built-ins listed under
+  [Components](/docs/components)
+
+## Migration steps
+
+<Steps>
+  <Step title="Copy config and content">
+    Place your existing `docs.json` at the project root and your pages under
+    `content/docs` (or set `$shiso.contentDir` to match your old layout).
+  </Step>
+  <Step title="Point the schema at Shiso">
+    Change the `$schema` value so editor validation matches what this project
+    implements:
+
+    ```json
+    {
+      "$schema": "./docs.schema.json"
+    }
+    ```
+  </Step>
+  <Step title="Set the site origin">
+    Add `$shiso.siteUrl` so canonical URLs, Open Graph tags, the sitemap, and
+    AI contextual links work:
+
+    ```json
+    {
+      "$shiso": {
+        "siteUrl": "https://docs.example.com"
+      }
+    }
+    ```
+  </Step>
+  <Step title="Validate">
+    Run the config check and fix anything it reports:
+
+    ```bash
+    pnpm check:config
+    ```
+  </Step>
+  <Step title="Preview and build">
+    ```bash
+    pnpm dev
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Behavior differences to expect
+
+### Config keys Shiso ignores
+
+Keys that are part of the docs.json standard but not implemented yet are
+**accepted and skipped** with a build notice — they do not fail the build.
+That includes things like `api`, `integrations`, `thumbnails`, most `theme`
+variants, and MCP-based `contextual` options.
+
+See [Configuration](/docs/configuration#how-shiso-treats-config-keys) for the
+supported / reserved / unknown tier policy.
+
+### Versions and languages
+
+If your config uses `navigation.versions` or `navigation.languages`, Shiso
+renders only the **default** entry and reports the others as skipped. Plan a
+separate site or branch per version/locale until full multi-version support
+lands.
+
+### Redirects
+
+Only exact-match `source` values work. Wildcard patterns such as
+`/old/:slug*` are skipped with a warning. Sources must include the full path
+(including the docs prefix), for example `/docs/old-page`.
+
+### Hosted features that do not apply
+
+Mintlify-hosted services — hosted search, analytics integrations, API
+playgrounds, authentication, and live GitHub star counts — are not part of
+Shiso. Built-in replacements:
+
+| Mintlify feature | Shiso equivalent |
+| --- | --- |
+| Hosted search | Client-side search (`⌘K` / `Ctrl K`) |
+| AI chat / MCP | [Markdown export](/docs/search-and-ai#markdown-export) + `contextual` menu |
+| Custom domain hosting | Deploy `dist/client` to any static host |
+
+### Icons
+
+Icon names still come from the [lucide](https://lucide.dev/icons) set. Names
+are collected from your content and `docs.json` at build time — no separate
+icon registration step.
+
+## Content checklist
+
+1. Every page listed under `navigation` has a matching file (`.md` or `.mdx`).
+2. Image and asset paths resolve under `public/` (for example
+   `/images/hero.png` → `public/images/hero.png`).
+3. Frontmatter uses `title` and optional `description`; add `noindex` or
+   `timestamp` where you need page-level SEO or last-updated overrides.
+4. Components you used still exist in Shiso — see
+   [Components](/docs/components). Unsupported custom components need a local
+   replacement or plain Markdown.
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — ship `dist/client`
+- [SEO and redirects](/docs/seo) — confirm sitemap, redirects, and 404 behavior
+- [Search and AI](/docs/search-and-ai) — enable the contextual menu if you want
+  copy/view/AI actions on every page

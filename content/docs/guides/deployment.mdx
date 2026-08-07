@@ -1,0 +1,93 @@
+---
+title: Deployment
+description: Ship the static build to any host.
+---
+
+`pnpm build` produces a fully static site in `dist/client` — plain HTML, CSS,
+and JavaScript with no server component. Any static host works.
+
+The output includes:
+
+- a prerendered `index.html` for every page
+- `sitemap.xml` (when [`$shiso.siteUrl`](/docs/configuration#shiso-only-options) is set)
+- redirect pages for every [`redirects`](/docs/seo#redirects) rule
+- a `.md` copy of every page for [AI tools](/docs/search-and-ai#markdown-export)
+- `404.html` for hosts that serve it on unknown paths
+
+## GitHub Pages
+
+Point Pages at the build output with an action:
+
+```yaml
+name: Deploy docs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history for last-modified timestamps
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/client
+      - uses: actions/deploy-pages@v4
+```
+
+GitHub Pages serves `404.html` for unknown paths automatically, so client-side
+routing keeps working on deep links.
+
+## Netlify
+
+- **Build command**: `pnpm build`
+- **Publish directory**: `dist/client`
+
+## Vercel
+
+- **Build command**: `pnpm build`
+- **Output directory**: `dist/client`
+
+## Cloudflare Pages
+
+- **Build command**: `pnpm build`
+- **Build output directory**: `dist/client`
+
+## Deploying under a subpath
+
+When the site lives at `https://example.com/my-docs/` rather than a domain
+root, pass Vite's `--base` flag to both build steps in the `build` script:
+
+```json
+{
+  "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs"
+}
+```
+
+The prerenderer detects the base from the build output and lays out the
+directories to match.
+
+## Checklist
+
+1. Set `$shiso.siteUrl` so canonical URLs, Open Graph tags, and the sitemap
+   are emitted.
+2. Use a full-history checkout (`fetch-depth: 0`) if
+   [`metadata.timestamp`](/docs/seo#last-modified-timestamps) is enabled.
+3. Verify a deep link (any docs page URL) after the first deploy.

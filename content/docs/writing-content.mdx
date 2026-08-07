@@ -1,14 +1,14 @@
 ---
 title: Writing content
-description: File format, frontmatter fields, and MDX components.
+description: File format, frontmatter fields, MDX components, and organization.
 ---
 
-Write docs as `.mdx` (or `.md`) files under `content/docs` and reference them in
-`docs.json` navigation.
+Write docs as `.mdx` (or `.md`) files under `content/docs` and list each page
+in `docs.json` navigation.
 
 ## File format
 
-Each docs page usually starts with frontmatter:
+Each page usually starts with YAML frontmatter:
 
 ```mdx
 ---
@@ -21,17 +21,17 @@ Welcome to Shiso.
 
 ## Frontmatter fields
 
-- `title`: the page heading, sidebar fallback label, and `<title>` tag
-- `description`: intro text under the title, also used as the meta description
-- `noindex`: set `true` to mark the page `noindex` and keep it out of
-  `sitemap.xml`
-- `timestamp`: overrides the site-wide
-  [`metadata.timestamp`](/docs/seo#last-modified-timestamps) setting for this
-  page — `true` shows the last-updated date, `false` hides it
+| Field | Purpose |
+| --- | --- |
+| `title` | Page heading, sidebar fallback label, and `<title>` tag |
+| `description` | Intro text under the title and meta description |
+| `noindex` | When `true`, marks the page `noindex` and excludes it from `sitemap.xml` |
+| `timestamp` | Overrides site-wide [`metadata.timestamp`](/docs/seo#last-modified-timestamps) — `true` shows last-updated, `false` hides it |
 
-## MDX support
+## Markdown and MDX
 
-You can use standard Markdown plus React components directly in content:
+Pages support standard Markdown, GFM (tables, task lists, strikethrough), and
+React components inline:
 
 ```mdx
 <Note>
@@ -39,36 +39,40 @@ You can use standard Markdown plus React components directly in content:
 </Note>
 ```
 
-## Available component surface in MDX
+See [Text](/docs/text), [Lists](/docs/lists), [Images](/docs/images), and
+[Code blocks](/docs/code-blocks) for Markdown details.
 
-Shiso injects its built-in docs components into every page, so you can use them
-without imports: `Tabs`, `Callout`, `Note`, `Card`, `Steps`, `CodeGroup`,
-`ResponseField`, and more. See the Components tab for the full list.
+## Built-in components
+
+Shiso injects docs components into every page — no imports required:
+`Tabs`, `Callout`, `Note`, `Card`, `Steps`, `CodeGroup`, `ResponseField`,
+and more. Browse the full set under [Components](/docs/components).
 
 ## Icons
 
 Components with an `icon` prop (and `icon` fields in `docs.json`) take names
-from the [lucide](https://lucide.dev/icons) icon set:
+from the [lucide](https://lucide.dev/icons) set:
 
 ```mdx
 <Card title="Quickstart" icon="rocket" />
 ```
 
-Icon names are collected from your content at build time, so an icon resolves
-as soon as it appears in a source file — no imports or registration needed.
+Names are collected from your content at build time, so an icon resolves as
+soon as it appears in a source file.
 
 ## Heading anchors and right rail
 
-Heading IDs are generated and used for:
+Heading IDs are generated for:
 
-- anchor links
-- right-side "On this page" navigation
+- in-page anchor links (`#` permalink on each heading)
+- the right-side "On this page" outline
 
-Use meaningful heading text so anchors are readable.
+Use clear heading text so anchors stay readable and stable.
 
-## File organization conventions
+## File organization
 
-- keep one concept per page
-- use nested folders for nested routes (`components/tabs.mdx` -> `/docs/components/tabs`)
-- prefer stable file slugs, and add a [redirect](/docs/seo#redirects) when a
-  page has to move
+- one concept per page
+- nested folders become nested routes
+  (`components/tabs.mdx` → `/docs/components/tabs`)
+- keep slugs stable; when a page must move, add a
+  [redirect](/docs/seo#redirects)

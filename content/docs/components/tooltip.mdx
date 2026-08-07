@@ -1,13 +1,15 @@
 ---
 title: Tooltip
+description: Short hover and keyboard-focus hints.
 ---
 
-Use `Tooltip` to provide short inline hints.
+Use `Tooltip` for brief definitions or clarifications without leaving the
+sentence.
 
-## Supported props
+## Props
 
-- `tip?: ReactNode`
-- `children?: ReactNode`
+- `tip?: ReactNode` — the hint text
+- `children?: ReactNode` — the trigger content
 
 ## Basic usage
 
@@ -19,6 +21,6 @@ The value of <Tooltip tip="Used to identify the current API key">API key</Toolti
 
 ## Behavior notes
 
-- the tip appears on hover and on keyboard focus
-- the trigger is focusable and linked to the tip with `aria-describedby`
-- keep tips short; they are not a place for links or block content
+- the tip appears on hover and keyboard focus
+- the trigger is focusable and linked with `aria-describedby`
+- keep tips short — no links or block content

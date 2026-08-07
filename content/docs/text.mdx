@@ -1,14 +1,17 @@
 ---
 title: Text
+description: Headings, emphasis, links, blockquotes, and tables.
 ---
+
+Standard Markdown and GitHub-flavored Markdown (GFM) work in every docs page.
 
 ## Headings
 
-Use `#` levels to structure your page and generate anchor navigation.
+Heading levels structure the page and feed the right-rail "On this page"
+navigation. Prefer starting body content at `##` — the page title already comes
+from frontmatter.
 
-```text
-# Title
-
+```markdown
 ## Section
 
 ### Subsection
@@ -16,48 +19,54 @@ Use `#` levels to structure your page and generate anchor navigation.
 
 ## Emphasis
 
-Use standard Markdown emphasis:
-
 ```markdown
-Use **bold** for strong emphasis.
+**bold**, _italic_, and ~~strikethrough~~
 ```
 
-```markdown
-Use _italic_ for light emphasis.
-```
-
-```markdown
-Use ~~strikethrough~~ when something is outdated.
-```
+**bold**, _italic_, and ~~strikethrough~~
 
 ## Links
 
 ```markdown
-[Link text](/docs/configuration)
+[Configuration](/docs/configuration)
 ```
 
-[Link text](/docs/configuration)
+[Configuration](/docs/configuration)
+
+External links open in a new tab when written as normal Markdown URLs.
 
 ## Blockquotes
 
 ```markdown
-> This is a blockquote.
+> Useful for short pull-quotes or callouts you do not want as a component.
 ```
 
-> This is a blockquote.
+> Useful for short pull-quotes or callouts you do not want as a component.
+
+For colored callouts with icons, prefer
+[Callout](/docs/components/callout) components instead.
 
 ## Tables
 
-GitHub-flavored markdown tables are supported:
+GFM tables are supported:
 
 ```markdown
-| Name | Type |
-| ---- | ---- |
+| Name | Type   |
+| ---- | ------ |
 | id   | string |
 | age  | number |
 ```
 
-| Name | Type |
-| ---- | ---- |
+| Name | Type   |
+| ---- | ------ |
 | id   | string |
 | age  | number |
+
+## Horizontal rules
+
+```markdown
+---
+```
+
+Three or more hyphens on their own line render a rule. Avoid putting them at
+the very top of the file — that is frontmatter territory.

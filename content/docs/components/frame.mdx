@@ -1,22 +1,36 @@
 ---
 title: Frame
+description: Border and caption for screenshots or other media.
 ---
 
-Use `Frame` to visually contain custom content with an optional caption.
+Use `Frame` to visually contain media or custom content with an optional
+caption.
 
-## Supported props
+## Props
 
 - `caption?: ReactNode`
 - `children?: ReactNode`
 
 ## Basic usage
 
+```mdx
+<Frame caption="Docs layout preview">
+  ![Sample](/images/sample.jpg)
+</Frame>
+```
+
+<Frame caption="Docs layout preview">
+  ![Sample](/images/sample.jpg)
+</Frame>
+
+## With code or other children
+
 ```tsx
 <Frame caption="Environment variables in `.env`">
-  <code>NEXT_PUBLIC_API_URL=https://api.example.com</code>
+  <code>VITE_API_URL=https://api.example.com</code>
 </Frame>
 ```
 
 <Frame caption="Environment variables in `.env`">
-  <code>NEXT_PUBLIC_API_URL=https://api.example.com</code>
+  <code>VITE_API_URL=https://api.example.com</code>
 </Frame>

@@ -1,8 +1,9 @@
 ---
 title: Images
+description: Add images from the public folder with Markdown or HTML.
 ---
 
-Use standard Markdown or HTML image tags in MDX.
+Put image assets under `public/` and reference them with absolute site paths.
 
 ## Markdown syntax
 
@@ -12,21 +13,41 @@ Use standard Markdown or HTML image tags in MDX.
 
 ![Sample image](/images/sample.jpg)
 
+Always include meaningful alt text.
+
 ## HTML syntax
 
+Use an `<img>` tag when you need explicit dimensions or other attributes:
+
 ```html
-<img src="/images/sample.jpg" width="640" />
+<img src="/images/sample.jpg" width="640" alt="Sample image" />
 ```
 
-<img src="/images/sample.jpg" width="640" />
+<img src="/images/sample.jpg" width="640" alt="Sample image" />
 
-## Where image assets should live
+## Where assets live
 
-- place assets under `public/`
-- reference them as absolute site paths (`/images/sample.jpg`)
+| File on disk | URL in content |
+| --- | --- |
+| `public/images/sample.jpg` | `/images/sample.jpg` |
+| `public/logo.svg` | `/logo.svg` |
+
+Paths are served as-is from the static build output — no image pipeline or
+optimization step runs at build time.
+
+## Framed screenshots
+
+Wrap media in [Frame](/docs/components/frame) when you want a border and
+caption:
+
+```mdx
+<Frame caption="The default docs layout">
+  ![Docs layout](/images/sample.jpg)
+</Frame>
+```
 
 ## Tips
 
-- always include meaningful alt text in Markdown syntax
-- avoid very large images for docs readability and load performance
-- use explicit width/height on `<img>` when layout stability matters
+- keep screenshots reasonably sized for docs readability
+- prefer SVG for logos and simple diagrams
+- set width/height on large images when layout shift matters

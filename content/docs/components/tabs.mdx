@@ -1,19 +1,21 @@
 ---
 title: Tabs
+description: Switch between alternate content panes, with optional persistence.
 ---
 
-Use `Tabs` and `Tab` to show alternate content in the same space.
+Use `Tabs` and `Tab` when readers should choose among alternatives in the same
+space — languages, platforms, or product modes.
 
-## Supported props
+## Props
 
 ### `Tabs`
 
-- `group?: string`
-- `children?: ReactNode`
+- `group?: string` — share selection across tab sets via `localStorage`
+- `children?: ReactNode` — one or more `Tab` children
 
 ### `Tab`
 
-- `title?: ReactNode`
+- `title?: ReactNode` — tab label (falls back to `Tab 1`, `Tab 2`, …)
 - `children?: ReactNode`
 
 ## Basic usage
@@ -21,35 +23,36 @@ Use `Tabs` and `Tab` to show alternate content in the same space.
 ```tsx
 <Tabs>
   <Tab title="JavaScript">
-    <p>Install with npm.</p>
+    Install with npm.
   </Tab>
   <Tab title="Python">
-    <p>Install with pip.</p>
+    Install with pip.
   </Tab>
 </Tabs>
 ```
 
 <Tabs>
   <Tab title="JavaScript">
-    <p>Install with npm.</p>
+    Install with npm.
   </Tab>
   <Tab title="Python">
-    <p>Install with pip.</p>
+    Install with pip.
   </Tab>
 </Tabs>
 
 ## Persist selection with `group`
 
-Tabs with the same `group` share selection via local storage.
+Tabs that share a `group` id restore the last selected tab from
+`localStorage` under `shiso-tabs:<group>`.
 
 ```tsx
 <Tabs group="language">
-  <Tab title="Node">...</Tab>
-  <Tab title="Go">...</Tab>
+  <Tab title="Node">Node instructions…</Tab>
+  <Tab title="Go">Go instructions…</Tab>
 </Tabs>
 ```
 
 ## Behavior notes
 
-- tab selection is stored under `localStorage` key `shiso-tabs:<group>`
-- one tab child renders as plain content (no tab UI)
+- a single `Tab` child renders as plain content with no tab chrome
+- for tabbed **code** only, prefer [Code Group](/docs/components/code-group)

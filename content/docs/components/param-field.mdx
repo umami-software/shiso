@@ -1,18 +1,17 @@
 ---
 title: Param Field
+description: Document request parameters with location and type badges.
 ---
 
-Use `ParamField` and `Param` to describe request parameters.
+Use `ParamField` for query, path, header, or body parameters, and `Param` for
+inline parameter names.
 
-## Supported props
+## Props
 
 ### `ParamField`
 
 - `name?: string`
-- `query?: string`
-- `path?: string`
-- `header?: string`
-- `body?: string`
+- `query?: string` / `path?: string` / `header?: string` / `body?: string`
 - `type?: string`
 - `required?: boolean`
 - `children?: ReactNode`
@@ -33,15 +32,38 @@ Use `ParamField` and `Param` to describe request parameters.
   Maximum number of records to return.
 </ParamField>
 
+## Location variants
+
+```tsx
+<ParamField path="userId" type="string" required>
+  User id in the URL path.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token.
+</ParamField>
+```
+
+<ParamField path="userId" type="string" required>
+  User id in the URL path.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token.
+</ParamField>
+
 ## Inline parameter names
 
-Use `Param` inline when referencing parameter names in text.
+```tsx
+Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+```
 
-<Note>
-  Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
-</Note>
+Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
 
 ## Behavior notes
 
-- parameter location badge is inferred from `query`, `path`, `header`, or `body`
-- if multiple location props are set, precedence is `query` -> `path` -> `header` -> `body`
+- the location badge is inferred from `query`, `path`, `header`, or `body`
+- if several location props are set, precedence is
+  `query` → `path` → `header` → `body`
+- the display label is `name`, or the first location prop value when `name` is
+  omitted

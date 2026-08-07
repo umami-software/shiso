@@ -1,10 +1,12 @@
 ---
 title: Columns
+description: Place any content side by side in a responsive grid.
 ---
 
-Use `Columns` to place any content side by side in a responsive grid.
+Use `Columns` and `Column` for multi-column layouts that are not pure card
+grids.
 
-## Supported props
+## Props
 
 ### `Columns`
 
@@ -17,16 +19,18 @@ Use `Columns` to place any content side by side in a responsive grid.
 
 ## Basic usage
 
-````tsx
+````mdx
 <Columns cols={2}>
   <Column>
     **Install**
+
     ```bash
     pnpm install
     ```
   </Column>
   <Column>
     **Run**
+
     ```bash
     pnpm dev
     ```
@@ -37,12 +41,14 @@ Use `Columns` to place any content side by side in a responsive grid.
 <Columns cols={2}>
   <Column>
     **Install**
+
     ```bash
     pnpm install
     ```
   </Column>
   <Column>
     **Run**
+
     ```bash
     pnpm dev
     ```
@@ -51,7 +57,13 @@ Use `Columns` to place any content side by side in a responsive grid.
 
 ## With cards
 
-`Columns` also works as a layout wrapper for cards.
+```tsx
+<Columns cols={3}>
+  <Card title="Install" icon="rocket" href="/docs/installation" />
+  <Card title="Configure" icon="settings" href="/docs/configuration" />
+  <Card title="Write" icon="book-open" href="/docs/writing-content" />
+</Columns>
+```
 
 <Columns cols={3}>
   <Card title="Install" icon="rocket" href="/docs/installation" />
@@ -63,4 +75,4 @@ Use `Columns` to place any content side by side in a responsive grid.
 
 - columns collapse to a single column below 768px
 - `cols` is clamped to the range 1–4
-- `CardGroup` uses the same grid, so prefer it when every child is a `Card`
+- prefer [CardGroup](/docs/components/card) when every child is a `Card`

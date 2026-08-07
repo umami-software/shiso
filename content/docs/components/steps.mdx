@@ -1,18 +1,19 @@
 ---
 title: Steps
+description: Numbered walkthroughs for procedures and setup guides.
 ---
 
-Use `Steps` and `Step` for ordered walkthroughs.
+Use `Steps` and `Step` for ordered how-tos.
 
-## Supported props
+## Props
 
 ### `Steps`
 
-- `children?: ReactNode`
+- `children?: ReactNode` — one or more `Step` children
 
 ### `Step`
 
-- `title?: ReactNode`
+- `title?: ReactNode` — falls back to `Step 1`, `Step 2`, …
 - `children?: ReactNode`
 
 ## Basic usage
@@ -33,4 +34,5 @@ Use `Steps` and `Step` for ordered walkthroughs.
 
 ## Behavior notes
 
-- if no `title` is provided, fallback titles are `Step 1`, `Step 2`, ...
+- step numbers are assigned automatically in document order
+- empty groups render nothing

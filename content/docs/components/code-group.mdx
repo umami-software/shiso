@@ -1,19 +1,25 @@
 ---
 title: Code Group
+description: Tabbed code snippets for package managers, languages, and variants.
 ---
 
-Use `CodeGroup` to render multiple code snippets behind tabs.
+Use `CodeGroup` to show multiple related fenced blocks behind tabs.
 
-## Supported props
+## Props
 
-- `children?: ReactNode`
+- `children?: ReactNode` — fenced code blocks (or other tabbable content)
 
-Each child code block can optionally define a `title` prop. If omitted, Shiso attempts to infer a label
-from `language-*` class names.
+Each child can set a label with:
+
+- a second token after the language fence (`` ```bash pnpm ``)
+- or a `title` prop when the child is an element
+
+If no label is found, Shiso infers one from the language class and suffixes
+duplicates (`bash`, `bash 2`, …).
 
 ## Basic usage
 
-````tsx
+````mdx
 <CodeGroup>
   ```bash npm
   npm install
@@ -37,5 +43,5 @@ from `language-*` class names.
 
 ## Behavior notes
 
-- one child renders as plain content (no tabs)
-- duplicate labels are auto-suffixed (`bash`, `bash 2`, ...)
+- one child renders as plain content with no tab chrome
+- for non-code alternate content, use [Tabs](/docs/components/tabs)

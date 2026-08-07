@@ -1,42 +1,86 @@
 ---
 title: Components
+description: Built-in MDX components available on every docs page without imports.
 ---
 
-This section covers the built-in MDX components you can use in pages.
+Shiso injects its docs components into the MDX scope, so you can use them
+directly in any page under `content/docs`.
 
-## Groups
+## Content structure
 
-### Content structure
+<CardGroup cols={2}>
+  <Card title="Accordion" href="/docs/components/accordion" icon="chevrons-up-down">
+    Expandable FAQ-style sections.
+  </Card>
+  <Card title="Expandable" href="/docs/components/expandable" icon="chevron-down">
+    A single collapsible block.
+  </Card>
+  <Card title="Tabs" href="/docs/components/tabs" icon="app-window">
+    Switch between alternate content panes.
+  </Card>
+  <Card title="Steps" href="/docs/components/steps" icon="list-ordered">
+    Numbered walkthroughs.
+  </Card>
+</CardGroup>
 
-- [Accordion](/docs/components/accordion)
-- [Expandable](/docs/components/expandable)
-- [Tabs](/docs/components/tabs)
-- [Steps](/docs/components/steps)
+## Callouts and labels
 
-### Callouts and hints
+<CardGroup cols={2}>
+  <Card title="Callout" href="/docs/components/callout" icon="message-square-warning">
+    Note, Tip, Warning, Info, Check, Danger.
+  </Card>
+  <Card title="Tooltip" href="/docs/components/tooltip" icon="message-circle">
+    Short hover/focus hints.
+  </Card>
+  <Card title="Badge" href="/docs/components/badge" icon="tag">
+    Inline status or version labels.
+  </Card>
+  <Card title="Frame" href="/docs/components/frame" icon="image">
+    Bordered media with an optional caption.
+  </Card>
+</CardGroup>
 
-- [Callout](/docs/components/callout)
-- [Tooltip](/docs/components/tooltip)
-- [Badge](/docs/components/badge)
-- [Frame](/docs/components/frame)
+## Layout
 
-### API/reference helpers
+<CardGroup cols={2}>
+  <Card title="Card" href="/docs/components/card" icon="layout-grid">
+    Linked or static summary cards.
+  </Card>
+  <Card title="Columns" href="/docs/components/columns" icon="columns-2">
+    Side-by-side content grids.
+  </Card>
+  <Card title="Code Group" href="/docs/components/code-group" icon="code">
+    Tabbed code snippets.
+  </Card>
+  <Card title="Icon" href="/docs/components/icon" icon="sparkles">
+    Lucide icons by name.
+  </Card>
+</CardGroup>
 
-- [Param Field](/docs/components/param-field)
-- [Response Field](/docs/components/response-field)
-- [Examples](/docs/components/examples)
+## API and reference
 
-### Layout helpers
+<CardGroup cols={2}>
+  <Card title="Param Field" href="/docs/components/param-field" icon="brackets">
+    Request parameters with location badges.
+  </Card>
+  <Card title="Response Field" href="/docs/components/response-field" icon="brackets">
+    Object properties and schema fields.
+  </Card>
+  <Card title="Examples" href="/docs/components/examples" icon="file-json">
+    Request and response payload blocks.
+  </Card>
+</CardGroup>
 
-- [Card](/docs/components/card)
-- [Columns](/docs/components/columns)
-- [Code Group](/docs/components/code-group)
+## Full component list
 
-### Visual
+These names are available in MDX with no import:
 
-- [Icon](/docs/components/icon)
+`Accordion`, `AccordionGroup`, `Badge`, `Callout`, `Note`, `Tip`, `Warning`,
+`Info`, `Check`, `Danger`, `Card`, `CardGroup`, `CodeGroup`, `Columns`,
+`Column`, `Expandable`, `Frame`, `Icon`, `ParamField`, `Param`,
+`RequestExample`, `ResponseExample`, `ResponseField`, `Steps`, `Step`,
+`Tabs`, `Tab`, `Tooltip`
 
-## Notes
-
-- These components are available automatically in MDX content.
-- Use these pages for props and examples.
+Icon names on `icon` props come from the
+[lucide](https://lucide.dev/icons) set and are collected from your content at
+build time.

@@ -1,10 +1,12 @@
 ---
 title: Response Field
+description: Document object properties and schema fields.
 ---
 
-Use `ResponseField` to document object properties and schema fields.
+Use `ResponseField` for response body fields, object properties, and similar
+schema documentation.
 
-## Supported props
+## Props
 
 - `name: string`
 - `type?: string | number | boolean | null`
@@ -26,10 +28,17 @@ Use `ResponseField` to document object properties and schema fields.
 
 ## Optional and deprecated fields
 
+```tsx
 <ResponseField name="legacyField" type="number" deprecated>
-  This field is deprecated and will be removed in a future release.
+  Removed in a future release.
+</ResponseField>
+```
+
+<ResponseField name="legacyField" type="number" deprecated>
+  Removed in a future release.
 </ResponseField>
 
 ## Behavior notes
 
 - HTML entities in string `type` values are decoded before rendering
+- nest `ResponseField` under headings to document nested objects

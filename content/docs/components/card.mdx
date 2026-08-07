@@ -1,20 +1,21 @@
 ---
 title: Card
+description: Linked or static summary cards, alone or in a grid.
 ---
 
-Use `Card` and `CardGroup` to present grouped links or summaries.
+Use `Card` and `CardGroup` for scannable links or feature summaries.
 
-## Supported props
+## Props
 
 ### `Card`
 
 - `title?: ReactNode`
 - `href?: string`
-- `icon?: ReactNode | string` (an icon name such as `"rocket"`)
-- `img?: string` (image shown above the card content)
-- `cta?: string` (label shown next to the arrow)
-- `horizontal?: boolean` (lays the icon, title, and body out in a row)
-- `arrow?: boolean` (defaults to `true` when `href` exists)
+- `icon?: ReactNode | string` — lucide name or element
+- `img?: string` — image shown above the body
+- `cta?: string` — label shown next to the arrow
+- `horizontal?: boolean` — icon, title, and body in a row
+- `arrow?: boolean` — defaults to `true` when `href` is set
 - `children?: ReactNode`
 
 ### `CardGroup`
@@ -36,6 +37,17 @@ Use `Card` and `CardGroup` to present grouped links or summaries.
 
 ## Card group
 
+```tsx
+<CardGroup cols={2}>
+  <Card title="Getting Started" icon="rocket" href="/docs/installation">
+    Install and configure Shiso.
+  </Card>
+  <Card title="Components" icon="book-open" href="/docs/components">
+    Browse all docs components.
+  </Card>
+</CardGroup>
+```
+
 <CardGroup cols={2}>
   <Card title="Getting Started" icon="rocket" href="/docs/installation">
     Install and configure Shiso.
@@ -55,6 +67,6 @@ Use `Card` and `CardGroup` to present grouped links or summaries.
 
 ## Behavior notes
 
-- cards with `href` render as links
-- cards without `href` render as static containers
+- cards with `href` render as links; without it they are static containers
 - external `href` values open in a new tab
+- for mixed content side by side, use [Columns](/docs/components/columns)

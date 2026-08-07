@@ -1,13 +1,15 @@
 ---
 title: Expandable
+description: A single collapsible section.
 ---
 
-Use `Expandable` for collapsible sections.
+Use `Expandable` for one optional block of content. For a list of related
+items, prefer [Accordion](/docs/components/accordion).
 
-## Supported props
+## Props
 
 - `title: ReactNode`
-- `defaultOpen?: boolean`
+- `defaultOpen?: boolean` (defaults to `false`)
 - `children?: ReactNode`
 
 ## Basic usage
@@ -28,12 +30,13 @@ Use `Expandable` for collapsible sections.
 <Expandable title="Open section" defaultOpen>
   This section starts expanded.
 </Expandable>
-
-## Behavior notes
-
-- each `Expandable` is rendered as a single-item accordion
 ```
 
 <Expandable title="Open section" defaultOpen>
   This section starts expanded.
 </Expandable>
+
+## Behavior notes
+
+- rendered as a single `<details>` element
+- does not coordinate open state with siblings

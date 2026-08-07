@@ -1,44 +1,63 @@
 ---
 title: Accordion
+description: Expandable FAQ-style sections, alone or in a group.
 ---
 
-Use `AccordionGroup` and `Accordion` for expandable FAQ-style sections.
+Use `Accordion` for a single expandable block, or wrap several in
+`AccordionGroup`.
 
-## Supported props
-
-### `AccordionGroup`
-
-- `defaultOpen?: boolean` - opens the first item initially when `true`
-- `children?: ReactNode`
+## Props
 
 ### `Accordion`
 
-- `title?: ReactNode` - item header text/node
-- `children?: ReactNode` - item content
+- `title?: ReactNode` — summary label
+- `icon?: ReactNode | string` — lucide name or element shown before the title
+- `defaultOpen?: boolean` — start expanded
+- `children?: ReactNode`
+
+### `AccordionGroup`
+
+- `defaultOpen?: boolean` — when `true`, opens the first child that does not
+  set its own `defaultOpen`
+- `children?: ReactNode` — one or more `Accordion` items
 
 ## Basic usage
 
 ```tsx
 <AccordionGroup defaultOpen>
   <Accordion title="What is Shiso?">
-    Documentation tooling powered by Vite, React, and MDX.
+    A docs site generator powered by Vite, React, and MDX.
   </Accordion>
   <Accordion title="What does it support?">
-    Docs navigation, metadata, and custom MDX components.
+    Navigation, branding, SEO, and built-in MDX components.
   </Accordion>
 </AccordionGroup>
 ```
 
 <AccordionGroup defaultOpen>
   <Accordion title="What is Shiso?">
-    Documentation tooling powered by Vite, React, and MDX.
+    A docs site generator powered by Vite, React, and MDX.
   </Accordion>
   <Accordion title="What does it support?">
-    Docs navigation, metadata, and custom MDX components.
+    Navigation, branding, SEO, and built-in MDX components.
   </Accordion>
 </AccordionGroup>
 
+## With icons
+
+```tsx
+<Accordion title="Deploy" icon="rocket">
+  Run `pnpm build` and publish `dist/client`.
+</Accordion>
+```
+
+<Accordion title="Deploy" icon="rocket">
+  Run `pnpm build` and publish `dist/client`.
+</Accordion>
+
 ## Behavior notes
 
-- empty groups render `null`
-- fallback titles are generated as `Section 1`, `Section 2`, ...
+- each item is a native `<details>` element
+- empty groups render nothing
+- for a single collapsible without group styling, use
+  [Expandable](/docs/components/expandable)

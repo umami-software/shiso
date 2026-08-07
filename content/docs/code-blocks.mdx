@@ -1,26 +1,24 @@
 ---
 title: Code blocks
+description: Inline code, fenced blocks, syntax highlighting, and tabbed snippets.
 ---
 
-## Inline Code
+## Inline code
 
-Use backticks for inline code.
+Use single backticks for short identifiers and commands:
 
-```text
-Use `inline code` in normal text.
+```markdown
+Use `docs.json` for site configuration.
 ```
+
+Use `docs.json` for site configuration.
 
 ## Fenced code blocks
 
-Use triple backticks and include a language for syntax highlighting:
+Use triple backticks and a language tag for syntax highlighting. Every block
+gets a copy button automatically.
 
-```javascript
-function hello(name) {
-  console.log('Hello', name);
-}
-```
-
-````text
+````markdown
 ```javascript
 function hello(name) {
   console.log('Hello', name);
@@ -28,18 +26,26 @@ function hello(name) {
 ```
 ````
 
-## Highlighting behavior
+```javascript
+function hello(name) {
+  console.log('Hello', name);
+}
+```
 
-This app uses:
+Common language tags: `bash`, `json`, `javascript`, `typescript`, `tsx`,
+`python`, `yaml`, `md`, `mdx`, `text`.
 
-- `rehype-highlight` for tokenized code output
-- a Highlight.js stylesheet imported in `src/app/layout.tsx`
+## How highlighting works
 
-Code colors come from the imported Highlight.js theme.
+- `rehype-highlight` tokenizes fenced blocks at build time
+- Highlight.js's `github-dark` theme ships with the app (`src/App.tsx`)
+- fenced `<pre>` elements are rendered by Shiso's `CodeBlock` component, which
+  adds the copy control
 
 ## Code groups
 
-Use `CodeGroup` when you want tabbed snippets:
+Use `CodeGroup` when readers should switch between related snippets (for
+example package managers or languages):
 
 ````mdx
 <CodeGroup>
@@ -53,9 +59,23 @@ Use `CodeGroup` when you want tabbed snippets:
 </CodeGroup>
 ````
 
-## Live component snippets
+<CodeGroup>
+  ```bash npm
+  npm install
+  ```
 
-MDX lets you render React components directly inside your content:
+  ```bash pnpm
+  pnpm install
+  ```
+</CodeGroup>
+
+An optional label after the language tag (or a `title` prop on the child)
+becomes the tab name. See [Code Group](/docs/components/code-group) for
+details.
+
+## Live MDX components
+
+MDX lets you render docs components inside a page — including next to code:
 
 ```jsx
 <Card title="Live example">This card is rendered from MDX.</Card>

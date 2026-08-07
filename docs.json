@@ -42,38 +42,51 @@
               "customization",
               "navbar-and-footer",
               { "page": "seo", "title": "SEO and redirects" },
-              "search-and-ai",
+              { "page": "search-and-ai", "title": "Search and AI" },
               "troubleshooting"
             ]
           },
           {
             "group": "Writing content",
-            "pages": ["writing-content", "text", "images", "lists", "code-blocks"]
+            "pages": [
+              "writing-content",
+              "text",
+              "images",
+              "lists",
+              "code-blocks",
+              {
+                "group": "Components",
+                "root": "components/index",
+                "pages": [
+                  "components/accordion",
+                  "components/badge",
+                  "components/callout",
+                  "components/card",
+                  "components/code-group",
+                  "components/columns",
+                  "components/examples",
+                  "components/expandable",
+                  "components/frame",
+                  "components/icon",
+                  "components/param-field",
+                  "components/response-field",
+                  "components/steps",
+                  "components/tabs",
+                  "components/tooltip"
+                ]
+              }
+            ]
           }
         ]
       },
       {
-        "tab": "Components",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "Components",
+            "group": "Guides",
             "pages": [
-              "components/index",
-              "components/accordion",
-              "components/badge",
-              "components/callout",
-              "components/card",
-              "components/code-group",
-              "components/columns",
-              "components/examples",
-              "components/expandable",
-              "components/frame",
-              "components/icon",
-              "components/param-field",
-              "components/response-field",
-              "components/steps",
-              "components/tabs",
-              "components/tooltip"
+              "guides/deployment",
+              { "page": "guides/migrating", "title": "Migrating from Mintlify" }
             ]
           }
         ]

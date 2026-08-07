@@ -1,13 +1,15 @@
 ---
 title: Icon
+description: Render lucide icons by name, or pass names to other components.
 ---
 
-Use `Icon` to render an icon inline, or pass an icon name to any component that accepts an `icon` prop.
+Use `Icon` for inline icons, or pass the same names to any component that
+accepts an `icon` prop.
 
-## Supported props
+## Props
 
-- `icon?: string` (a [lucide](https://lucide.dev/icons) icon name)
-- `src?: string` (image path or URL, used instead of `icon`)
+- `icon?: string` — a [lucide](https://lucide.dev/icons) icon name
+- `src?: string` — image path or URL (used instead of `icon`)
 - `color?: string`
 - `size?: number` (defaults to `16`)
 - `className?: string`
@@ -30,7 +32,7 @@ Deploy your site <Icon icon="rocket" /> in one command.
 
 ## Icon names on other components
 
-`Card`, `Callout`, and `Accordion` accept the same names on their `icon` prop.
+`Card`, `Callout`, and `Accordion` accept the same names on their `icon` prop:
 
 ```tsx
 <Card title="Quickstart" icon="rocket" href="/docs/installation">
@@ -44,6 +46,8 @@ Deploy your site <Icon icon="rocket" /> in one command.
 
 ## Behavior notes
 
-- names are case-insensitive and accept `circle-check`, `circle_check`, or `CircleCheck`
-- icon names are collected from your content at build time, so only names that appear in a source file are bundled
+- names are case-insensitive and accept `circle-check`, `circle_check`, or
+  `CircleCheck`
+- icon names are collected from content and `docs.json` at build time into
+  `src/lib/icon-registry.generated.ts`
 - an unrecognized name renders nothing and logs a warning in development
