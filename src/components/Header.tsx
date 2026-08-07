@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { Search } from '@/components/Search';
 import { SocialIcon } from '@/components/SocialIcon';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { getIcon } from '@/lib/icons';
@@ -47,6 +48,7 @@ export function Header() {
         </Link>
       </div>
       <div className={styles.right}>
+        <Search />
         {navbar?.links?.map(link => (
           <a
             key={link.href}

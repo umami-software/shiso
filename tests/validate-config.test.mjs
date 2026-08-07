@@ -60,7 +60,7 @@ describe('schema coverage', () => {
 describe('reserved keys', () => {
   it('accepts them and reports one notice each', () => {
     const result = validateConfig(
-      { ...minimal, thumbnails: {}, integrations: {}, contextual: {} },
+      { ...minimal, thumbnails: {}, integrations: {}, api: {} },
       schema,
     );
 
@@ -71,6 +71,47 @@ describe('reserved keys', () => {
 
   it('reports nothing for a config that uses only supported keys', () => {
     expect(validateConfig(minimal, schema).notices).toEqual([]);
+  });
+});
+
+describe('search, interaction, and contextual', () => {
+  it('accepts a full configuration', () => {
+    const result = validateConfig(
+      {
+        ...minimal,
+        search: { prompt: 'Search the docs...' },
+        interaction: { drilldown: false },
+        contextual: {
+          options: [
+            'copy',
+            'view',
+            'chatgpt',
+            'claude',
+            'mcp',
+            {
+              title: 'Ask our bot',
+              description: 'Send this page to the support bot',
+              href: 'https://example.com/ask?page=$path',
+            },
+          ],
+        },
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+  });
+
+  it('rejects an unknown contextual option', () => {
+    expect(validateConfig({ ...minimal, contextual: { options: ['bogus'] } }, schema).valid).toBe(
+      false,
+    );
+  });
+
+  it('rejects a custom contextual option without href', () => {
+    expect(
+      validateConfig({ ...minimal, contextual: { options: [{ title: 'X' }] } }, schema).valid,
+    ).toBe(false);
   });
 });
 

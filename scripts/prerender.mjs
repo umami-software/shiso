@@ -34,7 +34,7 @@ if (!template.includes('<!--app-html-->')) {
 const docsJson = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
 const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
 
-const { render, getRoutes, getRedirects, getSitemapEntries } = await import(
+const { render, getRoutes, getRedirects, getSitemapEntries, getMarkdownPages } = await import(
   pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href
 );
 
@@ -95,6 +95,16 @@ if (docsPrefix) {
       '',
     ),
   );
+}
+
+// Raw markdown next to every page: "/docs/installation" -> "docs/installation.md".
+// Served for the contextual menu's copy/view options and for AI tools.
+const markdownPages = getMarkdownPages();
+
+for (const { route, filePath } of markdownPages) {
+  const source = await readFile(path.join(root, ...filePath.split('/').filter(Boolean)), 'utf8');
+  const relative = withBase(route).replace(/^\//, '') || 'index';
+  await writePage(path.join(clientDir, `${relative}.md`), source);
 }
 
 // Redirect pages. Static hosting cannot serve real 301s, so each redirect

@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { ContextualMenu } from '@/components/ContextualMenu';
 import { ChevronRight } from '@/components/icons';
 import { getLastModified } from '@/lib/content';
 import { getPrevNext, getStyling, showTimestamp } from '@/lib/site-config';
@@ -30,7 +31,10 @@ export function DocContent({ page, doc }: DocContentProps) {
   return (
     <article className={styles.content}>
       {eyebrow && <div className={styles.section}>{eyebrow}</div>}
-      {title && <h1 className={styles.title}>{title}</h1>}
+      <div className={styles.titleRow}>
+        {title && <h1 className={styles.title}>{title}</h1>}
+        <ContextualMenu page={page} />
+      </div>
       {description && <p className={styles.description}>{description}</p>}
       <div className="docs-markdown">
         <Content />

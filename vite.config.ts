@@ -4,6 +4,7 @@ import docsConfig from './docs.json' with { type: 'json' };
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { generateLastModified } from './scripts/generate-last-modified.mjs';
+import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 
 /**
  * Keeps src/lib/icon-registry.generated.ts in sync with the `icon="name"` values
@@ -40,6 +41,24 @@ function shisoLastModified(): Plugin {
     async handleHotUpdate({ file }) {
       if (/\.(md|mdx)$/.test(file)) {
         await generateLastModified();
+      }
+    },
+  };
+}
+
+/**
+ * Keeps src/lib/search-index.generated.ts in sync with content, so the search
+ * dialog can query page text without a server.
+ */
+function shisoSearchIndex(): Plugin {
+  return {
+    name: 'shiso-search-index',
+    async buildStart() {
+      await generateSearchIndex();
+    },
+    async handleHotUpdate({ file }) {
+      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json')) {
+        await generateSearchIndex();
       }
     },
   };
@@ -276,6 +295,7 @@ export default defineConfig({
   plugins: [
     shisoIconRegistry(),
     shisoLastModified(),
+    shisoSearchIndex(),
     shisoHtml(),
     shisoMdx(),
     react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),

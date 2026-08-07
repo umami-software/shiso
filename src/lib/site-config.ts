@@ -4,6 +4,7 @@ import { stripBase, stripDocsPrefix } from '@/lib/paths';
 import type {
   AppearanceConfig,
   BannerConfig,
+  ContextualOption,
   DocsConfig,
   Error404Config,
   FooterConfig,
@@ -157,6 +158,42 @@ export function getStyling(): { eyebrows: 'section' | 'breadcrumbs' } {
   const styling: StylingConfig = siteConfig.styling || {};
 
   return { eyebrows: styling.eyebrows === 'breadcrumbs' ? 'breadcrumbs' : 'section' };
+}
+
+export function getSearchPrompt(): string {
+  return siteConfig.search?.prompt?.trim() || 'Search...';
+}
+
+/** Collapsible-group click behavior. Undefined means "use the default". */
+export function getDrilldown(): boolean | undefined {
+  return siteConfig.interaction?.drilldown;
+}
+
+/**
+ * Contextual menu options the static build can serve. The MCP-based options
+ * (`mcp`, `cursor`, `vscode`) require a hosted MCP server, which Shiso does
+ * not provide; they are reported once and skipped.
+ */
+const UNSUPPORTED_CONTEXTUAL = new Set(['mcp', 'cursor', 'vscode']);
+let warnedContextual = false;
+
+export function getContextualOptions(): ContextualOption[] {
+  const options = siteConfig.contextual?.options || [];
+  const skipped = options.filter(
+    option => typeof option === 'string' && UNSUPPORTED_CONTEXTUAL.has(option),
+  );
+
+  if (skipped.length && !warnedContextual) {
+    warnedContextual = true;
+    console.warn(
+      `[shiso] Contextual options ${skipped.map(option => `"${option}"`).join(', ')} require a ` +
+        'hosted MCP server and are not implemented — they will be skipped.',
+    );
+  }
+
+  return options.filter(
+    option => typeof option !== 'string' || !UNSUPPORTED_CONTEXTUAL.has(option),
+  );
 }
 
 /** True when the last-modified timestamp should show for a page. */

@@ -217,6 +217,46 @@ export interface FontsConfig extends FontSpec {
   body?: FontSpec;
 }
 
+export interface SearchConfig {
+  /** Placeholder text for the search input. */
+  prompt?: string;
+}
+
+export interface InteractionConfig {
+  /**
+   * Collapsible-group click behavior: true navigates to the group's first
+   * page on expand, false only expands/collapses. Unset uses the default
+   * (navigate when the group has a root page, toggle otherwise).
+   */
+  drilldown?: boolean;
+}
+
+/**
+ * A custom contextual menu entry. `href` may contain `$path` (replaced with
+ * the current page path) and `$page` (replaced with the page's markdown URL).
+ */
+export interface ContextualOptionObject {
+  title: string;
+  description?: string;
+  icon?: string;
+  href: string;
+}
+
+export type ContextualOption =
+  | 'copy'
+  | 'view'
+  | 'chatgpt'
+  | 'claude'
+  | 'perplexity'
+  | 'mcp'
+  | 'cursor'
+  | 'vscode'
+  | ContextualOptionObject;
+
+export interface ContextualConfig {
+  options: ContextualOption[];
+}
+
 export interface BackgroundConfig {
   /** Background image, single or per-mode. */
   image?: string | { light?: string; dark?: string };
@@ -247,6 +287,9 @@ export interface DocsConfig {
   styling?: StylingConfig;
   fonts?: FontsConfig;
   background?: BackgroundConfig;
+  search?: SearchConfig;
+  interaction?: InteractionConfig;
+  contextual?: ContextualConfig;
 
   /**
    * Keys that are part of the config standard but not implemented yet. They are
@@ -256,10 +299,7 @@ export interface DocsConfig {
    */
   thumbnails?: unknown;
   icons?: unknown;
-  interaction?: unknown;
-  contextual?: unknown;
   api?: unknown;
-  search?: unknown;
   integrations?: unknown;
 }
 

@@ -212,6 +212,73 @@
         }
       }
     },
+    "interaction": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Navigation interaction settings.",
+      "additionalProperties": false,
+      "properties": {
+        "drilldown": {
+          "type": "boolean",
+          "description": "Collapsible-group click behavior: true navigates to the group's first page on expand, false only expands/collapses. Unset uses the default (headers with a root page navigate, others toggle)."
+        }
+      }
+    },
+    "search": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Search display settings.",
+      "additionalProperties": false,
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "Placeholder text for the search input."
+        }
+      }
+    },
+    "contextual": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Contextual menu shown beside the page title. \"mcp\", \"cursor\", and \"vscode\" require a hosted MCP server and are accepted but skipped.",
+      "required": ["options"],
+      "additionalProperties": false,
+      "properties": {
+        "options": {
+          "type": "array",
+          "description": "Menu entries, in order; the first is the primary button.",
+          "items": {
+            "oneOf": [
+              {
+                "enum": [
+                  "copy",
+                  "view",
+                  "chatgpt",
+                  "claude",
+                  "perplexity",
+                  "mcp",
+                  "cursor",
+                  "vscode"
+                ]
+              },
+              {
+                "type": "object",
+                "required": ["title", "href"],
+                "additionalProperties": false,
+                "properties": {
+                  "title": { "type": "string", "description": "Menu entry title." },
+                  "description": { "type": "string", "description": "Menu entry description." },
+                  "icon": { "type": "string", "description": "Accepted for portability; not rendered yet." },
+                  "href": {
+                    "type": "string",
+                    "description": "Destination URL. \"$path\" expands to the page path, \"$page\" to the page's markdown URL."
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
     "navbar": {
       "x-shiso": "supported",
       "type": "object",
@@ -258,7 +325,6 @@
         }
       }
     },
-    "interaction": { "x-shiso": "reserved", "type": "object" },
     "metadata": {
       "x-shiso": "supported",
       "type": "object",
@@ -372,7 +438,6 @@
         }
       }
     },
-    "contextual": { "x-shiso": "reserved", "type": "object" },
     "api": { "x-shiso": "reserved", "type": "object" },
     "seo": {
       "x-shiso": "supported",
@@ -392,7 +457,6 @@
         }
       }
     },
-    "search": { "x-shiso": "reserved", "type": "object" },
     "integrations": { "x-shiso": "reserved", "type": "object" },
     "errors": {
       "x-shiso": "supported",

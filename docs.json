@@ -22,6 +22,9 @@
   "metadata": {
     "timestamp": true
   },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude"]
+  },
   "navigation": {
     "tabs": [
       {
@@ -39,6 +42,7 @@
               "customization",
               "navbar-and-footer",
               { "page": "seo", "title": "SEO and redirects" },
+              "search-and-ai",
               "troubleshooting"
             ]
           },

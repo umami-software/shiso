@@ -8,6 +8,13 @@
   font-weight: 700;
 }
 
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .title {
   margin: 0.75rem 0;
   font-family: var(--font-heading);

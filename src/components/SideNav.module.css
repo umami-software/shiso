@@ -42,6 +42,44 @@
   color: var(--color-text-strong);
 }
 
+.collapsibleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+}
+
+.collapsibleTitle {
+  width: 100%;
+  text-align: left;
+}
+
+.collapsibleTitle .chevron {
+  margin-left: auto;
+}
+
+.chevronButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+}
+
+.chevronButton:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-text-strong);
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
 .link {
   display: flex;
   align-items: center;

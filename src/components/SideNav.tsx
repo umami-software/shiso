@@ -1,10 +1,11 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router';
+import { type ReactNode, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { resolveIcon } from '@/components/docs-components/utils';
-import { ExternalLink } from '@/components/icons';
-import { isNodeHidden } from '@/lib/docs-config';
-import type { DocsTab, NavNode } from '@/lib/types';
+import { ChevronRight, ExternalLink } from '@/components/icons';
+import { flattenNav, isNodeHidden } from '@/lib/docs-config';
+import { getDrilldown } from '@/lib/site-config';
+import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 import styles from './SideNav.module.css';
 
 export interface SideNavProps {
@@ -13,7 +14,107 @@ export interface SideNavProps {
   isSticky?: boolean;
 }
 
-/** Depth 0 groups get a section heading; deeper groups indent under their parent. */
+/** True when the group's root or any descendant page is the current page. */
+function containsPage(node: NavGroupNode, pathname: string): boolean {
+  if (node.root?.page.url === pathname) {
+    return true;
+  }
+
+  return flattenNav(node.children).some(page => page.url === pathname);
+}
+
+/**
+ * A nested, collapsible group. Expansion starts open when the config says so
+ * or when the current page is inside; navigating into the group reopens it.
+ *
+ * Click behavior follows `interaction.drilldown`:
+ * - true: expanding also navigates to the group's root or first page
+ * - false: the header only expands/collapses
+ * - unset: headers with a root page navigate, others toggle
+ */
+function CollapsibleGroup({
+  node,
+  pathname,
+  depth,
+}: {
+  node: NavGroupNode;
+  pathname: string;
+  depth: number;
+}) {
+  const navigate = useNavigate();
+  const drilldown = getDrilldown();
+  const active = containsPage(node, pathname);
+  const [expanded, setExpanded] = useState(!!node.expanded || active);
+
+  useEffect(() => {
+    if (active) {
+      setExpanded(true);
+    }
+  }, [active]);
+
+  const firstPage = node.root?.page || flattenNav(node.children).find(page => !page.hidden);
+
+  const handleToggle = () => {
+    const next = !expanded;
+    setExpanded(next);
+
+    if (next && drilldown === true && firstPage) {
+      navigate(firstPage.url);
+    }
+  };
+
+  const chevron = (
+    <ChevronRight
+      size={14}
+      className={classNames(styles.chevron, { [styles.chevronOpen]: expanded })}
+    />
+  );
+
+  // Navigating headers keep a separate chevron button so collapse stays reachable.
+  const header =
+    drilldown !== false && node.root ? (
+      <div className={styles.collapsibleHeader}>
+        <Link
+          to={node.root.page.url}
+          className={classNames(styles.sectionTitle, styles.sectionLink, {
+            [styles.selected]: node.root.page.url === pathname,
+          })}
+        >
+          {resolveIcon(node.icon)}
+          {node.label}
+        </Link>
+        <button
+          type="button"
+          className={styles.chevronButton}
+          onClick={handleToggle}
+          aria-expanded={expanded}
+          aria-label={`${expanded ? 'Collapse' : 'Expand'} ${node.label}`}
+        >
+          {chevron}
+        </button>
+      </div>
+    ) : (
+      <button
+        type="button"
+        className={classNames(styles.sectionTitle, styles.collapsibleTitle)}
+        onClick={handleToggle}
+        aria-expanded={expanded}
+      >
+        {resolveIcon(node.icon)}
+        {node.label}
+        {chevron}
+      </button>
+    );
+
+  return (
+    <div className={styles.subsection}>
+      {header}
+      {expanded && <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />}
+    </div>
+  );
+}
+
+/** Depth 0 groups get a static section heading; deeper groups collapse. */
 function NavNodes({
   nodes,
   pathname,
@@ -64,8 +165,20 @@ function NavNodes({
       return;
     }
 
+    if (depth > 0) {
+      rendered.push(
+        <CollapsibleGroup
+          key={`group-${node.label}`}
+          node={node}
+          pathname={pathname}
+          depth={depth}
+        />,
+      );
+      return;
+    }
+
     rendered.push(
-      <div key={`group-${node.label}`} className={depth === 0 ? styles.section : styles.subsection}>
+      <div key={`group-${node.label}`} className={styles.section}>
         {node.root ? (
           <Link
             to={node.root.page.url}

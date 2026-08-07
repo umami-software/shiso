@@ -25,6 +25,16 @@ export function getRoutes(): string[] {
 export { getRedirects };
 
 /**
+ * Source file for every routed page, so the prerenderer can publish raw
+ * markdown next to each HTML page (used by the contextual menu's copy/view
+ * options and by AI tools). `filePath` is a module key like
+ * "/content/docs/index.mdx", resolved against the project root.
+ */
+export function getMarkdownPages(): { route: string; filePath: string }[] {
+  return docsConfig.pages.map(page => ({ route: page.url, filePath: page.filePath }));
+}
+
+/**
  * Absolute URLs for the sitemap, honoring `seo.indexing` and per-page
  * noindex. Empty when `$shiso.siteUrl` is not configured, since a sitemap
  * of relative URLs is invalid.

@@ -1,0 +1,75 @@
+---
+title: Search and AI
+description: Built-in search, markdown export, and the AI contextual menu.
+---
+
+## Search
+
+Every Shiso site ships with client-side search — no service or API key
+required. Open it with the header button or <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd>.
+
+The index is built at compile time from your content: each page is split into
+heading-bounded sections, so results land on the exact section that matched.
+Pages marked `hidden` in navigation stay out of the index.
+
+Customize the input placeholder with `search.prompt`:
+
+```json
+{
+  "search": { "prompt": "Search the docs..." }
+}
+```
+
+## Markdown export
+
+The production build publishes the raw markdown of every page next to its HTML:
+
+```text
+/docs/installation      the rendered page
+/docs/installation.md   the markdown source
+```
+
+This powers the contextual menu below and gives AI tools a clean,
+token-efficient version of every page.
+
+## Contextual menu
+
+The `contextual` key adds a menu beside the page title for AI-optimized
+actions. The first option is the primary button; the rest go in a dropdown.
+
+```json
+{
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "perplexity"]
+  }
+}
+```
+
+- `copy`: copy the page as Markdown to the clipboard
+- `view`: open the page's markdown source in a new tab
+- `chatgpt`, `claude`, `perplexity`: open the assistant with a prompt pointing
+  at the page's markdown URL (requires `$shiso.siteUrl`)
+
+The MCP-based options from the standard (`mcp`, `cursor`, `vscode`) require a
+hosted MCP server, which Shiso does not provide — they are accepted and
+skipped with a build notice.
+
+### Custom options
+
+Define your own entries as objects. `$path` expands to the page path and
+`$page` to the page's markdown URL:
+
+```json
+{
+  "contextual": {
+    "options": [
+      "copy",
+      {
+        "title": "Ask support",
+        "description": "Send this page to the support bot",
+        "href": "https://example.com/ask?page=$path"
+      }
+    ]
+  }
+}
+```
