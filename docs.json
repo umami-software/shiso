@@ -5,6 +5,23 @@
   },
   "name": "Shiso",
   "description": "Open-source docs site generator built with Vite, React, and MDX.",
+  "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/umami-software/shiso"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/umami-software/shiso",
+      "x": "https://x.com/umami_software"
+    }
+  },
+  "metadata": {
+    "timestamp": true
+  },
   "navigation": {
     "tabs": [
       {

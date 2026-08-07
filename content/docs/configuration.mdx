@@ -33,9 +33,222 @@ For most teams, setup is just naming the docs site and defining page navigation.
 - `name`: your docs/site title
 - `navigation`: the sidebar and top-level sections
 - `theme`: keep `"mint"` unless you have a reason to change it
-- `colors`: `primary` (light mode) and `light` (dark mode) accent colors
+- `colors`: `primary` (light mode) and `light` (dark mode) accent colors;
+  `dark` colors buttons and hover accents in both modes
 - `logo`: a path like `"/logo.svg"`, or `{ "light": "...", "dark": "..." }`
 - `favicon`: a path like `"/favicon.png"`
+
+## Navbar
+
+The `navbar` key adds links and a call-to-action button to the top navigation bar.
+
+```json
+{
+  "navbar": {
+    "links": [
+      { "type": "github", "href": "https://github.com/example/repo" },
+      { "label": "Community", "href": "https://example.com/community", "icon": "users" }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://example.com/start"
+    }
+  }
+}
+```
+
+- `links`: shown to the left of the theme toggle. Set `type` to `"github"` or
+  `"discord"` to get the brand icon with a default label, or use `label` with an
+  optional `icon` name for a plain link.
+- `primary`: a highlighted button after the theme toggle. `type` is `"button"`,
+  `"github"`, or `"discord"`.
+
+## Footer
+
+The `footer` key adds social icons and link columns above the footer's site name.
+
+```json
+{
+  "footer": {
+    "socials": {
+      "x": "https://x.com/example",
+      "github": "https://github.com/example"
+    },
+    "links": [
+      {
+        "header": "Resources",
+        "items": [
+          { "label": "Blog", "href": "https://example.com/blog" },
+          { "label": "Careers", "href": "https://example.com/careers" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Supported `socials` platforms: `x`, `twitter`, `x-twitter`, `github`, `linkedin`,
+`facebook`, `youtube`, `discord`, `slack`, `instagram`, `hacker-news`, `medium`,
+`telegram`, `bluesky`, `threads`, `reddit`, `website`, `earth-americas`, `podcast`.
+
+## Banner
+
+The `banner` key shows a site-wide announcement above the header.
+
+```json
+{
+  "banner": {
+    "content": "🚀 v2 is out! [Read the changelog](https://example.com/changelog)",
+    "dismissible": true
+  }
+}
+```
+
+`content` supports basic markdown: links, `**bold**`, `*italic*`, and `` `code` ``.
+When `dismissible` is true, dismissal persists in the browser until the banner
+content changes.
+
+## Appearance
+
+The `appearance` key sets the initial theme mode.
+
+```json
+{
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  }
+}
+```
+
+- `default`: `"system"` (default), `"light"`, or `"dark"`. `"system"` follows
+  the visitor's OS preference.
+- `strict`: hide the light/dark toggle and ignore stored preferences, locking
+  the site to the default mode.
+
+## Fonts
+
+The `fonts` key replaces the default typefaces. Google Fonts families load
+automatically; self-hosted fonts need `source` (and optionally `format`).
+
+```json
+{
+  "fonts": {
+    "family": "Open Sans",
+    "heading": { "family": "Playfair Display", "weight": 700 },
+    "body": { "family": "Hubot Sans", "source": "/fonts/Hubot-Sans.woff2", "format": "woff2" }
+  }
+}
+```
+
+The top-level `family` applies everywhere; `heading` and `body` override it for
+their part of the page.
+
+## Styling
+
+The `styling.eyebrows` key controls the label above page titles: `"section"`
+(default) shows the group name, `"breadcrumbs"` shows the navigation path.
+
+```json
+{
+  "styling": { "eyebrows": "breadcrumbs" }
+}
+```
+
+## Background
+
+The `background` key sets a custom page background per mode.
+
+```json
+{
+  "background": {
+    "color": { "light": "#ffffff", "dark": "#0a0a0f" },
+    "image": { "light": "/bg.png", "dark": "/bg-dark.png" }
+  }
+}
+```
+
+## Redirects
+
+The `redirects` key maps moved or renamed pages to their new locations. Each
+source becomes a static redirect page in the build output, and client-side
+routing follows the same rules for unknown paths.
+
+```json
+{
+  "redirects": [
+    { "source": "/docs/old-page", "destination": "/docs/new-page" },
+    { "source": "/docs/legacy", "destination": "https://example.com/archive" }
+  ]
+}
+```
+
+Sources are matched exactly. Wildcard patterns (`/old/:slug*`) are part of the
+standard but not implemented yet — they are skipped with a build warning.
+`permanent` is accepted for portability, but static output cannot vary the
+HTTP status code.
+
+## SEO
+
+The `seo` key controls indexing and site-wide meta tags.
+
+```json
+{
+  "seo": {
+    "metatags": { "og:image": "/images/social.png" },
+    "indexing": "navigable"
+  }
+}
+```
+
+- `metatags`: key-value pairs added to every page's `<head>`.
+- `indexing`: `"navigable"` (default) marks hidden pages `noindex` and keeps
+  them out of `sitemap.xml`; `"all"` indexes every page. A per-page `noindex`
+  frontmatter field always wins.
+
+When `$shiso.siteUrl` is set, the build also writes a `sitemap.xml` with
+last-modified dates from git history.
+
+## 404 page
+
+The `errors.404` key controls what happens when a page is not found.
+
+```json
+{
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "Page not found",
+      "description": "Try the [documentation home](/docs) instead."
+    }
+  }
+}
+```
+
+By default (`redirect: true`) unknown paths navigate to the docs home. Set
+`redirect` to `false` to show the 404 page with an optional custom `title` and
+`description` (supports basic markdown).
+
+## Last-modified timestamps
+
+Set `metadata.timestamp` to show a "Last updated" date on every page, taken
+from each file's git history at build time.
+
+```json
+{
+  "metadata": { "timestamp": true }
+}
+```
+
+Override it per page with the `timestamp` frontmatter field:
+
+```yaml
+---
+title: My page
+timestamp: false
+---
+```
 
 ## Schema and validation
 

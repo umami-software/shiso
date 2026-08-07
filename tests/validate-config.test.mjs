@@ -60,13 +60,13 @@ describe('schema coverage', () => {
 describe('reserved keys', () => {
   it('accepts them and reports one notice each', () => {
     const result = validateConfig(
-      { ...minimal, footer: { socials: {} }, banner: { content: 'hi' }, redirects: [] },
+      { ...minimal, thumbnails: {}, integrations: {}, contextual: {} },
       schema,
     );
 
     expect(result.valid).toBe(true);
     expect(result.notices).toHaveLength(3);
-    expect(result.notices.join('\n')).toContain('"banner"');
+    expect(result.notices.join('\n')).toContain('"integrations"');
   });
 
   it('reports nothing for a config that uses only supported keys', () => {
@@ -121,5 +121,115 @@ describe('supported keys stay strictly validated', () => {
 
   it('requires navigation', () => {
     expect(validateConfig({ name: 'Docs' }, schema).valid).toBe(false);
+  });
+
+  it('accepts a full navbar, footer, and banner', () => {
+    const result = validateConfig(
+      {
+        ...minimal,
+        navbar: {
+          links: [
+            { type: 'github', href: 'https://github.com/example/repo' },
+            { label: 'Community', href: 'https://example.com', icon: 'users' },
+          ],
+          primary: { type: 'button', label: 'Get Started', href: 'https://example.com' },
+        },
+        footer: {
+          socials: { x: 'https://x.com/example', github: 'https://github.com/example' },
+          links: [
+            { header: 'Resources', items: [{ label: 'Blog', href: 'https://example.com/blog' }] },
+          ],
+        },
+        banner: {
+          content: 'Now in **beta** — [read more](https://example.com)',
+          dismissible: true,
+        },
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+  });
+
+  it('rejects a navbar link without href', () => {
+    expect(validateConfig({ ...minimal, navbar: { links: [{ label: 'x' }] } }, schema).valid).toBe(
+      false,
+    );
+  });
+
+  it('rejects an unknown social platform', () => {
+    expect(
+      validateConfig(
+        { ...minimal, footer: { socials: { myspace: 'https://example.com' } } },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('rejects a banner without content', () => {
+    expect(validateConfig({ ...minimal, banner: { dismissible: true } }, schema).valid).toBe(false);
+  });
+
+  it('accepts redirects, seo, errors, and metadata', () => {
+    const result = validateConfig(
+      {
+        ...minimal,
+        redirects: [{ source: '/old', destination: '/new', permanent: false }],
+        seo: { metatags: { 'og:image': '/social.png' }, indexing: 'all' },
+        errors: { 404: { redirect: false, title: 'Lost?', description: 'Try the **search**.' } },
+        metadata: { timestamp: true },
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+  });
+
+  it('rejects a redirect without a destination', () => {
+    expect(validateConfig({ ...minimal, redirects: [{ source: '/old' }] }, schema).valid).toBe(
+      false,
+    );
+  });
+
+  it('rejects an invalid seo.indexing value', () => {
+    expect(validateConfig({ ...minimal, seo: { indexing: 'some' } }, schema).valid).toBe(false);
+  });
+
+  it('accepts appearance, styling, fonts, and background', () => {
+    const result = validateConfig(
+      {
+        ...minimal,
+        appearance: { default: 'dark', strict: true },
+        styling: { eyebrows: 'breadcrumbs' },
+        fonts: {
+          family: 'Open Sans',
+          weight: 550,
+          heading: { family: 'Playfair Display', weight: 700 },
+          body: { family: 'Hubot Sans', source: '/fonts/Hubot-Sans.woff2', format: 'woff2' },
+        },
+        background: {
+          color: { light: '#ffffff', dark: '#0f172a' },
+          image: { light: '/bg.png', dark: '/bg-dark.png' },
+          decoration: 'gradient',
+        },
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+  });
+
+  it('rejects fonts without a family', () => {
+    expect(validateConfig({ ...minimal, fonts: { weight: 400 } }, schema).valid).toBe(false);
+    expect(
+      validateConfig({ ...minimal, fonts: { family: 'X', heading: { weight: 700 } } }, schema)
+        .valid,
+    ).toBe(false);
+  });
+
+  it('rejects an invalid appearance default', () => {
+    expect(validateConfig({ ...minimal, appearance: { default: 'auto' } }, schema).valid).toBe(
+      false,
+    );
   });
 });

@@ -12,6 +12,7 @@
 html,
 body {
   font-family: var(--font-sans);
+  font-weight: var(--font-body-weight, 400);
   color: var(--color-text);
   font-size: 14px;
   background-color: var(--color-bg);
@@ -59,7 +60,8 @@ pre {
 }
 
 .docs-markdown :where(h2, h3, h4, h5, h6) {
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight, 700);
   letter-spacing: -0.02em;
   line-height: 1.25;
   color: var(--color-text-strong);

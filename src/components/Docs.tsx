@@ -1,13 +1,39 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
 import { Menu, X } from '@/components/icons';
 import { PageLinks } from '@/components/PageLinks';
 import { SideNav } from '@/components/SideNav';
 import { TopNav } from '@/components/TopNav';
-import { docsConfig } from '@/lib/site-config';
+import { renderInlineMarkdown } from '@/lib/inline-markdown';
+import { DOCS_PREFIX } from '@/lib/paths';
+import { docsConfig, getError404 } from '@/lib/site-config';
 import type { DocModule, NormalizedDocsPage } from '@/lib/types';
 import styles from './Docs.module.css';
+
+/**
+ * 404 view driven by the `errors.404` config key. The standard defaults to
+ * redirecting home; that happens after hydration rather than during render,
+ * because the prerendered 404.html must stay a static page for hosts that
+ * serve it for every unknown path.
+ */
+function NotFound() {
+  const navigate = useNavigate();
+  const { redirect, title, description } = getError404();
+
+  useEffect(() => {
+    if (redirect) {
+      navigate(DOCS_PREFIX || '/', { replace: true });
+    }
+  }, [redirect, navigate]);
+
+  return (
+    <div className={styles.notFound}>
+      <h1>{title || 'Page not found'}</h1>
+      {description && <p>{renderInlineMarkdown(description)}</p>}
+    </div>
+  );
+}
 
 export interface DocsProps {
   page: NormalizedDocsPage | null;
@@ -26,11 +52,7 @@ export function Docs({ page, doc }: DocsProps) {
   }, [pathname]);
 
   if (!page || !doc) {
-    return (
-      <div className={styles.notFound}>
-        <h1>Page not found</h1>
-      </div>
-    );
+    return <NotFound />;
   }
 
   return (

@@ -15,6 +15,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { pathToFileURL } from 'node:url';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
 const DEFAULT_HEAD_CLOSE = '<!--/shiso-default-head-->';
@@ -33,8 +34,8 @@ if (!template.includes('<!--app-html-->')) {
 const docsJson = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
 const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
 
-const { render, getRoutes } = await import(
-  new URL(path.join(root, 'dist', 'server', 'entry-server.js'), 'file://').href
+const { render, getRoutes, getRedirects, getSitemapEntries } = await import(
+  pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href
 );
 
 /** Vite's `base`, normalized to "" or "/prefix". */
@@ -96,6 +97,61 @@ if (docsPrefix) {
   );
 }
 
+// Redirect pages. Static hosting cannot serve real 301s, so each redirect
+// gets the same canonical + meta refresh + immediate replace treatment as
+// the root entry. Real pages always win over redirect rules.
+const routeSet = new Set(routes.map(withBase));
+const redirects = getRedirects();
+
+function redirectTarget(destination) {
+  return /^[a-z][a-z0-9+.-]*:/i.test(destination) ? destination : withBase(destination);
+}
+
+for (const { source, destination } of redirects) {
+  if (routeSet.has(withBase(source))) {
+    console.warn(`Redirect source "${source}" is an existing page — skipped.`);
+    continue;
+  }
+
+  const target = redirectTarget(destination);
+
+  await writePage(
+    outputPathFor(source),
+    fillTemplate(
+      [
+        `<link rel="canonical" href="${target}" />`,
+        `<meta name="robots" content="noindex" />`,
+        `<meta http-equiv="refresh" content="0;url=${target}" />`,
+        `<script>location.replace(${JSON.stringify(target)});</script>`,
+      ].join('\n    '),
+      '',
+    ),
+  );
+}
+
+// Sitemap, only when $shiso.siteUrl provides an absolute origin.
+const sitemapEntries = getSitemapEntries();
+
+if (sitemapEntries.length) {
+  const urls = sitemapEntries
+    .map(({ url, lastmod }) =>
+      [
+        '  <url>',
+        `    <loc>${url}</loc>`,
+        lastmod ? `    <lastmod>${lastmod}</lastmod>` : null,
+        '  </url>',
+      ]
+        .filter(Boolean)
+        .join('\n'),
+    )
+    .join('\n');
+
+  await writePage(
+    path.join(clientDir, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+  );
+}
+
 // 404 fallback renders the app shell so client routing can take over
 // on hosts that serve 404.html for unknown paths (e.g. GitHub Pages).
 const notFound = render('/404');
@@ -108,4 +164,13 @@ if (stray.length) {
   throw new Error(`Routes fall outside the deploy base "${base}": ${stray.join(', ')}`);
 }
 
-console.log(`Prerendered ${routes.length} pages to ${path.relative(root, clientDir)}`);
+const extras = [
+  redirects.length ? `${redirects.length} redirects` : null,
+  sitemapEntries.length ? 'sitemap.xml' : null,
+]
+  .filter(Boolean)
+  .join(', ');
+
+console.log(
+  `Prerendered ${routes.length} pages to ${path.relative(root, clientDir)}${extras ? ` (+ ${extras})` : ''}`,
+);

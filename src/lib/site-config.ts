@@ -1,7 +1,19 @@
 import { resolveDocFile } from '@/lib/content';
 import { assertDocsConfig, normalizeDocsConfig } from '@/lib/docs-config';
 import { stripBase, stripDocsPrefix } from '@/lib/paths';
-import type { DocsConfig, NormalizedDocsConfig, NormalizedDocsPage } from '@/lib/types';
+import type {
+  AppearanceConfig,
+  BannerConfig,
+  DocsConfig,
+  Error404Config,
+  FooterConfig,
+  NavbarConfig,
+  NormalizedDocsConfig,
+  NormalizedDocsPage,
+  RedirectRule,
+  SeoConfig,
+  StylingConfig,
+} from '@/lib/types';
 import rawConfig from '../../docs.json';
 
 assertDocsConfig(rawConfig, 'docs.json');
@@ -30,6 +42,130 @@ export function getLogo(): LogoConfig | null {
   }
 
   return { light: logo.light || logo.dark, dark: logo.dark || logo.light, href: logo.href };
+}
+
+/** Navbar links and primary button. Schema validation guarantees the shape. */
+export function getNavbar(): NavbarConfig | null {
+  const { navbar } = siteConfig;
+
+  if (!navbar || (!navbar.links?.length && !navbar.primary)) {
+    return null;
+  }
+
+  return {
+    links: (navbar.links || []).filter(link => !!link?.href),
+    primary: navbar.primary?.href ? navbar.primary : undefined,
+  };
+}
+
+/** Footer socials and link columns. */
+export function getFooter(): FooterConfig | null {
+  const { footer } = siteConfig;
+
+  if (!footer) {
+    return null;
+  }
+
+  const socials = Object.entries(footer.socials || {}).filter(([, url]) => !!url);
+  const links = (footer.links || []).filter(column => column?.items?.length);
+
+  if (!socials.length && !links.length) {
+    return null;
+  }
+
+  return { socials: Object.fromEntries(socials), links };
+}
+
+/** Site-wide banner. Returns null when there is no content to show. */
+export function getBanner(): BannerConfig | null {
+  const { banner } = siteConfig;
+
+  if (!banner?.content?.trim()) {
+    return null;
+  }
+
+  return { content: banner.content.trim(), dismissible: banner.dismissible === true };
+}
+
+/** Trailing-slash-insensitive route key for redirect matching. */
+function toRouteKey(routePath: string): string {
+  const trimmed = routePath.replace(/\/+$/, '');
+  return trimmed || '/';
+}
+
+/**
+ * Redirect rules with exact-match sources. Wildcard patterns are part of the
+ * standard but not implemented; they are skipped with a warning.
+ */
+export function getRedirects(): RedirectRule[] {
+  return (siteConfig.redirects || []).filter(rule => {
+    if (!rule?.source || !rule.destination) {
+      return false;
+    }
+
+    if (/[:*]/.test(rule.source)) {
+      console.warn(
+        `[shiso] Redirect source "${rule.source}" uses a wildcard pattern, which is not ` +
+          'implemented yet — it will be skipped.',
+      );
+      return false;
+    }
+
+    return true;
+  });
+}
+
+const redirectBySource = new Map(
+  getRedirects().map(rule => [toRouteKey(rule.source), rule.destination]),
+);
+
+/** Destination for a base-relative route covered by a redirect rule, if any. */
+export function matchRedirect(routePath: string): string | null {
+  return redirectBySource.get(toRouteKey(routePath)) || null;
+}
+
+export function getSeo(): SeoConfig {
+  const seo = siteConfig.seo || {};
+
+  return {
+    metatags: seo.metatags || {},
+    indexing: seo.indexing === 'all' ? 'all' : 'navigable',
+  };
+}
+
+/** 404 behavior. The standard defaults `redirect` to true (navigate home). */
+export function getError404(): Required<Pick<Error404Config, 'redirect'>> & Error404Config {
+  const config = siteConfig.errors?.['404'] || {};
+
+  return { ...config, redirect: config.redirect !== false };
+}
+
+/** Theme mode defaults. The init script in index.html applies `default` and `strict`. */
+export function getAppearance(): Required<AppearanceConfig> {
+  const appearance = siteConfig.appearance || {};
+
+  return {
+    default:
+      appearance.default === 'light' || appearance.default === 'dark'
+        ? appearance.default
+        : 'system',
+    strict: appearance.strict === true,
+  };
+}
+
+export function getStyling(): { eyebrows: 'section' | 'breadcrumbs' } {
+  const styling: StylingConfig = siteConfig.styling || {};
+
+  return { eyebrows: styling.eyebrows === 'breadcrumbs' ? 'breadcrumbs' : 'section' };
+}
+
+/** True when the last-modified timestamp should show for a page. */
+export function showTimestamp(frontmatterValue: unknown): boolean {
+  if (typeof frontmatterValue === 'boolean') {
+    return frontmatterValue;
+  }
+
+  return siteConfig.metadata?.timestamp === true;
 }
 
 export function normalizeParamSlug(slug: string): string {

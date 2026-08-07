@@ -59,7 +59,7 @@
         },
         "dark": {
           "type": "string",
-          "description": "Accent color used in light mode. Not implemented yet."
+          "description": "Color for buttons and hover accents in both modes. Defaults to primary."
         }
       }
     },
@@ -121,25 +121,317 @@
       "description": "Layout theme name. Shiso currently ships a single theme."
     },
     "thumbnails": { "x-shiso": "reserved", "type": "object" },
-    "styling": { "x-shiso": "reserved", "type": "object" },
+    "styling": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Visual styling configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "eyebrows": {
+          "enum": ["section", "breadcrumbs"],
+          "description": "Page eyebrow style: the section name (default) or the full navigation path.",
+          "default": "section"
+        },
+        "latex": {
+          "x-shiso": "reserved",
+          "type": "boolean",
+          "description": "LaTeX stylesheet loading is not implemented yet; accepted and ignored."
+        },
+        "codeblocks": {
+          "x-shiso": "reserved",
+          "description": "Code block themes are not implemented yet; accepted and ignored."
+        }
+      }
+    },
     "icons": { "x-shiso": "reserved", "type": "object" },
-    "fonts": { "x-shiso": "reserved", "type": "object" },
-    "appearance": { "x-shiso": "reserved", "type": "object" },
-    "background": { "x-shiso": "reserved", "type": "object" },
-    "navbar": { "x-shiso": "reserved", "type": "object" },
+    "fonts": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Custom fonts. Google Fonts families load automatically; use source/format for self-hosted files.",
+      "required": ["family"],
+      "additionalProperties": false,
+      "properties": {
+        "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
+        "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
+        "source": { "type": "string", "description": "URL or path to a hosted font file." },
+        "format": { "enum": ["woff", "woff2"], "description": "Font file format, for `source`." },
+        "heading": { "$ref": "#/definitions/fontSpec", "description": "Override for headings." },
+        "body": { "$ref": "#/definitions/fontSpec", "description": "Override for body text." }
+      }
+    },
+    "appearance": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Light/dark mode defaults.",
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "enum": ["system", "light", "dark"],
+          "description": "Initial theme mode. \"system\" follows the OS preference.",
+          "default": "system"
+        },
+        "strict": {
+          "type": "boolean",
+          "description": "Hide the light/dark toggle and ignore stored preferences.",
+          "default": false
+        }
+      }
+    },
+    "background": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Background color and image settings.",
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "description": "Background image, a single path or per-mode paths.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "light": { "type": "string" },
+                "dark": { "type": "string" }
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "x-shiso": "reserved",
+          "enum": ["gradient", "grid", "windows"],
+          "description": "Theme decorations are not implemented yet; accepted and ignored."
+        },
+        "color": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "light": { "type": "string", "description": "Background color for light mode." },
+            "dark": { "type": "string", "description": "Background color for dark mode." }
+          }
+        }
+      }
+    },
+    "navbar": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Links and primary button in the top navigation bar.",
+      "additionalProperties": false,
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["href"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "enum": ["github", "discord"],
+                "description": "Renders the matching brand icon. Live star/member counts are not fetched."
+              },
+              "label": {
+                "type": "string",
+                "description": "Link text. Defaults to \"GitHub\" or \"Discord\" for typed links."
+              },
+              "href": { "type": "string", "description": "Destination URL." },
+              "icon": { "type": "string", "description": "Icon name shown beside the label." },
+              "iconType": {
+                "x-shiso": "reserved",
+                "type": "string",
+                "description": "Font Awesome icon style. Shiso uses the lucide icon set."
+              }
+            }
+          }
+        },
+        "primary": {
+          "type": "object",
+          "required": ["type", "href"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "enum": ["button", "github", "discord"],
+              "description": "Button style. \"github\" and \"discord\" render with the brand icon."
+            },
+            "label": { "type": "string", "description": "Button text. Required for \"button\"." },
+            "href": { "type": "string", "description": "Button destination URL." }
+          }
+        }
+      }
+    },
     "interaction": { "x-shiso": "reserved", "type": "object" },
-    "metadata": { "x-shiso": "reserved", "type": "object" },
-    "footer": { "x-shiso": "reserved", "type": "object" },
-    "banner": { "x-shiso": "reserved", "type": "object" },
-    "redirects": { "x-shiso": "reserved", "type": "array" },
+    "metadata": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Page metadata settings.",
+      "additionalProperties": false,
+      "properties": {
+        "timestamp": {
+          "type": "boolean",
+          "description": "Show the last-modified date (from git history) on all pages. Override per page with the `timestamp` frontmatter field.",
+          "default": false
+        }
+      }
+    },
+    "footer": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Footer content: social links and link columns.",
+      "additionalProperties": false,
+      "properties": {
+        "socials": {
+          "type": "object",
+          "description": "Platform name to profile URL, e.g. { \"x\": \"https://x.com/example\" }.",
+          "propertyNames": {
+            "enum": [
+              "x",
+              "website",
+              "facebook",
+              "youtube",
+              "discord",
+              "slack",
+              "github",
+              "linkedin",
+              "instagram",
+              "hacker-news",
+              "medium",
+              "telegram",
+              "twitter",
+              "x-twitter",
+              "earth-americas",
+              "bluesky",
+              "threads",
+              "reddit",
+              "podcast"
+            ]
+          },
+          "additionalProperties": { "type": "string" }
+        },
+        "links": {
+          "type": "array",
+          "description": "Link columns displayed above the footer bottom row.",
+          "items": {
+            "type": "object",
+            "required": ["items"],
+            "additionalProperties": false,
+            "properties": {
+              "header": { "type": "string", "description": "Column heading." },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["label", "href"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": { "type": "string", "description": "Link text." },
+                    "href": { "type": "string", "description": "Link destination URL." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "banner": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Site-wide banner displayed above the header.",
+      "required": ["content"],
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Banner text. Supports basic markdown: links, bold, italic, and inline code."
+        },
+        "dismissible": {
+          "type": "boolean",
+          "description": "Show a dismiss button. Dismissal persists until the content changes.",
+          "default": false
+        }
+      }
+    },
+    "redirects": {
+      "x-shiso": "supported",
+      "type": "array",
+      "description": "Redirects for moved, renamed, or deleted pages. Sources are matched exactly; wildcard patterns are not implemented yet and are skipped with a warning.",
+      "items": {
+        "type": "object",
+        "required": ["source", "destination"],
+        "additionalProperties": false,
+        "properties": {
+          "source": { "type": "string", "description": "Path to redirect from, e.g. \"/old-page\"." },
+          "destination": {
+            "type": "string",
+            "description": "Path or URL to redirect to, e.g. \"/new-page\"."
+          },
+          "permanent": {
+            "type": "boolean",
+            "description": "Accepted for portability. Static output cannot vary the status code; every redirect is a meta refresh page.",
+            "default": true
+          }
+        }
+      }
+    },
     "contextual": { "x-shiso": "reserved", "type": "object" },
     "api": { "x-shiso": "reserved", "type": "object" },
-    "seo": { "x-shiso": "reserved", "type": "object" },
+    "seo": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "SEO indexing configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "metatags": {
+          "type": "object",
+          "description": "Meta tags added to every page, e.g. { \"og:image\": \"/social.png\" }.",
+          "additionalProperties": { "type": "string" }
+        },
+        "indexing": {
+          "enum": ["navigable", "all"],
+          "description": "\"navigable\" (default) marks hidden pages noindex and keeps them out of the sitemap; \"all\" indexes every page.",
+          "default": "navigable"
+        }
+      }
+    },
     "search": { "x-shiso": "reserved", "type": "object" },
     "integrations": { "x-shiso": "reserved", "type": "object" },
-    "errors": { "x-shiso": "reserved", "type": "object" }
+    "errors": {
+      "x-shiso": "supported",
+      "type": "object",
+      "description": "Error handling settings.",
+      "additionalProperties": false,
+      "properties": {
+        "404": {
+          "type": "object",
+          "description": "\"Page not found\" behavior.",
+          "additionalProperties": false,
+          "properties": {
+            "redirect": {
+              "type": "boolean",
+              "description": "Navigate to the docs home when a page is not found. Defaults to true.",
+              "default": true
+            },
+            "title": { "type": "string", "description": "Custom title for the 404 page." },
+            "description": {
+              "type": "string",
+              "description": "Custom description. Supports basic markdown: links, bold, italic, and inline code."
+            }
+          }
+        }
+      }
+    }
   },
   "definitions": {
+    "fontSpec": {
+      "type": "object",
+      "required": ["family"],
+      "additionalProperties": false,
+      "properties": {
+        "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
+        "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
+        "source": { "type": "string", "description": "URL or path to a hosted font file." },
+        "format": { "enum": ["woff", "woff2"], "description": "Font file format, for `source`." }
+      }
+    },
     "pageItem": {
       "oneOf": [
         {

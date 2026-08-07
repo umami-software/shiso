@@ -1,3 +1,4 @@
+import { LAST_MODIFIED } from '@/lib/last-modified.generated';
 import { CONTENT_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
 
@@ -31,4 +32,13 @@ export function resolveDocFile(fileSlug: string, contentDir = CONTENT_DIR): stri
 
 export function getDocModule(filePath: string): DocModule | undefined {
   return docModules[filePath];
+}
+
+/**
+ * Last-modified date of a content file, captured from git history at build
+ * time (see scripts/generate-last-modified.mjs). ISO 8601, or undefined for
+ * files outside the generated map.
+ */
+export function getLastModified(filePath: string): string | undefined {
+  return LAST_MODIFIED[filePath];
 }

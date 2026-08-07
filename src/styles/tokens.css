@@ -1,6 +1,8 @@
 :root {
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Headings follow the body font unless the `fonts.heading` config overrides it. */
+  --font-heading: var(--font-sans);
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
@@ -8,6 +10,8 @@
   --radius-full: 9999px;
 
   --color-primary: #16a34a;
+  /* Buttons and hover accents in both modes; the `colors.dark` config overrides it. */
+  --color-primary-strong: var(--color-primary);
 
   --color-bg: #ffffff;
   --color-surface: #fafafa;

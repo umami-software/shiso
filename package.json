@@ -20,7 +20,8 @@
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "icons": "svgr ./src/assets --out-dir src/components/svg --typescript",
-    "icons:registry": "node scripts/generate-icon-registry.mjs"
+    "icons:registry": "node scripts/generate-icon-registry.mjs",
+    "timestamps": "node scripts/generate-last-modified.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.5",
@@ -37,7 +38,8 @@
     "rehype-autolink-headings": "^7.1.0",
     "rehype-highlight": "^7.0.1",
     "rehype-slug": "^6.0.0",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "simple-icons": "^16.28.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",

@@ -23,6 +23,9 @@ const ALWAYS_INCLUDE = ['rocket', 'code', 'book-open', 'circle-check', 'circle-a
 
 const ICON_ATTRIBUTE = /\bicon\s*=\s*["']([^"'{}\n]+)["']/g;
 
+// docs.json declares icons as JSON properties rather than JSX/MDX attributes.
+const ICON_JSON_PROPERTY = /"icon"\s*:\s*"([^"]+)"/g;
+
 /** `circle-check`, `circle_check`, `CircleCheck` -> `circle-check` */
 export function normalizeIconName(name) {
   return name
@@ -68,6 +71,16 @@ async function collectFiles(dir, files = []) {
   return files;
 }
 
+function addMatches(names, source, pattern) {
+  for (const match of source.matchAll(pattern)) {
+    const normalized = normalizeIconName(match[1]);
+
+    if (normalized && /^[a-z0-9-]+$/.test(normalized)) {
+      names.add(normalized);
+    }
+  }
+}
+
 async function findIconNames() {
   const names = new Set(ALWAYS_INCLUDE);
 
@@ -75,17 +88,13 @@ async function findIconNames() {
     const files = await collectFiles(path.join(ROOT, dir));
 
     for (const file of files) {
-      const source = await fs.readFile(file, 'utf8');
-
-      for (const match of source.matchAll(ICON_ATTRIBUTE)) {
-        const normalized = normalizeIconName(match[1]);
-
-        if (normalized && /^[a-z0-9-]+$/.test(normalized)) {
-          names.add(normalized);
-        }
-      }
+      addMatches(names, await fs.readFile(file, 'utf8'), ICON_ATTRIBUTE);
     }
   }
+
+  // Navigation and navbar icons live in docs.json, not in content or source.
+  const config = await fs.readFile(path.join(ROOT, 'docs.json'), 'utf8').catch(() => '');
+  addMatches(names, config, ICON_JSON_PROPERTY);
 
   return [...names].sort();
 }

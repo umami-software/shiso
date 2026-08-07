@@ -108,6 +108,124 @@ export interface ShisoOptions {
   siteUrl?: string;
 }
 
+/**
+ * A link in the top navigation bar. The `github` and `discord` types render
+ * with the matching brand icon; live star/member counts are not fetched.
+ */
+export interface NavbarLink {
+  type?: 'github' | 'discord';
+  label?: string;
+  href: string;
+  icon?: string;
+}
+
+export interface NavbarPrimary {
+  type: 'button' | 'github' | 'discord';
+  label?: string;
+  href: string;
+}
+
+export interface NavbarConfig {
+  links?: NavbarLink[];
+  primary?: NavbarPrimary;
+}
+
+export interface FooterLinkItem {
+  label: string;
+  href: string;
+}
+
+export interface FooterLinkColumn {
+  header?: string;
+  items: FooterLinkItem[];
+}
+
+export interface FooterConfig {
+  /** Platform name -> profile URL, e.g. { "x": "https://x.com/..." }. */
+  socials?: Record<string, string>;
+  links?: FooterLinkColumn[];
+}
+
+export interface BannerConfig {
+  /** Supports basic markdown: links, bold, italic, and inline code. */
+  content: string;
+  dismissible?: boolean;
+}
+
+/**
+ * A redirect for a moved or renamed page. Sources are matched exactly;
+ * wildcard patterns (`:slug*`) are part of the standard but not implemented.
+ * `permanent` is accepted for portability — static hosting cannot vary the
+ * status code, so every redirect renders as a meta refresh page.
+ */
+export interface RedirectRule {
+  source: string;
+  destination: string;
+  permanent?: boolean;
+}
+
+export interface SeoConfig {
+  /** Extra meta tags added to every page, e.g. { "og:image": "/social.png" }. */
+  metatags?: Record<string, string>;
+  /** "navigable" (default) keeps hidden pages out of the index; "all" indexes everything. */
+  indexing?: 'navigable' | 'all';
+}
+
+export interface Error404Config {
+  /** Navigate to the docs home instead of showing the 404 page. Defaults to true. */
+  redirect?: boolean;
+  title?: string;
+  /** Supports basic markdown: links, bold, italic, and inline code. */
+  description?: string;
+}
+
+export interface ErrorsConfig {
+  '404'?: Error404Config;
+}
+
+export interface MetadataConfig {
+  /** Show the last-modified date on all pages. Overridable per page via `timestamp` frontmatter. */
+  timestamp?: boolean;
+}
+
+export interface AppearanceConfig {
+  /** Initial theme mode. "system" follows the OS preference. */
+  default?: 'system' | 'light' | 'dark';
+  /** Hide the light/dark toggle and ignore stored preferences. */
+  strict?: boolean;
+}
+
+export interface StylingConfig {
+  /** Page eyebrow style: the section name (default) or the full breadcrumb path. */
+  eyebrows?: 'section' | 'breadcrumbs';
+  /** Part of the standard; accepted and ignored. */
+  latex?: unknown;
+  codeblocks?: unknown;
+}
+
+export interface FontSpec {
+  /** Font family name. Google Fonts families load automatically without a source. */
+  family: string;
+  weight?: number;
+  /** URL or path to a hosted font file, for non-Google fonts. */
+  source?: string;
+  format?: 'woff' | 'woff2';
+}
+
+export interface FontsConfig extends FontSpec {
+  heading?: FontSpec;
+  body?: FontSpec;
+}
+
+export interface BackgroundConfig {
+  /** Background image, single or per-mode. */
+  image?: string | { light?: string; dark?: string };
+  /** Part of the standard; theme decorations are accepted and ignored. */
+  decoration?: string;
+  /** Background color per mode. */
+  color?: { light?: string; dark?: string };
+}
+
 export interface DocsConfig {
   $schema?: string;
   $shiso?: ShisoOptions;
@@ -118,6 +236,17 @@ export interface DocsConfig {
   favicon?: string;
   description?: string;
   navigation: NavigationConfig;
+  navbar?: NavbarConfig;
+  footer?: FooterConfig;
+  banner?: BannerConfig;
+  redirects?: RedirectRule[];
+  seo?: SeoConfig;
+  errors?: ErrorsConfig;
+  metadata?: MetadataConfig;
+  appearance?: AppearanceConfig;
+  styling?: StylingConfig;
+  fonts?: FontsConfig;
+  background?: BackgroundConfig;
 
   /**
    * Keys that are part of the config standard but not implemented yet. They are
@@ -126,23 +255,12 @@ export interface DocsConfig {
    * the corresponding feature lands and the key is given a real type above.
    */
   thumbnails?: unknown;
-  styling?: unknown;
   icons?: unknown;
-  fonts?: unknown;
-  appearance?: unknown;
-  background?: unknown;
-  navbar?: unknown;
   interaction?: unknown;
-  metadata?: unknown;
-  footer?: unknown;
-  banner?: unknown;
-  redirects?: unknown;
   contextual?: unknown;
   api?: unknown;
-  seo?: unknown;
   search?: unknown;
   integrations?: unknown;
-  errors?: unknown;
 }
 
 /* ---------------------------------------------------------------------------
@@ -238,6 +356,8 @@ export interface DocFrontmatter {
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** Overrides the site-wide `metadata.timestamp` setting for this page. */
+  timestamp?: boolean;
   [key: string]: unknown;
 }
 
