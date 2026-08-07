@@ -1,8 +1,10 @@
 ---
 title: Troubleshooting
+description: Fixes for the most common configuration and rendering problems.
 ---
 
-Use this page when something in your docs is not rendering as expected.
+Use this page when something in your docs is not building or rendering as
+expected.
 
 ## A page does not show up
 
@@ -26,14 +28,53 @@ Check:
 1. `navigation` exists in `docs.json`.
 2. Each tab/group has valid `pages`.
 3. No duplicate page slugs.
+4. The page or an ancestor group is not marked `hidden`.
 
 ## Build fails after editing `docs.json`
+
+The build validates `docs.json` against `docs.schema.json` first, so read the
+error — it names the offending key and suggests a fix for likely typos.
 
 Common causes:
 
 - Missing page file referenced in `pages`
 - Duplicate slug entries
 - Invalid object structure in navigation
+- A malformed value under a supported key (e.g. a `navbar` link without `href`)
+
+## The build prints a notice about an ignored key
+
+```text
+notice: "integrations" is part of the docs.json standard but is not implemented yet — it will be ignored.
+```
+
+This is expected: keys of the standard that Shiso does not implement yet are
+accepted and skipped so a shared config still builds. See
+[Configuration](/docs/configuration#how-shiso-treats-config-keys) for the tier
+policy.
+
+## A redirect is not working
+
+- Sources are matched exactly against the full route, including the docs
+  prefix: `/docs/old-page`, not `old-page`.
+- Wildcard patterns (`/old/:slug*`) are not implemented and are skipped with a
+  build warning.
+- A redirect whose source collides with a real page is skipped — pages always
+  win.
+
+## An icon does not render
+
+Icon names must exist in the [lucide](https://lucide.dev/icons) icon set.
+Names are collected from content and `docs.json` at build time; a typo'd name
+logs a warning in dev and renders nothing.
+
+## "Last updated" dates are missing or wrong
+
+Timestamps come from git history at build time:
+
+- A file that has never been committed falls back to its filesystem date.
+- CI checkouts need history for accurate dates — use `fetch-depth: 0` with
+  shallow-cloning CI systems.
 
 ## "On this page" links are missing
 
@@ -51,6 +92,6 @@ Add headings like:
 Title priority is:
 
 1. frontmatter `title`
-2. page label in `docs.json`
+2. page label in `docs.json` (`label` wins over `title`)
 
-If neither is set, the slug is used.
+If neither is set, the label is derived from the file name.

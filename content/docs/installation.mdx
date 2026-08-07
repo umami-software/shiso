@@ -1,8 +1,9 @@
 ---
 title: Installation
+description: Run Shiso locally and build the static site.
 ---
 
-This guide sets up Shiso.
+This guide sets up Shiso from a fresh checkout.
 
 ## Prerequisites
 
@@ -23,8 +24,13 @@ pnpm install
 │   └── docs
 │       └── index.mdx
 ├── docs.json
+├── docs.schema.json
 └── src
 ```
+
+- `content/docs` holds your pages
+- `docs.json` configures the whole site
+- `docs.schema.json` powers editor autocomplete and build validation
 
 ## 3. Configure navigation
 
@@ -32,6 +38,7 @@ Edit `docs.json`:
 
 ```json
 {
+  "$schema": "./docs.schema.json",
   "theme": "mint",
   "name": "My Docs",
   "navigation": {
@@ -71,3 +78,19 @@ Open `/docs` and confirm:
 2. side navigation matches `docs.json`
 3. prev/next links follow navigation order
 4. heading anchors appear in "On this page"
+
+## 6. Build for production
+
+```bash
+pnpm build
+```
+
+The build validates `docs.json`, prerenders every page to static HTML in
+`dist/client`, and writes `sitemap.xml`, redirect pages, and a `404.html`
+fallback. The output deploys to any static host — no server required.
+
+Preview the production build locally:
+
+```bash
+pnpm preview
+```

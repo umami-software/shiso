@@ -1,0 +1,88 @@
+---
+title: Navbar and footer
+description: Links, buttons, social icons, and footer link columns.
+---
+
+## Navbar
+
+The `navbar` key adds links and a call-to-action button to the top navigation
+bar.
+
+```json
+{
+  "navbar": {
+    "links": [
+      { "type": "github", "href": "https://github.com/example/repo" },
+      { "label": "Community", "href": "https://example.com/community", "icon": "users" }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://example.com/start"
+    }
+  }
+}
+```
+
+### Links
+
+Shown to the left of the theme toggle.
+
+- Set `type` to `"github"` or `"discord"` to get the brand icon with a default
+  label. Live star and member counts are not fetched.
+- For a plain link, set `label` and optionally an `icon` name from the
+  [lucide](https://lucide.dev/icons) icon set.
+
+### Primary button
+
+A highlighted button at the end of the navbar.
+
+- `type`: `"button"` for a labeled button, or `"github"` / `"discord"` for a
+  branded one
+- `label`: required for `"button"`; defaults to the platform name otherwise
+- `href`: destination URL
+
+## Footer
+
+The `footer` key adds social icons and link columns to the footer.
+
+```json
+{
+  "footer": {
+    "socials": {
+      "x": "https://x.com/example",
+      "github": "https://github.com/example"
+    },
+    "links": [
+      {
+        "header": "Resources",
+        "items": [
+          { "label": "Blog", "href": "https://example.com/blog" },
+          { "label": "Careers", "href": "https://example.com/careers" }
+        ]
+      },
+      {
+        "header": "Company",
+        "items": [
+          { "label": "About", "href": "https://example.com/about" },
+          { "label": "Privacy", "href": "https://example.com/privacy" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Socials
+
+Each key is a platform name and each value is your profile URL. Supported
+platforms:
+
+`x`, `twitter`, `x-twitter`, `github`, `linkedin`, `facebook`, `youtube`,
+`discord`, `slack`, `instagram`, `hacker-news`, `medium`, `telegram`,
+`bluesky`, `threads`, `reddit`, `website`, `earth-americas`, `podcast`
+
+### Link columns
+
+Each entry in `links` renders as a column with an optional `header` and a list
+of `items`. Columns appear above the footer's bottom row.

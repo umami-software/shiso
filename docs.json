@@ -33,7 +33,14 @@
           },
           {
             "group": "Configuration",
-            "pages": ["configuration", "navigation", "troubleshooting"]
+            "pages": [
+              "configuration",
+              "navigation",
+              "customization",
+              "navbar-and-footer",
+              { "page": "seo", "title": "SEO and redirects" },
+              "troubleshooting"
+            ]
           },
           {
             "group": "Writing content",

@@ -64,11 +64,12 @@ export function assertDocsConfig(value: unknown, sourceName: string): asserts va
   }
 }
 
+/** "code-blocks" -> "Code blocks". Sentence case: only the first word is capitalized. */
 function toLabel(value: string): string {
-  return value
-    .split(/[-_]/g)
-    .filter(Boolean)
-    .map(word => word[0]?.toUpperCase() + word.slice(1))
+  const words = value.split(/[-_]/g).filter(Boolean);
+
+  return words
+    .map((word, index) => (index === 0 ? word[0]?.toUpperCase() + word.slice(1) : word))
     .join(' ');
 }
 

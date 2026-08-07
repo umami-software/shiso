@@ -1,5 +1,6 @@
 ---
 title: Navigation
+description: Tabs, groups, page entries, external links, anchors, and hidden pages.
 ---
 
 Use `docs.json` to control tabs, sidebar groups, and page order.
@@ -27,50 +28,82 @@ Use one tab with one group:
 ## When to use each pattern
 
 - `navigation.tabs`: best default for most docs sites
-- `navigation.dropdowns`: useful when you want top-level categories without full tabs
+- `navigation.dropdowns`: top-level categories; currently rendered as tabs
 - `navigation.groups` + `navigation.pages`: good for a single simple section
-- `navigation.versions`: use when you publish multiple product versions
-- `navigation.languages`: use when your docs are translated
+- `navigation.versions`: multiple product versions — only the default version
+  renders today; the others are reported and skipped
+- `navigation.languages`: translated docs — same current limitation as versions
 
-## Page entries you can add
+## Page entries
 
-Inside `pages`, you can use:
+Inside `pages`, you can mix:
 
-- string slugs, such as `"installation"` or `"components/tabs"`
-- page objects when you want a custom label:
+**String slugs** — the file path without extension:
 
 ```json
-{ "page": "installation", "title": "Install" }
+"installation"
 ```
 
-- group blocks when you want nested sections:
+**Page objects** — for custom labels, icons, tags, or hidden pages:
+
+```json
+{ "page": "installation", "title": "Install", "icon": "download", "tag": "New" }
+```
+
+- `title` (or `label`, which wins): custom sidebar text
+- `icon`: a [lucide](https://lucide.dev/icons) icon name shown beside the label
+- `tag`: a short badge shown after the label
+- `hidden`: keep the page out of the sidebar and search — it is still built
+  and reachable by URL
+
+**External links**:
+
+```json
+{ "href": "https://github.com/example/repo", "label": "GitHub", "icon": "github" }
+```
+
+**Nested groups** — arbitrarily deep, with an optional landing page:
 
 ```json
 {
   "group": "Getting started",
   "root": "index",
-  "pages": ["index", "installation"]
+  "icon": "rocket",
+  "pages": ["installation", "configuration"]
 }
 ```
 
-## More examples
+Groups also accept `hidden`, which hides the group and everything in it.
 
-### Tabs
+## Anchors
+
+Anchors render as prominent links above the sidebar:
 
 ```json
 {
   "navigation": {
-    "tabs": [
-      {
-        "tab": "Docs",
-        "groups": [
-          { "group": "Basics", "pages": ["index", "installation"] }
-        ]
-      }
-    ]
+    "anchors": [
+      { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" }
+    ],
+    "tabs": [...]
   }
 }
 ```
+
+Anchors that contain their own `pages` or `groups` are part of the standard but
+not implemented yet.
+
+## Hidden pages
+
+Any tab, group, page, or link accepts `hidden: true`. Hidden pages are still
+prerendered and reachable by URL, but they:
+
+- do not appear in the sidebar
+- are skipped by prev/next paging
+- are excluded from `sitemap.xml` and marked `noindex`
+  (unless [`seo.indexing`](/docs/seo#indexing) is `"all"`)
+
+## More examples
 
 ### Dropdowns
 

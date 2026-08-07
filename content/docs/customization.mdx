@@ -1,0 +1,100 @@
+---
+title: Customization
+description: Theme mode, fonts, colors, backgrounds, and the announcement banner.
+---
+
+These `docs.json` keys control how your site looks. All of them are optional.
+
+## Appearance
+
+The `appearance` key sets the initial theme mode.
+
+```json
+{
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  }
+}
+```
+
+- `default`: `"system"` (default), `"light"`, or `"dark"`. `"system"` follows
+  the visitor's OS preference.
+- `strict`: hide the light/dark toggle and ignore stored preferences, locking
+  the site to the default mode.
+
+## Colors
+
+```json
+{
+  "colors": {
+    "primary": "#16a34a",
+    "light": "#4ade80",
+    "dark": "#15803d"
+  }
+}
+```
+
+- `primary`: accent color in light mode
+- `light`: accent color in dark mode (defaults to `primary`)
+- `dark`: buttons and hover accents in both modes (defaults to `primary`)
+
+## Fonts
+
+The `fonts` key replaces the default typefaces. Google Fonts families load
+automatically; self-hosted fonts need `source` (and optionally `format`).
+
+```json
+{
+  "fonts": {
+    "family": "Open Sans",
+    "heading": { "family": "Playfair Display", "weight": 700 },
+    "body": { "family": "Hubot Sans", "source": "/fonts/Hubot-Sans.woff2", "format": "woff2" }
+  }
+}
+```
+
+The top-level `family` applies everywhere; `heading` and `body` override it for
+their part of the page.
+
+## Eyebrows
+
+The `styling.eyebrows` key controls the label above page titles: `"section"`
+(default) shows the group name, `"breadcrumbs"` shows the navigation path.
+
+```json
+{
+  "styling": { "eyebrows": "breadcrumbs" }
+}
+```
+
+## Background
+
+The `background` key sets a custom page background per mode. `image` can also
+be a single path used in both modes.
+
+```json
+{
+  "background": {
+    "color": { "light": "#ffffff", "dark": "#0a0a0f" },
+    "image": { "light": "/bg.png", "dark": "/bg-dark.png" }
+  }
+}
+```
+
+## Banner
+
+The `banner` key shows a site-wide announcement above the header.
+
+```json
+{
+  "banner": {
+    "content": "🚀 v2 is out! [Read the changelog](https://example.com/changelog)",
+    "dismissible": true
+  }
+}
+```
+
+`content` supports basic markdown: links, `**bold**`, `*italic*`, and `` `code` ``.
+When `dismissible` is true, dismissal persists in the browser until the banner
+content changes — publishing a new message shows the banner again for everyone.

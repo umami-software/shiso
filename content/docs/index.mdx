@@ -1,29 +1,45 @@
 ---
 title: Overview
-description: A simple guide to getting your docs site running.
+description: A static docs site generator configured with a single docs.json file.
 ---
 
-Shiso is powered by Markdown and MDX.
-You edit content files, define navigation once, and the site renders your docs at `/docs`.
+Shiso turns a folder of Markdown and MDX files into a fast, fully static
+documentation site. Everything about the site — navigation, branding, SEO,
+redirects — lives in one `docs.json` file that follows the industry-standard
+docs.json format, so an existing config from another docs platform builds here
+without modification.
 
-## What you can do
+## How it works
 
-- Write docs pages in Markdown or MDX
-- Organize pages with one navigation file
-- Use built-in docs UI components like callouts, tabs, steps, and cards
-- Preview everything locally at `/docs`
+- Write pages as `.mdx` (or `.md`) files under `content/docs`
+- Describe your site once in `docs.json`
+- Build to plain HTML with `pnpm build` — every page is prerendered, then
+  hydrated into a client-side app for instant navigation
+
+## What you get
+
+- **Standards-compatible config**: keys Shiso implements are strictly
+  validated; the rest of the docs.json standard is accepted and safely ignored,
+  so nothing breaks as your config grows
+- **Site chrome**: navbar links and buttons, footer socials and link columns,
+  and a dismissible announcement banner
+- **Theming**: light/dark modes, accent colors, custom fonts, and backgrounds
+- **SEO built in**: canonical URLs, Open Graph tags, structured data,
+  `sitemap.xml`, redirects, and last-modified timestamps from git history
+- **Docs components**: callouts, tabs, steps, cards, code groups, and more,
+  available in every page without imports
 
 ## Quick setup path
 
-1. Follow [Installation](/docs/installation) to run the app locally.
-2. Use [Configuration](/docs/configuration) to set your docs name and navigation.
-3. Add content files under `content/docs`.
-4. Run locally and confirm your pages and sidebar look right.
+1. Follow [Installation](/docs/installation) to run the site locally.
+2. Use [Configuration](/docs/configuration) to set your site name and options.
+3. Define your sidebar in [Navigation](/docs/navigation).
+4. Add content files under `content/docs` and check them at `/docs`.
 
 ## Daily workflow
 
 1. Create or edit a page in `content/docs`.
-2. Add that page slug to `docs.json`.
+2. Add new page slugs to `docs.json`.
 3. Refresh `/docs` and verify page order and links.
 
 ## Continue
@@ -31,6 +47,8 @@ You edit content files, define navigation once, and the site renders your docs a
 1. [Installation](/docs/installation)
 2. [Configuration](/docs/configuration)
 3. [Navigation](/docs/navigation)
-4. [Writing content](/docs/writing-content)
-5. [Components](/docs/components)
-6. [Troubleshooting](/docs/troubleshooting)
+4. [Customization](/docs/customization)
+5. [Navbar and footer](/docs/navbar-and-footer)
+6. [SEO and redirects](/docs/seo)
+7. [Writing content](/docs/writing-content)
+8. [Components](/docs/components)

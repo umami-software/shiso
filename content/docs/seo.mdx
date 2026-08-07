@@ -1,0 +1,113 @@
+---
+title: SEO and redirects
+description: Meta tags, sitemaps, redirects, the 404 page, and last-modified dates.
+---
+
+Shiso generates SEO metadata for every page automatically: titles, meta
+descriptions, canonical URLs, Open Graph and Twitter tags, and structured data.
+Set `$shiso.siteUrl` so tags that need an absolute origin can be emitted.
+
+These `docs.json` keys tune the rest.
+
+## Meta tags
+
+`seo.metatags` adds meta tags to every page:
+
+```json
+{
+  "seo": {
+    "metatags": { "og:image": "/images/social.png" }
+  }
+}
+```
+
+Keys with an `og:`-style prefix become `property` attributes; everything else
+becomes a `name` attribute.
+
+## Indexing
+
+```json
+{
+  "seo": { "indexing": "navigable" }
+}
+```
+
+- `"navigable"` (default): pages marked `hidden` in navigation get a `noindex`
+  tag and stay out of `sitemap.xml`
+- `"all"`: every page is indexable
+
+A per-page `noindex` frontmatter field always wins:
+
+```yaml
+---
+title: Internal notes
+noindex: true
+---
+```
+
+## Sitemap
+
+When `$shiso.siteUrl` is set, `pnpm build` writes a `sitemap.xml` covering
+every indexable page, with last-modified dates taken from git history.
+
+## Redirects
+
+The `redirects` key maps moved or renamed pages to their new locations. Each
+source becomes a static redirect page in the build output, and client-side
+routing follows the same rules for unknown paths.
+
+```json
+{
+  "redirects": [
+    { "source": "/docs/old-page", "destination": "/docs/new-page" },
+    { "source": "/docs/legacy", "destination": "https://example.com/archive" }
+  ]
+}
+```
+
+Sources are matched exactly. Wildcard patterns (`/old/:slug*`) are part of the
+standard but not implemented yet — they are skipped with a build warning.
+`permanent` is accepted for portability, but static output cannot vary the
+HTTP status code.
+
+## 404 page
+
+The `errors.404` key controls what happens when a page is not found.
+
+```json
+{
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "Page not found",
+      "description": "Try the [documentation home](/docs) instead."
+    }
+  }
+}
+```
+
+By default (`redirect: true`) unknown paths navigate to the docs home. Set
+`redirect` to `false` to show the 404 page with an optional custom `title` and
+`description` (supports basic markdown).
+
+## Last-modified timestamps
+
+Set `metadata.timestamp` to show a "Last updated" date on every page, taken
+from each file's git history at build time.
+
+```json
+{
+  "metadata": { "timestamp": true }
+}
+```
+
+Override it per page with the `timestamp` frontmatter field:
+
+```yaml
+---
+title: My page
+timestamp: false
+---
+```
+
+Pages with timestamps also emit an `article:modified_time` meta tag.
