@@ -55,7 +55,7 @@
   },
   "overrides": [
     {
-      "includes": ["src/components/svg/**", "src/assets/**", "public/**"],
+      "includes": ["public/**"],
       "linter": {
         "rules": {
           "a11y": {

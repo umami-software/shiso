@@ -19,7 +19,6 @@
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
-    "icons": "svgr ./src/assets --out-dir src/components/svg --typescript",
     "icons:registry": "node scripts/generate-icon-registry.mjs",
     "timestamps": "node scripts/generate-last-modified.mjs",
     "search:index": "node scripts/generate-search-index.mjs"
@@ -47,7 +46,6 @@
     "@biomejs/biome": "^2.4.2",
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/rollup": "^3.1.1",
-    "@svgr/cli": "^8.1.0",
     "@types/css-modules": "^1.0.5",
     "@types/mdx": "^2.0.11",
     "@types/node": "^26.1.2",

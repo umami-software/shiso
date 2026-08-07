@@ -76,6 +76,13 @@
   .sidenav,
   .pagelinks {
     display: block;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+  }
+
+  .sidenav {
+    height: 100vh;
   }
 
   .mobileMenu {

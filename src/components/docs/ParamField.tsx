@@ -30,7 +30,7 @@ export function ParamField({
   return (
     <div className={styles.field}>
       <div className={styles.fieldHeader}>
-        <code className={styles.code}>{label}</code>
+        <span className={styles.fieldName}>{label}</span>
         {location ? <Badge>{location}</Badge> : null}
         {type ? <span className={styles.fieldType}>{decodeHtmlEntities(type)}</span> : null}
         {required ? <Badge tone="primary">required</Badge> : null}

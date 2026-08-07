@@ -370,6 +370,11 @@ a.card:hover {
   font-size: 0.9rem;
 }
 
+.fieldName {
+  color: var(--color-text-strong);
+  font-weight: 700;
+}
+
 .code {
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, currentColor 10%, transparent);

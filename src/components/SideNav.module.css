@@ -4,9 +4,7 @@
 }
 
 .sticky {
-  position: sticky;
-  top: 0;
-  max-height: 100vh;
+  height: 100%;
 }
 
 .nav {

@@ -24,7 +24,7 @@ export function ResponseField({ name, type, required, deprecated, children }: Re
   return (
     <div className={styles.field}>
       <div className={styles.fieldHeader}>
-        <code className={styles.code}>{name}</code>
+        <span className={styles.fieldName}>{name}</span>
         {normalizedType ? <span className={styles.fieldType}>{normalizedType}</span> : null}
         {required ? <Badge tone="primary">required</Badge> : null}
         {deprecated ? <Badge>deprecated</Badge> : null}
