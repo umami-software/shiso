@@ -42,7 +42,15 @@ export function Footer() {
         </div>
       )}
       <div className="flex items-center justify-between gap-4">
-        <span className="text-sm">Powered by Shiso</span>
+        <span className="text-sm">
+          Powered by{' '}
+          <a
+            href="https://shiso.umami.is?ref=docs-footer"
+            className="font-bold hover:text-foreground"
+          >
+            shiso
+          </a>
+        </span>
         {socials.length > 0 && (
           <div className="flex items-center gap-1">
             {socials.map(([platform, url]) => (

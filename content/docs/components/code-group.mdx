@@ -1,5 +1,5 @@
 ---
-title: Code Group
+title: Code group
 description: Tabbed code snippets for package managers, languages, and variants.
 ---
 
@@ -8,30 +8,30 @@ Use `CodeGroup` to show multiple related fenced blocks behind tabs.
 ## Basic usage
 
 <CodeGroup>
-  ```bash npm
+  ```bash title="npm"
   npm install
   ```
 
-  ```bash pnpm
+  ```bash title="pnpm"
   pnpm install
   ```
 </CodeGroup>
 
 ````mdx
 <CodeGroup>
-  ```bash npm
+  ```bash title="npm"
   npm install
   ```
 
-  ```bash pnpm
+  ```bash title="pnpm"
   pnpm install
   ```
 </CodeGroup>
 ````
 
-Each child can set a label with a second token after the language fence
-(`` ```bash pnpm ``) or a `title` prop when the child is an element. If no
-label is found, Shiso infers one from the language class and suffixes
+Each child can set a label with title metadata after the language fence
+(`` ```bash title="pnpm" ``) or a `title` prop when the child is an element.
+If no label is found, Shiso infers one from the language class and suffixes
 duplicates (`bash`, `bash 2`, …).
 
 A single child renders as plain content with no tab chrome. For non-code
@@ -39,6 +39,8 @@ alternate content, use [Tabs](/docs/components/tabs).
 
 ## Properties
 
+<PropertiesTable>
 <ResponseField name="children" type="ReactNode">
   Fenced code blocks or other tabbable content.
 </ResponseField>
+</PropertiesTable>

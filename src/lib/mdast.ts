@@ -11,6 +11,7 @@ export interface MdNode {
   depth?: number;
   value?: string;
   lang?: string;
+  meta?: string;
   children?: MdNode[];
   data?: Record<string, unknown>;
   /**

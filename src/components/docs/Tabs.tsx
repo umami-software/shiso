@@ -93,14 +93,14 @@ export function Tabs({ children, group }: TabsProps) {
     >
       <TabsList
         variant="line"
-        className="w-full justify-start gap-7 overflow-x-auto overflow-y-hidden border-border border-b p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="w-full justify-start gap-5 overflow-x-auto overflow-y-hidden border-border border-b p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Content tabs"
       >
         {tabs.map(tab => (
           <TabsTrigger
             key={tab.id}
             value={tab.id}
-            className="after:bg-primary data-active:text-primary"
+            className="flex-none px-0 text-muted-foreground after:bg-primary data-active:text-foreground"
           >
             {tab.title}
           </TabsTrigger>

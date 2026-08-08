@@ -23,9 +23,9 @@ export const styles = {
     'border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300',
   danger: 'border-destructive/40 bg-destructive/10 text-destructive',
 
-  card: 'block h-full gap-0 rounded-lg border border-border bg-card p-4 ring-0 hover:border-input',
+  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 ring-0 hover:border-input',
   cardHorizontal:
-    '[&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0',
+    '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0',
   cardImage: 'mb-3 block w-full rounded-md',
   cardInner: 'flex items-start justify-between gap-3',
   cardMain: 'flex min-w-0 flex-col gap-2',
@@ -54,7 +54,7 @@ export const styles = {
   fieldBody: 'mt-3',
   fieldType: 'text-[0.9rem] text-muted-foreground',
   fieldName: 'font-bold text-foreground',
-  code: 'rounded-sm bg-[color-mix(in_srgb,currentColor_10%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono',
+  code: 'rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono',
   example: 'my-4 rounded-lg border border-border bg-muted p-4',
   exampleHeader: 'flex items-center gap-2 font-semibold text-foreground',
   exampleBody: 'mt-3',

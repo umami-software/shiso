@@ -4,8 +4,9 @@
     "siteUrl": "https://shiso.dev"
   },
   "theme": "shiso",
-  "name": "Shiso",
+  "name": "shiso",
   "description": "Open-source docs site generator built with Vite, React, and MDX.",
+  "favicon": "/logo.svg",
   "navbar": {
     "links": [
       {

@@ -140,7 +140,7 @@
 
   .docs-markdown code:not(pre code) {
     border-radius: var(--radius-sm);
-    background: color-mix(in srgb, currentColor 10%, transparent);
+    background: color-mix(in srgb, currentColor 4%, transparent);
     padding: 0.1rem 0.3rem;
     font-size: 0.875rem;
   }

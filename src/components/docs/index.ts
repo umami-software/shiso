@@ -9,6 +9,7 @@ export * from './Expandable';
 export * from './Frame';
 export * from './Icon';
 export * from './ParamField';
+export * from './PropertiesTable';
 export * from './ResponseField';
 export * from './Steps';
 export * from './Tabs';

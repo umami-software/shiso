@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { TabsContent, TabsList, Tabs as TabsPrimitive, TabsTrigger } from '@/components/ui/tabs';
 import { styles } from './styles';
-import { findCodeLanguage, slugify, toElementArray } from './utils';
+import { findCodeLanguage, findCodeTitle, slugify, toElementArray } from './utils';
 
 export interface CodeGroupProps {
   children?: ReactNode;
@@ -16,6 +16,7 @@ export function CodeGroup({ children }: CodeGroupProps) {
       const explicitTitle = child.props?.title;
       const titleValue =
         (typeof explicitTitle === 'string' && explicitTitle.trim()) ||
+        findCodeTitle(child) ||
         findCodeLanguage(child) ||
         `snippet ${index + 1}`;
       const keyBase = slugify(titleValue, `snippet-${index + 1}`);
@@ -42,24 +43,28 @@ export function CodeGroup({ children }: CodeGroupProps) {
   }
 
   return (
-    <TabsPrimitive value={selected} onValueChange={setSelectedKey} className={styles.tabs}>
+    <TabsPrimitive
+      value={selected}
+      onValueChange={setSelectedKey}
+      className="my-4 gap-0 overflow-hidden rounded-lg border border-border bg-background [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-muted/50"
+    >
       <TabsList
         variant="line"
-        className="w-full justify-start overflow-x-auto border-border border-b p-0"
+        className="h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none border-border border-b px-3 py-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Code snippets"
       >
         {blocks.map(block => (
           <TabsTrigger
             key={block.id}
             value={block.id}
-            className="after:bg-primary data-active:text-primary"
+            className="flex-none px-0 text-muted-foreground after:bg-primary data-active:text-foreground"
           >
             {block.title}
           </TabsTrigger>
         ))}
       </TabsList>
       {blocks.map(block => (
-        <TabsContent key={block.id} value={block.id} className="pt-4">
+        <TabsContent key={block.id} value={block.id}>
           {block.content}
         </TabsContent>
       ))}

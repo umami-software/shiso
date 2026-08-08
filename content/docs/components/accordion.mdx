@@ -50,6 +50,7 @@ For a single collapsible without group styling, use
 
 ### Accordion
 
+<PropertiesTable>
 <ResponseField name="title" type="ReactNode">
   Summary label shown in the header.
 </ResponseField>
@@ -65,9 +66,11 @@ For a single collapsible without group styling, use
 <ResponseField name="children" type="ReactNode">
   Content revealed when open.
 </ResponseField>
+</PropertiesTable>
 
 ### AccordionGroup
 
+<PropertiesTable>
 <ResponseField name="defaultOpen" type="boolean" default="false">
   When `true`, opens the first child that does not set its own `defaultOpen`.
 </ResponseField>
@@ -75,3 +78,4 @@ For a single collapsible without group styling, use
 <ResponseField name="children" type="ReactNode">
   One or more `Accordion` items. Empty groups render nothing.
 </ResponseField>
+</PropertiesTable>

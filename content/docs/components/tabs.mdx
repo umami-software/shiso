@@ -11,20 +11,20 @@ prefer [Code Group](/docs/components/code-group).
 
 <Tabs>
   <Tab title="JavaScript">
-    Install with npm.
+    Content for JavaScript developers.
   </Tab>
   <Tab title="Python">
-    Install with pip.
+    Content for Python developers.
   </Tab>
 </Tabs>
 
 ```tsx
 <Tabs>
   <Tab title="JavaScript">
-    Install with npm.
+    Content for JavaScript developers.
   </Tab>
   <Tab title="Python">
-    Install with pip.
+    Content for Python developers.
   </Tab>
 </Tabs>
 ```
@@ -47,6 +47,7 @@ A single `Tab` child renders as plain content with no tab chrome.
 
 ### Tabs
 
+<PropertiesTable>
 <ResponseField name="group" type="string">
   Shared id for persisting the selected tab across tab sets.
 </ResponseField>
@@ -54,9 +55,11 @@ A single `Tab` child renders as plain content with no tab chrome.
 <ResponseField name="children" type="ReactNode">
   One or more `Tab` children.
 </ResponseField>
+</PropertiesTable>
 
 ### Tab
 
+<PropertiesTable>
 <ResponseField name="title" type="ReactNode">
   Tab label. Falls back to `Tab 1`, `Tab 2`, and so on.
 </ResponseField>
@@ -64,3 +67,4 @@ A single `Tab` child renders as plain content with no tab chrome.
 <ResponseField name="children" type="ReactNode">
   Panel content.
 </ResponseField>
+</PropertiesTable>

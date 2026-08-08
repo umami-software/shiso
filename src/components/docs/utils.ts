@@ -3,6 +3,7 @@ import { getIcon } from '@/lib/icons';
 
 interface NodeWithClassName {
   className?: string;
+  'data-title'?: string;
   children?: ReactNode;
 }
 
@@ -94,4 +95,17 @@ export function findCodeLanguage(node: ReactNode): string | undefined {
   }
 
   return findCodeLanguage(node.props.children);
+}
+
+export function findCodeTitle(node: ReactNode): string | undefined {
+  if (!isValidElement<NodeWithClassName>(node)) {
+    return undefined;
+  }
+
+  const title = node.props['data-title'];
+  if (typeof title === 'string' && title.trim()) {
+    return title.trim();
+  }
+
+  return findCodeTitle(node.props.children);
 }

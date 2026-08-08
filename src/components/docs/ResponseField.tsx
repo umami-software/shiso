@@ -8,6 +8,7 @@ type FieldValue = string | number | boolean | null | undefined;
 export interface ResponseFieldProps {
   name: string;
   type?: FieldValue;
+  default?: FieldValue;
   required?: boolean;
   deprecated?: boolean;
   children?: ReactNode;

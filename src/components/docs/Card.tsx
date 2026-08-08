@@ -20,7 +20,7 @@ function DocsCardContent({ title, icon, img, cta, arrow, children }: Omit<CardPr
   return (
     <CardContent className="p-0">
       {img ? <img src={img} alt="" className={styles.cardImage} /> : null}
-      <div className={styles.cardInner}>
+      <div className={styles.cardInner} data-slot="card-inner">
         <div className={styles.cardMain} data-slot="card-main">
           <div className={styles.cardHeader}>
             {resolveIcon(icon, 16)}

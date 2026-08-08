@@ -4,7 +4,7 @@ export const LAST_MODIFIED: Record<string, string> = {
   '/content/docs/components/accordion.mdx': '2026-08-07T14:55:40-07:00',
   '/content/docs/components/badge.mdx': '2026-08-07T21:50:33-07:00',
   '/content/docs/components/callout.mdx': '2026-08-07T14:55:40-07:00',
-  '/content/docs/components/card.mdx': '2026-08-07T14:55:40-07:00',
+  '/content/docs/components/card.mdx': '2026-08-07T22:08:37-07:00',
   '/content/docs/components/code-group.mdx': '2026-08-07T14:55:40-07:00',
   '/content/docs/components/columns.mdx': '2026-08-07T14:55:40-07:00',
   '/content/docs/components/examples.mdx': '2026-08-07T14:55:40-07:00',

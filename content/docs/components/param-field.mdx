@@ -1,5 +1,5 @@
 ---
-title: Param Field
+title: Param field
 description: Document request parameters with location and type badges.
 ---
 
@@ -55,6 +55,7 @@ Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
 
 ### ParamField
 
+<PropertiesTable>
 <ResponseField name="name" type="string">
   Display label for the parameter.
 </ResponseField>
@@ -86,9 +87,12 @@ Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
 <ResponseField name="children" type="ReactNode">
   Parameter description.
 </ResponseField>
+</PropertiesTable>
 
 ### Param
 
+<PropertiesTable>
 <ResponseField name="children" type="ReactNode">
   Inline parameter name rendered as code.
 </ResponseField>
+</PropertiesTable>
