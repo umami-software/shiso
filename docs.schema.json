@@ -584,6 +584,10 @@
           "type": "boolean",
           "description": "When true, nested groups start expanded. Top-level groups start expanded by default. Groups that contain the current page always expand."
         },
+        "collapsible": {
+          "type": "boolean",
+          "description": "When false, the group stays expanded and its heading does not show a collapse control."
+        },
         "hidden": {
           "type": "boolean",
           "description": "Hide the group and its pages from the sidebar."

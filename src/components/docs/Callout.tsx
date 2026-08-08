@@ -6,7 +6,7 @@ import {
   Lightbulb,
   TriangleAlert,
 } from '@/components/icons';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { resolveIcon } from './utils';
 
 export interface CalloutProps {

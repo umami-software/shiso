@@ -225,6 +225,7 @@ type PendingNode =
       children: PendingNode[];
       icon?: string;
       expanded?: boolean;
+      collapsible?: boolean;
       hidden?: boolean;
     };
 
@@ -333,6 +334,7 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
         children: collectPages(item.pages as PageItem[], childContext, state),
         icon: typeof item.icon === 'string' ? item.icon : undefined,
         expanded: item.expanded === true || undefined,
+        collapsible: item.collapsible === false ? false : undefined,
         hidden,
       });
       return;
@@ -557,6 +559,7 @@ export function normalizeDocsConfig(
       children: node.children.map(materialize).filter((child): child is NavNode => !!child),
       icon: node.icon,
       expanded: node.expanded,
+      collapsible: node.collapsible,
       hidden: node.hidden,
     } satisfies NavGroupNode;
   }

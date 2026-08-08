@@ -1,5 +1,5 @@
 import { cloneElement, type ReactNode } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { resolveIcon, toElementArray } from './utils';
 
 export interface AccordionProps {

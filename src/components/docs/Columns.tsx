@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { gridColsClass } from './utils';
 
 export interface ColumnsProps {

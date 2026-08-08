@@ -28,6 +28,7 @@ export interface GroupItem {
   pages: PageItem[];
   icon?: string;
   expanded?: boolean;
+  collapsible?: boolean;
   hidden?: boolean;
 }
 
@@ -359,6 +360,7 @@ export interface NavGroupNode {
   children: NavNode[];
   icon?: string;
   expanded?: boolean;
+  collapsible?: boolean;
   hidden?: boolean;
 }
 

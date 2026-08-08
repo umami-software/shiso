@@ -1,5 +1,4 @@
 import { Moon, Sun } from '@/components/icons';
-import styles from './ThemeToggle.module.css';
 
 /**
  * Both icons are always rendered and toggled via CSS on [data-theme], so the
@@ -19,9 +18,14 @@ export function ThemeToggle() {
   };
 
   return (
-    <button type="button" className={styles.button} onClick={handleClick} aria-label="Toggle theme">
-      <Sun className={styles.sun} size={16} />
-      <Moon className={styles.moon} size={16} />
+    <button
+      type="button"
+      className="inline-flex size-8 items-center justify-center rounded-[var(--radius-md)] text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)]"
+      onClick={handleClick}
+      aria-label="Toggle theme"
+    >
+      <Sun className="dark:hidden" size={16} />
+      <Moon className="hidden dark:block" size={16} />
     </button>
   );
 }

@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 import docsConfig from './docs.json' with { type: 'json' };
@@ -293,6 +294,7 @@ function shisoHtml(): Plugin {
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     shisoIconRegistry(),
     shisoLastModified(),
     shisoSearchIndex(),

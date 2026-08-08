@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Search as SearchIcon } from '@/components/icons';
 import { type SearchRecord, type SearchResult, searchIndex } from '@/lib/search';
 import { getSearchPrompt } from '@/lib/site-config';
-import styles from './Search.module.css';
 
 /**
  * Search dialog over the build-time index. The index module is dynamically
@@ -82,26 +82,36 @@ export function Search() {
 
   return (
     <>
-      <button type="button" className={styles.trigger} onClick={openDialog}>
+      <button
+        type="button"
+        className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-sm text-[var(--color-text-muted)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)]"
+        onClick={openDialog}
+      >
         <SearchIcon size={14} />
-        <span className={styles.prompt}>{prompt}</span>
-        <kbd className={styles.kbd}>⌘K</kbd>
+        <span className="min-w-24 text-left">{prompt}</span>
+        <kbd className="rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] px-[0.3rem] py-[0.05rem] text-[0.7rem] [font-family:var(--font-sans)]">
+          ⌘K
+        </kbd>
       </button>
       {open && (
-        <div className={styles.overlay}>
+        <div className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-[10vh] pb-4">
           <button
             type="button"
-            className={styles.backdrop}
+            className="absolute inset-0 bg-black/40"
             onClick={closeDialog}
             aria-label="Close search"
           />
-          <div className={styles.dialog} role="dialog" aria-label="Search">
-            <div className={styles.inputRow}>
-              <SearchIcon size={16} className={styles.inputIcon} />
+          <div
+            className="relative w-full max-w-[34rem] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_10px_40px_rgba(0,0,0,0.2)]"
+            role="dialog"
+            aria-label="Search"
+          >
+            <div className="flex items-center gap-2 px-4 py-3">
+              <SearchIcon size={16} className="shrink-0 text-[var(--color-text-muted)]" />
               <input
                 ref={inputRef}
                 type="text"
-                className={styles.input}
+                className="w-full border-none bg-transparent text-base text-[var(--color-text)] outline-none [font:inherit]"
                 placeholder={prompt}
                 value={query}
                 onChange={event => runQuery(event.target.value)}
@@ -109,21 +119,30 @@ export function Search() {
               />
             </div>
             {query && (
-              <div className={styles.results}>
-                {results.length === 0 && <div className={styles.empty}>No results</div>}
+              <div className="max-h-[50vh] overflow-y-auto border-[var(--color-border)] border-t p-2">
+                {results.length === 0 && (
+                  <div className="p-4 text-center text-[var(--color-text-muted)]">No results</div>
+                )}
                 {results.map((result, index) => (
                   <button
                     type="button"
                     key={result.url}
-                    className={index === active ? styles.resultActive : styles.result}
+                    className={classNames(
+                      'block w-full rounded-[var(--radius-md)] px-3 py-2 text-left',
+                      { 'bg-[var(--color-surface-sunken)]': index === active },
+                    )}
                     onMouseEnter={() => setActive(index)}
                     onClick={() => select(result)}
                   >
-                    <div className={styles.resultTitle}>
+                    <div className="text-[0.9rem] font-semibold text-[var(--color-text-strong)]">
                       {result.record.page}
                       {result.record.heading ? ` › ${result.record.heading}` : ''}
                     </div>
-                    {result.snippet && <div className={styles.resultSnippet}>{result.snippet}</div>}
+                    {result.snippet && (
+                      <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-[var(--color-text-muted)]">
+                        {result.snippet}
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>

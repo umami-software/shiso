@@ -6,7 +6,6 @@ import { getIcon } from '@/lib/icons';
 import { DOCS_PREFIX } from '@/lib/paths';
 import { getAppearance, getLogo, getNavbar, siteName } from '@/lib/site-config';
 import type { NavbarLink } from '@/lib/types';
-import styles from './Header.module.css';
 
 const TYPE_LABELS: Record<string, string> = {
   github: 'GitHub',
@@ -34,26 +33,29 @@ export function Header() {
   const brandHref = logo?.href || DOCS_PREFIX || '/';
 
   return (
-    <header className={styles.header}>
-      <div className={styles.left}>
-        <Link to={brandHref} className={styles.brand}>
+    <header className="flex items-center justify-between py-5">
+      <div className="flex items-center gap-5">
+        <Link
+          to={brandHref}
+          className="text-xl font-bold text-[var(--color-text-strong)] tracking-[-0.03em]"
+        >
           {logo ? (
             <>
-              <img src={logo.light} alt={siteName} className={styles.logoLight} />
-              <img src={logo.dark} alt={siteName} className={styles.logoDark} />
+              <img src={logo.light} alt={siteName} className="h-7 w-auto dark:hidden" />
+              <img src={logo.dark} alt={siteName} className="hidden h-7 w-auto dark:block" />
             </>
           ) : (
             siteName
           )}
         </Link>
       </div>
-      <div className={styles.right}>
+      <div className="flex items-center gap-2">
         <Search />
         {navbar?.links?.map(link => (
           <a
             key={link.href}
             href={link.href}
-            className={styles.navLink}
+            className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] px-2.5 py-1.5 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
             target="_blank"
             rel="noreferrer"
           >
@@ -63,7 +65,12 @@ export function Header() {
         ))}
         {!getAppearance().strict && <ThemeToggle />}
         {navbar?.primary && (
-          <a href={navbar.primary.href} className={styles.primary} target="_blank" rel="noreferrer">
+          <a
+            href={navbar.primary.href}
+            className="ml-1 inline-flex items-center gap-1.5 rounded-[var(--radius-full)] bg-[var(--color-primary-strong)] px-3.5 py-1.5 text-sm font-semibold text-white hover:opacity-90"
+            target="_blank"
+            rel="noreferrer"
+          >
             {navbar.primary.type !== 'button' && (
               <SocialIcon platform={navbar.primary.type} size={16} />
             )}

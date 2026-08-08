@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { ChevronRight } from '@/components/icons';
-import styles from './docs.module.css';
+import { styles } from './styles';
 
 export interface ExampleProps {
   title?: ReactNode;

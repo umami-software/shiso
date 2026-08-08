@@ -1,6 +1,5 @@
 import { isKnownPlatform, SocialIcon } from '@/components/SocialIcon';
 import { getFooter, siteName } from '@/lib/site-config';
-import styles from './Footer.module.css';
 
 /** "hacker-news" -> "Hacker News", for accessible labels on icon-only links. */
 function platformLabel(platform: string): string {
@@ -18,16 +17,23 @@ export function Footer() {
   const columns = footer?.links || [];
 
   return (
-    <footer className={styles.footer}>
+    <footer className="mt-8 border-[var(--color-border)] border-t py-8 text-[var(--color-text-muted)]">
       {columns.length > 0 && (
-        <div className={styles.columns}>
+        <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(10rem,max-content))] gap-x-16 gap-y-8">
           {columns.map((column, index) => (
-            <div key={column.header || index} className={styles.column}>
-              {column.header && <div className={styles.columnHeader}>{column.header}</div>}
-              <ul className={styles.columnList}>
+            <div key={column.header || index}>
+              {column.header && (
+                <div className="mb-3 text-sm font-semibold text-[var(--color-text-strong)]">
+                  {column.header}
+                </div>
+              )}
+              <ul className="m-0 flex list-none flex-col gap-2 p-0">
                 {column.items.map(item => (
                   <li key={item.href}>
-                    <a href={item.href} className={styles.columnLink}>
+                    <a
+                      href={item.href}
+                      className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]"
+                    >
                       {item.label}
                     </a>
                   </li>
@@ -37,15 +43,15 @@ export function Footer() {
           ))}
         </div>
       )}
-      <div className={styles.bottom}>
-        <span className={styles.name}>{siteName}</span>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-sm">{siteName}</span>
         {socials.length > 0 && (
-          <div className={styles.socials}>
+          <div className="flex items-center gap-1">
             {socials.map(([platform, url]) => (
               <a
                 key={platform}
                 href={url}
-                className={styles.socialLink}
+                className="inline-flex size-8 items-center justify-center rounded-[var(--radius-md)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
                 target="_blank"
                 rel="noreferrer"
                 aria-label={platformLabel(platform)}

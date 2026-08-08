@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Badge } from './Badge';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { decodeHtmlEntities } from './utils';
 
 type FieldValue = string | number | boolean | null | undefined;

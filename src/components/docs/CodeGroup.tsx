@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { TabStrip } from './TabStrip';
 import { findCodeLanguage, slugify, toElementArray } from './utils';
 

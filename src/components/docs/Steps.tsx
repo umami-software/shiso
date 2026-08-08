@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { toElementArray } from './utils';
 
 interface StepChildProps {
@@ -31,7 +31,7 @@ export function Steps({ children }: StepsProps) {
   }
 
   return (
-    <div className={styles.steps}>
+    <div className={`${styles.steps} ${steps.length === 1 ? 'before:hidden' : ''}`}>
       {steps.map((step, index) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: steps are static MDX content
         <div key={`step-${index + 1}`} className={styles.step}>

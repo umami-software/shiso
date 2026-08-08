@@ -7,7 +7,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
 import { getDrilldown } from '@/lib/site-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
-import styles from './SideNav.module.css';
+
+const sectionLabelClass =
+  'flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 pl-3 font-bold text-inherit';
+const groupLabelClass =
+  'flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit';
+const selectedClass =
+  'border-l-[var(--color-primary)] font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]';
 
 export interface SideNavProps {
   tabs: DocsTab[];
@@ -25,8 +31,9 @@ function containsPage(node: NavGroupNode, pathname: string): boolean {
 }
 
 /**
- * Collapsible group. Top-level groups start expanded; nested groups start
- * collapsed unless `expanded: true` or the current page is inside.
+ * Group section. Groups with `collapsible: false` stay open; otherwise,
+ * top-level groups start expanded and nested groups start collapsed unless
+ * `expanded: true` or the current page is inside.
  *
  * Click behavior follows `interaction.drilldown`:
  * - true: expanding also navigates to the group's root or first page
@@ -45,14 +52,18 @@ function CollapsibleGroup({
   const navigate = useNavigate();
   const drilldown = getDrilldown();
   const active = containsPage(node, pathname);
+  const collapsible = node.collapsible !== false;
   // Top-level sections stay open by default so the sidebar is usable on first load.
-  const [expanded, setExpanded] = useState(depth === 0 || !!node.expanded || active);
+  const [expanded, setExpanded] = useState(
+    !collapsible || depth === 0 || !!node.expanded || active,
+  );
+  const isExpanded = !collapsible || expanded;
 
   useEffect(() => {
-    if (active) {
+    if (!collapsible || active) {
       setExpanded(true);
     }
-  }, [active]);
+  }, [active, collapsible]);
 
   const firstPage = node.root?.page || flattenNav(node.children).find(page => !page.hidden);
 
@@ -68,60 +79,95 @@ function CollapsibleGroup({
   const chevron = (
     <ChevronRight
       size={14}
-      className={classNames(styles.chevron, { [styles.chevronOpen]: expanded })}
+      className={classNames('shrink-0 origin-center transition-transform duration-150', {
+        'rotate-90': isExpanded,
+      })}
     />
   );
 
   const isTopLevel = depth === 0;
   const rootSelected = node.root?.page.url === pathname;
-  const headerClass = isTopLevel ? styles.sectionHeader : styles.nestedHeader;
+  const headerClass = isTopLevel
+    ? 'flex min-w-0 items-center text-[var(--color-text-strong)]'
+    : classNames(
+        'flex items-center border-[var(--color-border)] border-l text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]',
+        { 'pl-6': depth > 1 },
+      );
 
-  // Navigating headers keep a separate chevron button so collapse stays reachable.
-  const header =
-    drilldown !== false && node.root ? (
-      <div
-        className={classNames(headerClass, styles.collapsibleHeader, {
-          [styles.selected]: rootSelected && !isTopLevel,
-          [styles.sectionSelected]: rootSelected && isTopLevel,
-        })}
-      >
-        <Link
-          to={node.root.page.url}
-          className={isTopLevel ? styles.sectionLabel : styles.groupLabel}
-        >
+  const fixedHeader = (
+    <div
+      className={classNames(headerClass, {
+        [selectedClass]: rootSelected && !isTopLevel,
+        'text-[var(--color-primary)]': rootSelected && isTopLevel,
+      })}
+    >
+      {node.root ? (
+        <Link to={node.root.page.url} className={isTopLevel ? sectionLabelClass : groupLabelClass}>
           {resolveIcon(node.icon)}
           {node.label}
         </Link>
-        <button
-          type="button"
-          className={styles.chevronButton}
-          onClick={handleToggle}
-          aria-expanded={expanded}
-          aria-label={`${expanded ? 'Collapse' : 'Expand'} ${node.label}`}
-        >
-          {chevron}
-        </button>
-      </div>
-    ) : (
-      <button
-        type="button"
-        className={classNames(headerClass, styles.groupToggle, {
-          [styles.sectionToggle]: isTopLevel,
-        })}
-        onClick={handleToggle}
-        aria-expanded={expanded}
-      >
+      ) : (
+        <span className={isTopLevel ? sectionLabelClass : groupLabelClass}>
+          {resolveIcon(node.icon)}
+          {node.label}
+        </span>
+      )}
+    </div>
+  );
+
+  // Navigating collapsible headers keep a separate chevron button so collapse stays reachable.
+  const header = !collapsible ? (
+    fixedHeader
+  ) : drilldown !== false && node.root ? (
+    <div
+      className={classNames(headerClass, 'flex items-center', {
+        [selectedClass]: rootSelected && !isTopLevel,
+        'text-[var(--color-primary)]': rootSelected && isTopLevel,
+      })}
+    >
+      <Link to={node.root.page.url} className={isTopLevel ? sectionLabelClass : groupLabelClass}>
         {resolveIcon(node.icon)}
         {node.label}
+      </Link>
+      <button
+        type="button"
+        className={classNames(
+          'inline-flex size-6 items-center justify-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]',
+          { 'mr-[0.35rem]': !isTopLevel },
+        )}
+        onClick={handleToggle}
+        aria-expanded={isExpanded}
+        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${node.label}`}
+      >
         {chevron}
       </button>
-    );
+    </div>
+  ) : (
+    <button
+      type="button"
+      className={classNames(
+        headerClass,
+        'flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
+        {
+          'pb-2 pl-3 font-bold text-[var(--color-text-strong)]': isTopLevel,
+          'border-[var(--color-border)] border-l px-3 py-2 font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]':
+            !isTopLevel,
+        },
+      )}
+      onClick={handleToggle}
+      aria-expanded={isExpanded}
+    >
+      {resolveIcon(node.icon)}
+      {node.label}
+      {chevron}
+    </button>
+  );
 
   return (
-    <div className={isTopLevel ? styles.section : styles.subsection}>
+    <div className="flex flex-col">
       {header}
-      {expanded ? (
-        <div className={isTopLevel ? styles.sectionChildren : styles.subsectionChildren}>
+      {isExpanded ? (
+        <div className="flex flex-col">
           <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
         </div>
       ) : null}
@@ -152,11 +198,14 @@ function NavNodes({
           href={node.href}
           target="_blank"
           rel="noreferrer"
-          className={styles.link}
+          className={classNames(
+            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] [overflow-wrap:anywhere]',
+            { 'pl-6': depth > 1 },
+          )}
         >
           {resolveIcon(node.icon)}
           {node.label}
-          <ExternalLink size={12} className={styles.externalIcon} />
+          <ExternalLink size={12} className="ml-auto opacity-60" />
         </a>,
       );
       return;
@@ -169,11 +218,21 @@ function NavNodes({
         <Link
           key={url}
           to={url}
-          className={classNames(styles.link, { [styles.selected]: url === pathname })}
+          className={classNames(
+            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] [overflow-wrap:anywhere]',
+            {
+              'pl-6': depth > 1,
+              [selectedClass]: url === pathname,
+            },
+          )}
         >
           {resolveIcon(icon)}
           {label}
-          {tag ? <span className={styles.tag}>{tag}</span> : null}
+          {tag ? (
+            <span className="ml-auto rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] px-[0.35rem] py-[0.05rem] text-[0.7rem] font-medium text-[var(--color-text-muted)] uppercase">
+              {tag}
+            </span>
+          ) : null}
         </Link>,
       );
       return;
@@ -201,8 +260,8 @@ export function SideNav({ tabs, navigation, isSticky }: SideNavProps) {
   const nodes = navigation[tab?.id || tabs?.[0]?.id] || [];
 
   return (
-    <ScrollArea className={classNames(styles.sidenav, { [styles.sticky]: isSticky })}>
-      <nav className={styles.nav} aria-label="Documentation">
+    <ScrollArea className={classNames('w-full max-w-full', { 'h-full': isSticky })}>
+      <nav className="flex w-full flex-col gap-6 pr-4" aria-label="Documentation">
         <NavNodes nodes={nodes} pathname={pathname} depth={0} />
       </nav>
     </ScrollArea>

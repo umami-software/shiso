@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 
 export interface TabStripItem {
   id: string;

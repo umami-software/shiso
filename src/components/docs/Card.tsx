@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ChevronRight } from '@/components/icons';
-import styles from './docs.module.css';
+import { styles } from './styles';
 import { gridColsClass, resolveIcon } from './utils';
 
 export interface CardProps {
@@ -20,12 +20,16 @@ function CardContent({ title, icon, img, cta, arrow, children }: Omit<CardProps,
     <>
       {img ? <img src={img} alt="" className={styles.cardImage} /> : null}
       <div className={styles.cardInner}>
-        <div className={styles.cardMain}>
+        <div className={styles.cardMain} data-slot="card-main">
           <div className={styles.cardHeader}>
             {resolveIcon(icon, 16)}
             {title ? <div className={styles.cardTitle}>{title}</div> : null}
           </div>
-          {children ? <div className={styles.cardBody}>{children}</div> : null}
+          {children ? (
+            <div className={styles.cardBody} data-slot="card-body">
+              {children}
+            </div>
+          ) : null}
         </div>
         {cta || arrow ? (
           <div className={styles.cardCta}>

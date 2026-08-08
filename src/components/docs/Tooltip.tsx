@@ -1,5 +1,5 @@
 import { type ReactNode, useId } from 'react';
-import styles from './docs.module.css';
+import { styles } from './styles';
 
 export interface TooltipProps {
   tip?: ReactNode;

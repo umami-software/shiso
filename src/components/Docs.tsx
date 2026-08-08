@@ -9,7 +9,6 @@ import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { DOCS_PREFIX } from '@/lib/paths';
 import { docsConfig, getError404 } from '@/lib/site-config';
 import type { DocModule, NormalizedDocsPage } from '@/lib/types';
-import styles from './Docs.module.css';
 
 /**
  * 404 view driven by the `errors.404` config key. The standard defaults to
@@ -28,7 +27,7 @@ function NotFound() {
   }, [redirect, navigate]);
 
   return (
-    <div className={styles.notFound}>
+    <div className="py-16 text-center">
       <h1>{title || 'Page not found'}</h1>
       {description && <p>{renderInlineMarkdown(description)}</p>}
     </div>
@@ -56,26 +55,30 @@ export function Docs({ page, doc }: DocsProps) {
   }
 
   return (
-    <div className={styles.docs}>
+    <div className="flex flex-col gap-6">
       <TopNav tabs={tabs} />
-      <div className={styles.mobileMenu}>
-        <button type="button" className={styles.menuButton} onClick={() => setMenuOpen(true)}>
+      <div className="flex justify-end lg:hidden">
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 font-medium"
+          onClick={() => setMenuOpen(true)}
+        >
           <Menu size={14} />
           Menu
         </button>
       </div>
       {menuOpen && (
-        <div className={styles.overlay}>
+        <div className="fixed inset-0 z-50">
           <button
             type="button"
-            className={styles.backdrop}
+            className="absolute inset-0 cursor-default bg-black/40"
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
           />
-          <div className={styles.sheet}>
+          <div className="absolute inset-y-0 right-0 w-[min(320px,85vw)] overflow-y-auto border-[var(--color-border)] border-l bg-[var(--color-bg)] p-4">
             <button
               type="button"
-              className={styles.closeButton}
+              className="ml-auto flex p-1 text-[var(--color-text-muted)]"
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
             >
@@ -85,12 +88,12 @@ export function Docs({ page, doc }: DocsProps) {
           </div>
         </div>
       )}
-      <div className={styles.row}>
-        <div className={styles.sidenav}>
+      <div className="flex items-start gap-12 lg:min-h-[calc(100vh+8rem)]">
+        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-6 lg:block lg:h-[calc(100vh-1.5rem)] lg:shrink-0">
           <SideNav tabs={tabs} navigation={navigation} isSticky />
         </div>
         <DocContent page={page} doc={doc} />
-        <div className={styles.pagelinks}>
+        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-6 lg:block lg:shrink-0">
           <PageLinks items={doc.toc} />
         </div>
       </div>

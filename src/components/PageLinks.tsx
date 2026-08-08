@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import type { TocEntry } from '@/lib/types';
-import styles from './PageLinks.module.css';
 
 export interface PageLinksProps {
   items?: TocEntry[];
@@ -44,13 +43,16 @@ export function PageLinks({ items = [] }: PageLinksProps) {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>On this page</div>
+    <div className="flex h-max min-w-60 flex-col gap-3 text-[0.9rem]">
+      <div className="font-bold text-[var(--color-text-strong)]">On this page</div>
       {items.map(({ name, id, size }) => (
         <a
           key={id}
           href={`#${id}`}
-          className={classNames(styles.link, { [styles.selected]: hash === id })}
+          className={classNames(
+            'text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]',
+            { 'text-[var(--color-primary)]': hash === id },
+          )}
         >
           <span style={{ marginLeft: indent(size), display: 'block' }}>{name}</span>
         </a>

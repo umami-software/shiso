@@ -3,7 +3,6 @@ import { Check, ChevronRight, Copy, ExternalLink } from '@/components/icons';
 import { toAbsoluteUrl, toHref } from '@/lib/paths';
 import { getContextualOptions } from '@/lib/site-config';
 import type { ContextualOptionObject, NormalizedDocsPage } from '@/lib/types';
-import styles from './ContextualMenu.module.css';
 
 /**
  * The contextual menu from the `contextual` config key: copy or view the page
@@ -151,8 +150,12 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
   };
 
   return (
-    <div className={styles.container} ref={containerRef}>
-      <button type="button" className={styles.primary} onClick={() => runOption(primary)}>
+    <div className="relative inline-flex shrink-0 items-stretch" ref={containerRef}>
+      <button
+        type="button"
+        className="inline-flex items-center gap-1.5 rounded-l-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-[0.3rem] text-[0.8125rem] text-[var(--color-text)] only:rounded-[var(--radius-md)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
+        onClick={() => runOption(primary)}
+      >
         {primary.action === 'copy' ? (
           copied ? (
             <Check size={14} />
@@ -168,25 +171,29 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
         <>
           <button
             type="button"
-            className={styles.toggle}
+            className="inline-flex items-center gap-1.5 rounded-r-[var(--radius-md)] border border-[var(--color-border)] border-l-0 bg-[var(--color-surface)] px-[0.35rem] py-[0.3rem] text-[0.8125rem] text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
             onClick={() => setOpen(current => !current)}
             aria-expanded={open}
             aria-label="More options"
           >
-            <ChevronRight size={14} className={styles.toggleIcon} />
+            <ChevronRight size={14} className="rotate-90" />
           </button>
           {open && (
-            <div className={styles.menu}>
+            <div className="absolute top-[calc(100%+0.25rem)] right-0 z-50 min-w-60 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg)] p-1 shadow-[0_6px_24px_rgba(0,0,0,0.12)]">
               {options.map(option => (
                 <button
                   type="button"
                   key={option.key}
-                  className={styles.item}
+                  className="block w-full rounded-[var(--radius-sm)] px-2.5 py-1.5 text-left hover:bg-[var(--color-surface-sunken)]"
                   onClick={() => runOption(option)}
                 >
-                  <div className={styles.itemTitle}>{option.title}</div>
+                  <div className="text-[0.85rem] font-medium text-[var(--color-text-strong)]">
+                    {option.title}
+                  </div>
                   {option.description && (
-                    <div className={styles.itemDescription}>{option.description}</div>
+                    <div className="text-xs text-[var(--color-text-muted)]">
+                      {option.description}
+                    </div>
                   )}
                 </button>
               ))}

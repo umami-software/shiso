@@ -146,14 +146,14 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'Page entries',
     id: 'page-entries',
-    text: 'Inside pages, you can mix: String slugs — the file path without extension: "installation" Page objects — for custom labels, icons, tags, or hidden pages: { "page": "installation", "title": "Install", "icon": "download", "tag": "New" } title (or label, which wins): custom sidebar text icon: a lucide icon name shown beside the label tag: a short badge shown after the label hidden: keep the page out of the sidebar and search — it is still built and reachable by URL External links: { "href": "https://github.com/example/repo", "label": "GitHub", "icon": "github" } Nested groups — arbitrarily deep, with an optional landing page: { "group": "Getting started", "root": "index", "icon": "rocket", "expanded": true, "pages": ["installation", "configuration"] } Groups also accept hidden, which hides the group and everything in it.',
+    text: 'Inside pages, you can mix: String slugs — the file path without extension: "installation" Page objects — for custom labels, icons, tags, or hidden pages: { "page": "installation", "title": "Install", "icon": "download", "tag": "New" } title (or label, which wins): custom sidebar text icon: a lucide icon name shown beside the label tag: a short badge shown after the label hidden: keep the page out of the sidebar and search — it is still built and reachable by URL External links: { "href": "https://github.com/example/repo", "label": "GitHub", "icon": "github" } Nested groups — arbitrarily deep, with an optional landing page: { "group": "Getting started", "root": "index", "icon": "rocket", "expanded": true, "collapsible": false, "pages": ["installation", "configuration"] } Set collapsible: false to keep a group open without a chevron. Groups also accept hidden, which hides the group and everything in it.',
   },
   {
     url: '/docs/navigation',
     page: 'Navigation',
     heading: 'Collapsible groups',
     id: 'collapsible-groups',
-    text: 'Every group is collapsible and shows a chevron: Top-level groups start expanded Nested groups start collapsed unless expanded: true is set or the current page is inside them Navigating into a group reopens it. The interaction.drilldown key controls what clicking a group header does: { "interaction": { "drilldown": true } } true: expanding a group also navigates to its root (or first) page false: the header only expands and collapses unset: headers with a root page navigate (title is a link; chevron toggles); others only expand/collapse',
+    text: 'Groups are collapsible and show a chevron by default: Top-level groups start expanded Nested groups start collapsed unless expanded: true is set or the current page is inside them Navigating into a group reopens it. The interaction.drilldown key controls what clicking a group header does: { "interaction": { "drilldown": true } } true: expanding a group also navigates to its root (or first) page false: the header only expands and collapses unset: headers with a root page navigate (title is a link; chevron toggles); others only expand/collapse',
   },
   {
     url: '/docs/navigation',

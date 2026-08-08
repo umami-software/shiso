@@ -70,15 +70,17 @@ Inside `pages`, you can mix:
   "root": "index",
   "icon": "rocket",
   "expanded": true,
+  "collapsible": false,
   "pages": ["installation", "configuration"]
 }
 ```
 
-Groups also accept `hidden`, which hides the group and everything in it.
+Set `collapsible: false` to keep a group open without a chevron. Groups also
+accept `hidden`, which hides the group and everything in it.
 
 ## Collapsible groups
 
-Every group is collapsible and shows a chevron:
+Groups are collapsible and show a chevron by default:
 
 - **Top-level groups** start expanded
 - **Nested groups** start collapsed unless `expanded: true` is set or the
