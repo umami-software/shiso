@@ -163,6 +163,10 @@
     font-weight: 600;
   }
 
+  .docs-markdown table code:not(pre code) {
+    font-size: 0.75rem;
+  }
+
   .docs-markdown blockquote {
     border-left: 3px solid var(--input);
     padding-left: 1rem;
