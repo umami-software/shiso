@@ -86,6 +86,7 @@
         "groups": [
           {
             "group": "Guides",
+            "collapsible": false,
             "pages": [
               "guides/deployment",
               { "page": "guides/migrating", "title": "Migrating from Mintlify" }

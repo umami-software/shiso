@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router';
+import { getTabByPathname } from '@/lib/site-config';
 import type { DocsTab } from '@/lib/types';
 
 export function TopNav({ tabs }: { tabs: DocsTab[] }) {
@@ -9,9 +10,7 @@ export function TopNav({ tabs }: { tabs: DocsTab[] }) {
     return null;
   }
 
-  const active = [...tabs]
-    .sort((a, b) => b.url.length - a.url.length)
-    .find(({ url }) => pathname === url || pathname.startsWith(`${url}/`));
+  const active = getTabByPathname(pathname);
   const selected = active?.id || tabs[0]?.id;
 
   return (

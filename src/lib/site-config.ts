@@ -6,6 +6,7 @@ import type {
   BannerConfig,
   ContextualOption,
   DocsConfig,
+  DocsTab,
   Error404Config,
   FooterConfig,
   NavbarConfig,
@@ -222,6 +223,19 @@ export function normalizeParamSlug(slug: string): string {
 export function getPageByPathname(pathname: string): NormalizedDocsPage | null {
   const slug = normalizeParamSlug(stripDocsPrefix(stripBase(pathname)));
   return docsConfig.pageByLookupSlug[slug] || null;
+}
+
+/** Resolves tab ownership from the normalized page before falling back to URL prefixes. */
+export function getTabByPathname(pathname: string): DocsTab | undefined {
+  const page = getPageByPathname(pathname);
+
+  if (page) {
+    return docsConfig.tabs.find(tab => tab.id === page.tabId);
+  }
+
+  return [...docsConfig.tabs]
+    .sort((a, b) => b.url.length - a.url.length)
+    .find(({ url }) => pathname === url || pathname.startsWith(`${url}/`));
 }
 
 export interface PageNavLink {

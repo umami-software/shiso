@@ -1255,7 +1255,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Deployment',
     heading: 'Vercel',
     id: 'vercel',
-    text: "The repository includes vercel.json, which configures: Build command: pnpm build Output directory: dist/client Vercel's default Vite output directory is dist; without the override it does not serve the prerendered site nested in dist/client.",
+    text: 'The repository includes vercel.json, which configures: Build command: pnpm build Framework preset: Other Output directory: dist/client Shiso prerenders its own routes, so Vercel serves it as a static site rather than applying generic Vite SPA routing. The output-directory override ensures Vercel serves the site nested in dist/client.',
   },
   {
     url: '/docs/guides/deployment',

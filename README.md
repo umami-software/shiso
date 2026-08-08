@@ -45,7 +45,7 @@ The production build:
 
 Deploy `dist/client` to any static host. For subpath deployments, set Vite's `base` option in `vite.config.ts` before building.
 
-Vercel deployments use the included `vercel.json` to select `dist/client` as the static output directory.
+Vercel deployments use the included `vercel.json` to serve `dist/client` as a pre-rendered static site.
 
 ## Commands
 

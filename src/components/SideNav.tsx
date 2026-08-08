@@ -5,7 +5,7 @@ import { resolveIcon } from '@/components/docs/utils';
 import { ChevronRight, ExternalLink } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
-import { getDrilldown } from '@/lib/site-config';
+import { getDrilldown, getTabByPathname } from '@/lib/site-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 
 const sectionLabelClass =
@@ -259,9 +259,7 @@ function NavNodes({
 export function SideNav({ tabs, navigation, isSticky }: SideNavProps) {
   const { pathname } = useLocation();
 
-  const tab = [...(tabs || [])]
-    .sort((a, b) => b.url.length - a.url.length)
-    .find(({ url }) => pathname === url || pathname.startsWith(`${url}/`));
+  const tab = getTabByPathname(pathname);
   const nodes = navigation[tab?.id || tabs?.[0]?.id] || [];
 
   return (
