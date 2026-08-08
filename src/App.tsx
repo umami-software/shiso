@@ -10,6 +10,7 @@ import { Navigate, Route, Routes } from 'react-router';
 import { CodeBlock } from '@/components/CodeBlock';
 import * as docsComponents from '@/components/docs/index';
 import { Layout } from '@/components/Layout';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { DOCS_PREFIX } from '@/lib/paths';
 import { DocPage } from '@/pages/DocPage';
 
@@ -20,14 +21,18 @@ const mdxComponents = {
 
 export function App() {
   return (
-    <MDXProvider components={mdxComponents}>
-      <Layout>
-        <Routes>
-          {/* When docs are mounted at the site root there is nothing to redirect. */}
-          {DOCS_PREFIX ? <Route path="/" element={<Navigate to={DOCS_PREFIX} replace />} /> : null}
-          <Route path="*" element={<DocPage />} />
-        </Routes>
-      </Layout>
-    </MDXProvider>
+    <TooltipProvider>
+      <MDXProvider components={mdxComponents}>
+        <Layout>
+          <Routes>
+            {/* When docs are mounted at the site root there is nothing to redirect. */}
+            {DOCS_PREFIX ? (
+              <Route path="/" element={<Navigate to={DOCS_PREFIX} replace />} />
+            ) : null}
+            <Route path="*" element={<DocPage />} />
+          </Routes>
+        </Layout>
+      </MDXProvider>
+    </TooltipProvider>
   );
 }

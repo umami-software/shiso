@@ -19,7 +19,7 @@ export const LAST_MODIFIED: Record<string, string> = {
   '/content/docs/components/tooltip.mdx': '2026-08-07T14:55:40-07:00',
   '/content/docs/configuration.mdx': '2026-08-07T19:39:17-07:00',
   '/content/docs/customization.mdx': '2026-08-07T19:39:17-07:00',
-  '/content/docs/guides/deployment.mdx': '2026-08-07T20:50:33-07:00',
+  '/content/docs/guides/deployment.mdx': '2026-08-07T21:02:35-07:00',
   '/content/docs/guides/migrating.mdx': '2026-08-07T17:46:22-07:00',
   '/content/docs/images.mdx': '2026-08-07T13:31:17-07:00',
   '/content/docs/index.mdx': '2026-08-07T17:46:22-07:00',

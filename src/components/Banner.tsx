@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { X } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { getBanner } from '@/lib/site-config';
 
@@ -47,14 +48,16 @@ export function Banner() {
         {renderInlineMarkdown(banner.content)}
       </div>
       {banner.dismissible && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-xs"
           className="absolute top-1/2 right-3 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-inherit opacity-80 hover:bg-black/15 hover:opacity-100"
           onClick={handleDismiss}
           aria-label="Dismiss banner"
         >
           <X size={16} />
-        </button>
+        </Button>
       )}
     </div>
   );

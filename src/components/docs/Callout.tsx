@@ -6,6 +6,7 @@ import {
   Lightbulb,
   TriangleAlert,
 } from '@/components/icons';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { styles } from './styles';
 import { resolveIcon } from './utils';
 
@@ -27,15 +28,15 @@ const CALLOUT_ICONS = {
 
 export function Callout({ title, icon, children, variant = 'note' }: CalloutProps) {
   return (
-    <div className={`${styles.callout} ${styles[variant]}`}>
+    <Alert role="note" className={`${styles.callout} ${styles[variant]}`}>
       <span className={styles.calloutIcon} aria-hidden={true}>
         {resolveIcon(icon) || CALLOUT_ICONS[variant]}
       </span>
       <div className={styles.calloutBody}>
-        {title ? <div className={styles.calloutTitle}>{title}</div> : null}
-        {children}
+        {title ? <AlertTitle className={styles.calloutTitle}>{title}</AlertTitle> : null}
+        <AlertDescription className="text-base text-inherit leading-6">{children}</AlertDescription>
       </div>
-    </div>
+    </Alert>
   );
 }
 

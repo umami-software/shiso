@@ -83,6 +83,7 @@ export function Tabs({ children, group }: TabsProps) {
 
   return (
     <TabsPrimitive
+      className="my-4 gap-0"
       value={selectedKey}
       onValueChange={value => {
         if (typeof value === 'string') {
@@ -90,15 +91,23 @@ export function Tabs({ children, group }: TabsProps) {
         }
       }}
     >
-      <TabsList aria-label="Content tabs">
+      <TabsList
+        variant="line"
+        className="w-full justify-start gap-7 overflow-x-auto overflow-y-hidden border-border border-b p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label="Content tabs"
+      >
         {tabs.map(tab => (
-          <TabsTrigger key={tab.id} value={tab.id}>
+          <TabsTrigger
+            key={tab.id}
+            value={tab.id}
+            className="after:bg-primary data-active:text-primary"
+          >
             {tab.title}
           </TabsTrigger>
         ))}
       </TabsList>
       {tabs.map(tab => (
-        <TabsContent key={tab.id} value={tab.id}>
+        <TabsContent key={tab.id} value={tab.id} className="pt-4">
           {tab.content}
         </TabsContent>
       ))}

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ChevronRight } from '@/components/icons';
+import { CardContent, Card as CardPrimitive } from '@/components/ui/card';
 import { styles } from './styles';
 import { gridColsClass, resolveIcon } from './utils';
 
@@ -15,9 +16,9 @@ export interface CardProps {
   children?: ReactNode;
 }
 
-function CardContent({ title, icon, img, cta, arrow, children }: Omit<CardProps, 'href'>) {
+function DocsCardContent({ title, icon, img, cta, arrow, children }: Omit<CardProps, 'href'>) {
   return (
-    <>
+    <CardContent className="p-0">
       {img ? <img src={img} alt="" className={styles.cardImage} /> : null}
       <div className={styles.cardInner}>
         <div className={styles.cardMain} data-slot="card-main">
@@ -38,7 +39,7 @@ function CardContent({ title, icon, img, cta, arrow, children }: Omit<CardProps,
           </div>
         ) : null}
       </div>
-    </>
+    </CardContent>
   );
 }
 
@@ -54,25 +55,29 @@ export function Card({
 }: CardProps) {
   const className = `${styles.card} ${horizontal ? styles.cardHorizontal : ''}`;
   const content = (
-    <CardContent title={title} icon={icon} img={img} cta={cta} arrow={arrow}>
-      {children}
-    </CardContent>
+    <CardPrimitive className={className}>
+      <DocsCardContent title={title} icon={icon} img={img} cta={cta} arrow={arrow}>
+        {children}
+      </DocsCardContent>
+    </CardPrimitive>
   );
 
   if (!href) {
-    return <div className={className}>{content}</div>;
+    return content;
   }
+
+  const linkClassName = 'block h-full no-underline hover:no-underline active:no-underline';
 
   if (/^https?:\/\//.test(href)) {
     return (
-      <a href={href} className={className} target="_blank" rel="noreferrer">
+      <a href={href} className={linkClassName} target="_blank" rel="noreferrer">
         {content}
       </a>
     );
   }
 
   return (
-    <Link to={href} className={className}>
+    <Link to={href} className={linkClassName}>
       {content}
     </Link>
   );

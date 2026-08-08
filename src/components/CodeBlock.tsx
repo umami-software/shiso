@@ -1,5 +1,6 @@
 import { type ReactNode, useRef, useState } from 'react';
 import { CheckIcon, Copy } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export interface CodeBlockProps {
@@ -30,14 +31,16 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
           {children}
         </pre>
       </ScrollArea>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
         className="absolute top-3 right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
         onClick={handleCopy}
         aria-label="Copy code"
       >
         {copied ? <CheckIcon size={14} className="text-primary" /> : <Copy size={14} />}
-      </button>
+      </Button>
     </div>
   );
 }

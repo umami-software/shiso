@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
+import { TabsContent, TabsList, Tabs as TabsPrimitive, TabsTrigger } from '@/components/ui/tabs';
 import { styles } from './styles';
-import { TabStrip } from './TabStrip';
 import { findCodeLanguage, slugify, toElementArray } from './utils';
 
 export interface CodeGroupProps {
@@ -42,11 +42,27 @@ export function CodeGroup({ children }: CodeGroupProps) {
   }
 
   return (
-    <TabStrip
-      items={blocks}
-      selectedKey={selected}
-      onSelect={setSelectedKey}
-      ariaLabel="Code snippets"
-    />
+    <TabsPrimitive value={selected} onValueChange={setSelectedKey} className={styles.tabs}>
+      <TabsList
+        variant="line"
+        className="w-full justify-start overflow-x-auto border-border border-b p-0"
+        aria-label="Code snippets"
+      >
+        {blocks.map(block => (
+          <TabsTrigger
+            key={block.id}
+            value={block.id}
+            className="after:bg-primary data-active:text-primary"
+          >
+            {block.title}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {blocks.map(block => (
+        <TabsContent key={block.id} value={block.id} className="pt-4">
+          {block.content}
+        </TabsContent>
+      ))}
+    </TabsPrimitive>
   );
 }

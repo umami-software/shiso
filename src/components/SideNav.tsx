@@ -3,6 +3,9 @@ import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { resolveIcon } from '@/components/docs/utils';
 import { ChevronRight, ExternalLink } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
 import { getDrilldown, getTabByPathname } from '@/lib/site-config';
@@ -67,8 +70,7 @@ function CollapsibleGroup({
 
   const firstPage = node.root?.page || flattenNav(node.children).find(page => !page.hidden);
 
-  const handleToggle = () => {
-    const next = !expanded;
+  const handleOpenChange = (next: boolean) => {
     setExpanded(next);
 
     if (next && drilldown === true && firstPage) {
@@ -132,49 +134,67 @@ function CollapsibleGroup({
         {resolveIcon(node.icon)}
         {node.label}
       </Link>
-      <button
-        type="button"
-        className={classNames(
-          'inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-          { 'mr-[0.35rem]': !isTopLevel },
-        )}
-        onClick={handleToggle}
-        aria-expanded={isExpanded}
-        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${node.label}`}
+      <CollapsibleTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            className={classNames(
+              'inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              { 'mr-[0.35rem]': !isTopLevel },
+            )}
+            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${node.label}`}
+          />
+        }
       >
         {chevron}
-      </button>
+      </CollapsibleTrigger>
     </div>
   ) : (
-    <button
-      type="button"
-      className={classNames(
-        headerClass,
-        'group/section flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
-        {
-          'pb-2 font-bold text-sidebar-foreground': isTopLevel,
-          'border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':
-            !isTopLevel,
-        },
-      )}
-      onClick={handleToggle}
-      aria-expanded={isExpanded}
+    <CollapsibleTrigger
+      render={
+        <Button
+          type="button"
+          variant="ghost"
+          className={classNames(
+            headerClass,
+            'group/section flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent [&>svg:last-child]:ml-auto',
+            {
+              'pb-2 font-bold text-sidebar-foreground': isTopLevel,
+              'border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':
+                !isTopLevel,
+            },
+          )}
+        />
+      }
     >
       {resolveIcon(node.icon)}
       {node.label}
       {chevron}
-    </button>
+    </CollapsibleTrigger>
   );
 
-  return (
-    <div className="flex flex-col">
-      {header}
-      {isExpanded ? (
+  if (!collapsible) {
+    return (
+      <div className="flex flex-col">
+        {fixedHeader}
         <div className="flex flex-col">
           <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
         </div>
-      ) : null}
-    </div>
+      </div>
+    );
+  }
+
+  return (
+    <Collapsible open={expanded} onOpenChange={handleOpenChange} className="flex flex-col">
+      {header}
+      <CollapsibleContent>
+        <div className="flex flex-col">
+          <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
@@ -234,9 +254,12 @@ function NavNodes({
           {resolveIcon(icon)}
           {label}
           {tag ? (
-            <span className="ml-auto rounded-sm bg-muted px-[0.35rem] py-[0.05rem] text-[0.7rem] font-medium text-muted-foreground uppercase">
+            <Badge
+              variant="secondary"
+              className="ml-auto h-auto rounded-sm px-[0.35rem] py-[0.05rem] text-[0.7rem] text-muted-foreground uppercase"
+            >
               {tag}
-            </span>
+            </Badge>
           ) : null}
         </Link>,
       );

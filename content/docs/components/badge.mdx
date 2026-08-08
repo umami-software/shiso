@@ -1,33 +1,121 @@
 ---
 title: Badge
-description: Short inline labels for status, version, or emphasis.
+description: Inline labels for status, versions, and metadata.
 ---
 
-Use `Badge` for compact markers next to headings or inline text.
+Use `Badge` inside text or as a standalone status label.
 
 ## Basic usage
 
-<Badge>beta</Badge> <Badge tone="primary">new</Badge>
+<Badge>Badge</Badge>
 
 ```tsx
-<Badge>beta</Badge> <Badge tone="primary">new</Badge>
+<Badge>Badge</Badge>
 ```
 
-## In headings
+## Colors
 
-### Streaming responses <Badge tone="primary">new</Badge>
+<Badge color="gray">Gray</Badge>{' '}
+<Badge color="blue">Blue</Badge>{' '}
+<Badge color="green">Green</Badge>{' '}
+<Badge color="yellow">Yellow</Badge>{' '}
+<Badge color="orange">Orange</Badge>{' '}
+<Badge color="red">Red</Badge>{' '}
+<Badge color="purple">Purple</Badge>{' '}
+<Badge color="white">White</Badge>{' '}
+<Badge color="surface">Surface</Badge>{' '}
+<Badge color="white-destructive">White destructive</Badge>{' '}
+<Badge color="surface-destructive">Surface destructive</Badge>
 
 ```tsx
-### Streaming responses <Badge tone="primary">new</Badge>
+<Badge color="blue">Blue</Badge>
+<Badge color="green">Green</Badge>
+<Badge color="orange">Orange</Badge>
+<Badge color="red">Red</Badge>
 ```
 
-`ParamField` and `ResponseField` reuse the same badge styles for `required`
-and `deprecated` markers.
+## Sizes
+
+<Badge size="xs">Extra small</Badge>{' '}
+<Badge size="sm">Small</Badge>{' '}
+<Badge size="md">Medium</Badge>{' '}
+<Badge size="lg">Large</Badge>
+
+```tsx
+<Badge size="xs">Extra small</Badge>
+<Badge size="sm">Small</Badge>
+<Badge size="md">Medium</Badge>
+<Badge size="lg">Large</Badge>
+```
+
+## Shapes
+
+<Badge shape="rounded">Rounded</Badge>{' '}
+<Badge shape="pill">Pill</Badge>
+
+```tsx
+<Badge shape="rounded">Rounded</Badge>
+<Badge shape="pill">Pill</Badge>
+```
+
+## Icons
+
+Named icons use the Lucide icon registry. You can also pass an image URL, a local image path, or a rendered React node.
+
+<Badge icon="circle-check" color="green">Verified</Badge>{' '}
+<Badge icon="clock" color="orange">Pending</Badge>{' '}
+<Badge icon="ban" color="red">Blocked</Badge>
+
+```tsx
+<Badge icon="circle-check" color="green">Verified</Badge>
+<Badge icon="clock" color="orange">Pending</Badge>
+<Badge icon="ban" color="red">Blocked</Badge>
+```
+
+## Stroke and disabled states
+
+<Badge stroke color="blue">Stroke</Badge>{' '}
+<Badge disabled icon="lock">Disabled</Badge>
+
+```tsx
+<Badge stroke color="blue">Stroke</Badge>
+<Badge disabled icon="lock">Disabled</Badge>
+```
+
+## Combined properties
+
+<Badge icon="star" color="blue" size="lg" shape="pill">Premium</Badge>{' '}
+<Badge icon="circle-check" stroke color="green" size="sm">Verified</Badge>{' '}
+<Badge icon="badge-alert" color="orange">Beta</Badge>
 
 ## Properties
 
-<ResponseField name="tone" type="'muted' | 'primary'" default="muted">
-  Visual emphasis. `primary` uses the accent color.
+<ResponseField name="color" type="'gray' | 'blue' | 'green' | 'yellow' | 'orange' | 'red' | 'purple' | 'white' | 'surface' | 'white-destructive' | 'surface-destructive'" default="gray">
+  Color treatment.
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg'" default="md">
+  Badge size.
+</ResponseField>
+
+<ResponseField name="shape" type="'rounded' | 'pill'" default="rounded">
+  Corner shape.
+</ResponseField>
+
+<ResponseField name="icon" type="string | ReactNode">
+  Lucide icon name, image source, or rendered icon.
+</ResponseField>
+
+<ResponseField name="stroke" type="boolean" default="false">
+  Uses an outline instead of a filled background.
+</ResponseField>
+
+<ResponseField name="disabled" type="boolean" default="false">
+  Reduces emphasis and exposes the disabled state to assistive technology.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional classes applied to the badge.
 </ResponseField>
 
 <ResponseField name="children" type="ReactNode">

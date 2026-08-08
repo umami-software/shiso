@@ -29,6 +29,17 @@ vite.config.ts  Development and build plugins
 
 Add `"$schema": "./docs.schema.json"` to `docs.json` for editor validation and autocomplete. Navigation entries must resolve to files in the configured content directory; missing files fail validation.
 
+## UI components
+
+Prefer the shadcn primitives in `src/components/ui` whenever an equivalent exists. Add new
+primitives through the configured Base UI registry instead of recreating them locally:
+
+```bash
+pnpm dlx shadcn@latest add <component>
+```
+
+Feature and MDX components can wrap these primitives to preserve their public APIs and styling.
+
 ## Build pipeline
 
 ```bash

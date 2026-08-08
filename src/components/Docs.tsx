@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
 import { Footer } from '@/components/Footer';
-import { Menu, X } from '@/components/icons';
+import { Menu } from '@/components/icons';
 import { PageLinks } from '@/components/PageLinks';
 import { SideNav } from '@/components/SideNav';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { DOCS_PREFIX } from '@/lib/paths';
 import { docsConfig, getError404 } from '@/lib/site-config';
@@ -63,37 +65,23 @@ export function Docs({ page, doc }: DocsProps) {
 
   return (
     <div className="flex min-h-full flex-col gap-6 lg:gap-0">
-      <div className="flex justify-end lg:hidden">
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium"
-          onClick={() => setMenuOpen(true)}
+      <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+        <div className="flex justify-end lg:hidden">
+          <SheetTrigger render={<Button variant="outline" className="bg-card" />}>
+            <Menu size={14} />
+            Menu
+          </SheetTrigger>
+        </div>
+        <SheetContent
+          side="right"
+          className="w-[min(320px,85vw)] gap-0 overflow-y-auto bg-background p-4 sm:max-w-80"
         >
-          <Menu size={14} />
-          Menu
-        </button>
-      </div>
-      {menuOpen && (
-        <div className="fixed inset-0 z-50">
-          <button
-            type="button"
-            className="absolute inset-0 cursor-default bg-black/40"
-            onClick={() => setMenuOpen(false)}
-            aria-label="Close menu"
-          />
-          <div className="absolute inset-y-0 right-0 w-[min(320px,85vw)] overflow-y-auto border-border border-l bg-background p-4">
-            <button
-              type="button"
-              className="ml-auto flex p-1 text-muted-foreground"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <X size={14} />
-            </button>
+          <SheetTitle className="sr-only">Documentation navigation</SheetTitle>
+          <div className="pt-8">
             <SideNav tabs={tabs} navigation={navigation} />
           </div>
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
       <div className="flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6">
         <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
           <SideNav tabs={tabs} navigation={navigation} isSticky />

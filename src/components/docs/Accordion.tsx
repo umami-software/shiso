@@ -1,4 +1,10 @@
-import { cloneElement, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import {
+  AccordionContent,
+  AccordionItem,
+  Accordion as AccordionPrimitive,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { styles } from './styles';
 import { resolveIcon, toElementArray } from './utils';
 
@@ -9,15 +15,29 @@ export interface AccordionProps {
   children?: ReactNode;
 }
 
-export function Accordion({ title, icon, defaultOpen, children }: AccordionProps) {
+function AccordionSection({ value, title, icon, children }: AccordionProps & { value: string }) {
   return (
-    <details className={styles.details} open={defaultOpen}>
-      <summary className={styles.summary}>
-        {resolveIcon(icon)}
-        {title}
-      </summary>
-      <div className={styles.detailsBody}>{children}</div>
-    </details>
+    <AccordionItem value={value} className={styles.accordionItem}>
+      <AccordionTrigger className={styles.accordionTrigger}>
+        <span className="flex min-w-0 items-center gap-2">
+          {resolveIcon(icon)}
+          {title}
+        </span>
+      </AccordionTrigger>
+      <AccordionContent className={styles.accordionContent}>{children}</AccordionContent>
+    </AccordionItem>
+  );
+}
+
+export function Accordion({ title, icon, defaultOpen, children }: AccordionProps) {
+  const value = 'accordion-item';
+
+  return (
+    <AccordionPrimitive defaultValue={defaultOpen ? [value] : []} className={styles.accordion}>
+      <AccordionSection value={value} title={title} icon={icon}>
+        {children}
+      </AccordionSection>
+    </AccordionPrimitive>
   );
 }
 
@@ -33,14 +53,16 @@ export function AccordionGroup({ children, defaultOpen = false }: AccordionGroup
     return null;
   }
 
+  const values = items.map((_, index) => `accordion-${index + 1}`);
+  const defaultValue = values.filter((_, index) => {
+    return items[index].props.defaultOpen ?? (defaultOpen && index === 0);
+  });
+
   return (
-    <div className={styles.accordionGroup}>
-      {items.map((child, index) =>
-        cloneElement(child, {
-          key: child.key ?? `accordion-${index + 1}`,
-          defaultOpen: child.props.defaultOpen ?? (defaultOpen && index === 0),
-        }),
-      )}
-    </div>
+    <AccordionPrimitive multiple defaultValue={defaultValue} className={styles.accordionGroup}>
+      {items.map((child, index) => (
+        <AccordionSection key={child.key ?? values[index]} value={values[index]} {...child.props} />
+      ))}
+    </AccordionPrimitive>
   );
 }

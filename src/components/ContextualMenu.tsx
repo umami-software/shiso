@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Check, ChevronRight, Copy, ExternalLink } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toAbsoluteUrl, toHref } from '@/lib/paths';
 import { getContextualOptions } from '@/lib/site-config';
 import type { ContextualOptionObject, NormalizedDocsPage } from '@/lib/types';
@@ -102,34 +109,15 @@ function resolveOptions(page: NormalizedDocsPage): ResolvedOption[] {
 }
 
 export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
-  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const options = resolveOptions(page);
   const primary = options[0];
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const onClick = (event: MouseEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', onClick);
-    return () => document.removeEventListener('mousedown', onClick);
-  }, [open]);
 
   if (!primary) {
     return null;
   }
 
   const runOption = async (option: ResolvedOption) => {
-    setOpen(false);
-
     if (option.action === 'copy' && option.href) {
       try {
         const response = await fetch(option.href);
@@ -150,10 +138,11 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
   };
 
   return (
-    <div className="relative inline-flex shrink-0 items-stretch" ref={containerRef}>
-      <button
-        type="button"
-        className="inline-flex items-center gap-1.5 rounded-l-md border border-border bg-card px-2.5 py-[0.3rem] text-[0.8125rem] text-foreground only:rounded-md hover:bg-accent hover:text-foreground"
+    <div className="inline-flex shrink-0 items-stretch">
+      <Button
+        variant="outline"
+        size="sm"
+        className="rounded-r-none bg-card text-foreground only:rounded-md"
         onClick={() => runOption(primary)}
       >
         {primary.action === 'copy' ? (
@@ -166,36 +155,36 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
           <ExternalLink size={14} />
         )}
         {primary.action === 'copy' && copied ? 'Copied' : primary.title}
-      </button>
+      </Button>
       {options.length > 1 && (
-        <>
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 rounded-r-md border border-border border-l-0 bg-card px-[0.35rem] py-[0.3rem] text-[0.8125rem] text-foreground hover:bg-accent hover:text-foreground"
-            onClick={() => setOpen(current => !current)}
-            aria-expanded={open}
-            aria-label="More options"
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                className="rounded-l-none border-l-0 bg-card"
+                aria-label="More options"
+              />
+            }
           >
             <ChevronRight size={14} className="rotate-90" />
-          </button>
-          {open && (
-            <div className="absolute top-[calc(100%+0.25rem)] right-0 z-50 min-w-60 rounded-md border border-border bg-background p-1 shadow-[0_6px_24px_rgba(0,0,0,0.12)]">
-              {options.map(option => (
-                <button
-                  type="button"
-                  key={option.key}
-                  className="block w-full rounded-sm px-2.5 py-1.5 text-left hover:bg-accent"
-                  onClick={() => runOption(option)}
-                >
-                  <div className="text-[0.85rem] font-medium text-foreground">{option.title}</div>
-                  {option.description && (
-                    <div className="text-xs text-muted-foreground">{option.description}</div>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-        </>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-60">
+            {options.map(option => (
+              <DropdownMenuItem
+                key={option.key}
+                className="flex-col items-start gap-0.5 px-2.5 py-1.5"
+                onClick={() => runOption(option)}
+              >
+                <div className="text-[0.85rem] font-medium text-foreground">{option.title}</div>
+                {option.description && (
+                  <div className="text-xs text-muted-foreground">{option.description}</div>
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   );

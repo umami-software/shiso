@@ -73,7 +73,16 @@ async function collectFiles(dir, files = []) {
 
 function addMatches(names, source, pattern) {
   for (const match of source.matchAll(pattern)) {
-    const normalized = normalizeIconName(match[1]);
+    const value = match[1].trim();
+
+    if (
+      /^(?:https?:|data:image\/|\/|\.\.?\/)/i.test(value) ||
+      /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(value)
+    ) {
+      continue;
+    }
+
+    const normalized = normalizeIconName(value);
 
     if (normalized && /^[a-z0-9-]+$/.test(normalized)) {
       names.add(normalized);
