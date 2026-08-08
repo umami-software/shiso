@@ -26,12 +26,15 @@ export const styles = {
   card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 ring-0 hover:border-input',
   cardHorizontal:
     '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0',
+  cardTyped:
+    '[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit',
   cardImage: 'mb-3 block w-full rounded-md',
   cardInner: 'flex items-start justify-between gap-3',
   cardMain: 'flex min-w-0 flex-col gap-2',
   cardHeader: 'flex items-center gap-2',
-  cardTitle: 'text-[1.1rem] font-semibold text-foreground',
-  cardBody: 'text-muted-foreground',
+  cardIcon: 'inline-flex shrink-0 items-center justify-center [&_img]:size-4 [&_svg]:size-4',
+  cardTitle: 'text-sm font-semibold text-foreground',
+  cardBody: 'text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0',
   cardCta:
     'flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground',
   cardArrow: 'shrink-0 text-muted-foreground',

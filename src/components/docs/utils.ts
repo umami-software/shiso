@@ -20,6 +20,13 @@ export function resolveIcon(icon: ReactNode | string, size = 14): ReactNode {
     return icon;
   }
 
+  if (
+    /^(?:https?:|data:image\/|\/|\.\.?\/)/i.test(icon) ||
+    /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(icon)
+  ) {
+    return createElement('img', { src: icon, alt: '', width: size, height: size });
+  }
+
   const Component = getIcon(icon);
 
   return Component ? createElement(Component, { size }) : null;

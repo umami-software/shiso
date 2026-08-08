@@ -887,7 +887,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Card',
     heading: 'Basic usage',
     id: 'basic-usage',
-    text: 'Learn how to model response schemas. <Card title="API Reference" icon="code" href="/docs/components/response-field"> Learn how to model response schemas. </Card>',
+    text: 'Learn how to model response schemas. <Card title="API reference" icon="code" href="/docs/components/response-field"> Learn how to model response schemas. </Card>',
   },
   {
     url: '/docs/components/card',
@@ -901,7 +901,28 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Card',
     heading: 'Horizontal card',
     id: 'horizontal-card',
-    text: '<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" /> Cards with href render as links; without it they are static containers. External href values open in a new tab. For mixed content side by side, use Columns.',
+    text: '<Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />',
+  },
+  {
+    url: '/docs/components/card',
+    page: 'Card',
+    heading: 'Image card',
+    id: 'image-card',
+    text: 'Add an image above the card content with img. <Card title="Image card" img="/images/sample.jpg"> Add an image above the card content with `img`. </Card>',
+  },
+  {
+    url: '/docs/components/card',
+    page: 'Card',
+    heading: 'Link card',
+    id: 'link-card',
+    text: 'External links show an arrow by default. Set arrow={false} to hide it. <Card title="Shiso website" icon="rocket" color="#16a34a" href="https://shiso.umami.is" cta="Visit site" > External links show an arrow by default. Set `arrow={false}` to hide it. </Card>',
+  },
+  {
+    url: '/docs/components/card',
+    page: 'Card',
+    heading: 'Typed cards',
+    id: 'typed-cards',
+    text: 'Typed cards use the matching callout theme and default icon. Set icon to override the default. Supporting information. Additional context. Something needs attention. A helpful suggestion. A successful result. A risky or destructive action. <Card title="Note card" type="note">Supporting information.</Card> <Card title="Info card" type="info">Additional context.</Card> <Card title="Warning card" type="warning">Something needs attention.</Card> <Card title="Tip card" type="tip">A helpful suggestion.</Card> <Card title="Check card" type="check">A successful result.</Card> <Card title="Danger card" type="danger">A risky or destructive action.</Card> Cards with href render as links; without it they are static containers. External href values open in a new tab. For mixed content side by side, use Columns.',
   },
   {
     url: '/docs/components/card',
@@ -915,7 +936,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Card',
     heading: 'Card',
     id: 'card',
-    text: 'Card heading. Optional link destination. When set, the card is interactive. Lucide icon name or element. Image shown above the body. Trailing action label. Lay out icon, title, and body in a row. Show an optional trailing arrow. Body content.',
+    text: 'Card heading. Optional link destination. When set, the card is interactive. Lucide icon name, image URL or path, or rendered element. CSS color applied to the icon. Image shown above the body. Trailing action label. Lay out icon, title, and body in a row. Show or hide the trailing arrow. External links show it by default. Apply the matching callout background, border, text color, and default icon. Body content.',
   },
   {
     url: '/docs/components/card',

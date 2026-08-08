@@ -7,12 +7,12 @@ Use `Card` and `CardGroup` for scannable links or feature summaries.
 
 ## Basic usage
 
-<Card title="API Reference" icon="code" href="/docs/components/response-field">
+<Card title="API reference" icon="code" href="/docs/components/response-field">
   Learn how to model response schemas.
 </Card>
 
 ```tsx
-<Card title="API Reference" icon="code" href="/docs/components/response-field">
+<Card title="API reference" icon="code" href="/docs/components/response-field">
   Learn how to model response schemas.
 </Card>
 ```
@@ -47,6 +47,65 @@ Use `Card` and `CardGroup` for scannable links or feature summaries.
 <Card title="Changelog" icon="history" href="/docs" horizontal cta="Read more" />
 ```
 
+## Image card
+
+<Card title="Image card" img="/images/sample.jpg">
+  Add an image above the card content with `img`.
+</Card>
+
+```tsx
+<Card title="Image card" img="/images/sample.jpg">
+  Add an image above the card content with `img`.
+</Card>
+```
+
+## Link card
+
+<Card
+  title="Shiso website"
+  icon="rocket"
+  color="#16a34a"
+  href="https://shiso.umami.is"
+  cta="Visit site"
+>
+  External links show an arrow by default. Set `arrow={false}` to hide it.
+</Card>
+
+```tsx
+<Card
+  title="Shiso website"
+  icon="rocket"
+  color="#16a34a"
+  href="https://shiso.umami.is"
+  cta="Visit site"
+>
+  External links show an arrow by default. Set `arrow={false}` to hide it.
+</Card>
+```
+
+## Typed cards
+
+Typed cards use the matching callout theme and default icon. Set `icon` to
+override the default.
+
+<CardGroup cols={2}>
+  <Card title="Note card" type="note">Supporting information.</Card>
+  <Card title="Info card" type="info">Additional context.</Card>
+  <Card title="Warning card" type="warning">Something needs attention.</Card>
+  <Card title="Tip card" type="tip">A helpful suggestion.</Card>
+  <Card title="Check card" type="check">A successful result.</Card>
+  <Card title="Danger card" type="danger">A risky or destructive action.</Card>
+</CardGroup>
+
+```tsx
+<Card title="Note card" type="note">Supporting information.</Card>
+<Card title="Info card" type="info">Additional context.</Card>
+<Card title="Warning card" type="warning">Something needs attention.</Card>
+<Card title="Tip card" type="tip">A helpful suggestion.</Card>
+<Card title="Check card" type="check">A successful result.</Card>
+<Card title="Danger card" type="danger">A risky or destructive action.</Card>
+```
+
 Cards with `href` render as links; without it they are static containers.
 External `href` values open in a new tab. For mixed content side by side, use
 [Columns](/docs/components/columns).
@@ -65,7 +124,11 @@ External `href` values open in a new tab. For mixed content side by side, use
 </ResponseField>
 
 <ResponseField name="icon" type="ReactNode | string">
-  Lucide icon name or element.
+  Lucide icon name, image URL or path, or rendered element.
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  CSS color applied to the icon.
 </ResponseField>
 
 <ResponseField name="img" type="string">
@@ -80,8 +143,12 @@ External `href` values open in a new tab. For mixed content side by side, use
   Lay out icon, title, and body in a row.
 </ResponseField>
 
-<ResponseField name="arrow" type="boolean" default="false">
-  Show an optional trailing arrow.
+<ResponseField name="arrow" type="boolean">
+  Show or hide the trailing arrow. External links show it by default.
+</ResponseField>
+
+<ResponseField name="type" type="'note' | 'info' | 'warning' | 'tip' | 'check' | 'danger'">
+  Apply the matching callout background, border, text color, and default icon.
 </ResponseField>
 
 <ResponseField name="children" type="ReactNode">
