@@ -8,13 +8,13 @@ export const styles = {
     'items-center px-4 py-3 text-base font-semibold text-foreground hover:no-underline',
   accordionContent: 'px-4 pb-4 text-base leading-7',
 
-  callout: 'my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-base leading-6',
+  callout: 'my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6',
   calloutIcon:
     'mt-[calc((1.5em-1.25rem)/2)] inline-flex size-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4',
   calloutBody:
     'flex min-w-0 flex-1 flex-col gap-[0.35rem] [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:my-[0.35rem] [&>:where(p,ul,ol):first-child]:mt-0 [&>:where(p,ul,ol):last-child]:mb-0',
   calloutTitle: 'font-semibold leading-6',
-  note: 'border-border bg-muted text-foreground',
+  note: 'border-border bg-muted/50 text-foreground',
   info: 'border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-400/40 dark:bg-blue-400/10 dark:text-blue-300',
   warning:
     'border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-300',
@@ -60,10 +60,6 @@ export const styles = {
   fieldType: 'text-[0.9rem] text-muted-foreground',
   fieldName: 'font-bold text-foreground',
   code: 'rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono',
-  example: 'my-4 rounded-lg border border-border bg-muted p-4',
-  exampleHeader: 'flex items-center gap-2 font-semibold text-foreground',
-  exampleBody: 'mt-3',
-
   steps:
     "relative my-4 flex flex-col gap-5 before:absolute before:top-4 before:bottom-4 before:left-4 before:w-px before:-translate-x-1/2 before:bg-border before:content-['']",
   step: 'relative flex items-start gap-4',

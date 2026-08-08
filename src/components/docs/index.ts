@@ -4,7 +4,6 @@ export * from './Callout';
 export * from './Card';
 export * from './CodeGroup';
 export * from './Columns';
-export * from './Examples';
 export * from './Expandable';
 export * from './Frame';
 export * from './Icon';

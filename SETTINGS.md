@@ -1032,7 +1032,7 @@ This section contains the full reference for the `docs.json` file.
         </ResponseField>
 
         <ResponseField name="autogenerate" type="boolean">
-          Whether to generate code samples for endpoints from API specifications. Defaults to `true`. When set to `false`, only manually-written code samples (from `x-codeSamples` in OpenAPI specifications or `<RequestExample>` components in MDX) appear in the API playground.
+          Whether to generate code samples for endpoints from API specifications. Defaults to `true`. When set to `false`, only manually-written code samples from `x-codeSamples` in OpenAPI specifications appear in the API playground.
         </ResponseField>
       </Expandable>
     </ResponseField>
