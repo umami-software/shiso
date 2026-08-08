@@ -97,7 +97,7 @@ export function Docs({ page, doc }: DocsProps) {
               <PageLinks items={doc.toc} />
             </div>
           </div>
-          <Footer />
+          <Footer className="lg:mr-72" />
         </div>
       </div>
     </div>

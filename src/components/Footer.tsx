@@ -9,7 +9,7 @@ function platformLabel(platform: string): string {
     .join(' ');
 }
 
-export function Footer() {
+export function Footer({ className = '' }: { className?: string }) {
   const footer = getFooter();
   const socials = Object.entries(footer?.socials || {}).filter(([platform]) =>
     isKnownPlatform(platform),
@@ -17,7 +17,7 @@ export function Footer() {
   const columns = footer?.links || [];
 
   return (
-    <footer className="mt-8 border-border border-t py-8 text-muted-foreground">
+    <footer className={`mt-8 border-border border-t py-8 text-muted-foreground ${className}`}>
       {columns.length > 0 && (
         <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(10rem,max-content))] gap-x-16 gap-y-8">
           {columns.map((column, index) => (
