@@ -1255,7 +1255,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Deployment',
     heading: 'Vercel',
     id: 'vercel',
-    text: 'Build command: pnpm build Output directory: dist/client',
+    text: "The repository includes vercel.json, which configures: Build command: pnpm build Output directory: dist/client Vercel's default Vite output directory is dist; without the override it does not serve the prerendered site nested in dist/client.",
   },
   {
     url: '/docs/guides/deployment',

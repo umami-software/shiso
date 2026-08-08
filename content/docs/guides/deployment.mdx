@@ -62,8 +62,13 @@ routing keeps working on deep links.
 
 ## Vercel
 
+The repository includes `vercel.json`, which configures:
+
 - **Build command**: `pnpm build`
 - **Output directory**: `dist/client`
+
+Vercel's default Vite output directory is `dist`; without the override it does
+not serve the prerendered site nested in `dist/client`.
 
 ## Cloudflare Pages
 
