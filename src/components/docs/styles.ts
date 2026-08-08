@@ -3,7 +3,7 @@ export const styles = {
   accordion: 'my-3',
   accordionGroup:
     'my-4 overflow-hidden rounded-lg border border-border [&_[data-slot=accordion-item]]:rounded-none [&_[data-slot=accordion-item]]:border-0 [&_[data-slot=accordion-item]+[data-slot=accordion-item]]:border-t [&_[data-slot=accordion-trigger]]:rounded-none',
-  accordionItem: 'rounded-lg border border-border bg-card',
+  accordionItem: 'rounded-lg border border-border bg-transparent',
   accordionTrigger:
     'items-center px-4 py-3 text-base font-semibold text-foreground hover:no-underline',
   accordionContent: 'px-4 pb-4 text-base leading-7',
@@ -52,7 +52,8 @@ export const styles = {
   frame: 'my-4 rounded-lg border border-border bg-muted p-4',
   frameCaption: 'mt-3 text-[0.9rem] text-muted-foreground',
 
-  field: 'my-3 rounded-lg border border-border bg-card p-4',
+  field: 'my-3',
+  paramField: 'my-3',
   fieldHeader: 'flex flex-wrap items-center gap-2',
   fieldBody: 'mt-3',
   fieldType: 'text-[0.9rem] text-muted-foreground',

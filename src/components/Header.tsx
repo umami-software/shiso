@@ -37,15 +37,21 @@ export function Header() {
     <header className="sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-border border-b bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-md">
       <div className="mx-auto grid h-full max-w-[1600px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-5">
         <div className="flex min-w-0 items-center gap-5 justify-self-start">
-          <Link to={brandHref} className="text-xl font-bold text-foreground tracking-[-0.03em]">
+          <Link
+            to={brandHref}
+            className="inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]"
+          >
             {logo ? (
               <>
-                <img src={logo.light} alt={siteName} className="h-7 w-auto dark:hidden" />
-                <img src={logo.dark} alt={siteName} className="hidden h-7 w-auto dark:block" />
+                <img src={logo.light} alt="" className="h-6 w-auto dark:hidden" />
+                <img
+                  src={logo.dark}
+                  alt=""
+                  className={`hidden h-6 w-auto dark:block ${logo.light === logo.dark ? 'dark:invert' : ''}`}
+                />
               </>
-            ) : (
-              siteName
-            )}
+            ) : null}
+            <span>{siteName}</span>
           </Link>
         </div>
         <TopNav tabs={docsConfig.tabs} />

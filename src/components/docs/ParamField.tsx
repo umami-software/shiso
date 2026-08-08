@@ -28,7 +28,7 @@ export function ParamField({
   const location = query ? 'query' : path ? 'path' : header ? 'header' : body ? 'body' : undefined;
 
   return (
-    <div className={styles.field}>
+    <div className={styles.paramField}>
       <div className={styles.fieldHeader}>
         <span className={styles.fieldName}>{label}</span>
         {location ? <Badge>{location}</Badge> : null}

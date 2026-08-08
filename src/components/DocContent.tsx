@@ -72,11 +72,21 @@ const NavigationButton = ({
   return (
     <Link
       to={url}
-      className="my-3 inline-flex items-center gap-3 text-[1.1rem] font-bold text-foreground"
+      className="group my-3 inline-flex items-center gap-3 text-base font-bold text-foreground"
     >
-      {isPrev && <ChevronRight size={14} className="rotate-180" />}
+      {isPrev && (
+        <ChevronRight
+          size={14}
+          className="rotate-180 text-muted-foreground transition-colors group-hover:text-foreground"
+        />
+      )}
       {label}
-      {!isPrev && <ChevronRight size={14} />}
+      {!isPrev && (
+        <ChevronRight
+          size={14}
+          className="text-muted-foreground transition-colors group-hover:text-foreground"
+        />
+      )}
     </Link>
   );
 };

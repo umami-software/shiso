@@ -107,7 +107,7 @@ export function Tabs({ children, group }: TabsProps) {
         ))}
       </TabsList>
       {tabs.map(tab => (
-        <TabsContent key={tab.id} value={tab.id} className="pt-4">
+        <TabsContent key={tab.id} value={tab.id} className="pt-4 text-base">
           {tab.content}
         </TabsContent>
       ))}

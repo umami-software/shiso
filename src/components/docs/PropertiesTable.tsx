@@ -60,7 +60,7 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
                   </span>
                 </td>
                 <td
-                  className={`${borderClass} border-x-0 border-t-0 border-border px-0 py-3 pr-6 align-top font-mono text-sm text-foreground`}
+                  className={`${borderClass} border-x-0 border-t-0 border-border px-0 py-3 pr-6 align-top text-sm text-foreground`}
                 >
                   {displayValue(type)}
                 </td>
@@ -69,8 +69,8 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
                 >
                   {description}
                   {defaultValue ? (
-                    <span className="mt-1 block text-xs text-muted-foreground">
-                      Default: <code>{defaultValue}</code>
+                    <span className="mt-1 block text-sm text-muted-foreground">
+                      Default: {defaultValue}
                     </span>
                   ) : null}
                 </td>

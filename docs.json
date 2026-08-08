@@ -6,6 +6,7 @@
   "theme": "shiso",
   "name": "shiso",
   "description": "Open-source docs site generator built with Vite, React, and MDX.",
+  "logo": "/logo.svg",
   "favicon": "/logo.svg",
   "navbar": {
     "links": [
