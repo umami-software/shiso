@@ -136,6 +136,8 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.1.2)(vite@8.2.0(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
 
+  packages/create-shiso-app: {}
+
 packages:
 
   '@babel/runtime@7.29.7':

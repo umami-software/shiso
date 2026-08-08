@@ -1,0 +1,37 @@
+{
+  "name": "create-shiso-app",
+  "version": "0.61.0",
+  "description": "Create a new Shiso documentation site.",
+  "type": "module",
+  "bin": {
+    "create-shiso-app": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "template"
+  ],
+  "scripts": {
+    "prepare:template": "node scripts/prepare-template.mjs",
+    "prepack": "node scripts/prepare-template.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umami-software/shiso.git",
+    "directory": "packages/create-shiso-app"
+  },
+  "homepage": "https://shiso.umami.is",
+  "keywords": [
+    "shiso",
+    "documentation",
+    "docs",
+    "mdx",
+    "vite"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

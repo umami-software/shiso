@@ -1,0 +1,89 @@
+---
+title: Installation
+description: Create a standalone Shiso documentation site with create-shiso-app.
+---
+
+Use `create-shiso-app` to start a new Shiso site. The generator creates a
+standalone project instead of cloning the Shiso source repository.
+
+## Create a project
+
+Choose the command for your package manager:
+
+<CodeGroup>
+  ```bash pnpm
+  pnpm create shiso-app my-docs
+  ```
+
+  ```bash npm
+  npm create shiso-app@latest my-docs
+  ```
+
+  ```bash yarn
+  yarn create shiso-app my-docs
+  ```
+
+  ```bash bun
+  bunx create-shiso-app@latest my-docs
+  ```
+</CodeGroup>
+
+Replace `my-docs` with your project directory. The directory must be empty if
+it already exists.
+
+The generator:
+
+- Copies a minimal Shiso starter site
+- Sets the package name from the project directory
+- Installs dependencies with the package manager that invoked it
+- Initializes a fresh Git repository on the `main` branch
+- Adds no Git remote, so the project is not tied to the Shiso repository
+
+## Start the site
+
+Move into the generated project and start the development server:
+
+<CodeGroup>
+  ```bash pnpm
+  cd my-docs
+  pnpm dev
+  ```
+
+  ```bash npm
+  cd my-docs
+  npm run dev
+  ```
+
+  ```bash yarn
+  cd my-docs
+  yarn dev
+  ```
+
+  ```bash bun
+  cd my-docs
+  bun run dev
+  ```
+</CodeGroup>
+
+Open [http://localhost:8001/docs](http://localhost:8001/docs). Edit
+`content/docs/index.mdx` to change the first page and `docs.json` to configure
+the site and navigation.
+
+## CLI options
+
+Run `create-shiso-app --help` to see every option.
+
+| Option | Description |
+| --- | --- |
+| `--use-pnpm` | Install dependencies with pnpm. |
+| `--use-npm` | Install dependencies with npm. |
+| `--use-yarn` | Install dependencies with Yarn. |
+| `--use-bun` | Install dependencies with Bun. |
+| `--skip-install` | Create the project without installing dependencies. |
+| `--disable-git` | Create the project without initializing Git. |
+| `--help` | Print command usage and options. |
+
+## Next step
+
+Continue to [Configuration](/docs/configuration) to customize `docs.json`, or
+[Writing content](/docs/writing-content) to add pages and components.

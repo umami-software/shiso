@@ -50,7 +50,7 @@ export function CodeGroup({ children }: CodeGroupProps) {
     >
       <TabsList
         variant="line"
-        className="h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none border-border border-b px-3 py-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none px-3 py-0 shadow-[inset_0_-1px_0_var(--border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Code snippets"
       >
         {blocks.map(block => (

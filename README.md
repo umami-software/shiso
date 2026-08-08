@@ -7,13 +7,17 @@ For configuration, content authoring, and component usage, see the [Shiso docume
 ## Installation
 
 ```bash
-git clone https://github.com/umami-software/shiso.git
-cd shiso
-pnpm install
+pnpm create shiso-app my-docs
+cd my-docs
 pnpm dev
 ```
 
-The development server runs at `http://localhost:8001`. With the default configuration, documentation is available at `http://localhost:8001/docs`.
+With npm, run `npm create shiso-app@latest my-docs` instead. The generator
+creates a standalone project with a fresh Git repository and no remote tied to
+the Shiso source repository.
+
+The development server runs at `http://localhost:8001`. With the default
+configuration, documentation is available at `http://localhost:8001/docs`.
 
 ## Project layout
 
@@ -21,6 +25,7 @@ The development server runs at `http://localhost:8001`. With the default configu
 content/docs/   Markdown and MDX source files
 scripts/        Validation and build-time generators
 src/            React application and rendering code
+packages/create-shiso-app/  Project generator published to npm
 docs.json       Site configuration and navigation
 docs.schema.json  JSON Schema for docs.json
 mdx.config.ts   MDX processing pipeline

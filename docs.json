@@ -36,7 +36,10 @@
           {
             "group": "Getting started",
             "collapsible": false,
-            "pages": [{ "page": "index", "title": "Introduction" }, "quickstart"]
+            "pages": [
+              { "page": "index", "title": "Introduction" },
+              "installation"
+            ]
           },
           {
             "group": "Configuration",

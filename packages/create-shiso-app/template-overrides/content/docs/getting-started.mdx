@@ -1,0 +1,36 @@
+---
+title: Getting started
+description: Make your first changes to your Shiso site.
+---
+
+## Add a page
+
+Create a Markdown or MDX file under `content/docs`:
+
+```mdx
+---
+title: API reference
+description: Learn how to use the API.
+---
+
+Your content goes here.
+```
+
+## Configure navigation
+
+Add the page path to a group in `docs.json`:
+
+```json
+{
+  "group": "Getting started",
+  "pages": ["index", "getting-started", "api-reference"]
+}
+```
+
+## Build for production
+
+```bash
+pnpm build
+```
+
+Deploy the generated `dist/client` directory to your static host.

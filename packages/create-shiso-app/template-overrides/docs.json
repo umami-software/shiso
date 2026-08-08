@@ -1,0 +1,20 @@
+{
+  "$schema": "./docs.schema.json",
+  "theme": "shiso",
+  "name": "My Docs",
+  "description": "Documentation for my project.",
+  "logo": "/logo.svg",
+  "favicon": "/logo.svg",
+  "contextual": {
+    "options": ["copy", "view"]
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting started",
+        "collapsible": false,
+        "pages": [{ "page": "index", "title": "Introduction" }, "getting-started"]
+      }
+    ]
+  }
+}
