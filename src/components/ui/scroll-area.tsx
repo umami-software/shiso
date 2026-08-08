@@ -31,15 +31,15 @@ export function ScrollBar({ className, orientation = 'vertical', ...props }: Scr
     <ScrollAreaPrimitive.Scrollbar
       orientation={orientation}
       className={classNames(
-        'absolute z-[1] flex touch-none opacity-0 transition-opacity duration-150 select-none group-hover/scrollarea:opacity-100 data-[hovering]:opacity-100 data-[scrolling]:opacity-100',
+        'absolute z-[1] flex touch-none rounded-[var(--radius-full)] bg-[var(--color-surface-sunken)] opacity-0 transition-opacity duration-150 select-none group-hover/scrollarea:opacity-100 data-[hovering]:opacity-100 data-[scrolling]:opacity-100',
         orientation === 'vertical'
-          ? 'inset-y-0 right-0 w-2.5 flex-col p-0.5'
-          : 'right-0 bottom-0 left-0 h-2.5 flex-row p-0.5',
+          ? 'inset-y-0 right-0 w-1.5 flex-col p-px'
+          : 'right-0 bottom-0 left-0 h-1.5 flex-row p-px',
         className,
       )}
       {...props}
     >
-      <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-[var(--radius-full)] bg-[var(--color-border-strong)] hover:bg-[var(--color-text-muted)]" />
+      <ScrollAreaPrimitive.Thumb className="relative shrink-0 rounded-[var(--radius-full)] bg-[var(--color-border-strong)] transition-colors hover:bg-[var(--color-text-muted)]" />
     </ScrollAreaPrimitive.Scrollbar>
   );
 }

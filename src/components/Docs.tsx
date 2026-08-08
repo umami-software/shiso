@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
+import { Footer } from '@/components/Footer';
 import { Menu, X } from '@/components/icons';
 import { PageLinks } from '@/components/PageLinks';
 import { SideNav } from '@/components/SideNav';
@@ -50,11 +51,18 @@ export function Docs({ page, doc }: DocsProps) {
   }, [pathname]);
 
   if (!page || !doc) {
-    return <NotFound />;
+    return (
+      <div className="flex min-h-full flex-col">
+        <div className="grow">
+          <NotFound />
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-full flex-col gap-6 lg:gap-0">
       <div className="flex justify-end lg:hidden">
         <button
           type="button"
@@ -86,13 +94,18 @@ export function Docs({ page, doc }: DocsProps) {
           </div>
         </div>
       )}
-      <div className="flex items-start gap-12 lg:min-h-[calc(100vh-var(--header-height))] lg:pt-6">
-        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100vh-var(--header-height)-1.5rem)] lg:shrink-0">
+      <div className="flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6">
+        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
           <SideNav tabs={tabs} navigation={navigation} isSticky />
         </div>
-        <DocContent page={page} doc={doc} />
-        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
-          <PageLinks items={doc.toc} />
+        <div className="flex min-w-0 grow self-stretch flex-col">
+          <div className="flex grow items-start gap-12">
+            <DocContent page={page} doc={doc} />
+            <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
+              <PageLinks items={doc.toc} />
+            </div>
+          </div>
+          <Footer />
         </div>
       </div>
     </div>

@@ -79,9 +79,12 @@ function CollapsibleGroup({
   const chevron = (
     <ChevronRight
       size={14}
-      className={classNames('shrink-0 origin-center transition-transform duration-150', {
-        'rotate-90': isExpanded,
-      })}
+      className={classNames(
+        'shrink-0 origin-center text-[var(--color-text-muted)] transition-[color,transform] duration-150 group-hover/section:text-[var(--color-text-strong)]',
+        {
+          'rotate-90': isExpanded,
+        },
+      )}
     />
   );
 
@@ -120,7 +123,7 @@ function CollapsibleGroup({
     fixedHeader
   ) : drilldown !== false && node.root ? (
     <div
-      className={classNames(headerClass, 'flex items-center', {
+      className={classNames(headerClass, 'group/section flex items-center', {
         [selectedClass]: rootSelected && !isTopLevel,
         'text-[var(--color-primary)]': rootSelected && isTopLevel,
       })}
@@ -147,7 +150,7 @@ function CollapsibleGroup({
       type="button"
       className={classNames(
         headerClass,
-        'flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
+        'group/section flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
         {
           'pb-2 pl-3 font-bold text-[var(--color-text-strong)]': isTopLevel,
           'border-[var(--color-border)] border-l px-3 py-2 font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]':

@@ -42,7 +42,7 @@ export function Banner() {
   };
 
   return (
-    <div className="relative flex items-center justify-center gap-2 bg-[var(--color-primary)] px-10 py-2 text-center text-sm text-white">
+    <div className="relative flex shrink-0 items-center justify-center gap-2 bg-[var(--color-primary)] px-10 py-2 text-center text-sm text-white">
       <div className="[&_a:hover]:opacity-[0.85] [&_a]:text-inherit [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-[var(--radius-sm)] [&_code]:bg-black/20 [&_code]:px-1 [&_code]:py-[0.0625rem] [&_code]:text-[0.8125rem] [&_code]:[font-family:var(--font-mono)]">
         {renderInlineMarkdown(banner.content)}
       </div>

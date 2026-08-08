@@ -34,7 +34,7 @@ export function Header() {
   const brandHref = logo?.href || DOCS_PREFIX || '/';
 
   return (
-    <header className="sticky top-0 z-50 h-[var(--header-height)] border-[var(--color-border)] border-b bg-[color-mix(in_srgb,var(--color-bg)_92%,transparent)] backdrop-blur-md">
+    <header className="sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-[var(--color-border)] border-b bg-[color-mix(in_srgb,var(--color-bg)_92%,transparent)] backdrop-blur-md">
       <div className="mx-auto grid h-full max-w-[1600px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-5">
         <div className="flex min-w-0 items-center gap-5 justify-self-start">
           <Link
