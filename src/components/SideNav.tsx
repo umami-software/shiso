@@ -213,16 +213,18 @@ function NavNodes({
 
     if (node.kind === 'page') {
       const { url, label, icon, tag } = node.page;
+      const isSelected = url === pathname;
 
       rendered.push(
         <Link
           key={url}
           to={url}
           className={classNames(
-            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] [overflow-wrap:anywhere]',
+            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] [overflow-wrap:anywhere]',
             {
               'pl-6': depth > 1,
-              [selectedClass]: url === pathname,
+              [selectedClass]: isSelected,
+              'text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]': !isSelected,
             },
           )}
         >
