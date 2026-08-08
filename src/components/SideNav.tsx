@@ -13,7 +13,7 @@ const sectionLabelClass =
 const groupLabelClass =
   'flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit';
 const selectedClass =
-  'border-l-[var(--color-primary)] font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]';
+  'border-l-sidebar-primary font-medium text-sidebar-primary hover:text-sidebar-primary';
 
 export interface SideNavProps {
   tabs: DocsTab[];
@@ -80,7 +80,7 @@ function CollapsibleGroup({
     <ChevronRight
       size={14}
       className={classNames(
-        'shrink-0 origin-center text-[var(--color-text-muted)] transition-[color,transform] duration-150 group-hover/section:text-[var(--color-text-strong)]',
+        'shrink-0 origin-center text-muted-foreground transition-[color,transform] duration-150 group-hover/section:text-sidebar-accent-foreground',
         {
           'rotate-90': isExpanded,
         },
@@ -91,9 +91,9 @@ function CollapsibleGroup({
   const isTopLevel = depth === 0;
   const rootSelected = node.root?.page.url === pathname;
   const headerClass = isTopLevel
-    ? 'flex min-w-0 items-center text-[var(--color-text-strong)]'
+    ? 'flex min-w-0 items-center text-sidebar-foreground'
     : classNames(
-        'flex items-center border-[var(--color-border)] border-l text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]',
+        'flex items-center border-sidebar-border border-l text-muted-foreground hover:text-sidebar-accent-foreground',
         { 'pl-6': depth > 1 },
       );
 
@@ -101,7 +101,7 @@ function CollapsibleGroup({
     <div
       className={classNames(headerClass, {
         [selectedClass]: rootSelected && !isTopLevel,
-        'text-[var(--color-primary)]': rootSelected && isTopLevel,
+        'text-sidebar-primary': rootSelected && isTopLevel,
       })}
     >
       {node.root ? (
@@ -125,7 +125,7 @@ function CollapsibleGroup({
     <div
       className={classNames(headerClass, 'group/section flex items-center', {
         [selectedClass]: rootSelected && !isTopLevel,
-        'text-[var(--color-primary)]': rootSelected && isTopLevel,
+        'text-sidebar-primary': rootSelected && isTopLevel,
       })}
     >
       <Link to={node.root.page.url} className={isTopLevel ? sectionLabelClass : groupLabelClass}>
@@ -135,7 +135,7 @@ function CollapsibleGroup({
       <button
         type="button"
         className={classNames(
-          'inline-flex size-6 items-center justify-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]',
+          'inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
           { 'mr-[0.35rem]': !isTopLevel },
         )}
         onClick={handleToggle}
@@ -152,8 +152,8 @@ function CollapsibleGroup({
         headerClass,
         'group/section flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
         {
-          'pb-2 font-bold text-[var(--color-text-strong)]': isTopLevel,
-          'border-[var(--color-border)] border-l px-3 py-2 font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]':
+          'pb-2 font-bold text-sidebar-foreground': isTopLevel,
+          'border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':
             !isTopLevel,
         },
       )}
@@ -202,7 +202,7 @@ function NavNodes({
           target="_blank"
           rel="noreferrer"
           className={classNames(
-            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] [overflow-wrap:anywhere]',
+            'flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]',
             { 'pl-6': depth > 1 },
           )}
         >
@@ -223,18 +223,18 @@ function NavNodes({
           key={url}
           to={url}
           className={classNames(
-            'flex min-w-0 items-center gap-[0.4rem] border-[var(--color-border)] border-l px-3 py-[0.55rem] [overflow-wrap:anywhere]',
+            'flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] [overflow-wrap:anywhere]',
             {
               'pl-6': depth > 1,
               [selectedClass]: isSelected,
-              'text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]': !isSelected,
+              'text-muted-foreground hover:text-sidebar-accent-foreground': !isSelected,
             },
           )}
         >
           {resolveIcon(icon)}
           {label}
           {tag ? (
-            <span className="ml-auto rounded-[var(--radius-sm)] bg-[var(--color-surface-sunken)] px-[0.35rem] py-[0.05rem] text-[0.7rem] font-medium text-[var(--color-text-muted)] uppercase">
+            <span className="ml-auto rounded-sm bg-muted px-[0.35rem] py-[0.05rem] text-[0.7rem] font-medium text-muted-foreground uppercase">
               {tag}
             </span>
           ) : null}
@@ -266,7 +266,7 @@ export function SideNav({ tabs, navigation, isSticky }: SideNavProps) {
 
   return (
     <ScrollArea className={classNames('w-full max-w-full', { 'h-full': isSticky })}>
-      <nav className="flex w-full flex-col gap-6 pr-4" aria-label="Documentation">
+      <nav className="flex w-full flex-col gap-6 pr-4 text-sm" aria-label="Documentation">
         <NavNodes nodes={nodes} pathname={pathname} depth={0} />
       </nav>
     </ScrollArea>

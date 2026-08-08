@@ -20,7 +20,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="inline-flex size-8 items-center justify-center rounded-[var(--radius-md)] text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)]"
+      className="inline-flex size-8 items-center justify-center rounded-md text-foreground hover:bg-accent"
       onClick={handleClick}
       aria-label="Toggle theme"
     >

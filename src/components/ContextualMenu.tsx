@@ -153,7 +153,7 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
     <div className="relative inline-flex shrink-0 items-stretch" ref={containerRef}>
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 rounded-l-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-[0.3rem] text-[0.8125rem] text-[var(--color-text)] only:rounded-[var(--radius-md)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
+        className="inline-flex items-center gap-1.5 rounded-l-md border border-border bg-card px-2.5 py-[0.3rem] text-[0.8125rem] text-foreground only:rounded-md hover:bg-accent hover:text-foreground"
         onClick={() => runOption(primary)}
       >
         {primary.action === 'copy' ? (
@@ -171,7 +171,7 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
         <>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-r-[var(--radius-md)] border border-[var(--color-border)] border-l-0 bg-[var(--color-surface)] px-[0.35rem] py-[0.3rem] text-[0.8125rem] text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
+            className="inline-flex items-center gap-1.5 rounded-r-md border border-border border-l-0 bg-card px-[0.35rem] py-[0.3rem] text-[0.8125rem] text-foreground hover:bg-accent hover:text-foreground"
             onClick={() => setOpen(current => !current)}
             aria-expanded={open}
             aria-label="More options"
@@ -179,21 +179,17 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
             <ChevronRight size={14} className="rotate-90" />
           </button>
           {open && (
-            <div className="absolute top-[calc(100%+0.25rem)] right-0 z-50 min-w-60 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg)] p-1 shadow-[0_6px_24px_rgba(0,0,0,0.12)]">
+            <div className="absolute top-[calc(100%+0.25rem)] right-0 z-50 min-w-60 rounded-md border border-border bg-background p-1 shadow-[0_6px_24px_rgba(0,0,0,0.12)]">
               {options.map(option => (
                 <button
                   type="button"
                   key={option.key}
-                  className="block w-full rounded-[var(--radius-sm)] px-2.5 py-1.5 text-left hover:bg-[var(--color-surface-sunken)]"
+                  className="block w-full rounded-sm px-2.5 py-1.5 text-left hover:bg-accent"
                   onClick={() => runOption(option)}
                 >
-                  <div className="text-[0.85rem] font-medium text-[var(--color-text-strong)]">
-                    {option.title}
-                  </div>
+                  <div className="text-[0.85rem] font-medium text-foreground">{option.title}</div>
                   {option.description && (
-                    <div className="text-xs text-[var(--color-text-muted)]">
-                      {option.description}
-                    </div>
+                    <div className="text-xs text-muted-foreground">{option.description}</div>
                   )}
                 </button>
               ))}

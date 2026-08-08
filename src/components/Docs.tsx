@@ -66,7 +66,7 @@ export function Docs({ page, doc }: DocsProps) {
       <div className="flex justify-end lg:hidden">
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 font-medium"
+          className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium"
           onClick={() => setMenuOpen(true)}
         >
           <Menu size={14} />
@@ -81,10 +81,10 @@ export function Docs({ page, doc }: DocsProps) {
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
           />
-          <div className="absolute inset-y-0 right-0 w-[min(320px,85vw)] overflow-y-auto border-[var(--color-border)] border-l bg-[var(--color-bg)] p-4">
+          <div className="absolute inset-y-0 right-0 w-[min(320px,85vw)] overflow-y-auto border-border border-l bg-background p-4">
             <button
               type="button"
-              className="ml-auto flex p-1 text-[var(--color-text-muted)]"
+              className="ml-auto flex p-1 text-muted-foreground"
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
             >

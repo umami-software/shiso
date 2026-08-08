@@ -59,7 +59,7 @@
         },
         "dark": {
           "type": "string",
-          "description": "Color for buttons and hover accents in both modes. Defaults to primary."
+          "description": "Legacy fallback for the primary color when primary is omitted."
         }
       }
     },

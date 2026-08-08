@@ -85,12 +85,12 @@ export function Search() {
     <>
       <button
         type="button"
-        className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-sm text-[var(--color-text-muted)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)]"
+        className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1.5 text-sm text-muted-foreground hover:border-input hover:text-foreground"
         onClick={openDialog}
       >
         <SearchIcon size={14} />
         <span className="min-w-24 text-left">{prompt}</span>
-        <kbd className="rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] px-[0.3rem] py-[0.05rem] text-[0.7rem] [font-family:var(--font-sans)]">
+        <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
           ⌘K
         </kbd>
       </button>
@@ -105,16 +105,16 @@ export function Search() {
               aria-label="Close search"
             />
             <div
-              className="relative w-full max-w-[34rem] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_10px_40px_rgba(0,0,0,0.2)]"
+              className="relative w-full max-w-[34rem] overflow-hidden rounded-lg border border-border bg-background shadow-[0_10px_40px_rgba(0,0,0,0.2)]"
               role="dialog"
               aria-label="Search"
             >
               <div className="flex items-center gap-2 px-4 py-3">
-                <SearchIcon size={16} className="shrink-0 text-[var(--color-text-muted)]" />
+                <SearchIcon size={16} className="shrink-0 text-muted-foreground" />
                 <input
                   ref={inputRef}
                   type="text"
-                  className="w-full border-none bg-transparent text-base text-[var(--color-text)] outline-none [font:inherit]"
+                  className="w-full border-none bg-transparent text-base text-foreground outline-none [font:inherit]"
                   placeholder={prompt}
                   value={query}
                   onChange={event => runQuery(event.target.value)}
@@ -122,27 +122,26 @@ export function Search() {
                 />
               </div>
               {query && (
-                <div className="max-h-[50vh] overflow-y-auto border-[var(--color-border)] border-t p-2">
+                <div className="max-h-[50vh] overflow-y-auto border-border border-t p-2">
                   {results.length === 0 && (
-                    <div className="p-4 text-center text-[var(--color-text-muted)]">No results</div>
+                    <div className="p-4 text-center text-muted-foreground">No results</div>
                   )}
                   {results.map((result, index) => (
                     <button
                       type="button"
                       key={result.url}
-                      className={classNames(
-                        'block w-full rounded-[var(--radius-md)] px-3 py-2 text-left',
-                        { 'bg-[var(--color-surface-sunken)]': index === active },
-                      )}
+                      className={classNames('block w-full rounded-md px-3 py-2 text-left', {
+                        'bg-muted': index === active,
+                      })}
                       onMouseEnter={() => setActive(index)}
                       onClick={() => select(result)}
                     >
-                      <div className="text-[0.9rem] font-semibold text-[var(--color-text-strong)]">
+                      <div className="text-[0.9rem] font-semibold text-foreground">
                         {result.record.page}
                         {result.record.heading ? ` › ${result.record.heading}` : ''}
                       </div>
                       {result.snippet && (
-                        <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-[var(--color-text-muted)]">
+                        <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground">
                           {result.snippet}
                         </div>
                       )}

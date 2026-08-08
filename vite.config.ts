@@ -146,20 +146,24 @@ function buildThemeCss(config: typeof docsConfig): string {
   const dark: string[] = [];
   const extra: string[] = [];
 
-  if (colors?.primary) {
-    root.push(`--color-primary:${colors.primary};`);
+  const lightModePrimary = colors?.primary || colors?.dark;
+
+  if (lightModePrimary) {
+    root.push(`--primary:${lightModePrimary};`);
+    root.push(`--ring:${lightModePrimary};`);
+    root.push(`--sidebar-primary:${lightModePrimary};`);
+    root.push(`--sidebar-ring:${lightModePrimary};`);
   }
 
-  // `light` is the accent used in dark mode; `dark` colors buttons and hover
-  // states in both modes.
-  const darkModeAccent = colors?.light || colors?.primary;
+  // Shadcn uses one semantic primary token for high-emphasis actions and
+  // active accents. `dark` remains a legacy fallback for older configs.
+  const darkModeAccent = colors?.light || colors?.primary || colors?.dark;
 
   if (darkModeAccent) {
-    dark.push(`--color-primary:${darkModeAccent};`);
-  }
-
-  if (colors?.dark) {
-    root.push(`--color-primary-strong:${colors.dark};`);
+    dark.push(`--primary:${darkModeAccent};`);
+    dark.push(`--ring:${darkModeAccent};`);
+    dark.push(`--sidebar-primary:${darkModeAccent};`);
+    dark.push(`--sidebar-ring:${darkModeAccent};`);
   }
 
   if (fonts) {
@@ -192,11 +196,11 @@ function buildThemeCss(config: typeof docsConfig): string {
   }
 
   if (background?.color?.light) {
-    root.push(`--color-bg:${background.color.light};`);
+    root.push(`--background:${background.color.light};`);
   }
 
   if (background?.color?.dark) {
-    dark.push(`--color-bg:${background.color.dark};`);
+    dark.push(`--background:${background.color.dark};`);
   }
 
   if (background?.image) {

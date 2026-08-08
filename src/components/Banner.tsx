@@ -42,14 +42,14 @@ export function Banner() {
   };
 
   return (
-    <div className="relative flex shrink-0 items-center justify-center gap-2 bg-[var(--color-primary)] px-10 py-2 text-center text-sm text-white">
-      <div className="[&_a:hover]:opacity-[0.85] [&_a]:text-inherit [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-[var(--radius-sm)] [&_code]:bg-black/20 [&_code]:px-1 [&_code]:py-[0.0625rem] [&_code]:text-[0.8125rem] [&_code]:[font-family:var(--font-mono)]">
+    <div className="relative flex shrink-0 items-center justify-center gap-2 bg-primary px-10 py-2 text-center text-sm text-primary-foreground">
+      <div className="[&_a:hover]:opacity-[0.85] [&_a]:text-inherit [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-sm [&_code]:bg-black/20 [&_code]:px-1 [&_code]:py-[0.0625rem] [&_code]:text-[0.8125rem] [&_code]:font-mono">
         {renderInlineMarkdown(banner.content)}
       </div>
       {banner.dismissible && (
         <button
           type="button"
-          className="absolute top-1/2 right-3 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-[var(--radius-sm)] text-inherit opacity-80 hover:bg-black/15 hover:opacity-100"
+          className="absolute top-1/2 right-3 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-inherit opacity-80 hover:bg-black/15 hover:opacity-100"
           onClick={handleDismiss}
           aria-label="Dismiss banner"
         >

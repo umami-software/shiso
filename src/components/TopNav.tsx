@@ -16,7 +16,7 @@ export function TopNav({ tabs }: { tabs: DocsTab[] }) {
 
   return (
     <nav
-      className="hidden h-full max-w-screen items-center gap-7 overflow-x-auto [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden"
+      className="hidden h-full max-w-screen items-center gap-7 overflow-x-auto text-sm [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden"
       aria-label="Sections"
     >
       {tabs.map(({ id, label, url }) => (
@@ -24,11 +24,13 @@ export function TopNav({ tabs }: { tabs: DocsTab[] }) {
           key={id}
           to={url}
           className={classNames(
-            'flex h-full items-center whitespace-nowrap border-transparent border-b-2 font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]',
+            'flex h-full items-center whitespace-nowrap border-transparent border-b-2 font-medium',
             {
-              'border-b-[var(--color-primary)] text-[var(--color-text-strong)]': id === selected,
+              'border-b-primary text-foreground': id === selected,
+              'text-muted-foreground hover:text-foreground': id !== selected,
             },
           )}
+          aria-current={id === selected ? 'page' : undefined}
         >
           {label}
         </Link>

@@ -92,7 +92,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Overview',
     heading: 'Core fields',
     id: 'core-fields',
-    text: 'theme: layout theme. Only "shiso" is implemented (the default) name: site title, shown in the header and page titles description: default meta description for pages without one logo: a path like "/logo.svg", or per-mode paths with an optional link: { "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg", "href": "https://example.com" } } favicon: a path like "/favicon.png" colors: accent colors — { "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary is the accent in light mode, light is the accent in dark mode, and dark colors buttons and hover accents in both modes.',
+    text: 'theme: layout theme. Only "shiso" is implemented (the default) name: site title, shown in the header and page titles description: default meta description for pages without one logo: a path like "/logo.svg", or per-mode paths with an optional link: { "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg", "href": "https://example.com" } } favicon: a path like "/favicon.png" colors: accent colors — { "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary is the semantic primary color in light mode and light is the primary color in dark mode. dark remains a legacy fallback when primary is omitted.',
   },
   {
     url: '/docs/configuration',
@@ -228,7 +228,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Customization',
     heading: 'Colors',
     id: 'colors',
-    text: '{ "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary: accent color in light mode light: accent color in dark mode (defaults to primary) dark: buttons and hover accents in both modes (defaults to primary)',
+    text: '{ "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary: semantic primary color in light mode light: semantic primary color in dark mode (defaults to primary) dark: legacy fallback used when primary is omitted',
   },
   {
     url: '/docs/customization',

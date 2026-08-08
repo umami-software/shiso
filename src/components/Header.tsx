@@ -34,13 +34,10 @@ export function Header() {
   const brandHref = logo?.href || DOCS_PREFIX || '/';
 
   return (
-    <header className="sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-[var(--color-border)] border-b bg-[color-mix(in_srgb,var(--color-bg)_92%,transparent)] backdrop-blur-md">
+    <header className="sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-border border-b bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-md">
       <div className="mx-auto grid h-full max-w-[1600px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-5">
         <div className="flex min-w-0 items-center gap-5 justify-self-start">
-          <Link
-            to={brandHref}
-            className="text-xl font-bold text-[var(--color-text-strong)] tracking-[-0.03em]"
-          >
+          <Link to={brandHref} className="text-xl font-bold text-foreground tracking-[-0.03em]">
             {logo ? (
               <>
                 <img src={logo.light} alt={siteName} className="h-7 w-auto dark:hidden" />
@@ -58,7 +55,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] px-2.5 py-1.5 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surface-sunken)] hover:text-[var(--color-text-strong)]"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-foreground"
               target="_blank"
               rel="noreferrer"
             >
@@ -70,7 +67,7 @@ export function Header() {
           {navbar?.primary && (
             <a
               href={navbar.primary.href}
-              className="ml-1 inline-flex items-center gap-1.5 rounded-[var(--radius-full)] bg-[var(--color-primary-strong)] px-3.5 py-1.5 text-sm font-semibold text-white hover:opacity-90"
+              className="ml-1 inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
               target="_blank"
               rel="noreferrer"
             >

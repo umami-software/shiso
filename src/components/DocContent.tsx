@@ -29,23 +29,21 @@ export function DocContent({ page, doc }: DocContentProps) {
 
   return (
     <article className="min-w-0 grow">
-      {eyebrow && <div className="font-bold text-[var(--color-primary)]">{eyebrow}</div>}
+      {eyebrow && <div className="text-sm font-bold text-primary">{eyebrow}</div>}
       <div className="flex items-start justify-between gap-4">
         {title && (
-          <h1 className="my-3 text-4xl text-[var(--color-text-strong)] leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]">
+          <h1 className="my-3 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]">
             {title}
           </h1>
         )}
         <ContextualMenu page={page} />
       </div>
-      {description && (
-        <p className="mb-6 text-[1.1rem] text-[var(--color-text-muted)]">{description}</p>
-      )}
+      {description && <p className="mb-6 text-[1.1rem] text-muted-foreground">{description}</p>}
       <div className="docs-markdown">
         <Content />
       </div>
       {lastModified && (
-        <div className="mt-8 text-sm text-[var(--color-text-muted)]">
+        <div className="mt-8 text-sm text-muted-foreground">
           Last updated on{' '}
           <time dateTime={lastModified}>{DATE_FORMAT.format(new Date(lastModified))}</time>
         </div>
@@ -74,7 +72,7 @@ const NavigationButton = ({
   return (
     <Link
       to={url}
-      className="my-3 inline-flex items-center gap-3 text-[1.1rem] font-bold text-[var(--color-text-strong)]"
+      className="my-3 inline-flex items-center gap-3 text-[1.1rem] font-bold text-foreground"
     >
       {isPrev && <ChevronRight size={14} className="rotate-180" />}
       {label}

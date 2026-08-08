@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { styles } from './styles';
-import { TabStrip } from './TabStrip';
+import { TabsContent, TabsList, Tabs as TabsPrimitive, TabsTrigger } from '@/components/ui/tabs';
 import { slugify, toElementArray } from './utils';
 
 interface TabChildProps {
@@ -79,15 +78,30 @@ export function Tabs({ children, group }: TabsProps) {
   }
 
   if (tabs.length === 1) {
-    return <div className={styles.tabs}>{tabs[0].content}</div>;
+    return <div className="my-4">{tabs[0].content}</div>;
   }
 
   return (
-    <TabStrip
-      items={tabs}
-      selectedKey={selectedKey}
-      onSelect={handleSelect}
-      ariaLabel="Content tabs"
-    />
+    <TabsPrimitive
+      value={selectedKey}
+      onValueChange={value => {
+        if (typeof value === 'string') {
+          handleSelect(value);
+        }
+      }}
+    >
+      <TabsList aria-label="Content tabs">
+        {tabs.map(tab => (
+          <TabsTrigger key={tab.id} value={tab.id}>
+            {tab.title}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {tabs.map(tab => (
+        <TabsContent key={tab.id} value={tab.id}>
+          {tab.content}
+        </TabsContent>
+      ))}
+    </TabsPrimitive>
   );
 }

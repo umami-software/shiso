@@ -1,5 +1,6 @@
 import { type ReactNode, useRef, useState } from 'react';
 import { CheckIcon, Copy } from '@/components/icons';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export interface CodeBlockProps {
   children?: ReactNode;
@@ -20,19 +21,23 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
   };
 
   return (
-    <pre
-      ref={textInput}
-      className={`relative my-5 overflow-auto rounded-[var(--radius-lg)] border border-[var(--color-code-border)] bg-[var(--color-code-bg)] p-5 text-[0.9rem] text-[var(--color-code-text)] leading-[1.6] [font-family:var(--font-mono)] ${className || ''}`}
-    >
-      {children}
+    <div className="relative my-5 overflow-hidden rounded-lg border border-border bg-muted/50">
+      <ScrollArea scrollbars="horizontal" className="w-full">
+        <pre
+          ref={textInput}
+          className={`code-block p-3 pr-12 text-sm text-foreground leading-[1.6] font-mono ${className || ''}`}
+        >
+          {children}
+        </pre>
+      </ScrollArea>
       <button
         type="button"
-        className="absolute top-3 right-3 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)] hover:bg-white/10 hover:text-[#fafafa]"
+        className="absolute top-3 right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
         onClick={handleCopy}
         aria-label="Copy code"
       >
-        {copied ? <CheckIcon size={14} className="text-[#4ade80]" /> : <Copy size={14} />}
+        {copied ? <CheckIcon size={14} className="text-primary" /> : <Copy size={14} />}
       </button>
-    </pre>
+    </div>
   );
 }
