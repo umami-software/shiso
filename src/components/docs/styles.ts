@@ -52,8 +52,15 @@ export const styles = {
 
   tabs: 'my-4 gap-0',
 
-  frame: 'my-4 rounded-lg border border-border bg-muted p-4',
-  frameCaption: 'mt-3 text-[0.9rem] text-muted-foreground',
+  frameWrapper: 'my-4',
+  frameHint: 'mb-4 flex items-start gap-2 text-sm font-medium leading-5 text-foreground',
+  frameHintIcon:
+    'flex h-5 shrink-0 items-center text-muted-foreground [&_svg]:size-4 [&_svg]:fill-current',
+  frame: 'relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2',
+  frameContent:
+    'relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:w-full [&_video]:w-full',
+  frameCaption:
+    'relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold',
 
   field: 'my-3',
   paramField: 'my-3',

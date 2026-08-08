@@ -1033,14 +1033,35 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/components/frame',
     page: 'Frame',
-    text: 'Use Frame to visually contain media or custom content with an optional caption.',
+    text: 'Use Frame to visually contain media or custom content with optional hints and captions.',
   },
   {
     url: '/docs/components/frame',
     page: 'Frame',
     heading: 'Basic usage',
     id: 'basic-usage',
-    text: '<Frame caption="Docs layout preview"> ![Sample](/images/sample.jpg) </Frame>',
+    text: '<Frame caption="Docs layout preview"> <img src="/images/sample.jpg" alt="Sample" /> </Frame>',
+  },
+  {
+    url: '/docs/components/frame',
+    page: 'Frame',
+    heading: 'Markdown captions',
+    id: 'markdown-captions',
+    text: 'Caption strings support Markdown links, bold, italic, and inline code. <Frame caption="**Sample:** Learn more in the [images guide](/docs/images)."> <img src="/images/sample.jpg" alt="Sample" /> </Frame>',
+  },
+  {
+    url: '/docs/components/frame',
+    page: 'Frame',
+    heading: 'Hints',
+    id: 'hints',
+    text: 'Use hint to display text before the frame. You can combine it with a caption. <Frame hint="Use a high-resolution source image." caption="Docs layout preview"> <img src="/images/sample.jpg" alt="Sample" /> </Frame>',
+  },
+  {
+    url: '/docs/components/frame',
+    page: 'Frame',
+    heading: 'Autoplay videos',
+    id: 'autoplay-videos',
+    text: 'Videos with autoPlay automatically receive playsInline, loop, and muted attributes. Videos without autoPlay are left unchanged. <Frame caption="Product demo"> <video autoPlay src="/videos/product-demo.mp4" /> </Frame>',
   },
   {
     url: '/docs/components/frame',
@@ -1054,7 +1075,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Frame',
     heading: 'Properties',
     id: 'properties',
-    text: 'Optional caption below the framed content. Media or other content to frame.',
+    text: 'Optional centered caption below the framed content. String values support inline Markdown. Optional text displayed before the frame. String values support inline Markdown. Media or other content to frame.',
   },
   {
     url: '/docs/components/icon',
