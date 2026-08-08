@@ -45,17 +45,25 @@ export function PageLinks({ items = [] }: PageLinksProps) {
   return (
     <div className="flex h-max min-w-60 flex-col gap-3 text-sm">
       <div className="font-bold text-foreground">On this page</div>
-      {items.map(({ name, id, size }) => (
-        <a
-          key={id}
-          href={`#${id}`}
-          className={classNames('text-muted-foreground hover:text-foreground', {
-            'text-primary': hash === id,
-          })}
-        >
-          <span style={{ marginLeft: indent(size), display: 'block' }}>{name}</span>
-        </a>
-      ))}
+      <nav className="flex flex-col" aria-label="Table of contents">
+        {items.map(({ name, id, size }) => {
+          const isActive = hash === id;
+
+          return (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={classNames('block border-l px-3 py-1.5', {
+                'border-l-primary font-medium text-primary': isActive,
+                'border-border text-muted-foreground hover:text-foreground': !isActive,
+              })}
+              aria-current={isActive ? 'location' : undefined}
+            >
+              <span style={{ marginLeft: indent(size), display: 'block' }}>{name}</span>
+            </a>
+          );
+        })}
+      </nav>
     </div>
   );
 }
