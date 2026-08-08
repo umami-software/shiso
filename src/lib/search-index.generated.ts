@@ -915,7 +915,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Card',
     heading: 'Card',
     id: 'card',
-    text: 'Card heading. Optional link destination. When set, the card is interactive. Lucide icon name or element. Image shown above the body. Label shown next to the arrow. Lay out icon, title, and body in a row. Show a trailing arrow. Defaults to true when href is set. Body content.',
+    text: 'Card heading. Optional link destination. When set, the card is interactive. Lucide icon name or element. Image shown above the body. Trailing action label. Lay out icon, title, and body in a row. Show an optional trailing arrow. Body content.',
   },
   {
     url: '/docs/components/card',

@@ -147,12 +147,12 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
       >
         {primary.action === 'copy' ? (
           copied ? (
-            <Check size={14} />
+            <Check className="size-3.5" />
           ) : (
-            <Copy size={14} />
+            <Copy className="size-3.5" />
           )
         ) : (
-          <ExternalLink size={14} />
+          <ExternalLink className="size-3.5" />
         )}
         {primary.action === 'copy' && copied ? 'Copied' : primary.title}
       </Button>
@@ -168,7 +168,7 @@ export function ContextualMenu({ page }: { page: NormalizedDocsPage }) {
               />
             }
           >
-            <ChevronRight size={14} className="rotate-90" />
+            <ChevronRight className="size-3.5 rotate-90" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-60">
             {options.map(option => (

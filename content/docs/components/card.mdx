@@ -72,15 +72,15 @@ External `href` values open in a new tab. For mixed content side by side, use
 </ResponseField>
 
 <ResponseField name="cta" type="string">
-  Label shown next to the arrow.
+  Trailing action label.
 </ResponseField>
 
 <ResponseField name="horizontal" type="boolean" default="false">
   Lay out icon, title, and body in a row.
 </ResponseField>
 
-<ResponseField name="arrow" type="boolean">
-  Show a trailing arrow. Defaults to `true` when `href` is set.
+<ResponseField name="arrow" type="boolean" default="false">
+  Show an optional trailing arrow.
 </ResponseField>
 
 <ResponseField name="children" type="ReactNode">

@@ -68,7 +68,7 @@ export function Docs({ page, doc }: DocsProps) {
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <div className="flex justify-end lg:hidden">
           <SheetTrigger render={<Button variant="outline" className="bg-card" />}>
-            <Menu size={14} />
+            <Menu className="size-3.5" />
             Menu
           </SheetTrigger>
         </div>

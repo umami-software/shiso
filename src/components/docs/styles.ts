@@ -8,7 +8,7 @@ export const styles = {
     'items-center px-4 py-3 text-base font-semibold text-foreground hover:no-underline',
   accordionContent: 'px-4 pb-4 text-base leading-7',
 
-  callout: 'my-4 flex items-start gap-3 rounded-lg border px-4 py-3.5 text-base leading-6',
+  callout: 'my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-base leading-6',
   calloutIcon:
     'mt-[calc((1.5em-1.25rem)/2)] inline-flex size-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4',
   calloutBody:

@@ -35,11 +35,11 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
         type="button"
         variant="ghost"
         size="icon-sm"
-        className="absolute top-3 right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+        className="absolute top-2.5 right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
         onClick={handleCopy}
         aria-label="Copy code"
       >
-        {copied ? <CheckIcon size={14} className="text-primary" /> : <Copy size={14} />}
+        {copied ? <CheckIcon className="size-3.5 text-primary" /> : <Copy className="size-3.5" />}
       </Button>
     </div>
   );

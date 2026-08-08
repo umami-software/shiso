@@ -75,7 +75,7 @@ export function Search() {
           />
         }
       >
-        <SearchIcon size={14} />
+        <SearchIcon className="size-3.5" />
         <span className="min-w-24 text-left">{prompt}</span>
         <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
           ⌘K
@@ -83,7 +83,8 @@ export function Search() {
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="top-[10vh] max-w-[calc(100%-2rem)] -translate-y-0 gap-0 overflow-hidden rounded-lg bg-background p-0 shadow-[0_10px_40px_rgba(0,0,0,0.2)] sm:max-w-[34rem]"
+        overlayClassName="bg-black/40 supports-backdrop-filter:backdrop-blur-none"
+        className="top-[10vh] max-w-[calc(100%-2rem)] -translate-y-0 gap-0 overflow-hidden rounded-lg border border-border bg-background p-0 ring-0 shadow-[0_10px_40px_rgba(0,0,0,0.2)] sm:max-w-[34rem]"
       >
         <DialogTitle className="sr-only">Search</DialogTitle>
         <Command shouldFilter={false} className="rounded-none bg-background p-0">
@@ -93,6 +94,11 @@ export function Search() {
             placeholder={prompt}
             value={query}
             onValueChange={runQuery}
+            onKeyDownCapture={event => {
+              if (event.key === 'Home' || event.key === 'End') {
+                event.stopPropagation();
+              }
+            }}
           />
           <CommandList className="max-h-[50vh] border-border border-t">
             {query ? <CommandEmpty>No results</CommandEmpty> : null}

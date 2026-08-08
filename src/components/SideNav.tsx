@@ -79,15 +79,7 @@ function CollapsibleGroup({
   };
 
   const chevron = (
-    <ChevronRight
-      size={14}
-      className={classNames(
-        'shrink-0 origin-center text-muted-foreground transition-[color,transform] duration-150 group-hover/section:text-sidebar-accent-foreground',
-        {
-          'rotate-90': isExpanded,
-        },
-      )}
-    />
+    <ChevronRight className="size-3.5 shrink-0 origin-center text-muted-foreground transition-[color,transform] duration-150 group-hover/section:text-sidebar-accent-foreground group-aria-expanded/collapsible-trigger:rotate-90" />
   );
 
   const isTopLevel = depth === 0;
@@ -141,7 +133,7 @@ function CollapsibleGroup({
             variant="ghost"
             size="icon-xs"
             className={classNames(
-              'inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              'group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
               { 'mr-[0.35rem]': !isTopLevel },
             )}
             aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${node.label}`}
@@ -159,7 +151,7 @@ function CollapsibleGroup({
           variant="ghost"
           className={classNames(
             headerClass,
-            'group/section flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent [&>svg:last-child]:ml-auto',
+            'group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent [&>svg:last-child]:ml-auto',
             {
               'pb-2 font-bold text-sidebar-foreground': isTopLevel,
               'border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':

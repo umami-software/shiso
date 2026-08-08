@@ -50,7 +50,7 @@ export function Card({
   img,
   cta,
   horizontal,
-  arrow = !!href,
+  arrow = false,
   children,
 }: CardProps) {
   const className = `${styles.card} ${horizontal ? styles.cardHorizontal : ''}`;
