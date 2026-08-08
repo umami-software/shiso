@@ -955,7 +955,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Code group',
     heading: 'Basic usage',
     id: 'basic-usage',
-    text: 'npm install pnpm install <CodeGroup> ```bash title="npm" npm install ``` ```bash title="pnpm" pnpm install ``` </CodeGroup> Each child can set a label with title metadata after the language fence (```bash title="pnpm") or a title prop when the child is an element. If no label is found, Shiso infers one from the language class and suffixes duplicates (bash, bash 2, …). A single child renders as plain content with no tab chrome. For non-code alternate content, use Tabs.',
+    text: 'npm install pnpm install <CodeGroup> ```bash npm npm install ``` ```bash pnpm pnpm install ``` </CodeGroup> Each child can set a label with a token after the language fence (```bash pnpm) or a title prop when the child is an element. If no label is found, Shiso infers one from the language class and suffixes duplicates (bash, bash 2, …). A single child renders as plain content with no tab chrome. For non-code alternate content, use Tabs.',
   },
   {
     url: '/docs/components/code-group',

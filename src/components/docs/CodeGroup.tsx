@@ -46,7 +46,7 @@ export function CodeGroup({ children }: CodeGroupProps) {
     <TabsPrimitive
       value={selected}
       onValueChange={setSelectedKey}
-      className="my-4 gap-0 overflow-hidden rounded-lg bg-background [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-muted/50"
+      className="my-4 gap-0 overflow-hidden rounded-lg bg-muted/50 [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent"
     >
       <TabsList
         variant="line"

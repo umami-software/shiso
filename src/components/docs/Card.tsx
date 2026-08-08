@@ -64,7 +64,10 @@ function DocsCardContent({
         <div className={styles.cardMain} data-slot="card-main">
           <div className={styles.cardHeader}>
             {resolvedIcon ? (
-              <span className={styles.cardIcon} style={color ? { color } : undefined}>
+              <span
+                className={`${styles.cardIcon} ${type ? 'text-inherit' : 'text-primary'}`}
+                style={color ? { color } : undefined}
+              >
                 {resolvedIcon}
               </span>
             ) : null}
@@ -107,7 +110,7 @@ export function Card({
 }: CardProps) {
   const external = typeof href === 'string' && /^https?:\/\//i.test(href);
   const showArrow = arrow ?? external;
-  const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : ''} ${horizontal ? styles.cardHorizontal : ''}`;
+  const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : ''} ${horizontal ? styles.cardHorizontal : ''} ${img ? styles.cardImageLayout : ''}`;
   const content = (
     <CardPrimitive className={className}>
       <DocsCardContent

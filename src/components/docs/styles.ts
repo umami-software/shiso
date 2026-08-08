@@ -23,17 +23,18 @@ export const styles = {
     'border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300',
   danger: 'border-destructive/40 bg-destructive/10 text-destructive',
 
-  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 ring-0 hover:border-input',
+  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-input',
   cardHorizontal:
     '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0',
   cardTyped:
     '[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit',
-  cardImage: 'mb-3 block w-full rounded-md',
+  cardImageLayout: 'p-0 [&_[data-slot=card-inner]]:p-6',
+  cardImage: 'block aspect-video w-full border-border border-b object-cover',
   cardInner: 'flex items-start justify-between gap-3',
   cardMain: 'flex min-w-0 flex-col gap-2',
   cardHeader: 'flex items-center gap-2',
   cardIcon: 'inline-flex shrink-0 items-center justify-center [&_img]:size-4 [&_svg]:size-4',
-  cardTitle: 'text-sm font-semibold text-foreground',
+  cardTitle: 'text-base font-semibold text-foreground',
   cardBody: 'text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0',
   cardCta:
     'flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground',

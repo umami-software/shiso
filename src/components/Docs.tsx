@@ -46,10 +46,14 @@ export function Docs({ page, doc }: DocsProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { tabs, navigation } = docsConfig;
 
-  // Close the mobile menu whenever the route changes.
+  // Close the mobile menu and start each newly loaded page at the top. Hash
+  // links keep their native section-scrolling behavior.
   // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger
   useEffect(() => {
     setMenuOpen(false);
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, left: 0 });
+    }
   }, [pathname]);
 
   if (!page || !doc) {
