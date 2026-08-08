@@ -25,15 +25,15 @@ Every page in `docs.json` navigation must map to a real file in `content/docs`. 
 
 The format is described by [`docs.schema.json`](./docs.schema.json) — add `"$schema": "./docs.schema.json"` to `docs.json` for editor autocomplete. The build validates the config against the schema (`pnpm check:config` runs it standalone).
 
-Every top-level key of the `docs.json` standard is declared in the schema, in one of three tiers:
+Every top-level key recognized by Shiso is declared in the schema, in one of three tiers:
 
 | Tier | Behavior |
 | --- | --- |
 | **Supported** | Implemented and strictly validated. |
-| **Reserved** | Part of the standard, accepted and ignored, with a build notice. |
+| **Reserved** | Recognized but not implemented; accepted and ignored with a build notice. |
 | **Unknown** | Rejected, with a "did you mean" suggestion. |
 
-The reserved tier is the point: a `docs.json` written against the full standard builds here using the subset Shiso implements, instead of failing on the first feature that isn't written yet. Reserved keys are annotated `"x-shiso": "reserved"` in the schema, and [`SETTINGS.md`](./SETTINGS.md) documents the full standard.
+The reserved tier lets configs from other docs platforms build using the subset Shiso implements instead of failing on recognized features that are not implemented yet. Reserved keys are annotated `"x-shiso": "reserved"` in the schema, and [`SETTINGS.md`](./SETTINGS.md) documents the available settings.
 
 Implemented today: `name`, `description`, `colors` (`primary`, `light`, `dark`), `logo`, `favicon`, `navbar` (links and primary button), `footer` (socials and link columns), `banner` (dismissible site-wide banner), `redirects` (exact-match static redirects), `seo` (`metatags`, `indexing`, plus a generated `sitemap.xml`), `errors.404` (custom title/description or redirect home), `metadata.timestamp` (last-modified dates from git), `appearance` (default mode and strict lock), `fonts` (Google Fonts or self-hosted, with heading/body overrides), `styling.eyebrows`, `background` (color and image per mode), `search.prompt` (built-in client-side search), `interaction.drilldown`, `contextual` (copy/view markdown, AI assistant links, custom entries — every page is also published as raw `.md`), and `navigation` with `tabs`, `dropdowns`, `anchors`, `groups`, `pages`, page objects (`{ page, title, icon, tag, hidden }`), external links (`{ href, label }`), and collapsible nested groups (`{ group, pages, root, icon, expanded, hidden }`). `versions` and `languages` resolve to their default entry and report the ones they skipped.
 
@@ -41,7 +41,7 @@ Hidden pages are still built and reachable by URL, but are left out of the sideb
 
 ### Shiso-only options
 
-Anything Shiso adds beyond the standard is namespaced under `$shiso`, so `docs.json` stays portable:
+Shiso-specific options are namespaced under `$shiso`, so `docs.json` stays portable:
 
 ```json
 {

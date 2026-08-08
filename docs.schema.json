@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "docs.schema.json",
   "title": "Shiso docs.json",
-  "description": "Configuration for a Shiso docs site. Every key of the docs.json standard is declared here and annotated with \"x-shiso\": \"supported\" (implemented, strictly validated) or \"x-shiso\": \"reserved\" (part of the standard, accepted and ignored, loosely validated). Keys absent from this file are rejected. See scripts/validate-config.mjs.",
+  "description": "Configuration for a Shiso docs site. Recognized keys are annotated with \"x-shiso\": \"supported\" (implemented and strictly validated) or \"x-shiso\": \"reserved\" (recognized, accepted and ignored, and loosely validated). Keys absent from this file are rejected. See scripts/validate-config.mjs.",
   "type": "object",
   "required": ["navigation"],
   "additionalProperties": false,

@@ -3,9 +3,8 @@ title: Overview
 description: How docs.json works, what Shiso implements, and the Shiso-only options.
 ---
 
-Shiso is configured with a single file: `docs.json`. It follows the
-industry-standard docs.json format, so a config written for another docs
-platform builds here as-is.
+Shiso is configured with a single file: `docs.json`. All supported site
+settings live there.
 
 ## Minimal example
 
@@ -42,12 +41,12 @@ Every key in `docs.json` falls into one of three tiers:
 | Tier | Behavior |
 | --- | --- |
 | **Supported** | Implemented and strictly validated. A malformed value fails the build. |
-| **Reserved** | Part of the standard but not implemented yet. Accepted and ignored, with a build notice. |
+| **Reserved** | Recognized but not implemented yet. Accepted and ignored, with a build notice. |
 | **Unknown** | Rejected, with a "did you mean" suggestion. |
 
-The reserved tier is the point: a `docs.json` written against the full standard
-builds here using the subset Shiso implements, instead of failing on the first
-feature that isn't written yet.
+The reserved tier lets configs from other docs platforms build using the subset
+Shiso implements instead of failing on recognized features that are not
+implemented yet.
 
 Supported today: `theme`, `name`, `description`, `colors`, `logo`, `favicon`,
 `navigation` and [`interaction`](/docs/navigation#collapsible-groups),
@@ -93,8 +92,8 @@ Reserved (accepted, ignored): `thumbnails`, `icons`, `api`, and `integrations`.
 
 ## Shiso-only options
 
-Options that are not part of the standard live under the `$shiso` key, so the
-rest of the file stays portable:
+Shiso-specific options live under the `$shiso` key, so the rest of the file
+stays portable:
 
 ```json
 {

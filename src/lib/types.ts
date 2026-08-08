@@ -155,7 +155,7 @@ export interface BannerConfig {
 
 /**
  * A redirect for a moved or renamed page. Sources are matched exactly;
- * wildcard patterns (`:slug*`) are part of the standard but not implemented.
+ * wildcard patterns (`:slug*`) are recognized but not implemented.
  * `permanent` is accepted for portability — static hosting cannot vary the
  * status code, so every redirect renders as a meta refresh page.
  */
@@ -199,7 +199,7 @@ export interface AppearanceConfig {
 export interface StylingConfig {
   /** Page eyebrow style: the section name (default) or the full breadcrumb path. */
   eyebrows?: 'section' | 'breadcrumbs';
-  /** Part of the standard; accepted and ignored. */
+  /** Recognized for compatibility; accepted and ignored. */
   latex?: unknown;
   codeblocks?: unknown;
 }
@@ -261,7 +261,7 @@ export interface ContextualConfig {
 export interface BackgroundConfig {
   /** Background image, single or per-mode. */
   image?: string | { light?: string; dark?: string };
-  /** Part of the standard; theme decorations are accepted and ignored. */
+  /** Recognized for compatibility; theme decorations are accepted and ignored. */
   decoration?: string;
   /** Background color per mode. */
   color?: { light?: string; dark?: string };
@@ -293,7 +293,7 @@ export interface DocsConfig {
   contextual?: ContextualConfig;
 
   /**
-   * Keys that are part of the config standard but not implemented yet. They are
+   * Recognized config keys that are not implemented yet. They are
    * accepted by the schema and ignored at runtime (see `scripts/validate-config.mjs`).
    * Typed `unknown` deliberately: code must not grow a dependency on them until
    * the corresponding feature lands and the key is given a real type above.
@@ -325,8 +325,8 @@ export interface NormalizedDocsPage {
   tabLabel: string;
   order: number;
   /**
-   * Hidden pages are still routed and prerendered — the standard keeps them
-   * reachable by URL — but are excluded from the sidebar, prev/next, the
+   * Hidden pages are still routed and prerendered, so they remain reachable by
+   * URL, but are excluded from the sidebar, prev/next, the
    * sitemap, and search.
    */
   hidden?: boolean;

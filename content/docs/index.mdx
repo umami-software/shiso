@@ -5,9 +5,8 @@ description: A static docs site generator configured with a single docs.json fil
 
 Shiso turns a folder of Markdown and MDX files into a fast, fully static
 documentation site. Everything about the site — navigation, branding, SEO,
-redirects — lives in one `docs.json` file that follows the industry-standard
-docs.json format, so an existing config from another docs platform builds here
-without modification.
+redirects — lives in one `docs.json` file, so the whole site can be configured
+in one place.
 
 ## How it works
 
@@ -18,9 +17,8 @@ without modification.
 
 ## What you get
 
-- **Standards-compatible config**: keys Shiso implements are strictly
-  validated; the rest of the docs.json standard is accepted and safely ignored,
-  so nothing breaks as your config grows
+- **Validated configuration**: supported `docs.json` keys are strictly
+  validated, with clear errors for malformed or unknown options
 - **Site chrome**: navbar links and buttons, footer socials and link columns,
   and a dismissible announcement banner
 - **Theming**: light/dark modes, accent colors, custom fonts, and backgrounds

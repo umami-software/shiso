@@ -30,7 +30,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
- * Config keys that belong to the standard but that Shiso does not implement.
+ * Recognized config keys that Shiso does not implement.
  * Policy: warn once and skip. Never fail a build over an unimplemented feature —
  * the same rule the schema validator applies to top-level keys.
  */
@@ -344,7 +344,7 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
 
     if (reservedKey) {
       warnOnce(
-        `Navigation item with "${reservedKey}" is part of the config standard but is not ` +
+        `Navigation item with "${reservedKey}" is recognized but is not ` +
           'implemented yet — it will be skipped.',
       );
       return;

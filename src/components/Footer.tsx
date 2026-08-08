@@ -56,7 +56,7 @@ export function Footer() {
                 rel="noreferrer"
                 aria-label={platformLabel(platform)}
               >
-                <SocialIcon platform={platform} />
+                <SocialIcon platform={platform} size={14} />
               </a>
             ))}
           </div>

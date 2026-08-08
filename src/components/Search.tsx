@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router';
 import { Search as SearchIcon } from '@/components/icons';
 import { type SearchRecord, type SearchResult, searchIndex } from '@/lib/search';
@@ -93,63 +94,66 @@ export function Search() {
           ⌘K
         </kbd>
       </button>
-      {open && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-[10vh] pb-4">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/40"
-            onClick={closeDialog}
-            aria-label="Close search"
-          />
-          <div
-            className="relative w-full max-w-[34rem] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_10px_40px_rgba(0,0,0,0.2)]"
-            role="dialog"
-            aria-label="Search"
-          >
-            <div className="flex items-center gap-2 px-4 py-3">
-              <SearchIcon size={16} className="shrink-0 text-[var(--color-text-muted)]" />
-              <input
-                ref={inputRef}
-                type="text"
-                className="w-full border-none bg-transparent text-base text-[var(--color-text)] outline-none [font:inherit]"
-                placeholder={prompt}
-                value={query}
-                onChange={event => runQuery(event.target.value)}
-                onKeyDown={onInputKeyDown}
-              />
-            </div>
-            {query && (
-              <div className="max-h-[50vh] overflow-y-auto border-[var(--color-border)] border-t p-2">
-                {results.length === 0 && (
-                  <div className="p-4 text-center text-[var(--color-text-muted)]">No results</div>
-                )}
-                {results.map((result, index) => (
-                  <button
-                    type="button"
-                    key={result.url}
-                    className={classNames(
-                      'block w-full rounded-[var(--radius-md)] px-3 py-2 text-left',
-                      { 'bg-[var(--color-surface-sunken)]': index === active },
-                    )}
-                    onMouseEnter={() => setActive(index)}
-                    onClick={() => select(result)}
-                  >
-                    <div className="text-[0.9rem] font-semibold text-[var(--color-text-strong)]">
-                      {result.record.page}
-                      {result.record.heading ? ` › ${result.record.heading}` : ''}
-                    </div>
-                    {result.snippet && (
-                      <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-[var(--color-text-muted)]">
-                        {result.snippet}
-                      </div>
-                    )}
-                  </button>
-                ))}
+      {open &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-[10vh] pb-4">
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/40"
+              onClick={closeDialog}
+              aria-label="Close search"
+            />
+            <div
+              className="relative w-full max-w-[34rem] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_10px_40px_rgba(0,0,0,0.2)]"
+              role="dialog"
+              aria-label="Search"
+            >
+              <div className="flex items-center gap-2 px-4 py-3">
+                <SearchIcon size={16} className="shrink-0 text-[var(--color-text-muted)]" />
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="w-full border-none bg-transparent text-base text-[var(--color-text)] outline-none [font:inherit]"
+                  placeholder={prompt}
+                  value={query}
+                  onChange={event => runQuery(event.target.value)}
+                  onKeyDown={onInputKeyDown}
+                />
               </div>
-            )}
-          </div>
-        </div>
-      )}
+              {query && (
+                <div className="max-h-[50vh] overflow-y-auto border-[var(--color-border)] border-t p-2">
+                  {results.length === 0 && (
+                    <div className="p-4 text-center text-[var(--color-text-muted)]">No results</div>
+                  )}
+                  {results.map((result, index) => (
+                    <button
+                      type="button"
+                      key={result.url}
+                      className={classNames(
+                        'block w-full rounded-[var(--radius-md)] px-3 py-2 text-left',
+                        { 'bg-[var(--color-surface-sunken)]': index === active },
+                      )}
+                      onMouseEnter={() => setActive(index)}
+                      onClick={() => select(result)}
+                    >
+                      <div className="text-[0.9rem] font-semibold text-[var(--color-text-strong)]">
+                        {result.record.page}
+                        {result.record.heading ? ` › ${result.record.heading}` : ''}
+                      </div>
+                      {result.snippet && (
+                        <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-[var(--color-text-muted)]">
+                          {result.snippet}
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }

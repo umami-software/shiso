@@ -25,7 +25,7 @@ export const LAST_MODIFIED: Record<string, string> = {
   '/content/docs/index.mdx': '2026-08-07T13:55:47-07:00',
   '/content/docs/lists.mdx': '2026-08-07T13:31:17-07:00',
   '/content/docs/navbar-and-footer.mdx': '2026-08-07T13:05:48-07:00',
-  '/content/docs/navigation.mdx': '2026-08-07T13:43:46-07:00',
+  '/content/docs/navigation.mdx': '2026-08-07T17:35:41-07:00',
   '/content/docs/quickstart.mdx': '2026-08-07T13:55:47-07:00',
   '/content/docs/search-and-ai.mdx': '2026-08-07T13:55:47-07:00',
   '/content/docs/seo.mdx': '2026-08-07T13:05:48-07:00',

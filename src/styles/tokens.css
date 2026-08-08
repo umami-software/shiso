@@ -8,6 +8,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-full: 9999px;
+  --header-height: 3.5rem;
 
   --color-primary: #16a34a;
   /* Buttons and hover accents in both modes; the `colors.dark` config overrides it. */

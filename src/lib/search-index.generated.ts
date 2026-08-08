@@ -5,7 +5,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs',
     page: 'Introduction',
-    text: 'Shiso turns a folder of Markdown and MDX files into a fast, fully static documentation site. Everything about the site — navigation, branding, SEO, redirects — lives in one docs.json file that follows the industry-standard docs.json format, so an existing config from another docs platform builds here without modification.',
+    text: 'Shiso turns a folder of Markdown and MDX files into a fast, fully static documentation site. Everything about the site — navigation, branding, SEO, redirects — lives in one docs.json file, so the whole site can be configured in one place.',
   },
   {
     url: '/docs',
@@ -19,7 +19,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Introduction',
     heading: 'What you get',
     id: 'what-you-get',
-    text: 'Standards-compatible config: keys Shiso implements are strictly validated; the rest of the docs.json standard is accepted and safely ignored, so nothing breaks as your config grows Site chrome: navbar links and buttons, footer socials and link columns, and a dismissible announcement banner Theming: light/dark modes, accent colors, custom fonts, and backgrounds SEO built in: canonical URLs, Open Graph tags, structured data, sitemap.xml, redirects, and last-modified timestamps from git history Docs components: callouts, tabs, steps, cards, code groups, and more, available in every page without imports',
+    text: 'Validated configuration: supported docs.json keys are strictly validated, with clear errors for malformed or unknown options Site chrome: navbar links and buttons, footer socials and link columns, and a dismissible announcement banner Theming: light/dark modes, accent colors, custom fonts, and backgrounds SEO built in: canonical URLs, Open Graph tags, structured data, sitemap.xml, redirects, and last-modified timestamps from git history Docs components: callouts, tabs, steps, cards, code groups, and more, available in every page without imports',
   },
   {
     url: '/docs',
@@ -71,7 +71,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/configuration',
     page: 'Overview',
-    text: 'Shiso is configured with a single file: docs.json. It follows the industry-standard docs.json format, so a config written for another docs platform builds here as-is.',
+    text: 'Shiso is configured with a single file: docs.json. All supported site settings live there.',
   },
   {
     url: '/docs/configuration',
@@ -85,7 +85,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Overview',
     heading: 'How Shiso treats config keys',
     id: 'how-shiso-treats-config-keys',
-    text: 'Every key in docs.json falls into one of three tiers: Tier Behavior Supported Implemented and strictly validated. A malformed value fails the build. Reserved Part of the standard but not implemented yet. Accepted and ignored, with a build notice. Unknown Rejected, with a "did you mean" suggestion. The reserved tier is the point: a docs.json written against the full standard builds here using the subset Shiso implements, instead of failing on the first feature that isn\'t written yet. Supported today: theme, name, description, colors, logo, favicon, navigation and interaction, navbar, footer, banner, appearance, fonts, styling, background, redirects, seo, errors, metadata, and search, contextual. Reserved (accepted, ignored): thumbnails, icons, api, and integrations.',
+    text: 'Every key in docs.json falls into one of three tiers: Tier Behavior Supported Implemented and strictly validated. A malformed value fails the build. Reserved Recognized but not implemented yet. Accepted and ignored, with a build notice. Unknown Rejected, with a "did you mean" suggestion. The reserved tier lets configs from other docs platforms build using the subset Shiso implements instead of failing on recognized features that are not implemented yet. Supported today: theme, name, description, colors, logo, favicon, navigation and interaction, navbar, footer, banner, appearance, fonts, styling, background, redirects, seo, errors, metadata, and search, contextual. Reserved (accepted, ignored): thumbnails, icons, api, and integrations.',
   },
   {
     url: '/docs/configuration',
@@ -99,7 +99,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Overview',
     heading: 'Shiso-only options',
     id: 'shiso-only-options',
-    text: 'Options that are not part of the standard live under the $shiso key, so the rest of the file stays portable: { "$shiso": { "docsPrefix": "/docs", "contentDir": "content/docs", "siteUrl": "https://docs.example.com" } } docsPrefix: route prefix for docs pages. Defaults to "/docs"; set "" to serve docs at the site root. contentDir: content directory relative to the project root. Defaults to "content/docs". siteUrl: absolute site origin. Required for canonical URLs, og:url, structured data, and sitemap.xml generation.',
+    text: 'Shiso-specific options live under the $shiso key, so the rest of the file stays portable: { "$shiso": { "docsPrefix": "/docs", "contentDir": "content/docs", "siteUrl": "https://docs.example.com" } } docsPrefix: route prefix for docs pages. Defaults to "/docs"; set "" to serve docs at the site root. contentDir: content directory relative to the project root. Defaults to "content/docs". siteUrl: absolute site origin. Required for canonical URLs, og:url, structured data, and sitemap.xml generation.',
   },
   {
     url: '/docs/configuration',
@@ -160,7 +160,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'Anchors',
     id: 'anchors',
-    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [...] } } Anchors that contain their own pages or groups are part of the standard but not implemented yet.',
+    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [...] } } Anchors that contain their own pages or groups are recognized but not implemented yet.',
   },
   {
     url: '/docs/navigation',
@@ -406,7 +406,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Troubleshooting',
     heading: 'The build prints a notice about an ignored key',
     id: 'the-build-prints-a-notice-about-an-ignored-key',
-    text: 'notice: "integrations" is part of the docs.json standard but is not implemented yet — it will be ignored. This is expected: keys of the standard that Shiso does not implement yet are accepted and skipped so a shared config still builds. See Configuration for the tier policy.',
+    text: 'notice: "integrations" is recognized but not implemented yet — it will be ignored. This is expected: recognized keys that Shiso does not implement yet are accepted and skipped so a shared config still builds. See Configuration for the tier policy.',
   },
   {
     url: '/docs/troubleshooting',
@@ -1309,7 +1309,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Migrating from Mintlify',
     heading: 'Config keys Shiso ignores',
     id: 'config-keys-shiso-ignores',
-    text: 'Keys that are part of the docs.json standard but not implemented yet are accepted and skipped with a build notice — they do not fail the build. That includes things like api, integrations, thumbnails, and MCP-based contextual options. Set theme to "shiso" (or omit it) — other theme names from Mintlify are not supported yet. See Configuration for the supported / reserved / unknown tier policy.',
+    text: 'Recognized keys that are not implemented yet are accepted and skipped with a build notice — they do not fail the build. That includes things like api, integrations, thumbnails, and MCP-based contextual options. Set theme to "shiso" (or omit it) — other theme names from Mintlify are not supported yet. See Configuration for the supported / reserved / unknown tier policy.',
   },
   {
     url: '/docs/guides/migrating',

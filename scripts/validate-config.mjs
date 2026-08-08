@@ -2,15 +2,14 @@
  * Validates docs.json against docs.schema.json.
  *
  * The schema is the source of truth for the config format, and it declares
- * every key of the docs.json standard in one of three tiers:
+ * every recognized docs.json key in one of three tiers:
  *
  *   supported  implemented, strictly validated
- *   reserved   part of the standard, accepted and ignored (loosely validated)
+ *   reserved   recognized, accepted and ignored (loosely validated)
  *   unknown    not in the schema at all, rejected
  *
- * The point of the middle tier is forward compatibility: a config written for
- * the full standard must build here, using the subset Shiso implements, rather
- * than failing on the first feature we have not written yet.
+ * The middle tier preserves compatibility with configs from other docs
+ * platforms by accepting recognized features Shiso has not implemented yet.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -95,10 +94,7 @@ export function validateConfig(config, schema) {
 
   const notices = Object.keys(config)
     .filter(key => tiers[key] === 'reserved')
-    .map(
-      key =>
-        `"${key}" is part of the docs.json standard but is not implemented yet — it will be ignored.`,
-    );
+    .map(key => `"${key}" is recognized but is not implemented yet — it will be ignored.`);
 
   return { valid: true, errors: [], notices };
 }
