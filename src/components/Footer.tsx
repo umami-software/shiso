@@ -1,5 +1,5 @@
 import { isKnownPlatform, SocialIcon } from '@/components/SocialIcon';
-import { getFooter, siteName } from '@/lib/site-config';
+import { getFooter } from '@/lib/site-config';
 
 /** "hacker-news" -> "Hacker News", for accessible labels on icon-only links. */
 function platformLabel(platform: string): string {
@@ -44,7 +44,7 @@ export function Footer() {
         </div>
       )}
       <div className="flex items-center justify-between gap-4">
-        <span className="text-sm">{siteName}</span>
+        <span className="text-sm">Powered by Shiso</span>
         {socials.length > 0 && (
           <div className="flex items-center gap-1">
             {socials.map(([platform, url]) => (

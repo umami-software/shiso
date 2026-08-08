@@ -9,7 +9,7 @@ import { getDrilldown } from '@/lib/site-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 
 const sectionLabelClass =
-  'flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 pl-3 font-bold text-inherit';
+  'flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit';
 const groupLabelClass =
   'flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit';
 const selectedClass =
@@ -152,7 +152,7 @@ function CollapsibleGroup({
         headerClass,
         'group/section flex w-full items-center gap-[0.4rem] text-left [&>svg:last-child]:ml-auto',
         {
-          'pb-2 pl-3 font-bold text-[var(--color-text-strong)]': isTopLevel,
+          'pb-2 font-bold text-[var(--color-text-strong)]': isTopLevel,
           'border-[var(--color-border)] border-l px-3 py-2 font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)]':
             !isTopLevel,
         },
