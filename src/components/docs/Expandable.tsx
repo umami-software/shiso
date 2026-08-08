@@ -14,10 +14,10 @@ export function Expandable({ title, children, defaultOpen = false }: ExpandableP
     <Collapsible defaultOpen={defaultOpen} className={styles.accordion}>
       <div className={styles.accordionItem}>
         <CollapsibleTrigger
-          className={`${styles.accordionTrigger} group/collapsible-trigger flex w-full justify-between text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50`}
+          className={`${styles.expandableTrigger} group/collapsible-trigger flex w-full justify-start gap-2 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50`}
         >
-          {title}
           <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-aria-expanded/collapsible-trigger:rotate-90" />
+          {title}
         </CollapsibleTrigger>
         <CollapsibleContent>
           <div className={styles.accordionContent}>{children}</div>
