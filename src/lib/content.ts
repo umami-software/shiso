@@ -1,4 +1,4 @@
-import { LAST_MODIFIED } from '@/lib/last-modified.generated';
+import { LAST_MODIFIED } from '@/generated/last-modified';
 import { CONTENT_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
 

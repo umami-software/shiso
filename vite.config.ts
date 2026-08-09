@@ -4,7 +4,7 @@ import { defineConfig, type Plugin } from 'vite';
 import docsConfig from './docs.json' with { type: 'json' };
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
-import { generateLastModified } from './scripts/generate-last-modified.mjs';
+import { shisoLastModified } from './scripts/generate-last-modified.mjs';
 import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 
 /**
@@ -24,24 +24,6 @@ function shisoIconRegistry(): Plugin {
     async handleHotUpdate({ file }) {
       if (/\.(md|mdx|tsx)$/.test(file)) {
         await generateIconRegistry();
-      }
-    },
-  };
-}
-
-/**
- * Keeps src/lib/last-modified.generated.ts in sync with git history, so the
- * `metadata.timestamp` feature can show per-page dates without runtime git access.
- */
-function shisoLastModified(): Plugin {
-  return {
-    name: 'shiso-last-modified',
-    async buildStart() {
-      await generateLastModified();
-    },
-    async handleHotUpdate({ file }) {
-      if (/\.(md|mdx)$/.test(file)) {
-        await generateLastModified();
       }
     },
   };

@@ -1,5 +1,5 @@
 /**
- * Generates src/lib/last-modified.generated.ts.
+ * Generates src/generated/last-modified.ts.
  *
  * The `metadata.timestamp` config key shows a last-modified date on pages.
  * That date comes from git history, which only exists at build time, so a
@@ -7,7 +7,7 @@
  * the latest commit that touched it. Files not committed yet fall back to
  * filesystem mtime.
  *
- * Run via `pnpm timestamps`, or automatically by the Vite plugin in vite.config.ts.
+ * Run via `pnpm timestamps`, or automatically by the Vite plugin exported below.
  */
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
@@ -18,7 +18,7 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUTPUT = path.join(ROOT, 'src/lib/last-modified.generated.ts');
+const OUTPUT = path.join(ROOT, 'src/generated/last-modified.ts');
 const CONTENT_EXTENSIONS = new Set(['.md', '.mdx']);
 
 async function collectContentFiles(dir, files = []) {
@@ -103,6 +103,21 @@ ${mapping}
   }
 
   return { count: entries.length, changed: previous !== contents };
+}
+
+/** Ensures consumers can import the generated module before Vite loads app code. */
+export function shisoLastModified() {
+  return {
+    name: 'shiso-last-modified',
+    async buildStart() {
+      await generateLastModified();
+    },
+    async handleHotUpdate({ file }) {
+      if (/\.(md|mdx)$/.test(file)) {
+        await generateLastModified();
+      }
+    },
+  };
 }
 
 if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
