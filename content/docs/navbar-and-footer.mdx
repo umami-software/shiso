@@ -1,6 +1,6 @@
 ---
-title: Navbar and footer
-description: Links, buttons, social icons, and footer link columns.
+title: Header, footer, and banner
+description: Navbar links, announcement banners, social icons, and footer link columns.
 ---
 
 ## Navbar
@@ -41,6 +41,24 @@ A highlighted button at the end of the navbar.
   branded one
 - `label`: required for `"button"`; defaults to the platform name otherwise
 - `href`: destination URL
+
+## Announcement banner
+
+The `banner` key shows a site-wide announcement above the header.
+
+```json
+{
+  "banner": {
+    "content": "🚀 v2 is out! [Read the changelog](https://example.com/changelog)",
+    "dismissible": true
+  }
+}
+```
+
+`content` supports links, `**bold**`, `*italic*`, and inline `` `code` ``.
+Set `dismissible` to `true` to let visitors close the banner. Their choice is
+remembered until you change the banner content, so a new announcement appears
+for everyone.
 
 ## Footer
 

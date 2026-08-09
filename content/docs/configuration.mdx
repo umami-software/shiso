@@ -1,154 +1,55 @@
 ---
 title: Overview
-description: How docs.json works, what Shiso implements, and the Shiso-only options.
+description: Find the settings you need to configure your Shiso site.
 ---
 
-Shiso is configured with a single file: `docs.json`. All supported site
-settings live there.
+Use `docs.json` to configure your site-wide settings. It controls your site's
+name and branding, navigation, appearance, search, SEO, and other features.
 
-## Minimal example
+Only `navigation` is required. Start with a small configuration and add other
+sections when you need them:
 
 ```json
 {
   "$schema": "./docs.schema.json",
-  "theme": "shiso",
-  "name": "My Docs",
-  "colors": {
-    "primary": "#16a34a"
-  },
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": ["index", "installation", "configuration"]
-          }
-        ]
+        "group": "Getting started",
+        "pages": ["index", "installation"]
       }
     ]
   }
 }
 ```
 
-Only `navigation` is required. Everything else can be added as your site grows.
+## Configuration sections
 
-## How Shiso treats config keys
+The pages below cover every `docs.json` setting that changes your Shiso site.
 
-Every key in `docs.json` falls into one of three tiers:
-
-| Tier | Behavior |
-| --- | --- |
-| **Supported** | Implemented and strictly validated. A malformed value fails the build. |
-| **Reserved** | Recognized but not implemented yet. Accepted and ignored, with a build notice. |
-| **Unknown** | Rejected, with a "did you mean" suggestion. |
-
-The reserved tier lets configs from other docs platforms build using the subset
-Shiso implements instead of failing on recognized features that are not
-implemented yet.
-
-Supported today: `theme`, `name`, `description`, `colors`, `logo`, `favicon`,
-`navigation` and [`interaction`](/docs/navigation#collapsible-groups),
-[`navbar`, `footer`, `banner`](/docs/navbar-and-footer),
-[`appearance`, `fonts`, `styling`, `background`](/docs/customization),
-[`redirects`, `seo`, `errors`, `metadata`](/docs/seo), and
-[`search`, `contextual`](/docs/search-and-ai).
-
-Reserved (accepted, ignored): `thumbnails`, `icons`, `api`, and `integrations`.
-
-## Core fields
-
-- `theme`: layout theme. Only `"shiso"` is implemented (the default)
-- `name`: site title, shown in the header and page titles
-- `description`: default meta description for pages without one
-- `logo`: a path like `"/logo.svg"`, or per-mode paths with an optional link:
-
-```json
-{
-  "logo": {
-    "light": "/logo-light.svg",
-    "dark": "/logo-dark.svg",
-    "href": "https://example.com"
-  }
-}
-```
-
-- `favicon`: a path like `"/favicon.png"`
-- `colors`: accent colors —
-
-```json
-{
-  "colors": {
-    "primary": "#16a34a",
-    "light": "#4ade80",
-    "dark": "#15803d"
-  }
-}
-```
-
-  `primary` is the semantic primary color in light mode and `light` is the
-  primary color in dark mode. `dark` remains a legacy fallback when `primary`
-  is omitted.
-
-## Shiso-only options
-
-Shiso-specific options live under the `$shiso` key, so the rest of the file
-stays portable:
-
-```json
-{
-  "$shiso": {
-    "docsPrefix": "/docs",
-    "contentDir": "content/docs",
-    "siteUrl": "https://docs.example.com"
-  }
-}
-```
-
-- `docsPrefix`: route prefix for docs pages. Defaults to `"/docs"`; set `""`
-  to serve docs at the site root.
-- `contentDir`: content directory relative to the project root. Defaults to
-  `"content/docs"`.
-- `siteUrl`: absolute site origin. Required for canonical URLs, `og:url`,
-  structured data, and `sitemap.xml` generation.
-
-## Schema and validation
-
-The full config format is described by `docs.schema.json` in the project root.
-Point your editor at it for autocomplete and inline validation:
-
-```json
-{
-  "$schema": "./docs.schema.json"
-}
-```
-
-The build validates `docs.json` against the schema before anything else runs.
-You can also run the check on its own:
-
-```bash
-pnpm check:config
-```
-
-## How page slugs map to files
-
-Every value in `navigation...pages` must match a file in `content/docs`.
-
-- `"index"` -> `content/docs/index.mdx` (or `.md`)
-- `"installation"` -> `content/docs/installation.mdx` (or `.md`)
-- `"components/index"` -> `content/docs/components/index.mdx` (or `.md`)
-
-Those slugs become routes like:
-
-- `index` -> `/docs`
-- `components/index` -> `/docs/components`
-- `components/callout` -> `/docs/components/callout`
-
-## Common setup issues
-
-- A page is listed in navigation but the file does not exist.
-- A file exists but was never added to `navigation`.
-- A nested slug path does not match the folder structure.
-
-See [Troubleshooting](/docs/troubleshooting) for more.
+<CardGroup cols={2}>
+  <Card title="Site details" icon="id-card" href="/docs/site-details">
+    Set your site name, description, logo, favicon, and theme.
+  </Card>
+  <Card title="Navigation" icon="panel-left" href="/docs/navigation">
+    Organize pages into groups, tabs, dropdowns, versions, or languages.
+  </Card>
+  <Card title="Appearance" icon="palette" href="/docs/customization">
+    Choose colors, fonts, light and dark modes, backgrounds, and breadcrumbs.
+  </Card>
+  <Card title="Header, footer, and banner" icon="panel-top" href="/docs/navbar-and-footer">
+    Add navbar links, a primary action, announcements, social profiles, and footer links.
+  </Card>
+  <Card title="Search and AI" icon="search" href="/docs/search-and-ai">
+    Configure site search, Markdown exports, and actions for AI assistants.
+  </Card>
+  <Card title="SEO, redirects, and errors" icon="globe" href="/docs/seo">
+    Control indexing and metadata, redirect old URLs, customize the 404 page, and show update dates.
+  </Card>
+  <Card title="URLs and content location" icon="folder-cog" href="/docs/project-settings">
+    Change the docs URL prefix or content folder, and set your production site URL.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/docs/troubleshooting">
+    Fix missing pages, navigation problems, and invalid configuration values.
+  </Card>
+</CardGroup>

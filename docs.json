@@ -36,20 +36,19 @@
           {
             "group": "Getting started",
             "collapsible": false,
-            "pages": [
-              { "page": "index", "title": "Introduction" },
-              "installation"
-            ]
+            "pages": [{ "page": "index", "title": "Introduction" }, "installation"]
           },
           {
             "group": "Configuration",
             "pages": [
               { "page": "configuration", "title": "Overview" },
+              "site-details",
               "navigation",
-              "customization",
-              "navbar-and-footer",
-              { "page": "seo", "title": "SEO and redirects" },
+              { "page": "customization", "title": "Appearance" },
+              { "page": "navbar-and-footer", "title": "Header, footer, and banner" },
               { "page": "search-and-ai", "title": "Search and AI" },
+              { "page": "seo", "title": "SEO, redirects, and errors" },
+              { "page": "project-settings", "title": "URLs and content location" },
               "troubleshooting"
             ]
           },

@@ -1,11 +1,12 @@
 ---
-title: SEO and redirects
+title: SEO, redirects, and errors
 description: Meta tags, sitemaps, redirects, the 404 page, and last-modified dates.
 ---
 
 Shiso generates SEO metadata for every page automatically: titles, meta
 descriptions, canonical URLs, Open Graph and Twitter tags, and structured data.
-Set `$shiso.siteUrl` so tags that need an absolute origin can be emitted.
+Set [`$shiso.siteUrl`](/docs/project-settings#production-site-url) so tags that
+need an absolute origin can be emitted.
 
 These `docs.json` keys tune the rest.
 
@@ -47,8 +48,9 @@ noindex: true
 
 ## Sitemap
 
-When `$shiso.siteUrl` is set, `pnpm build` writes a `sitemap.xml` covering
-every indexable page, with last-modified dates taken from git history.
+When [`$shiso.siteUrl`](/docs/project-settings#production-site-url) is set,
+`pnpm build` writes a `sitemap.xml` covering every indexable page, with
+last-modified dates taken from git history.
 
 ## Redirects
 

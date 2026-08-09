@@ -1,0 +1,100 @@
+---
+title: Site details
+description: Set your site name, description, logo, favicon, and theme.
+---
+
+Use these `docs.json` settings to identify your documentation and add your
+brand. All of them are optional.
+
+## Name and description
+
+`name` appears in the header beside your logo and in browser page titles.
+`description` supplies the default meta description for any page that does not
+define one in its frontmatter.
+
+```json
+{
+  "name": "Acme Docs",
+  "description": "Guides and API documentation for Acme."
+}
+```
+
+Individual pages can override the description:
+
+```yaml
+---
+title: Authentication
+description: Authenticate requests to the Acme API.
+---
+```
+
+## Logo
+
+Set `logo` to an image path to use the same logo in light and dark mode. Put
+the image in your project's `public` folder; `/logo.svg` refers to
+`public/logo.svg`.
+
+```json
+{
+  "logo": "/logo.svg"
+}
+```
+
+To use a different image for each color mode, provide `light` and `dark`
+paths. Add `href` to choose where the logo sends visitors when they click it.
+Without `href`, it links to the documentation home.
+
+```json
+{
+  "logo": {
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg",
+    "href": "https://example.com"
+  }
+}
+```
+
+## Favicon
+
+`favicon` sets the small icon shown in browser tabs and bookmarks. Use a path
+to an image in the `public` folder.
+
+```json
+{
+  "favicon": "/favicon.png"
+}
+```
+
+Square PNG or SVG images work best. If you omit this setting, the browser uses
+its default icon.
+
+## Theme
+
+New Shiso sites include the following setting:
+
+```json
+{
+  "theme": "shiso"
+}
+```
+
+`"shiso"` is the available layout theme and is also the default, so you can
+omit `theme` without changing the site.
+
+## Complete example
+
+```json
+{
+  "theme": "shiso",
+  "name": "Acme Docs",
+  "description": "Guides and API documentation for Acme.",
+  "logo": {
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg"
+  },
+  "favicon": "/favicon.png"
+}
+```
+
+To change colors, fonts, or color mode, continue to
+[Appearance](/docs/customization).

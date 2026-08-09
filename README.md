@@ -1,10 +1,19 @@
 # Shiso
 
-Shiso is an open-source static documentation generator built with Vite, React, and MDX. Site configuration lives in `docs.json`, and documentation content lives in Markdown or MDX files.
+Shiso turns Markdown files into a fast, searchable documentation website. Use
+it for product guides, help centers, API documentation, or any other content
+that benefits from clear navigation and a polished reading experience.
 
-For configuration, content authoring, and component usage, see the [Shiso documentation](https://shiso.umami.is).
+Shiso includes:
 
-## Installation
+- navigation with tabs, groups, and nested pages
+- light and dark modes with customizable colors, fonts, and branding
+- built-in search with no external service required
+- SEO metadata, sitemaps, redirects, and custom 404 pages
+- Markdown copies of every page and optional actions for AI assistants
+- static output that can be hosted almost anywhere
+
+## Create a documentation site
 
 ```bash
 pnpm create shiso-app my-docs
@@ -12,74 +21,69 @@ cd my-docs
 pnpm dev
 ```
 
-With npm, run `npm create shiso-app@latest my-docs` instead. The generator
-creates a standalone project with a fresh Git repository and no remote tied to
-the Shiso source repository.
+Open [http://localhost:8001/docs](http://localhost:8001/docs) to view the site.
 
-The development server runs at `http://localhost:8001`. With the default
-configuration, documentation is available at `http://localhost:8001/docs`.
+## Add and organize pages
 
-## Project layout
+Write pages as Markdown or MDX files in `content/docs`:
 
-```text
-content/docs/   Markdown and MDX source files
-scripts/        Validation and build-time generators
-src/            React application and rendering code
-packages/create-shiso-app/  Project generator published to npm
-docs.json       Site configuration and navigation
-docs.schema.json  JSON Schema for docs.json
-mdx.config.ts   MDX processing pipeline
-vite.config.ts  Development and build plugins
+```mdx
+---
+title: Getting started
+description: Learn the basics in a few minutes.
+---
+
+Welcome to the documentation.
 ```
 
-Add `"$schema": "./docs.schema.json"` to `docs.json` for editor validation and autocomplete. Navigation entries must resolve to files in the configured content directory; missing files fail validation.
+Add each page to `navigation` in `docs.json` to choose its position in the
+sidebar:
 
-## UI components
-
-Prefer the shadcn primitives in `src/components/ui` whenever an equivalent exists. Add new
-primitives through the configured Base UI registry instead of recreating them locally:
-
-```bash
-pnpm dlx shadcn@latest add <component>
+```json
+{
+  "$schema": "./docs.schema.json",
+  "name": "Acme Docs",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting started",
+        "pages": ["index", "installation"]
+      }
+    ]
+  }
+}
 ```
 
-Feature and MDX components can wrap these primitives to preserve their public APIs and styling.
+The page name matches its file path without the extension. For example,
+`"installation"` uses `content/docs/installation.mdx`.
 
-## Build pipeline
+## Customize your site
+
+Use `docs.json` to set your logo, colors, navigation, header and footer links,
+search, SEO, redirects, and other site-wide options. Add images, fonts, and
+other files to `public` and reference them with paths such as `/logo.svg`.
+
+See the [configuration overview](https://shiso.dev/docs/configuration) for all
+available sections and examples.
+
+## Build and publish
 
 ```bash
 pnpm build
 ```
 
-The production build:
+The finished static site is written to `dist/client`. Publish that folder with
+your preferred static hosting provider.
 
-1. Validates `docs.json` against `docs.schema.json`.
-2. Generates the icon registry, last-modified metadata, and client-side search index.
-3. Builds the browser application into `dist/client`.
-4. Builds the server renderer into `dist/server`.
-5. Prerenders every documentation route to static HTML in `dist/client`.
+For hosting setup and deployment checks, see the
+[deployment guide](https://shiso.dev/docs/guides/deployment).
 
-Deploy `dist/client` to any static host. For subpath deployments, set Vite's `base` option in `vite.config.ts` before building.
+## Documentation
 
-Vercel deployments use the included `vercel.json` to serve `dist/client` as a pre-rendered static site.
-
-## Commands
-
-| Command | Purpose |
-| --- | --- |
-| `pnpm dev` | Start the Vite development server on port 8001 |
-| `pnpm build` | Validate, build, and prerender the static site |
-| `pnpm preview` | Preview the production client build |
-| `pnpm check:config` | Validate `docs.json` |
-| `pnpm lint` | Run Biome checks |
-| `pnpm test` | Run the Vitest suite |
-| `pnpm icons:registry` | Regenerate the content icon registry |
-| `pnpm timestamps` | Regenerate last-modified metadata |
-| `pnpm search:index` | Regenerate the client-side search index |
-
-Generated source modules are refreshed automatically during development and production builds. They should not be edited by hand.
-
-Search uses the built-in local provider by default. Set `search` to `false` to disable it, or configure `{ "provider": "...", "options": { ... } }` and register an asynchronous provider factory in `src/entry-client.tsx`. See [Search and AI](./content/docs/search-and-ai.mdx) for the provider contract and an example.
+- [Installation](https://shiso.dev/docs/installation)
+- [Configuration](https://shiso.dev/docs/configuration)
+- [Writing content](https://shiso.dev/docs/writing-content)
+- [Troubleshooting](https://shiso.dev/docs/troubleshooting)
 
 ## License
 

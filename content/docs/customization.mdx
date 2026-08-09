@@ -1,6 +1,6 @@
 ---
-title: Customization
-description: Theme mode, fonts, colors, backgrounds, and the announcement banner.
+title: Appearance
+description: Theme mode, fonts, colors, backgrounds, and page title breadcrumbs.
 ---
 
 These `docs.json` keys control how your site looks. All of them are optional.
@@ -81,20 +81,3 @@ be a single path used in both modes.
   }
 }
 ```
-
-## Banner
-
-The `banner` key shows a site-wide announcement above the header.
-
-```json
-{
-  "banner": {
-    "content": "🚀 v2 is out! [Read the changelog](https://example.com/changelog)",
-    "dismissible": true
-  }
-}
-```
-
-`content` supports basic markdown: links, `**bold**`, `*italic*`, and `` `code` ``.
-When `dismissible` is true, dismissal persists in the browser until the banner
-content changes — publishing a new message shows the banner again for everyone.

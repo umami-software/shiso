@@ -1,0 +1,120 @@
+---
+title: URLs and content location
+description: Choose where documentation files live and which URLs your site uses.
+---
+
+Most sites can use Shiso's default folder and URL structure. Add `$shiso` to
+`docs.json` when you need to change where content lives, serve docs at a
+different path, or provide the site's public URL.
+
+```json
+{
+  "$shiso": {
+    "docsPrefix": "/docs",
+    "contentDir": "content/docs",
+    "siteUrl": "https://docs.example.com"
+  }
+}
+```
+
+## Documentation URL
+
+`docsPrefix` is the path that appears before every documentation page. It
+defaults to `"/docs"`.
+
+```json
+{
+  "$shiso": {
+    "docsPrefix": "/help"
+  }
+}
+```
+
+With this setting, the documentation home is `/help` and a page named
+`installation` is available at `/help/installation`.
+
+Set `docsPrefix` to an empty string to serve documentation from the root of
+the site:
+
+```json
+{
+  "$shiso": {
+    "docsPrefix": ""
+  }
+}
+```
+
+## Content folder
+
+`contentDir` tells Shiso where to find your Markdown and MDX files, relative
+to the project root. It defaults to `"content/docs"`.
+
+```json
+{
+  "$shiso": {
+    "contentDir": "docs"
+  }
+}
+```
+
+After changing this setting, move or create your pages in the matching folder
+and keep navigation page entries relative to that folder.
+
+## Production site URL
+
+`siteUrl` is the public origin of your deployed site. Do not include a trailing
+slash or the documentation prefix.
+
+```json
+{
+  "$shiso": {
+    "siteUrl": "https://docs.example.com"
+  }
+}
+```
+
+Set it before deploying so Shiso can generate canonical URLs, Open Graph URLs,
+structured data, `sitemap.xml`, and absolute links for AI actions.
+
+## How page names become URLs
+
+Every page named in `navigation` matches a `.md` or `.mdx` file in your content
+folder. With the default `contentDir` and `docsPrefix`:
+
+| Navigation entry | Content file | URL |
+| --- | --- | --- |
+| `"index"` | `content/docs/index.mdx` | `/docs` |
+| `"installation"` | `content/docs/installation.mdx` | `/docs/installation` |
+| `"components/index"` | `content/docs/components/index.mdx` | `/docs/components` |
+| `"components/callout"` | `content/docs/components/callout.mdx` | `/docs/components/callout` |
+
+The same mapping applies when you customize either setting; only the content
+folder and URL prefix change.
+
+## Editor help and validation
+
+Keep the schema reference at the top of `docs.json` to get autocomplete, field
+descriptions, and inline validation in supported editors:
+
+```json
+{
+  "$schema": "./docs.schema.json"
+}
+```
+
+Shiso checks the file when it builds your site. To check it without running a
+full build, use:
+
+```bash
+pnpm check:config
+```
+
+## Common mistakes
+
+- The page is named in navigation, but its file does not exist.
+- The file exists, but it is not included in navigation.
+- A nested page name does not match its folder structure.
+- `siteUrl` includes `/docs`, another path, or a trailing slash.
+
+See [Troubleshooting](/docs/troubleshooting) for help with build and navigation
+errors.
