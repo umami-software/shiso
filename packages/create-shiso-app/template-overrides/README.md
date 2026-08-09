@@ -11,7 +11,7 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:8001/docs](http://localhost:8001/docs), then edit
+Open the local URL shown in your terminal, then edit
 `content/docs/index.mdx` to start writing.
 
 Site configuration and navigation live in `docs.json`.

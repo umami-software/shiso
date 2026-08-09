@@ -21,7 +21,7 @@ cd my-docs
 pnpm dev
 ```
 
-Open [http://localhost:8001/docs](http://localhost:8001/docs) to view the site.
+Open the local URL shown in your terminal to view the site.
 
 ## Add and organize pages
 

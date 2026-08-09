@@ -45,7 +45,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Installation',
     heading: 'Start the site',
     id: 'start-the-site',
-    text: 'Move into the generated project and start the development server: cd my-docs pnpm dev cd my-docs npm run dev cd my-docs yarn dev cd my-docs bun run dev Open http://localhost:8001/docs. Edit content/docs/index.mdx to change the first page and docs.json to configure the site and navigation.',
+    text: 'Move into the generated project and start the development server: cd my-docs pnpm dev cd my-docs npm run dev cd my-docs yarn dev cd my-docs bun run dev Open the local URL shown in your terminal. Edit content/docs/index.mdx to change the first page and docs.json to configure the site and navigation.',
   },
   {
     url: '/docs/installation',
