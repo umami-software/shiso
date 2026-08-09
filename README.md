@@ -79,6 +79,8 @@ Vercel deployments use the included `vercel.json` to serve `dist/client` as a pr
 
 Generated source modules are refreshed automatically during development and production builds. They should not be edited by hand.
 
+Search uses the built-in local provider by default. Set `search` to `false` to disable it, or configure `{ "provider": "...", "options": { ... } }` and register an asynchronous provider factory in `src/entry-client.tsx`. See [Search and AI](./content/docs/search-and-ai.mdx) for the provider contract and an example.
+
 ## License
 
 MIT

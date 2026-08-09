@@ -221,6 +221,10 @@ export interface FontsConfig extends FontSpec {
 export interface SearchConfig {
   /** Placeholder text for the search input. */
   prompt?: string;
+  /** Registered provider id. Defaults to the built-in local provider. */
+  provider?: string;
+  /** Provider-specific configuration. */
+  options?: Record<string, unknown>;
 }
 
 export interface InteractionConfig {
@@ -288,7 +292,8 @@ export interface DocsConfig {
   styling?: StylingConfig;
   fonts?: FontsConfig;
   background?: BackgroundConfig;
-  search?: SearchConfig;
+  /** Search settings. Set to false to hide search and skip index generation. */
+  search?: false | SearchConfig;
   interaction?: InteractionConfig;
   contextual?: ContextualConfig;
 

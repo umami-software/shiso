@@ -21,11 +21,15 @@ export interface SearchRecord {
 }
 
 export interface SearchResult {
-  record: SearchRecord;
   /** Route including the section anchor. */
   url: string;
+  /** Page title. */
+  page: string;
+  /** Section heading, absent for the page intro. */
+  heading?: string;
   /** Snippet of section text around the first match, when the text matched. */
   snippet?: string;
+  /** Provider-specific relevance score. Use 0 when a provider does not expose one. */
   score: number;
 }
 
@@ -84,8 +88,9 @@ export function searchIndex(records: SearchRecord[], query: string, limit = 10):
     }
 
     results.push({
-      record,
       url: record.id ? `${record.url}#${record.id}` : record.url,
+      page: record.page,
+      heading: record.heading,
       snippet: snippetAt >= 0 ? makeSnippet(record.text, snippetAt, snippetLength) : undefined,
       score,
     });

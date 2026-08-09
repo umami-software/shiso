@@ -228,15 +228,29 @@
     },
     "search": {
       "x-shiso": "supported",
-      "type": "object",
-      "description": "Search display settings.",
-      "additionalProperties": false,
-      "properties": {
-        "prompt": {
-          "type": "string",
-          "description": "Placeholder text for the search input."
+      "description": "Search settings. Set to false to disable search.",
+      "oneOf": [
+        { "const": false },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Placeholder text for the search input."
+            },
+            "provider": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Registered search provider id. Defaults to local."
+            },
+            "options": {
+              "type": "object",
+              "description": "Provider-specific configuration."
+            }
+          }
         }
-      }
+      ]
     },
     "contextual": {
       "x-shiso": "supported",

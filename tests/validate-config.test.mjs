@@ -79,7 +79,11 @@ describe('search, interaction, and contextual', () => {
     const result = validateConfig(
       {
         ...minimal,
-        search: { prompt: 'Search the docs...' },
+        search: {
+          prompt: 'Search the docs...',
+          provider: 'hosted',
+          options: { index: 'docs' },
+        },
         interaction: { drilldown: false },
         contextual: {
           options: [
@@ -100,6 +104,18 @@ describe('search, interaction, and contextual', () => {
     );
 
     expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+  });
+
+  it('accepts false to disable search', () => {
+    expect(validateConfig({ ...minimal, search: false }, schema)).toMatchObject({
+      valid: true,
+      errors: [],
+    });
+  });
+
+  it('rejects true and unknown search settings', () => {
+    expect(validateConfig({ ...minimal, search: true }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, search: { unknown: true } }, schema).valid).toBe(false);
   });
 
   it('rejects an unknown contextual option', () => {

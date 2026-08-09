@@ -1,6 +1,7 @@
 import { resolveDocFile } from '@/lib/content';
 import { assertDocsConfig, normalizeDocsConfig } from '@/lib/docs-config';
 import { stripBase, stripDocsPrefix } from '@/lib/paths';
+import { resolveSearchConfig } from '@/lib/search/config';
 import type {
   AppearanceConfig,
   BannerConfig,
@@ -162,7 +163,11 @@ export function getStyling(): { eyebrows: 'section' | 'breadcrumbs' } {
 }
 
 export function getSearchPrompt(): string {
-  return siteConfig.search?.prompt?.trim() || 'Search...';
+  return getSearchConfig().prompt;
+}
+
+export function getSearchConfig() {
+  return resolveSearchConfig(siteConfig.search);
 }
 
 /** Collapsible-group click behavior. Undefined means "use the default". */

@@ -345,7 +345,14 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Search and AI',
     heading: 'Search',
     id: 'search',
-    text: 'Every Shiso site ships with client-side search — no service or API key required. Open it with the header button or ⌘K / Ctrl K. The index is built at compile time from your content: each page is split into heading-bounded sections, so results land on the exact section that matched. Pages marked hidden in navigation stay out of the index. Customize the input placeholder with search.prompt: { "search": { "prompt": "Search the docs..." } }',
+    text: 'Every Shiso site ships with client-side search — no service or API key required. Open it with the header button or ⌘K / Ctrl K. The index is built at compile time from your content: each page is split into heading-bounded sections, so results land on the exact section that matched. Pages marked hidden in navigation stay out of the index. Customize the input placeholder with search.prompt, or set search to false to remove the search button and keyboard shortcut: { "search": { "prompt": "Search the docs..." } }',
+  },
+  {
+    url: '/docs/search-and-ai',
+    page: 'Search and AI',
+    heading: 'Search providers',
+    id: 'search-providers',
+    text: 'The built-in local provider is used by default. Select a registered provider with search.provider; options are passed directly to its factory: { "search": { "prompt": "Search the docs...", "provider": "hosted", "options": { "index": "docs" } } } Register custom providers in src/entry-client.tsx before hydration: import { registerSearchProvider } from \'@/lib/search/provider\'; registerSearchProvider(\'hosted\', options => ({ async search(query, limit = 10) { const params = new URLSearchParams({ q: query, limit: String(limit) }); const response = await fetch(\'/api/search?\' + params); return response.json(); }, })); Every provider returns normalized results with url, page, score, and optional heading and snippet fields. Provider options are included in the browser bundle, so do not put private API keys in them. An unknown provider id logs a warning and falls back to local.',
   },
   {
     url: '/docs/search-and-ai',

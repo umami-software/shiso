@@ -28,7 +28,7 @@ describe('searchIndex', () => {
   it('matches page titles ahead of body text', () => {
     const results = searchIndex(records, 'configuration');
 
-    expect(results[0].record.page).toBe('Configuration');
+    expect(results[0].page).toBe('Configuration');
   });
 
   it('appends the heading anchor to result urls', () => {

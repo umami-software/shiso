@@ -52,13 +52,17 @@ function shisoLastModified(): Plugin {
  * dialog can query page text without a server.
  */
 function shisoSearchIndex(): Plugin {
+  const enabled = (docsConfig as { search?: unknown }).search !== false;
+
   return {
     name: 'shiso-search-index',
     async buildStart() {
-      await generateSearchIndex();
+      if (enabled) {
+        await generateSearchIndex();
+      }
     },
     async handleHotUpdate({ file }) {
-      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json')) {
+      if (enabled && (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json'))) {
         await generateSearchIndex();
       }
     },

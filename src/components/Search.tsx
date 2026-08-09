@@ -11,46 +11,101 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { type SearchRecord, type SearchResult, searchIndex } from '@/lib/search';
-import { getSearchPrompt } from '@/lib/site-config';
+import type { SearchResult } from '@/lib/search';
+import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provider';
+import { getSearchConfig } from '@/lib/site-config';
 
 /**
- * Search dialog over the build-time index. The index module is dynamically
- * imported on first open, so Vite splits page text out of the initial bundle.
+ * Provider-neutral search dialog. The selected provider and its index or
+ * client are loaded on demand, so search stays out of the initial bundle.
  */
 export function Search() {
   const navigate = useNavigate();
-  const prompt = getSearchPrompt();
+  const config = getSearchConfig();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const records = useRef<SearchRecord[] | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const provider = useRef<Promise<SearchProvider> | null>(null);
+  const requestId = useRef(0);
 
-  const runQuery = useCallback((value: string) => {
-    setQuery(value);
-    setResults(records.current ? searchIndex(records.current, value) : []);
-  }, []);
+  const loadProvider = useCallback(() => {
+    if (!provider.current) {
+      provider.current = resolveSearchProvider(config.provider, config.options)
+        .then(resolved => {
+          if (resolved.fellBack) {
+            console.warn(
+              `[shiso] Unknown search provider "${config.provider}" — using the built-in local provider.`,
+            );
+          }
+
+          return resolved.provider;
+        })
+        .catch(error => {
+          provider.current = null;
+          throw error;
+        });
+    }
+
+    return provider.current;
+  }, [config.options, config.provider]);
+
+  const runQuery = useCallback(
+    async (value: string) => {
+      const currentRequest = ++requestId.current;
+      setQuery(value);
+
+      if (!value.trim()) {
+        setResults([]);
+        setStatus('idle');
+        return;
+      }
+
+      setResults([]);
+      setStatus('loading');
+
+      try {
+        const activeProvider = await loadProvider();
+        const nextResults = await activeProvider.search(value);
+
+        if (currentRequest === requestId.current) {
+          setResults(nextResults);
+          setStatus('ready');
+        }
+      } catch (error) {
+        if (currentRequest === requestId.current) {
+          console.error('[shiso] Search provider failed:', error);
+          setResults([]);
+          setStatus('error');
+        }
+      }
+    },
+    [loadProvider],
+  );
 
   const openDialog = useCallback(() => {
-    setOpen(true);
-
-    if (!records.current) {
-      import('@/lib/search-index.generated').then(module => {
-        records.current = module.SEARCH_INDEX;
-      });
+    if (!config.enabled) {
+      return;
     }
-  }, []);
+
+    setOpen(true);
+    void loadProvider().catch(error => {
+      console.error('[shiso] Search provider failed to load:', error);
+    });
+  }, [config.enabled, loadProvider]);
 
   const closeDialog = useCallback(() => {
+    requestId.current += 1;
     setOpen(false);
     setQuery('');
     setResults([]);
+    setStatus('idle');
   }, []);
 
   // Global shortcut: Cmd/Ctrl+K.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+      if (config.enabled && (event.metaKey || event.ctrlKey) && event.key === 'k') {
         event.preventDefault();
         openDialog();
       }
@@ -58,12 +113,18 @@ export function Search() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [openDialog]);
+  }, [config.enabled, openDialog]);
 
   const select = (result: SearchResult) => {
     closeDialog();
     navigate(result.url);
   };
+
+  if (!config.enabled) {
+    return null;
+  }
+
+  const hasQuery = !!query.trim();
 
   return (
     <Dialog open={open} onOpenChange={nextOpen => (nextOpen ? openDialog() : closeDialog())}>
@@ -76,7 +137,7 @@ export function Search() {
         }
       >
         <SearchIcon className="size-3.5" />
-        <span className="min-w-24 text-left">{prompt}</span>
+        <span className="min-w-24 text-left">{config.prompt}</span>
         <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
           ⌘K
         </kbd>
@@ -91,7 +152,7 @@ export function Search() {
           <CommandInput
             autoFocus
             className="text-base md:text-base"
-            placeholder={prompt}
+            placeholder={config.prompt}
             value={query}
             onValueChange={runQuery}
             onKeyDownCapture={event => {
@@ -101,8 +162,16 @@ export function Search() {
             }}
           />
           <CommandList className="max-h-[50vh] border-border border-t">
-            {query ? <CommandEmpty>No results</CommandEmpty> : null}
-            {query && results.length ? (
+            {hasQuery ? (
+              <CommandEmpty>
+                {status === 'loading'
+                  ? 'Searching...'
+                  : status === 'error'
+                    ? 'Search unavailable'
+                    : 'No results'}
+              </CommandEmpty>
+            ) : null}
+            {hasQuery && results.length ? (
               <CommandGroup className="p-2">
                 {results.map(result => (
                   <CommandItem
@@ -112,8 +181,8 @@ export function Search() {
                     onSelect={() => select(result)}
                   >
                     <div className="text-[0.9rem] font-semibold text-foreground">
-                      {result.record.page}
-                      {result.record.heading ? ` › ${result.record.heading}` : ''}
+                      {result.page}
+                      {result.heading ? ` › ${result.heading}` : ''}
                     </div>
                     {result.snippet && (
                       <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground">
