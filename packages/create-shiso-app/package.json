@@ -1,12 +1,13 @@
 {
   "name": "create-shiso-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a new Shiso documentation site.",
   "type": "module",
   "bin": {
     "create-shiso-app": "./index.mjs"
   },
   "files": [
+    "CHANGELOG.md",
     "index.mjs",
     "template"
   ],
