@@ -1358,7 +1358,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Deployment',
     heading: 'Deploying under a subpath',
     id: 'deploying-under-a-subpath',
-    text: 'When the site lives at https://example.com/my-docs/ rather than a domain root, pass Vite\'s --base flag to both build steps in the build script: { "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs" } The prerenderer detects the base from the build output and lays out the directories to match.',
+    text: 'When the site lives at https://example.com/my-docs/ rather than a domain root, pass Vite\'s --base flag to both build steps in the build script: { "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client --emptyOutDir && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir && node scripts/prerender.mjs" } The prerenderer detects the base from the build output and lays out the directories to match.',
   },
   {
     url: '/docs/guides/deployment',

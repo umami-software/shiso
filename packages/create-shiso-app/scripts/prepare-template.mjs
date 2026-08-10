@@ -15,7 +15,11 @@ const PROJECT_FILES = [
   'LICENSE',
   'mdx.config.ts',
   'public/logo.svg',
-  'scripts',
+  'scripts/generate-icon-registry.mjs',
+  'scripts/generate-last-modified.mjs',
+  'scripts/generate-search-index.mjs',
+  'scripts/prerender.mjs',
+  'scripts/validate-config.mjs',
   'src',
   'tsconfig.json',
   'vercel.json',
@@ -62,7 +66,7 @@ async function writeProjectPackage() {
     type: 'module',
     scripts: Object.fromEntries(
       Object.entries(rootPackage.scripts).filter(
-        ([name]) => !['test', 'test:watch'].includes(name),
+        ([name]) => !['test', 'test:watch', 'test:create-app'].includes(name),
       ),
     ),
     dependencies: rootPackage.dependencies,

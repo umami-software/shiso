@@ -84,7 +84,7 @@ root, pass Vite's `--base` flag to both build steps in the `build` script:
 
 ```json
 {
-  "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server && node scripts/prerender.mjs"
+  "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client --emptyOutDir && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir && node scripts/prerender.mjs"
 }
 ```
 
