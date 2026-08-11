@@ -2,30 +2,38 @@ import { Link } from 'react-router';
 import { ContextualMenu } from '@/components/ContextualMenu';
 import { ChevronRight } from '@/components/icons';
 import { getLastModified } from '@/lib/content';
-import { getPrevNext, getStyling, showTimestamp } from '@/lib/site-config';
-import type { DocModule, NormalizedDocsPage } from '@/lib/types';
+import { resolveContextualOptions } from '@/lib/site-model';
+import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
 export interface DocContentProps {
   page: NormalizedDocsPage;
   doc: DocModule;
+  site: SiteModel;
 }
 
-/** Fixed locale and UTC keep the prerendered markup identical to hydration. */
-const DATE_FORMAT = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' });
-
-export function DocContent({ page, doc }: DocContentProps) {
-  const { prev, next } = getPrevNext(page.slug);
+export function DocContent({ page, doc, site }: DocContentProps) {
+  const pagerPages = site.docs.pages.filter(item => !item.hidden);
+  const pageIndex = pagerPages.findIndex(item => item.slug === page.slug);
+  const prev = pageIndex > 0 ? pagerPages[pageIndex - 1] : undefined;
+  const next = pageIndex >= 0 ? pagerPages[pageIndex + 1] : undefined;
   const title = doc.frontmatter?.title || page.label;
   const description = doc.frontmatter?.description;
   const Content = doc.default;
-  const lastModified = showTimestamp(doc.frontmatter?.timestamp)
-    ? getLastModified(page.filePath)
-    : undefined;
+  const shouldShowTimestamp =
+    typeof doc.frontmatter?.timestamp === 'boolean'
+      ? doc.frontmatter.timestamp
+      : site.showTimestamp;
+  const lastModified = shouldShowTimestamp ? getLastModified(page.filePath) : undefined;
   // `styling.eyebrows`: the section name alone, or the full navigation path.
   const eyebrow =
-    getStyling().eyebrows === 'breadcrumbs'
+    site.styling.eyebrows === 'breadcrumbs'
       ? [...new Set([page.tabLabel, page.section])].filter(Boolean).join(' / ')
       : page.section;
+  const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
+  const dateFormat = new Intl.DateTimeFormat(site.locale, {
+    dateStyle: 'medium',
+    timeZone: 'UTC',
+  });
 
   return (
     <article className="min-w-0 grow">
@@ -36,7 +44,7 @@ export function DocContent({ page, doc }: DocContentProps) {
             {title}
           </h1>
         )}
-        <ContextualMenu page={page} />
+        <ContextualMenu options={contextualOptions} labels={site.labels} />
       </div>
       {description && <p className="mb-6 text-[1.1rem] text-muted-foreground">{description}</p>}
       <div className="docs-markdown">
@@ -44,8 +52,8 @@ export function DocContent({ page, doc }: DocContentProps) {
       </div>
       {lastModified && (
         <div className="mt-8 text-sm text-muted-foreground">
-          Last updated on{' '}
-          <time dateTime={lastModified}>{DATE_FORMAT.format(new Date(lastModified))}</time>
+          {site.labels.lastUpdated}{' '}
+          <time dateTime={lastModified}>{dateFormat.format(new Date(lastModified))}</time>
         </div>
       )}
       <div className="mt-8 flex items-center justify-between">

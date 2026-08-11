@@ -142,7 +142,7 @@ function buildThemeCss(config: typeof docsConfig): string {
   }
 
   // Shadcn uses one semantic primary token for high-emphasis actions and
-  // active accents. `dark` remains a legacy fallback for older configs.
+  // active accents. `dark` supplies the accent when `primary` is omitted.
   const darkModeAccent = colors?.light || colors?.primary || colors?.dark;
 
   if (darkModeAccent) {
@@ -219,7 +219,7 @@ function shisoHtml(): Plugin {
   return {
     name: 'shiso-html',
     transformIndexHtml(html) {
-      const name = docsConfig.name || 'Shiso';
+      const name = docsConfig.name?.trim();
       const description = (docsConfig as { description?: string }).description;
       const favicon = (docsConfig as { favicon?: string }).favicon;
       const appearance = (docsConfig as { appearance?: { default?: string; strict?: boolean } })
@@ -228,7 +228,7 @@ function shisoHtml(): Plugin {
 
       const defaults = [
         DEFAULT_HEAD_OPEN,
-        `<title>${name}</title>`,
+        name ? `<title>${name}</title>` : '',
         description ? `<meta name="description" content="${description}" />` : '',
         DEFAULT_HEAD_CLOSE,
       ]

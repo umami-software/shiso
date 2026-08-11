@@ -20,8 +20,8 @@ describe('buildHead', () => {
     expect(tags[0].tag).toBe('title');
     expect(tags[0].children).toContain(docsConfig.name);
     expect(findMeta(tags, 'name', 'description')).toBeTruthy();
-    expect(findLink(tags, 'canonical')).toBe(`https://shiso.dev${firstPage.url}`);
-    expect(findMeta(tags, 'property', 'og:url')).toBe(`https://shiso.dev${firstPage.url}`);
+    expect(findLink(tags, 'canonical')).toBe(`https://shiso.umami.is${firstPage.url}`);
+    expect(findMeta(tags, 'property', 'og:url')).toBe(`https://shiso.umami.is${firstPage.url}`);
     expect(findMeta(tags, 'property', 'og:type')).toBe('article');
     expect(findMeta(tags, 'name', 'twitter:card')).toBe('summary_large_image');
     expect(findMeta(tags, 'name', 'robots')).toBeUndefined();

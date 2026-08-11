@@ -186,13 +186,17 @@ describe('supported keys stay strictly validated', () => {
         ...minimal,
         navbar: {
           links: [
-            { type: 'github', href: 'https://github.com/example/repo' },
+            { icon: 'github', ariaLabel: 'GitHub', href: 'https://github.com/example/repo' },
             { label: 'Community', href: 'https://example.com', icon: 'users' },
           ],
-          primary: { type: 'button', label: 'Get Started', href: 'https://example.com' },
+          primary: { label: 'Get Started', href: 'https://example.com' },
         },
         footer: {
-          socials: { x: 'https://x.com/example', github: 'https://github.com/example' },
+          attribution: true,
+          socials: [
+            { icon: 'x', ariaLabel: 'X', href: 'https://x.com/example' },
+            { icon: 'github', ariaLabel: 'GitHub', href: 'https://github.com/example' },
+          ],
           links: [
             { header: 'Resources', items: [{ label: 'Blog', href: 'https://example.com/blog' }] },
           ],
@@ -214,19 +218,57 @@ describe('supported keys stay strictly validated', () => {
     );
   });
 
-  it('rejects a navbar link without a label, type, or icon', () => {
+  it('rejects a navbar link without a label or icon', () => {
     expect(
       validateConfig({ ...minimal, navbar: { links: [{ href: 'https://example.com' }] } }, schema)
         .valid,
     ).toBe(false);
   });
 
-  it('rejects an unknown social platform', () => {
+  it('rejects platform-specific navbar types and keyed social objects', () => {
     expect(
       validateConfig(
-        { ...minimal, footer: { socials: { myspace: 'https://example.com' } } },
+        {
+          ...minimal,
+          navbar: { links: [{ type: 'github', href: 'https://github.com/example' }] },
+        },
         schema,
       ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        { ...minimal, footer: { socials: { github: 'https://github.com/example' } } },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('accepts generic socials and rejects entries without visible or icon content', () => {
+    expect(
+      validateConfig(
+        {
+          ...minimal,
+          footer: {
+            socials: [
+              { icon: 'music', ariaLabel: 'Music', href: 'https://example.com', target: '_blank' },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(true);
+    expect(
+      validateConfig({ ...minimal, footer: { socials: [{ href: 'https://example.com' }] } }, schema)
+        .valid,
+    ).toBe(false);
+  });
+
+  it('accepts boolean footer attribution and rejects attribution objects', () => {
+    expect(validateConfig({ ...minimal, footer: { attribution: true } }, schema).valid).toBe(true);
+    expect(validateConfig({ ...minimal, footer: { attribution: false } }, schema).valid).toBe(true);
+    expect(
+      validateConfig({ ...minimal, footer: { attribution: { label: 'Powered by Shiso' } } }, schema)
+        .valid,
     ).toBe(false);
   });
 

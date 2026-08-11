@@ -6,6 +6,7 @@ import type {
   DropdownItem,
   GroupItem,
   LanguageItem,
+  LinkTarget,
   NavGroupNode,
   NavLinkNode,
   NavNode,
@@ -27,6 +28,10 @@ export type DocFileResolver = (fileSlug: string) => string | undefined;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
+function normalizeLinkTarget(href: string, target?: LinkTarget): LinkTarget {
+  return target || (/^(?:#|\/|\.\.?\/)/.test(href) ? '_self' : '_blank');
 }
 
 /**
@@ -93,12 +98,8 @@ function normalizePageReference(pageRef: string): { fileSlug: string; slug: stri
 }
 
 function getDefaultLabel(fileSlug: string): string {
-  if (fileSlug === 'index') {
-    return 'Overview';
-  }
-
   const parts = fileSlug.split('/').filter(Boolean);
-  const leaf = parts.at(-1) === 'index' ? parts.at(-2) || 'overview' : parts.at(-1) || fileSlug;
+  const leaf = parts.at(-1) || fileSlug;
   return toLabel(leaf);
 }
 
@@ -113,13 +114,19 @@ function pickDefaultItem<T extends { default?: boolean }>(items: T[]): T {
 
 function dropdownsToTabs(dropdowns: DropdownItem[]): TabItem[] {
   return dropdowns.map((dropdown, index) => {
-    const label = dropdown.dropdown?.trim() || `Section ${index + 1}`;
+    const label = dropdown.dropdown?.trim();
+
+    if (!label) {
+      throw new Error(`Invalid docs config: dropdown at index ${index} is missing "dropdown".`);
+    }
+
     return {
       tab: label,
       groups: dropdown.groups || [],
       pages: dropdown.pages || [],
       icon: dropdown.icon,
       hidden: dropdown.hidden,
+      presentation: 'dropdown',
     };
   });
 }
@@ -140,7 +147,7 @@ interface NavContainer {
  * real limitation, so the skipped entries are reported rather than silently
  * dropped; Phases 6 and 7 replace this by normalizing once per version/locale.
  */
-function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Documentation'): TabItem[] {
+function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabItem[] {
   if (Array.isArray(container.tabs) && container.tabs.length) {
     return container.tabs;
   }
@@ -192,6 +199,25 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = 'Document
   throw new Error(
     'Invalid docs config: navigation must define tabs, dropdowns, groups, pages, versions, or languages.',
   );
+}
+
+function hasExplicitTopNavigation(container: NavContainer): boolean {
+  if (
+    (Array.isArray(container.tabs) && container.tabs.length > 0) ||
+    (Array.isArray(container.dropdowns) && container.dropdowns.length > 0)
+  ) {
+    return true;
+  }
+
+  if (Array.isArray(container.versions) && container.versions.length) {
+    return hasExplicitTopNavigation(pickDefaultItem(container.versions));
+  }
+
+  if (Array.isArray(container.languages) && container.languages.length) {
+    return hasExplicitTopNavigation(pickDefaultItem(container.languages));
+  }
+
+  return false;
 }
 
 /* ---------------------------------------------------------------------------
@@ -286,8 +312,11 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
     if (typeof item.href === 'string' && item.href) {
       const label =
         (typeof item.label === 'string' && item.label.trim()) ||
-        (typeof item.anchor === 'string' && item.anchor.trim()) ||
-        item.href;
+        (typeof item.anchor === 'string' && item.anchor.trim());
+
+      if (!label) {
+        throw new Error(`Invalid docs config: external link "${item.href}" is missing a label.`);
+      }
 
       nodes.push({
         kind: 'link',
@@ -295,6 +324,10 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
         href: item.href,
         icon: typeof item.icon === 'string' ? item.icon : undefined,
         hidden: item.hidden === true || context.hidden || undefined,
+        target: normalizeLinkTarget(
+          item.href,
+          item.target === '_self' || item.target === '_blank' ? item.target : undefined,
+        ),
       });
       return;
     }
@@ -320,7 +353,11 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
 
     // Nested group: { group, pages, root }
     if (typeof item.group === 'string' && Array.isArray(item.pages)) {
-      const label = item.group.trim() || context.section;
+      const label = item.group.trim();
+
+      if (!label) {
+        throw new Error('Invalid docs config: navigation group is missing "group".');
+      }
       const hidden = item.hidden === true || context.hidden || undefined;
       const childContext: WalkContext = { ...context, section: label, hidden };
 
@@ -372,6 +409,7 @@ function collectAnchors(anchors: AnchorItem[] | undefined): NavLinkNode[] {
       href: anchor.href as string,
       icon: anchor.icon,
       hidden: anchor.hidden || undefined,
+      target: normalizeLinkTarget(anchor.href as string, anchor.target),
     }));
 }
 
@@ -386,19 +424,20 @@ export function normalizeDocsConfig(
 ): NormalizedDocsConfig {
   const docsPrefix = options.docsPrefix ?? DOCS_PREFIX;
   const tabs = getTabsFromContainer(docsConfig.navigation);
+  const showTabs = hasExplicitTopNavigation(docsConfig.navigation);
   const state: WalkState = { pages: [], order: { value: 0 } };
   const treeByTab = new Map<string, PendingNode[]>();
   const seenTabIds = new Set<string>();
   const tabIds: string[] = [];
 
   tabs.forEach((tab, index) => {
-    const tabLabel = tab.tab?.trim();
+    const tabLabel = tab.tab?.trim() || '';
 
-    if (!tabLabel) {
+    if (!tabLabel && showTabs) {
       throw new Error(`Invalid docs config: tab at index ${index} is missing "tab".`);
     }
 
-    const tabId = slugifyId(tabLabel, `tab-${index + 1}`);
+    const tabId = slugifyId(tabLabel || 'documentation', `tab-${index + 1}`);
 
     if (seenTabIds.has(tabId)) {
       throw new Error(
@@ -430,7 +469,13 @@ export function normalizeDocsConfig(
 
     if (Array.isArray(tab.dropdowns)) {
       tab.dropdowns.forEach((dropdown, dropdownIndex) => {
-        const dropdownLabel = dropdown?.dropdown?.trim() || `Section ${dropdownIndex + 1}`;
+        const dropdownLabel = dropdown?.dropdown?.trim();
+
+        if (!dropdownLabel) {
+          throw new Error(
+            `Invalid docs config: tab "${tabLabel}" dropdown at index ${dropdownIndex} is missing "dropdown".`,
+          );
+        }
         const children: PendingNode[] = [];
         const dropdownContext: WalkContext = {
           ...context,
@@ -584,15 +629,18 @@ export function normalizeDocsConfig(
 
     return {
       id: tabId,
-      label: tab.tab?.trim() || `Tab ${index + 1}`,
+      label: tab.tab?.trim() || '',
       url: firstPage?.url || pageToUrl('index', docsPrefix),
       icon: tab.icon,
+      presentation: tab.presentation || 'tab',
+      hidden: tab.hidden || undefined,
     };
   });
 
   return {
     name: docsConfig.name,
     tabs: normalizedTabs,
+    showTabs,
     navigation,
     anchors: collectAnchors(docsConfig.navigation.anchors),
     pages,

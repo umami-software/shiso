@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
-import { getDrilldown, getTabByPathname } from '@/lib/site-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 
 const sectionLabelClass =
@@ -21,7 +20,12 @@ const selectedClass =
 export interface SideNavProps {
   tabs: DocsTab[];
   navigation: Record<string, NavNode[]>;
+  anchors: NavNode[];
   isSticky?: boolean;
+  drilldown?: boolean;
+  navigationLabel: string;
+  expandLabel: string;
+  collapseLabel: string;
 }
 
 /** True when the group's root or any descendant page is the current page. */
@@ -47,13 +51,18 @@ function CollapsibleGroup({
   node,
   pathname,
   depth,
+  drilldown,
+  expandLabel,
+  collapseLabel,
 }: {
   node: NavGroupNode;
   pathname: string;
   depth: number;
+  drilldown?: boolean;
+  expandLabel: string;
+  collapseLabel: string;
 }) {
   const navigate = useNavigate();
-  const drilldown = getDrilldown();
   const active = containsPage(node, pathname);
   const collapsible = node.collapsible !== false;
   // Top-level sections stay open by default so the sidebar is usable on first load.
@@ -136,7 +145,7 @@ function CollapsibleGroup({
               'group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
               { 'mr-[0.35rem]': !isTopLevel },
             )}
-            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${node.label}`}
+            aria-label={`${isExpanded ? collapseLabel : expandLabel} ${node.label}`}
           />
         }
       >
@@ -172,7 +181,14 @@ function CollapsibleGroup({
       <div className="flex flex-col">
         {fixedHeader}
         <div className="flex flex-col">
-          <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
+          <NavNodes
+            nodes={node.children}
+            pathname={pathname}
+            depth={depth + 1}
+            drilldown={drilldown}
+            expandLabel={expandLabel}
+            collapseLabel={collapseLabel}
+          />
         </div>
       </div>
     );
@@ -183,7 +199,14 @@ function CollapsibleGroup({
       {header}
       <CollapsibleContent>
         <div className="flex flex-col">
-          <NavNodes nodes={node.children} pathname={pathname} depth={depth + 1} />
+          <NavNodes
+            nodes={node.children}
+            pathname={pathname}
+            depth={depth + 1}
+            drilldown={drilldown}
+            expandLabel={expandLabel}
+            collapseLabel={collapseLabel}
+          />
         </div>
       </CollapsibleContent>
     </Collapsible>
@@ -194,10 +217,16 @@ function NavNodes({
   nodes,
   pathname,
   depth,
+  drilldown,
+  expandLabel,
+  collapseLabel,
 }: {
   nodes: NavNode[];
   pathname: string;
   depth: number;
+  drilldown?: boolean;
+  expandLabel: string;
+  collapseLabel: string;
 }) {
   const rendered: ReactNode[] = [];
 
@@ -211,8 +240,8 @@ function NavNodes({
         <a
           key={`link-${node.href}`}
           href={node.href}
-          target="_blank"
-          rel="noreferrer"
+          target={node.target}
+          rel={node.target === '_blank' ? 'noreferrer' : undefined}
           className={classNames(
             'flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]',
             { 'pl-6': depth > 1 },
@@ -264,6 +293,9 @@ function NavNodes({
         node={node}
         pathname={pathname}
         depth={depth}
+        drilldown={drilldown}
+        expandLabel={expandLabel}
+        collapseLabel={collapseLabel}
       />,
     );
   });
@@ -271,16 +303,44 @@ function NavNodes({
   return <>{rendered}</>;
 }
 
-export function SideNav({ tabs, navigation, isSticky }: SideNavProps) {
+export function SideNav({
+  tabs,
+  navigation,
+  anchors,
+  isSticky,
+  drilldown,
+  navigationLabel,
+  expandLabel,
+  collapseLabel,
+}: SideNavProps) {
   const { pathname } = useLocation();
 
-  const tab = getTabByPathname(pathname);
+  const tab = [...tabs]
+    .sort((a, b) => b.url.length - a.url.length)
+    .find(item => pathname === item.url || pathname.startsWith(`${item.url}/`));
   const nodes = navigation[tab?.id || tabs?.[0]?.id] || [];
 
   return (
     <ScrollArea className={classNames('w-full max-w-full', { 'h-full': isSticky })}>
-      <nav className="flex w-full flex-col gap-6 pr-4 text-sm" aria-label="Documentation">
-        <NavNodes nodes={nodes} pathname={pathname} depth={0} />
+      <nav className="flex w-full flex-col gap-6 pr-4 text-sm" aria-label={navigationLabel}>
+        {anchors.length ? (
+          <NavNodes
+            nodes={anchors}
+            pathname={pathname}
+            depth={0}
+            drilldown={drilldown}
+            expandLabel={expandLabel}
+            collapseLabel={collapseLabel}
+          />
+        ) : null}
+        <NavNodes
+          nodes={nodes}
+          pathname={pathname}
+          depth={0}
+          drilldown={drilldown}
+          expandLabel={expandLabel}
+          collapseLabel={collapseLabel}
+        />
       </nav>
     </ScrollArea>
   );

@@ -41,15 +41,17 @@ the image in your project's `public` folder; `/logo.svg` refers to
 ```
 
 To use a different image for each color mode, provide `light` and `dark`
-paths. Add `href` to choose where the logo sends visitors when they click it.
-Without `href`, it links to the documentation home.
+paths. Add `href` to choose where the logo sends visitors when they click it,
+and `target` to override whether it opens in the current or a new tab. Without
+`href`, it links to the documentation home.
 
 ```json
 {
   "logo": {
     "light": "/logo-light.svg",
     "dark": "/logo-dark.svg",
-    "href": "https://example.com"
+    "href": "https://example.com",
+    "target": "_blank"
   }
 }
 ```

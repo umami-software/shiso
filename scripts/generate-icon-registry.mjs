@@ -25,6 +25,24 @@ const ICON_ATTRIBUTE = /\bicon\s*=\s*["']([^"'{}\n]+)["']/g;
 
 // docs.json declares icons as JSON properties rather than JSX/MDX attributes.
 const ICON_JSON_PROPERTY = /"icon"\s*:\s*"([^"]+)"/g;
+const NON_LUCIDE_ICONS = new Set([
+  'bluesky',
+  'discord',
+  'facebook',
+  'github',
+  'hacker-news',
+  'instagram',
+  'linkedin',
+  'medium',
+  'reddit',
+  'slack',
+  'telegram',
+  'threads',
+  'twitter',
+  'x',
+  'x-twitter',
+  'youtube',
+]);
 
 /** `circle-check`, `circle_check`, `CircleCheck` -> `circle-check` */
 export function normalizeIconName(name) {
@@ -138,6 +156,10 @@ export async function generateIconRegistry() {
   const unknown = [];
 
   for (const name of names) {
+    if (NON_LUCIDE_ICONS.has(name)) {
+      continue;
+    }
+
     const component = toPascalCase(name);
 
     if (component in lucide) {

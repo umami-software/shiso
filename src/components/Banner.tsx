@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { X } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
-import { getBanner } from '@/lib/site-config';
+import type { BannerConfig } from '@/lib/types';
 
 const STORAGE_KEY = 'shiso-banner-dismissed';
 
@@ -12,8 +12,13 @@ const STORAGE_KEY = 'shiso-banner-dismissed';
  * The banner renders during prerender and hides after hydration when it was
  * previously dismissed.
  */
-export function Banner() {
-  const banner = getBanner();
+export function Banner({
+  banner,
+  dismissLabel,
+}: {
+  banner: BannerConfig | null;
+  dismissLabel: string;
+}) {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
@@ -54,7 +59,7 @@ export function Banner() {
           size="icon-xs"
           className="absolute top-1/2 right-3 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-inherit opacity-80 hover:bg-black/15 hover:opacity-100"
           onClick={handleDismiss}
-          aria-label="Dismiss banner"
+          aria-label={dismissLabel}
         >
           <X size={16} />
         </Button>

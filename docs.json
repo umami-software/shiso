@@ -1,7 +1,7 @@
 {
   "$schema": "./docs.schema.json",
   "$shiso": {
-    "siteUrl": "https://shiso.dev"
+    "siteUrl": "https://shiso.umami.is"
   },
   "theme": "shiso",
   "name": "shiso",
@@ -11,16 +11,25 @@
   "navbar": {
     "links": [
       {
-        "type": "github",
+        "icon": "github",
+        "ariaLabel": "GitHub",
         "href": "https://github.com/umami-software/shiso"
       }
     ]
   },
   "footer": {
-    "socials": {
-      "github": "https://github.com/umami-software/shiso",
-      "x": "https://x.com/umami_software"
-    }
+    "socials": [
+      {
+        "icon": "github",
+        "ariaLabel": "GitHub",
+        "href": "https://github.com/umami-software/shiso"
+      },
+      {
+        "icon": "x",
+        "ariaLabel": "X",
+        "href": "https://x.com/umami_software"
+      }
+    ]
   },
   "metadata": {
     "timestamp": true

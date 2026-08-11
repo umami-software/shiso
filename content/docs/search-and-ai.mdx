@@ -12,12 +12,17 @@ The index is built at compile time from your content: each page is split into
 heading-bounded sections, so results land on the exact section that matched.
 Pages marked `hidden` in navigation stay out of the index.
 
-Customize the input placeholder with `search.prompt`, or set `search` to `false`
-to remove the search button and keyboard shortcut:
+Customize the input placeholder and shortcut with `search.prompt`,
+`search.shortcut`, and `search.shortcutLabel`. Set `shortcut` to `false` to
+disable only the shortcut, or set `search` to `false` to remove search:
 
 ```json
 {
-  "search": { "prompt": "Search the docs..." }
+  "search": {
+    "prompt": "Search the docs...",
+    "shortcut": "k",
+    "shortcutLabel": "Ctrl K"
+  }
 }
 ```
 
@@ -103,9 +108,14 @@ Define your own entries as objects. `$path` expands to the page path and
       {
         "title": "Ask support",
         "description": "Send this page to the support bot",
-        "href": "https://example.com/ask?page=$path"
+        "icon": "life-buoy",
+        "href": "https://example.com/ask?page=$path",
+        "target": "_blank"
       }
     ]
   }
 }
 ```
+
+Custom options render the configured icon and infer `_self` for local links
+and `_blank` for external links unless `target` overrides it.

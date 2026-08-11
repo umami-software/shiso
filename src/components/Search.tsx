@@ -12,16 +12,16 @@ import {
 } from '@/components/ui/command';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { SearchResult } from '@/lib/search';
+import type { ResolvedSearchConfig } from '@/lib/search/config';
 import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provider';
-import { getSearchConfig } from '@/lib/site-config';
+import type { ThemeLabels } from '@/lib/types';
 
 /**
  * Provider-neutral search dialog. The selected provider and its index or
  * client are loaded on demand, so search stays out of the initial bundle.
  */
-export function Search() {
+export function Search({ config, labels }: { config: ResolvedSearchConfig; labels: ThemeLabels }) {
   const navigate = useNavigate();
-  const config = getSearchConfig();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -102,10 +102,15 @@ export function Search() {
     setStatus('idle');
   }, []);
 
-  // Global shortcut: Cmd/Ctrl+K.
+  // Global shortcut configured by docs.json.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (config.enabled && (event.metaKey || event.ctrlKey) && event.key === 'k') {
+      if (
+        config.enabled &&
+        config.shortcut &&
+        (event.metaKey || event.ctrlKey) &&
+        event.key.toLowerCase() === config.shortcut
+      ) {
         event.preventDefault();
         openDialog();
       }
@@ -113,7 +118,7 @@ export function Search() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [config.enabled, openDialog]);
+  }, [config.enabled, config.shortcut, openDialog]);
 
   const select = (result: SearchResult) => {
     closeDialog();
@@ -138,16 +143,18 @@ export function Search() {
       >
         <SearchIcon className="size-3.5" />
         <span className="min-w-24 text-left">{config.prompt}</span>
-        <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
-          ⌘K
-        </kbd>
+        {config.shortcut ? (
+          <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
+            {config.shortcutLabel}
+          </kbd>
+        ) : null}
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
         overlayClassName="bg-black/40 supports-backdrop-filter:backdrop-blur-none"
         className="top-[10vh] max-w-[calc(100%-2rem)] -translate-y-0 gap-0 overflow-hidden rounded-lg border border-border bg-background p-0 ring-0 shadow-[0_10px_40px_rgba(0,0,0,0.2)] sm:max-w-[34rem]"
       >
-        <DialogTitle className="sr-only">Search</DialogTitle>
+        <DialogTitle className="sr-only">{labels.searchTitle}</DialogTitle>
         <Command shouldFilter={false} className="rounded-none bg-background p-0">
           <CommandInput
             autoFocus
@@ -165,10 +172,10 @@ export function Search() {
             {hasQuery ? (
               <CommandEmpty>
                 {status === 'loading'
-                  ? 'Searching...'
+                  ? labels.searching
                   : status === 'error'
-                    ? 'Search unavailable'
-                    : 'No results'}
+                    ? labels.searchUnavailable
+                    : labels.noResults}
               </CommandEmpty>
             ) : null}
             {hasQuery && results.length ? (

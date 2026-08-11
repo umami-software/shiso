@@ -90,7 +90,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Site details',
     heading: 'Logo',
     id: 'logo',
-    text: 'Set logo to an image path to use the same logo in light and dark mode. Put the image in your project\'s public folder; /logo.svg refers to public/logo.svg. { "logo": "/logo.svg" } To use a different image for each color mode, provide light and dark paths. Add href to choose where the logo sends visitors when they click it. Without href, it links to the documentation home. { "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg", "href": "https://example.com" } }',
+    text: 'Set logo to an image path to use the same logo in light and dark mode. Put the image in your project\'s public folder; /logo.svg refers to public/logo.svg. { "logo": "/logo.svg" } To use a different image for each color mode, provide light and dark paths. Add href to choose where the logo sends visitors when they click it, and target to override whether it opens in the current or a new tab. Without href, it links to the documentation home. { "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg", "href": "https://example.com", "target": "_blank" } }',
   },
   {
     url: '/docs/site-details',
@@ -130,7 +130,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'When to use each pattern',
     id: 'when-to-use-each-pattern',
-    text: 'navigation.tabs: best default for most docs sites navigation.dropdowns: top-level categories; currently rendered as tabs navigation.groups + navigation.pages: good for a single simple section navigation.versions: multiple product versions — only the default version renders today; the others are reported and skipped navigation.languages: translated docs — same current limitation as versions',
+    text: 'navigation.tabs: best default for most docs sites navigation.dropdowns: top-level categories rendered as menus by the Shiso theme navigation.groups + navigation.pages: good for a single simple section navigation.versions: multiple product versions — only the default version renders today; the others are reported and skipped navigation.languages: translated docs — same current limitation as versions',
   },
   {
     url: '/docs/navigation',
@@ -219,7 +219,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Appearance',
     heading: 'Colors',
     id: 'colors',
-    text: '{ "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary: semantic primary color in light mode light: semantic primary color in dark mode (defaults to primary) dark: legacy fallback used when primary is omitted',
+    text: '{ "colors": { "primary": "#16a34a", "light": "#4ade80", "dark": "#15803d" } } primary: semantic primary color in light mode light: semantic primary color in dark mode (defaults to primary) dark: fallback accent used when primary is omitted',
   },
   {
     url: '/docs/customization',
@@ -247,21 +247,21 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Header, footer, and banner',
     heading: 'Navbar',
     id: 'navbar',
-    text: 'The navbar key adds links and a call-to-action button to the top navigation bar. { "navbar": { "links": [ { "type": "github", "href": "https://github.com/example/repo" }, { "label": "Community", "href": "https://example.com/community", "icon": "users" } ], "primary": { "type": "button", "label": "Get Started", "href": "https://example.com/start" } } }',
+    text: 'The navbar key adds links and a call-to-action button to the top navigation bar. { "navbar": { "links": [ { "icon": "github", "ariaLabel": "GitHub", "href": "https://github.com/example/repo" }, { "label": "Community", "href": "https://example.com/community", "icon": "users" } ], "primary": { "label": "Get Started", "icon": "rocket", "href": "https://example.com/start" } } }',
   },
   {
     url: '/docs/navbar-and-footer',
     page: 'Header, footer, and banner',
     heading: 'Links',
     id: 'links',
-    text: 'Shown to the left of the theme toggle. Set type to "github" or "discord" to use its brand icon. Live star and member counts are not fetched. Set icon to use a name from the lucide icon set. Add label when the link should include visible text. Omit it for an icon-only link.',
+    text: 'Shown to the left of the theme toggle. Set icon to use a brand or lucide icon name. Add label when the link should include visible text. Omit it for an icon-only link. Add ariaLabel to give an icon-only link an accessible name. Set target to "_self" or "_blank" to override the destination-based default.',
   },
   {
     url: '/docs/navbar-and-footer',
     page: 'Header, footer, and banner',
     heading: 'Primary button',
     id: 'primary-button',
-    text: 'A highlighted button at the end of the navbar. type: "button" for a labeled button, or "github" / "discord" for a branded one label: required for "button"; defaults to the platform name otherwise href: destination URL',
+    text: 'A highlighted button at the end of the navbar. label: visible button text; omit it for an icon-only primary action icon: optional brand or lucide icon name ariaLabel: accessible text for an icon-only primary action href: destination URL target: optional "_self" or "_blank" override',
   },
   {
     url: '/docs/navbar-and-footer',
@@ -275,14 +275,14 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Header, footer, and banner',
     heading: 'Footer',
     id: 'footer',
-    text: 'The footer key adds social icons and link columns to the footer. { "footer": { "socials": { "x": "https://x.com/example", "github": "https://github.com/example" }, "links": [ { "header": "Resources", "items": [ { "label": "Blog", "href": "https://example.com/blog" }, { "label": "Careers", "href": "https://example.com/careers" } ] }, { "header": "Company", "items": [ { "label": "About", "href": "https://example.com/about" }, { "label": "Privacy", "href": "https://example.com/privacy" } ] } ] } }',
+    text: 'The footer key adds social icons and link columns to the footer. { "footer": { "socials": [ { "icon": "x", "ariaLabel": "X", "href": "https://x.com/example" }, { "icon": "github", "ariaLabel": "GitHub", "href": "https://github.com/example" } ], "links": [ { "header": "Resources", "items": [ { "label": "Blog", "href": "https://example.com/blog" }, { "label": "Careers", "href": "https://example.com/careers" } ] }, { "header": "Company", "items": [ { "label": "About", "href": "https://example.com/about" }, { "label": "Privacy", "href": "https://example.com/privacy" } ] } ] } }',
   },
   {
     url: '/docs/navbar-and-footer',
     page: 'Header, footer, and banner',
     heading: 'Socials',
     id: 'socials',
-    text: 'Each key is a platform name and each value is your profile URL. Supported platforms: x, twitter, x-twitter, github, linkedin, facebook, youtube, discord, slack, instagram, hacker-news, medium, telegram, bluesky, threads, reddit, website, earth-americas, podcast',
+    text: 'Social entries use the same generic href, label, icon, ariaLabel, and target fields as navbar links. Labels are visible; omit label for an icon-only link.',
   },
   {
     url: '/docs/navbar-and-footer',
@@ -292,11 +292,18 @@ export const SEARCH_INDEX: SearchRecord[] = [
     text: "Each entry in links renders as a column with an optional header and a list of items. Columns appear above the footer's bottom row.",
   },
   {
+    url: '/docs/navbar-and-footer',
+    page: 'Header, footer, and banner',
+    heading: 'Attribution',
+    id: 'attribution',
+    text: 'The Shiso attribution is shown by default. Set attribution to false to hide it. { "footer": { "attribution": false } }',
+  },
+  {
     url: '/docs/search-and-ai',
     page: 'Search and AI',
     heading: 'Search',
     id: 'search',
-    text: 'Every Shiso site ships with client-side search — no service or API key required. Open it with the header button or ⌘K / Ctrl K. The index is built at compile time from your content: each page is split into heading-bounded sections, so results land on the exact section that matched. Pages marked hidden in navigation stay out of the index. Customize the input placeholder with search.prompt, or set search to false to remove the search button and keyboard shortcut: { "search": { "prompt": "Search the docs..." } }',
+    text: 'Every Shiso site ships with client-side search — no service or API key required. Open it with the header button or ⌘K / Ctrl K. The index is built at compile time from your content: each page is split into heading-bounded sections, so results land on the exact section that matched. Pages marked hidden in navigation stay out of the index. Customize the input placeholder and shortcut with search.prompt, search.shortcut, and search.shortcutLabel. Set shortcut to false to disable only the shortcut, or set search to false to remove search: { "search": { "prompt": "Search the docs...", "shortcut": "k", "shortcutLabel": "Ctrl K" } }',
   },
   {
     url: '/docs/search-and-ai',
@@ -324,7 +331,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Search and AI',
     heading: 'Custom options',
     id: 'custom-options',
-    text: 'Define your own entries as objects. $path expands to the page path and $page to the page\'s markdown URL: { "contextual": { "options": [ "copy", { "title": "Ask support", "description": "Send this page to the support bot", "href": "https://example.com/ask?page=$path" } ] } }',
+    text: 'Define your own entries as objects. $path expands to the page path and $page to the page\'s markdown URL: { "contextual": { "options": [ "copy", { "title": "Ask support", "description": "Send this page to the support bot", "icon": "life-buoy", "href": "https://example.com/ask?page=$path", "target": "_blank" } ] } } Custom options render the configured icon and infer _self for local links and _blank for external links unless target overrides it.',
   },
   {
     url: '/docs/seo',
@@ -376,7 +383,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/project-settings',
     page: 'URLs and content location',
-    text: 'Most sites can use Shiso\'s default folder and URL structure. Add $shiso to docs.json when you need to change where content lives, serve docs at a different path, or provide the site\'s public URL. { "$shiso": { "docsPrefix": "/docs", "contentDir": "content/docs", "siteUrl": "https://docs.example.com" } }',
+    text: 'Most sites can use Shiso\'s default folder and URL structure. Add $shiso to docs.json when you need to change where content lives, serve docs at a different path, or provide the site\'s public URL. { "$shiso": { "docsPrefix": "/docs", "contentDir": "content/docs", "siteUrl": "https://docs.example.com", "locale": "en-US" } }',
   },
   {
     url: '/docs/project-settings',
@@ -398,6 +405,13 @@ export const SEARCH_INDEX: SearchRecord[] = [
     heading: 'Production site URL',
     id: 'production-site-url',
     text: 'siteUrl is the public origin of your deployed site. Do not include a trailing slash or the documentation prefix. { "$shiso": { "siteUrl": "https://docs.example.com" } } Set it before deploying so Shiso can generate canonical URLs, Open Graph URLs, structured data, sitemap.xml, and absolute links for AI actions.',
+  },
+  {
+    url: '/docs/project-settings',
+    page: 'URLs and content location',
+    heading: 'Locale',
+    id: 'locale',
+    text: 'locale controls deterministic date formatting. Interface text such as menu, search, and table-of-contents labels is supplied by the active theme rather than configured as documentation content: { "$shiso": { "locale": "fr-FR" } }',
   },
   {
     url: '/docs/project-settings',

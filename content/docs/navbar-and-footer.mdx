@@ -12,12 +12,12 @@ bar.
 {
   "navbar": {
     "links": [
-      { "type": "github", "href": "https://github.com/example/repo" },
+      { "icon": "github", "ariaLabel": "GitHub", "href": "https://github.com/example/repo" },
       { "label": "Community", "href": "https://example.com/community", "icon": "users" }
     ],
     "primary": {
-      "type": "button",
       "label": "Get Started",
+      "icon": "rocket",
       "href": "https://example.com/start"
     }
   }
@@ -28,20 +28,22 @@ bar.
 
 Shown to the left of the theme toggle.
 
-- Set `type` to `"github"` or `"discord"` to use its brand icon. Live star and
-  member counts are not fetched.
-- Set `icon` to use a name from the [lucide](https://lucide.dev/icons) icon set.
+- Set `icon` to use a brand or [lucide](https://lucide.dev/icons) icon name.
 - Add `label` when the link should include visible text. Omit it for an
   icon-only link.
+- Add `ariaLabel` to give an icon-only link an accessible name.
+- Set `target` to `"_self"` or `"_blank"` to override the destination-based
+  default.
 
 ### Primary button
 
 A highlighted button at the end of the navbar.
 
-- `type`: `"button"` for a labeled button, or `"github"` / `"discord"` for a
-  branded one
-- `label`: required for `"button"`; defaults to the platform name otherwise
+- `label`: visible button text; omit it for an icon-only primary action
+- `icon`: optional brand or lucide icon name
+- `ariaLabel`: accessible text for an icon-only primary action
 - `href`: destination URL
+- `target`: optional `"_self"` or `"_blank"` override
 
 ## Announcement banner
 
@@ -68,10 +70,10 @@ The `footer` key adds social icons and link columns to the footer.
 ```json
 {
   "footer": {
-    "socials": {
-      "x": "https://x.com/example",
-      "github": "https://github.com/example"
-    },
+    "socials": [
+      { "icon": "x", "ariaLabel": "X", "href": "https://x.com/example" },
+      { "icon": "github", "ariaLabel": "GitHub", "href": "https://github.com/example" }
+    ],
     "links": [
       {
         "header": "Resources",
@@ -94,14 +96,24 @@ The `footer` key adds social icons and link columns to the footer.
 
 ### Socials
 
-Each key is a platform name and each value is your profile URL. Supported
-platforms:
-
-`x`, `twitter`, `x-twitter`, `github`, `linkedin`, `facebook`, `youtube`,
-`discord`, `slack`, `instagram`, `hacker-news`, `medium`, `telegram`,
-`bluesky`, `threads`, `reddit`, `website`, `earth-americas`, `podcast`
+Social entries use the same generic `href`, `label`, `icon`, `ariaLabel`, and
+`target` fields as navbar links. Labels are visible; omit `label` for an
+icon-only link.
 
 ### Link columns
 
 Each entry in `links` renders as a column with an optional `header` and a list
 of `items`. Columns appear above the footer's bottom row.
+
+### Attribution
+
+The Shiso attribution is shown by default. Set `attribution` to `false` to hide
+it.
+
+```json
+{
+  "footer": {
+    "attribution": false
+  }
+}
+```

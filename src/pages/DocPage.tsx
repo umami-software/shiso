@@ -5,8 +5,9 @@ import { getDocModule } from '@/lib/content';
 import { useHead } from '@/lib/head';
 import { isExternalHref } from '@/lib/paths';
 import { getPageByPathname, matchRedirect } from '@/lib/site-config';
+import type { SiteModel } from '@/lib/types';
 
-export function DocPage() {
+export function DocPage({ site }: { site: SiteModel }) {
   // pathname is base-relative: the router's basename already stripped BASE_URL.
   const { pathname } = useLocation();
   const page = getPageByPathname(pathname);
@@ -28,5 +29,5 @@ export function DocPage() {
     return externalRedirect ? null : <Navigate to={redirect} replace />;
   }
 
-  return <Docs page={page} doc={doc || null} />;
+  return <Docs page={page} doc={doc || null} site={site} />;
 }

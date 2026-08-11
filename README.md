@@ -63,7 +63,7 @@ Use `docs.json` to set your logo, colors, navigation, header and footer links,
 search, SEO, redirects, and other site-wide options. Add images, fonts, and
 other files to `public` and reference them with paths such as `/logo.svg`.
 
-See the [configuration overview](https://shiso.dev/docs/configuration) for all
+See the [configuration overview](https://shiso.umami.is/docs/configuration) for all
 available sections and examples.
 
 ## Build and publish
@@ -76,14 +76,14 @@ The finished static site is written to `dist/client`. Publish that folder with
 your preferred static hosting provider.
 
 For hosting setup and deployment checks, see the
-[deployment guide](https://shiso.dev/docs/guides/deployment).
+[deployment guide](https://shiso.umami.is/docs/guides/deployment).
 
 ## Documentation
 
-- [Installation](https://shiso.dev/docs/installation)
-- [Configuration](https://shiso.dev/docs/configuration)
-- [Writing content](https://shiso.dev/docs/writing-content)
-- [Troubleshooting](https://shiso.dev/docs/troubleshooting)
+- [Installation](https://shiso.umami.is/docs/installation)
+- [Configuration](https://shiso.umami.is/docs/configuration)
+- [Writing content](https://shiso.umami.is/docs/writing-content)
+- [Troubleshooting](https://shiso.umami.is/docs/troubleshooting)
 
 ## License
 

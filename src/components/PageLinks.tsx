@@ -4,9 +4,11 @@ import type { TocEntry } from '@/lib/types';
 
 export interface PageLinksProps {
   items?: TocEntry[];
+  title: string;
+  navigationLabel: string;
 }
 
-export function PageLinks({ items = [] }: PageLinksProps) {
+export function PageLinks({ items = [], title, navigationLabel }: PageLinksProps) {
   const [hash, setHash] = useState(items?.[0]?.id);
 
   useEffect(() => {
@@ -44,8 +46,8 @@ export function PageLinks({ items = [] }: PageLinksProps) {
 
   return (
     <div className="flex h-max min-w-60 flex-col gap-3 text-sm">
-      <div className="font-bold text-foreground">On this page</div>
-      <nav className="flex flex-col" aria-label="Table of contents">
+      <div className="font-bold text-foreground">{title}</div>
+      <nav className="flex flex-col" aria-label={navigationLabel}>
         {items.map(({ name, id, size }) => {
           const isActive = hash === id;
 

@@ -75,9 +75,12 @@ export function buildHead(pathname: string): HeadTag[] {
   // Open Graph
   tags.push(
     { tag: 'meta', attrs: { property: 'og:type', content: 'article' } },
-    { tag: 'meta', attrs: { property: 'og:site_name', content: siteName } },
     { tag: 'meta', attrs: { property: 'og:title', content: title } },
   );
+
+  if (siteName) {
+    tags.push({ tag: 'meta', attrs: { property: 'og:site_name', content: siteName } });
+  }
 
   if (description) {
     tags.push({ tag: 'meta', attrs: { property: 'og:description', content: description } });
@@ -121,9 +124,9 @@ export function buildHead(pathname: string): HeadTag[] {
   // TechArticle.url and BreadcrumbList items require resolvable URLs.
   if (page && canonical && SITE_URL) {
     const breadcrumbs = [
-      { name: siteName, url: toAbsoluteUrl('/') },
-      page.section !== page.tabLabel ? { name: page.tabLabel } : null,
-      { name: page.section },
+      siteName ? { name: siteName, url: toAbsoluteUrl('/') } : null,
+      page.tabLabel && page.section !== page.tabLabel ? { name: page.tabLabel } : null,
+      page.section ? { name: page.section } : null,
       { name: page.label, url: canonical },
     ].filter((item): item is { name: string; url?: string } => !!item);
 
@@ -137,7 +140,7 @@ export function buildHead(pathname: string): HeadTag[] {
           headline: pageTitle || page.label,
           description,
           url: canonical,
-          isPartOf: { '@type': 'WebSite', name: siteName, url: SITE_URL },
+          ...(siteName ? { isPartOf: { '@type': 'WebSite', name: siteName, url: SITE_URL } } : {}),
         },
         {
           '@context': 'https://schema.org',

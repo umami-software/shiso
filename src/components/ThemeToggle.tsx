@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
  * Both icons are always rendered and toggled via CSS on [data-theme], so the
  * server render matches the client regardless of the user's stored theme.
  */
-export function ThemeToggle() {
+export function ThemeToggle({ label }: { label: string }) {
   const handleClick = () => {
     const current = document.documentElement.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
@@ -25,7 +25,7 @@ export function ThemeToggle() {
       size="icon"
       className="inline-flex size-8 items-center justify-center rounded-md text-foreground hover:bg-accent"
       onClick={handleClick}
-      aria-label="Toggle theme"
+      aria-label={label}
     >
       <Sun className="size-3.5 dark:hidden" />
       <Moon className="hidden size-3.5 dark:block" />

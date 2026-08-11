@@ -18,6 +18,7 @@ export interface LinkItem {
   anchor?: string;
   icon?: string;
   hidden?: boolean;
+  target?: LinkTarget;
 }
 
 export type PageItem = string | GroupItem | PageObjectItem | LinkItem;
@@ -47,6 +48,8 @@ export interface TabItem {
   dropdowns?: DropdownItem[];
   icon?: string;
   hidden?: boolean;
+  /** Internal normalized presentation; not a docs.json field. */
+  presentation?: 'tab' | 'dropdown';
 }
 
 export interface AnchorItem {
@@ -54,6 +57,7 @@ export interface AnchorItem {
   href?: string;
   icon?: string;
   hidden?: boolean;
+  target?: LinkTarget;
   groups?: GroupItem[];
   pages?: PageItem[];
 }
@@ -97,7 +101,9 @@ export interface ThemeColors {
   dark?: string;
 }
 
-export type LogoOption = string | { light?: string; dark?: string; href?: string };
+export type LogoOption =
+  | string
+  | { light?: string; dark?: string; href?: string; target?: LinkTarget };
 
 /** Shiso-only configuration. Namespaced so docs.json stays portable. */
 export interface ShisoOptions {
@@ -107,25 +113,27 @@ export interface ShisoOptions {
   contentDir?: string;
   /** Absolute site origin, required for canonical and og:url tags. */
   siteUrl?: string;
+  /** Locale used for deterministic date formatting. */
+  locale?: string;
 }
 
-/**
- * A link in the top navigation bar. The `github` and `discord` types render
- * with the matching brand icon; live star/member counts are not fetched.
- */
-export interface NavbarLink {
-  type?: 'github' | 'discord';
+export type LinkTarget = '_self' | '_blank';
+
+/** A user-configured link. Presentation is determined entirely by its fields. */
+export interface ConfigLink {
   /** Visible link text. Omit for an icon-only link. */
   label?: string;
   href: string;
   icon?: string;
+  /** Accessible text for an icon-only link. */
+  ariaLabel?: string;
+  /** Override whether the link opens in the current or a new browsing context. */
+  target?: LinkTarget;
 }
 
-export interface NavbarPrimary {
-  type: 'button' | 'github' | 'discord';
-  label?: string;
-  href: string;
-}
+export type NavbarLink = ConfigLink;
+
+export type NavbarPrimary = ConfigLink;
 
 export interface NavbarConfig {
   links?: NavbarLink[];
@@ -135,6 +143,7 @@ export interface NavbarConfig {
 export interface FooterLinkItem {
   label: string;
   href: string;
+  target?: LinkTarget;
 }
 
 export interface FooterLinkColumn {
@@ -143,9 +152,10 @@ export interface FooterLinkColumn {
 }
 
 export interface FooterConfig {
-  /** Platform name -> profile URL, e.g. { "x": "https://x.com/..." }. */
-  socials?: Record<string, string>;
+  socials?: ConfigLink[];
   links?: FooterLinkColumn[];
+  /** Show the theme-provided Shiso attribution. Defaults to true. */
+  attribution?: boolean;
 }
 
 export interface BannerConfig {
@@ -226,6 +236,10 @@ export interface SearchConfig {
   provider?: string;
   /** Provider-specific configuration. */
   options?: Record<string, unknown>;
+  /** Cmd/Ctrl shortcut key. Set false to disable the shortcut. Defaults to "k". */
+  shortcut?: string | false;
+  /** Text shown for the shortcut. The theme supplies a platform-neutral default. */
+  shortcutLabel?: string;
 }
 
 export interface InteractionConfig {
@@ -246,6 +260,7 @@ export interface ContextualOptionObject {
   description?: string;
   icon?: string;
   href: string;
+  target?: LinkTarget;
 }
 
 export type ContextualOption =
@@ -319,6 +334,8 @@ export interface DocsTab {
   label: string;
   url: string;
   icon?: string;
+  presentation: 'tab' | 'dropdown';
+  hidden?: boolean;
 }
 
 export interface NormalizedDocsPage {
@@ -355,6 +372,7 @@ export interface NavLinkNode {
   href: string;
   icon?: string;
   hidden?: boolean;
+  target: LinkTarget;
 }
 
 /** A titled, arbitrarily nestable group of nodes. */
@@ -375,6 +393,8 @@ export type NavNode = NavPageNode | NavLinkNode | NavGroupNode;
 export interface NormalizedDocsConfig {
   name?: string;
   tabs: DocsTab[];
+  /** Whether the source config explicitly defines top-level tabs/dropdowns. */
+  showTabs: boolean;
   /** Navigation tree per tab id. */
   navigation: Record<string, NavNode[]>;
   /** Top-level anchors, rendered above the sidebar. */
@@ -388,6 +408,77 @@ export interface NormalizedDocsConfig {
 export interface NormalizeOptions {
   /** Route prefix for docs pages. Phases 6/7 pass "/v2/docs", "/es/docs", etc. */
   docsPrefix?: string;
+}
+
+export interface NormalizedLink extends ConfigLink {
+  target: LinkTarget;
+}
+
+export interface NormalizedNavbar {
+  links: NormalizedLink[];
+  primary?: NormalizedLink;
+}
+
+export interface NormalizedFooter {
+  socials: NormalizedLink[];
+  links: FooterLinkColumn[];
+  attribution: boolean;
+}
+
+export interface ThemeLabels {
+  menu: string;
+  documentationNavigation: string;
+  sections: string;
+  tableOfContents: string;
+  tableOfContentsNavigation: string;
+  searchTitle: string;
+  searching: string;
+  searchUnavailable: string;
+  noResults: string;
+  lastUpdated: string;
+  notFound: string;
+  dismissBanner: string;
+  toggleTheme: string;
+  moreOptions: string;
+  copied: string;
+  expand: string;
+  collapse: string;
+  copyPage: string;
+  copyPageDescription: string;
+  viewMarkdown: string;
+  viewMarkdownDescription: string;
+  openInChatGPT: string;
+  openInClaude: string;
+  openInPerplexity: string;
+  askQuestionsAboutPage: string;
+}
+
+export interface SiteModel {
+  name?: string;
+  logo: { light?: string; dark?: string; href?: string; target?: LinkTarget } | null;
+  navbar: NormalizedNavbar | null;
+  footer: NormalizedFooter | null;
+  banner: BannerConfig | null;
+  appearance: Required<AppearanceConfig>;
+  styling: Required<Pick<StylingConfig, 'eyebrows'>>;
+  search: import('@/lib/search/config').ResolvedSearchConfig;
+  contextualOptions: ContextualOption[];
+  error404: Required<Pick<Error404Config, 'redirect'>> & Error404Config;
+  showTimestamp: boolean;
+  drilldown?: boolean;
+  locale: string;
+  labels: ThemeLabels;
+  docs: NormalizedDocsConfig;
+}
+
+export interface ResolvedContextualOption {
+  key: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  action: 'copy' | 'link';
+  href: string;
+  target: LinkTarget;
 }
 
 /* ---------------------------------------------------------------------------

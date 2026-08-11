@@ -1,20 +1,18 @@
-import { isKnownPlatform, SocialIcon } from '@/components/SocialIcon';
-import { getFooter } from '@/lib/site-config';
+import { ConfiguredIcon } from '@/components/ConfiguredIcon';
+import type { NormalizedFooter } from '@/lib/types';
 
-/** "hacker-news" -> "Hacker News", for accessible labels on icon-only links. */
-function platformLabel(platform: string): string {
-  return platform
-    .split('-')
-    .map(word => word[0]?.toUpperCase() + word.slice(1))
-    .join(' ');
-}
+export function Footer({
+  footer,
+  className = '',
+}: {
+  footer: NormalizedFooter | null;
+  className?: string;
+}) {
+  if (!footer) {
+    return null;
+  }
 
-export function Footer({ className = '' }: { className?: string }) {
-  const footer = getFooter();
-  const socials = Object.entries(footer?.socials || {}).filter(([platform]) =>
-    isKnownPlatform(platform),
-  );
-  const columns = footer?.links || [];
+  const { socials, links: columns, attribution } = footer;
 
   return (
     <footer className={`mt-8 border-border border-t py-8 text-muted-foreground ${className}`}>
@@ -30,6 +28,8 @@ export function Footer({ className = '' }: { className?: string }) {
                   <li key={item.href}>
                     <a
                       href={item.href}
+                      target={item.target}
+                      rel={item.target === '_blank' ? 'noreferrer' : undefined}
                       className="text-sm text-muted-foreground hover:text-foreground"
                     >
                       {item.label}
@@ -41,33 +41,44 @@ export function Footer({ className = '' }: { className?: string }) {
           ))}
         </div>
       )}
-      <div className="flex items-center justify-between gap-4">
-        <span className="text-sm">
-          Powered by{' '}
-          <a
-            href="https://shiso.umami.is?ref=docs-footer"
-            className="font-bold hover:text-foreground"
-          >
-            shiso
-          </a>
-        </span>
-        {socials.length > 0 && (
-          <div className="flex items-center gap-1">
-            {socials.map(([platform, url]) => (
+      {attribution || socials.length > 0 ? (
+        <div className="flex items-center justify-between gap-4">
+          {attribution ? (
+            <span className="text-sm">
+              Powered by{' '}
               <a
-                key={platform}
-                href={url}
-                className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
-                target="_blank"
-                rel="noreferrer"
-                aria-label={platformLabel(platform)}
+                href="https://shiso.umami.is?ref=docs-footer"
+                className="font-bold hover:text-foreground"
               >
-                <SocialIcon platform={platform} size={14} />
+                shiso
               </a>
-            ))}
-          </div>
-        )}
-      </div>
+            </span>
+          ) : (
+            <span />
+          )}
+          {socials.length > 0 && (
+            <div className="flex items-center gap-1">
+              {socials.map(link => {
+                const iconOnly = !link.label;
+
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target={link.target}
+                    rel={link.target === '_blank' ? 'noreferrer' : undefined}
+                    className={`inline-flex min-h-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground ${iconOnly ? 'size-8' : 'gap-1.5 px-2'}`}
+                    aria-label={iconOnly ? link.ariaLabel || link.icon || link.href : undefined}
+                  >
+                    <ConfiguredIcon icon={link.icon} />
+                    {link.label}
+                  </a>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ) : null}
     </footer>
   );
 }

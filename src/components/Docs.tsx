@@ -9,8 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { DOCS_PREFIX } from '@/lib/paths';
-import { docsConfig, getError404 } from '@/lib/site-config';
-import type { DocModule, NormalizedDocsPage } from '@/lib/types';
+import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
 /**
  * 404 view driven by the `errors.404` config key. The standard defaults to
@@ -18,9 +17,9 @@ import type { DocModule, NormalizedDocsPage } from '@/lib/types';
  * because the prerendered 404.html must stay a static page for hosts that
  * serve it for every unknown path.
  */
-function NotFound() {
+function NotFound({ site }: { site: SiteModel }) {
   const navigate = useNavigate();
-  const { redirect, title, description } = getError404();
+  const { redirect, title, description } = site.error404;
 
   useEffect(() => {
     if (redirect) {
@@ -30,7 +29,7 @@ function NotFound() {
 
   return (
     <div className="py-16 text-center">
-      <h1>{title || 'Page not found'}</h1>
+      <h1>{title || site.labels.notFound}</h1>
       {description && <p>{renderInlineMarkdown(description)}</p>}
     </div>
   );
@@ -39,12 +38,13 @@ function NotFound() {
 export interface DocsProps {
   page: NormalizedDocsPage | null;
   doc: DocModule | null;
+  site: SiteModel;
 }
 
-export function Docs({ page, doc }: DocsProps) {
+export function Docs({ page, doc, site }: DocsProps) {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { tabs, navigation } = docsConfig;
+  const { tabs, navigation } = site.docs;
 
   // Close the mobile menu and start each newly loaded page at the top. Hash
   // links keep their native section-scrolling behavior.
@@ -60,9 +60,9 @@ export function Docs({ page, doc }: DocsProps) {
     return (
       <div className="flex min-h-full flex-col">
         <div className="grow">
-          <NotFound />
+          <NotFound site={site} />
         </div>
-        <Footer />
+        <Footer footer={site.footer} />
       </div>
     );
   }
@@ -73,31 +73,52 @@ export function Docs({ page, doc }: DocsProps) {
         <div className="flex justify-end lg:hidden">
           <SheetTrigger render={<Button variant="outline" className="bg-card" />}>
             <Menu className="size-3.5" />
-            Menu
+            {site.labels.menu}
           </SheetTrigger>
         </div>
         <SheetContent
           side="right"
           className="w-[min(320px,85vw)] gap-0 overflow-y-auto bg-background p-4 sm:max-w-80"
         >
-          <SheetTitle className="sr-only">Documentation navigation</SheetTitle>
+          <SheetTitle className="sr-only">{site.labels.documentationNavigation}</SheetTitle>
           <div className="pt-8">
-            <SideNav tabs={tabs} navigation={navigation} />
+            <SideNav
+              tabs={tabs}
+              navigation={navigation}
+              anchors={site.docs.anchors}
+              drilldown={site.drilldown}
+              navigationLabel={site.labels.documentationNavigation}
+              expandLabel={site.labels.expand}
+              collapseLabel={site.labels.collapse}
+            />
           </div>
         </SheetContent>
       </Sheet>
       <div className="flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6">
         <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
-          <SideNav tabs={tabs} navigation={navigation} isSticky />
+          <SideNav
+            tabs={tabs}
+            navigation={navigation}
+            anchors={site.docs.anchors}
+            isSticky
+            drilldown={site.drilldown}
+            navigationLabel={site.labels.documentationNavigation}
+            expandLabel={site.labels.expand}
+            collapseLabel={site.labels.collapse}
+          />
         </div>
         <div className="flex min-w-0 grow self-stretch flex-col">
           <div className="flex grow items-start gap-12">
-            <DocContent page={page} doc={doc} />
+            <DocContent page={page} doc={doc} site={site} />
             <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
-              <PageLinks items={doc.toc} />
+              <PageLinks
+                items={doc.toc}
+                title={site.labels.tableOfContents}
+                navigationLabel={site.labels.tableOfContentsNavigation}
+              />
             </div>
           </div>
-          <Footer className="lg:mr-72" />
+          <Footer footer={site.footer} className="lg:mr-72" />
         </div>
       </div>
     </div>

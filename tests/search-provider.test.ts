@@ -13,6 +13,8 @@ describe('search configuration', () => {
       prompt: 'Search...',
       provider: 'local',
       options: {},
+      shortcut: 'k',
+      shortcutLabel: 'Ctrl K',
     });
   });
 
@@ -25,12 +27,22 @@ describe('search configuration', () => {
         prompt: 'Search docs',
         provider: 'hosted',
         options,
+        shortcut: 'k',
+        shortcutLabel: 'Ctrl K',
       },
     );
   });
 
   it('can disable search', () => {
     expect(resolveSearchConfig(false).enabled).toBe(false);
+  });
+
+  it('can configure or disable the keyboard shortcut', () => {
+    expect(resolveSearchConfig({ shortcut: 's', shortcutLabel: 'Ctrl S' })).toMatchObject({
+      shortcut: 's',
+      shortcutLabel: 'Ctrl S',
+    });
+    expect(resolveSearchConfig({ shortcut: false }).shortcut).toBe(false);
   });
 });
 

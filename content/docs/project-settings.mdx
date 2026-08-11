@@ -12,7 +12,8 @@ different path, or provide the site's public URL.
   "$shiso": {
     "docsPrefix": "/docs",
     "contentDir": "content/docs",
-    "siteUrl": "https://docs.example.com"
+    "siteUrl": "https://docs.example.com",
+    "locale": "en-US"
   }
 }
 ```
@@ -75,6 +76,20 @@ slash or the documentation prefix.
 
 Set it before deploying so Shiso can generate canonical URLs, Open Graph URLs,
 structured data, `sitemap.xml`, and absolute links for AI actions.
+
+## Locale
+
+`locale` controls deterministic date formatting. Interface text such as menu,
+search, and table-of-contents labels is supplied by the active theme rather
+than configured as documentation content:
+
+```json
+{
+  "$shiso": {
+    "locale": "fr-FR"
+  }
+}
+```
 
 ## How page names become URLs
 

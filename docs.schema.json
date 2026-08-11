@@ -31,12 +31,18 @@
         "siteUrl": {
           "type": "string",
           "description": "Absolute site origin (e.g. \"https://docs.example.com\"). Required for canonical, og:url, and structured data."
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Locale used for dates and theme-provided interface copy. Defaults to en-US."
         }
       }
     },
     "name": {
       "x-shiso": "supported",
       "type": "string",
+      "minLength": 1,
       "description": "Site name, shown in the header and the page title."
     },
     "description": {
@@ -59,7 +65,7 @@
         },
         "dark": {
           "type": "string",
-          "description": "Legacy fallback for the primary color when primary is omitted."
+          "description": "Fallback accent color when primary is omitted."
         }
       }
     },
@@ -72,6 +78,7 @@
         },
         {
           "type": "object",
+          "anyOf": [{ "required": ["light"] }, { "required": ["dark"] }],
           "additionalProperties": false,
           "properties": {
             "light": { "type": "string", "description": "Logo shown in light mode." },
@@ -79,6 +86,10 @@
             "href": {
               "type": "string",
               "description": "URL the logo links to. Defaults to the docs root."
+            },
+            "target": {
+              "enum": ["_self", "_blank"],
+              "description": "Browsing context for the logo link. Defaults from href."
             }
           }
         }
@@ -191,6 +202,7 @@
             { "type": "string" },
             {
               "type": "object",
+              "anyOf": [{ "required": ["light"] }, { "required": ["dark"] }],
               "additionalProperties": false,
               "properties": {
                 "light": { "type": "string" },
@@ -247,6 +259,18 @@
             "options": {
               "type": "object",
               "description": "Provider-specific configuration."
+            },
+            "shortcut": {
+              "description": "Single Cmd/Ctrl shortcut key, or false to disable it.",
+              "oneOf": [
+                { "type": "string", "minLength": 1, "maxLength": 1 },
+                { "const": false }
+              ]
+            },
+            "shortcutLabel": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Text displayed for the configured search shortcut."
             }
           }
         }
@@ -283,7 +307,11 @@
                 "properties": {
                   "title": { "type": "string", "description": "Menu entry title." },
                   "description": { "type": "string", "description": "Menu entry description." },
-                  "icon": { "type": "string", "description": "Accepted for portability; not rendered yet." },
+                  "icon": { "type": "string", "description": "Icon name rendered with the action." },
+                  "target": {
+                    "enum": ["_self", "_blank"],
+                    "description": "Browsing context for the action. Defaults from the destination URL."
+                  },
                   "href": {
                     "type": "string",
                     "description": "Destination URL. \"$path\" expands to the page path, \"$page\" to the page's markdown URL."
@@ -307,24 +335,30 @@
             "type": "object",
             "required": ["href"],
             "anyOf": [
-              { "required": ["type"] },
               { "required": ["label"] },
               { "required": ["icon"] }
             ],
             "additionalProperties": false,
             "properties": {
-              "type": {
-                "enum": ["github", "discord"],
-                "description": "Renders the matching brand icon. Live star/member counts are not fetched."
-              },
               "label": {
                 "type": "string",
+                "minLength": 1,
                 "description": "Visible link text. Omit for an icon-only link."
               },
-              "href": { "type": "string", "description": "Destination URL." },
+              "href": { "type": "string", "minLength": 1, "description": "Destination URL." },
+              "ariaLabel": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Accessible text for an icon-only link."
+              },
               "icon": {
                 "type": "string",
+                "minLength": 1,
                 "description": "Icon name. Rendered alone when label is omitted."
+              },
+              "target": {
+                "enum": ["_self", "_blank"],
+                "description": "Browsing context. Defaults to _self for local links and _blank for external links."
               },
               "iconType": {
                 "x-shiso": "reserved",
@@ -336,15 +370,21 @@
         },
         "primary": {
           "type": "object",
-          "required": ["type", "href"],
+          "required": ["href"],
+          "anyOf": [
+            { "required": ["label"] },
+            { "required": ["icon"] }
+          ],
           "additionalProperties": false,
           "properties": {
-            "type": {
-              "enum": ["button", "github", "discord"],
-              "description": "Button style. \"github\" and \"discord\" render with the brand icon."
-            },
-            "label": { "type": "string", "description": "Button text. Required for \"button\"." },
-            "href": { "type": "string", "description": "Button destination URL." }
+            "label": { "type": "string", "minLength": 1, "description": "Visible button text. Omit for icon-only." },
+            "href": { "type": "string", "minLength": 1, "description": "Button destination URL." },
+            "icon": { "type": "string", "minLength": 1, "description": "Icon name." },
+            "ariaLabel": { "type": "string", "minLength": 1, "description": "Accessible text for icon-only buttons." },
+            "target": {
+              "enum": ["_self", "_blank"],
+              "description": "Browsing context. Defaults from the destination URL."
+            }
           }
         }
       }
@@ -369,32 +409,21 @@
       "additionalProperties": false,
       "properties": {
         "socials": {
-          "type": "object",
-          "description": "Platform name to profile URL, e.g. { \"x\": \"https://x.com/example\" }.",
-          "propertyNames": {
-            "enum": [
-              "x",
-              "website",
-              "facebook",
-              "youtube",
-              "discord",
-              "slack",
-              "github",
-              "linkedin",
-              "instagram",
-              "hacker-news",
-              "medium",
-              "telegram",
-              "twitter",
-              "x-twitter",
-              "earth-americas",
-              "bluesky",
-              "threads",
-              "reddit",
-              "podcast"
-            ]
-          },
-          "additionalProperties": { "type": "string" }
+          "type": "array",
+          "description": "Social links displayed in the footer.",
+          "items": {
+            "type": "object",
+            "required": ["href"],
+            "anyOf": [{ "required": ["label"] }, { "required": ["icon"] }],
+            "additionalProperties": false,
+            "properties": {
+              "href": { "type": "string" },
+              "label": { "type": "string", "description": "Visible link text." },
+              "icon": { "type": "string" },
+              "ariaLabel": { "type": "string" },
+              "target": { "enum": ["_self", "_blank"] }
+            }
+          }
         },
         "links": {
           "type": "array",
@@ -413,12 +442,18 @@
                   "additionalProperties": false,
                   "properties": {
                     "label": { "type": "string", "description": "Link text." },
-                    "href": { "type": "string", "description": "Link destination URL." }
+                    "href": { "type": "string", "description": "Link destination URL." },
+                    "target": { "enum": ["_self", "_blank"] }
                   }
                 }
               }
             }
           }
+        },
+        "attribution": {
+          "type": "boolean",
+          "description": "Show the Shiso attribution in the footer. Defaults to true.",
+          "default": true
         }
       }
     },
@@ -560,13 +595,15 @@
       "type": "object",
       "description": "An external link in the navigation tree.",
       "required": ["href"],
+      "anyOf": [{ "required": ["label"] }, { "required": ["anchor"] }],
       "additionalProperties": false,
       "properties": {
         "href": { "type": "string", "description": "Destination URL." },
         "label": { "type": "string", "description": "Link text." },
         "anchor": { "type": "string", "description": "Alias for label." },
         "icon": { "type": "string", "description": "Icon name shown beside the label." },
-        "hidden": { "type": "boolean", "description": "Hide from the sidebar." }
+        "hidden": { "type": "boolean", "description": "Hide from the sidebar." },
+        "target": { "enum": ["_self", "_blank"] }
       }
     },
     "anchor": {
@@ -578,6 +615,7 @@
         "href": { "type": "string", "description": "Destination URL." },
         "icon": { "type": "string", "description": "Icon name shown beside the label." },
         "hidden": { "type": "boolean", "description": "Hide the anchor." },
+        "target": { "enum": ["_self", "_blank"] },
         "groups": {
           "x-shiso": "reserved",
           "type": "array",
@@ -595,7 +633,7 @@
       "required": ["group", "pages"],
       "additionalProperties": false,
       "properties": {
-        "group": { "type": "string", "description": "Group heading shown in the sidebar." },
+        "group": { "type": "string", "minLength": 1, "description": "Group heading shown in the sidebar." },
         "root": {
           "type": "string",
           "description": "Optional landing page for the group. When set, the group title links to this page (chevron still expands/collapses)."
@@ -623,7 +661,8 @@
       "properties": {
         "dropdown": {
           "type": "string",
-          "description": "Dropdown label. Currently rendered as a tab."
+          "minLength": 1,
+          "description": "Dropdown label rendered by the selected theme."
         },
         "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
         "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
@@ -636,7 +675,7 @@
       "required": ["tab"],
       "additionalProperties": false,
       "properties": {
-        "tab": { "type": "string", "description": "Tab label shown in the top navigation." },
+        "tab": { "type": "string", "minLength": 1, "description": "Tab label shown in the top navigation." },
         "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
         "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
         "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },

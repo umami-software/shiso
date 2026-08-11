@@ -24,7 +24,7 @@ describe('page items', () => {
     });
 
     expect(config.pages.map(page => [page.slug, page.label, page.url])).toEqual([
-      ['index', 'Overview', '/docs'],
+      ['index', 'Index', '/docs'],
       ['alpha', 'From title', '/docs/alpha'],
       ['beta', 'From label', '/docs/beta'],
     ]);
@@ -49,6 +49,21 @@ describe('page items', () => {
 
     expect(config.pages.map(page => page.url)).toEqual(['/', '/alpha']);
   });
+
+  it('keeps the synthetic container internal for simple navigation', () => {
+    const config = normalize({ groups: [{ group: 'Start', pages: ['index'] }] });
+
+    expect(config.showTabs).toBe(false);
+    expect(config.tabs[0].label).toBe('');
+    expect(config.pages[0].section).toBe('Start');
+  });
+
+  it('preserves dropdown presentation instead of turning it into a tab', () => {
+    const config = normalize({ dropdowns: [{ dropdown: 'Guides', pages: ['index'] }] });
+
+    expect(config.showTabs).toBe(true);
+    expect(config.tabs[0]).toMatchObject({ label: 'Guides', presentation: 'dropdown' });
+  });
 });
 
 describe('external links', () => {
@@ -62,24 +77,25 @@ describe('external links', () => {
       href: 'https://example.com',
       icon: undefined,
       hidden: undefined,
+      target: '_blank',
     });
   });
 
-  it('falls back to anchor, then href, for the label', () => {
+  it('accepts anchor as a label alias and rejects unlabeled links', () => {
     const nodes = normalize({
-      pages: [
-        'index',
-        { href: 'https://a.example', anchor: 'Anchored' },
-        { href: 'https://b.example' },
-      ],
+      pages: ['index', { href: 'https://a.example', anchor: 'Anchored' }],
     }).navigation.documentation as NavLinkNode[];
 
     expect(nodes[1].label).toBe('Anchored');
-    expect(nodes[2].label).toBe('https://b.example');
+    expect(() => normalize({ pages: ['index', { href: 'https://b.example' }] })).toThrow(
+      /missing a label/,
+    );
   });
 
   it('keeps links out of the routed page list', () => {
-    const config = normalize({ pages: ['index', { href: 'https://example.com' }] });
+    const config = normalize({
+      pages: ['index', { href: 'https://example.com', label: 'Example' }],
+    });
 
     expect(config.pages).toHaveLength(1);
     expect(flattenNav(config.navigation.documentation)).toHaveLength(1);
@@ -233,6 +249,7 @@ describe('anchors', () => {
         href: 'https://example.com/community',
         icon: undefined,
         hidden: undefined,
+        target: '_blank',
       },
     ]);
   });
