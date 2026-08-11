@@ -1,0 +1,66 @@
+name: Release create-shiso-app
+
+on:
+  push:
+    tags:
+      - create-shiso-app-v*
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'umami-software/shiso'
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Verify tag is on master
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/master
+      - name: Validate release metadata
+        id: release
+        run: pnpm release:check "$GITHUB_REF_NAME" --output-dir artifacts --check-registry
+      - run: pnpm lint
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm test:create-app
+      - name: Pack npm artifact
+        run: pnpm --dir packages/create-shiso-app pack --out "${{ steps.release.outputs.tarball }}"
+      - name: Publish to npm
+        if: steps.release.outputs.published != 'true'
+        run: >-
+          pnpm publish "${{ steps.release.outputs.tarball }}"
+          --access public
+          --tag "${{ steps.release.outputs.npm_tag }}"
+          --provenance
+          --no-git-checks
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          arguments=(
+            "$GITHUB_REF_NAME"
+            "${{ steps.release.outputs.tarball }}#npm package"
+            --verify-tag
+            --title "create-shiso-app ${{ steps.release.outputs.version }}"
+            --notes-file "${{ steps.release.outputs.notes_file }}"
+          )
+
+          if [[ "${{ steps.release.outputs.prerelease }}" == "true" ]]; then
+            arguments+=(--prerelease)
+          fi
+
+          gh release create "${arguments[@]}"

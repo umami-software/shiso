@@ -6,6 +6,7 @@ const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 const REPOSITORY_ROOT = path.resolve(PACKAGE_ROOT, '../..');
 const TEMPLATE_ROOT = path.join(PACKAGE_ROOT, 'template');
 const OVERRIDES_ROOT = path.join(PACKAGE_ROOT, 'template-overrides');
+const REPOSITORY_ONLY_SCRIPTS = new Set(['release:check', 'test', 'test:watch', 'test:create-app']);
 
 const PROJECT_FILES = [
   'biome.json',
@@ -65,9 +66,7 @@ async function writeProjectPackage() {
     description: 'A documentation site built with Shiso.',
     type: 'module',
     scripts: Object.fromEntries(
-      Object.entries(rootPackage.scripts).filter(
-        ([name]) => !['test', 'test:watch', 'test:create-app'].includes(name),
-      ),
+      Object.entries(rootPackage.scripts).filter(([name]) => !REPOSITORY_ONLY_SCRIPTS.has(name)),
     ),
     dependencies: rootPackage.dependencies,
     devDependencies: Object.fromEntries(

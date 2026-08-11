@@ -15,7 +15,7 @@ export function TopNav({ tabs }: { tabs: DocsTab[] }) {
 
   return (
     <nav
-      className="hidden h-full max-w-screen items-center gap-7 overflow-x-auto text-sm [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden"
+      className="hidden h-[calc(100%+1px)] max-w-screen self-start items-center gap-7 overflow-x-auto text-sm [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden"
       aria-label="Sections"
     >
       {tabs.map(({ id, label, url }) => (

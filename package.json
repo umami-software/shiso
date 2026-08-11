@@ -8,11 +8,13 @@
     "type": "git",
     "url": "https://github.com/umami-software/shiso.git"
   },
+  "packageManager": "pnpm@11.21.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "check:config": "node scripts/validate-config.mjs",
     "build": "node scripts/validate-config.mjs && vite build --outDir dist/client --emptyOutDir && vite build --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir && node scripts/prerender.mjs",
+    "release:check": "node scripts/prepare-release.mjs",
     "test:create-app": "node scripts/smoke-create-shiso-app.mjs",
     "preview": "vite preview --outDir dist/client",
     "test": "vitest run",

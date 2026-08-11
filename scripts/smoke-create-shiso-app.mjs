@@ -58,8 +58,10 @@ try {
     );
   }
 
-  if ('test:create-app' in projectPackage.scripts) {
-    throw new Error('Repository-only scripts leaked into the generated package.');
+  for (const script of ['release:check', 'test:create-app']) {
+    if (script in projectPackage.scripts) {
+      throw new Error(`Repository-only script "${script}" leaked into the generated package.`);
+    }
   }
 
   await assertFile(path.join(project, '.gitignore'));
