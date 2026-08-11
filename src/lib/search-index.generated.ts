@@ -254,7 +254,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Header, footer, and banner',
     heading: 'Links',
     id: 'links',
-    text: 'Shown to the left of the theme toggle. Set type to "github" or "discord" to get the brand icon with a default label. Live star and member counts are not fetched. For a plain link, set label and optionally an icon name from the lucide icon set.',
+    text: 'Shown to the left of the theme toggle. Set type to "github" or "discord" to use its brand icon. Live star and member counts are not fetched. Set icon to use a name from the lucide icon set. Add label when the link should include visible text. Omit it for an icon-only link.',
   },
   {
     url: '/docs/navbar-and-footer',

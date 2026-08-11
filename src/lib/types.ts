@@ -115,6 +115,7 @@ export interface ShisoOptions {
  */
 export interface NavbarLink {
   type?: 'github' | 'discord';
+  /** Visible link text. Omit for an icon-only link. */
   label?: string;
   href: string;
   icon?: string;

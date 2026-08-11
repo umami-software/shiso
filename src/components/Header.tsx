@@ -26,6 +26,24 @@ function NavbarLinkIcon({ link }: { link: NavbarLink }) {
   return null;
 }
 
+function NavbarLinkItem({ link }: { link: NavbarLink }) {
+  const iconOnly = !link.label;
+  const accessibleLabel = (link.type && TYPE_LABELS[link.type]) || link.href;
+
+  return (
+    <a
+      href={link.href}
+      className={`inline-flex items-center rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-foreground ${iconOnly ? 'size-8 justify-center' : 'gap-1.5 px-2.5 py-1.5'}`}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={iconOnly ? accessibleLabel : undefined}
+    >
+      <NavbarLinkIcon link={link} />
+      {link.label}
+    </a>
+  );
+}
+
 export function Header() {
   const logo = getLogo();
   const navbar = getNavbar();
@@ -58,16 +76,7 @@ export function Header() {
         <div className="flex min-w-0 items-center gap-2 justify-self-end">
           <Search />
           {navbar?.links?.map(link => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-foreground"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <NavbarLinkIcon link={link} />
-              {link.label || (link.type && TYPE_LABELS[link.type]) || null}
-            </a>
+            <NavbarLinkItem key={link.href} link={link} />
           ))}
           {!getAppearance().strict && <ThemeToggle />}
           {navbar?.primary && (

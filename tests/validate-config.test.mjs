@@ -214,6 +214,13 @@ describe('supported keys stay strictly validated', () => {
     );
   });
 
+  it('rejects a navbar link without a label, type, or icon', () => {
+    expect(
+      validateConfig({ ...minimal, navbar: { links: [{ href: 'https://example.com' }] } }, schema)
+        .valid,
+    ).toBe(false);
+  });
+
   it('rejects an unknown social platform', () => {
     expect(
       validateConfig(

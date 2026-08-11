@@ -306,6 +306,11 @@
           "items": {
             "type": "object",
             "required": ["href"],
+            "anyOf": [
+              { "required": ["type"] },
+              { "required": ["label"] },
+              { "required": ["icon"] }
+            ],
             "additionalProperties": false,
             "properties": {
               "type": {
@@ -314,10 +319,13 @@
               },
               "label": {
                 "type": "string",
-                "description": "Link text. Defaults to \"GitHub\" or \"Discord\" for typed links."
+                "description": "Visible link text. Omit for an icon-only link."
               },
               "href": { "type": "string", "description": "Destination URL." },
-              "icon": { "type": "string", "description": "Icon name shown beside the label." },
+              "icon": {
+                "type": "string",
+                "description": "Icon name. Rendered alone when label is omitted."
+              },
               "iconType": {
                 "x-shiso": "reserved",
                 "type": "string",
