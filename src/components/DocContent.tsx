@@ -40,13 +40,13 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       {eyebrow && <div className="text-sm font-bold text-primary">{eyebrow}</div>}
       <div className="flex items-start justify-between gap-4">
         {title && (
-          <h1 className="my-3 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]">
+          <h1 className="mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]">
             {title}
           </h1>
         )}
         <ContextualMenu options={contextualOptions} labels={site.labels} />
       </div>
-      {description && <p className="mb-6 text-[1.1rem] text-muted-foreground">{description}</p>}
+      {description && <p className="mt-1 mb-6 text-base text-muted-foreground">{description}</p>}
       <div className="docs-markdown">
         <Content />
       </div>

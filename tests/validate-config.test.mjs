@@ -6,50 +6,52 @@ import { getKeyTiers, suggestKey, validateConfig } from '../scripts/validate-con
 const root = path.resolve(import.meta.dirname, '..');
 
 const schema = JSON.parse(await readFile(path.join(root, 'docs.schema.json'), 'utf8'));
+const support = JSON.parse(await readFile(path.join(root, 'docs.support.json'), 'utf8'));
 const realConfig = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
 
 const minimal = { navigation: { pages: ['index'] } };
 
-/**
- * Every top-level key of the docs.json standard must be declared in the schema,
- * in one tier or the other. A config written against the full standard has to
- * build here — that is the whole point of the reserved tier — so an omission is
- * a forward-compatibility bug, not a missing feature.
- */
-const STANDARD_KEYS = [
-  'theme',
-  'name',
-  'colors',
-  'description',
-  'logo',
-  'favicon',
-  'thumbnails',
-  'styling',
-  'icons',
-  'fonts',
-  'appearance',
-  'background',
-  'navbar',
-  'navigation',
-  'interaction',
-  'metadata',
-  'footer',
-  'banner',
-  'redirects',
-  'contextual',
-  'api',
-  'seo',
-  'search',
-  'integrations',
-  'errors',
-];
-
 describe('schema coverage', () => {
-  it('declares every top-level key of the standard', () => {
-    const declared = Object.keys(getKeyTiers(schema));
-    const missing = STANDARD_KEYS.filter(key => !declared.includes(key));
+  it('classifies every schema key in the Shiso support contract', () => {
+    const declared = Object.keys(getKeyTiers(schema)).sort();
+    const contracted = Object.entries(support.fields)
+      .filter(([, field]) => field.status !== 'unsupported')
+      .map(([key]) => key)
+      .sort();
 
-    expect(missing).toEqual([]);
+    expect(contracted).toEqual(declared);
+  });
+
+  it('keeps unsupported top-level keys out of the schema', () => {
+    const declared = new Set(Object.keys(getKeyTiers(schema)));
+    const unsupported = Object.entries(support.fields)
+      .filter(([, field]) => field.status === 'unsupported')
+      .map(([key]) => key);
+
+    expect(unsupported.filter(key => declared.has(key))).toEqual([]);
+  });
+
+  it('uses only documented support categories', () => {
+    const categories = new Set(Object.keys(support.categories));
+    const statuses = [
+      ...Object.values(support.fields).map(field => field.status),
+      ...support.exceptions.map(field => field.status),
+    ];
+
+    expect(statuses.filter(status => !categories.has(status))).toEqual([]);
+  });
+
+  it('matches reserved schema keys to recognized contract fields', () => {
+    const reserved = Object.entries(getKeyTiers(schema))
+      .filter(([, tier]) => tier === 'reserved')
+      .map(([key]) => key)
+      .sort();
+    const recognized = Object.entries(support.fields)
+      .filter(([, field]) => field.status === 'recognized')
+      .map(([key]) => key)
+      .sort();
+
+    expect(recognized).toEqual(reserved);
   });
 
   it('validates the real docs.json', () => {
