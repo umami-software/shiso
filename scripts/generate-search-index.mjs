@@ -23,6 +23,7 @@ import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from '../src/lib/mdast.ts';
 import { createSlugger } from '../src/lib/slug.ts';
+import { loadDocsConfig } from './load-docs-config.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUTPUT = path.join(ROOT, 'src/lib/search-index.generated.ts');
@@ -160,7 +161,7 @@ function collectSections(tree) {
 }
 
 export async function generateSearchIndex() {
-  const docsJson = JSON.parse(await fs.readFile(path.join(ROOT, 'docs.json'), 'utf8'));
+  const { config: docsJson } = await loadDocsConfig({ root: ROOT });
   const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
   const contentDir = (docsJson.$shiso?.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
 

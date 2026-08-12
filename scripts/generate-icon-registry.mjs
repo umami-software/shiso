@@ -12,6 +12,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as lucide from 'lucide-react';
+import { loadDocsConfig } from './load-docs-config.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUTPUT = path.join(ROOT, 'src/lib/icon-registry.generated.ts');
@@ -120,8 +121,8 @@ async function findIconNames() {
   }
 
   // Navigation and navbar icons live in docs.json, not in content or source.
-  const config = await fs.readFile(path.join(ROOT, 'docs.json'), 'utf8').catch(() => '');
-  addMatches(names, config, ICON_JSON_PROPERTY);
+  const { config } = await loadDocsConfig({ root: ROOT });
+  addMatches(names, JSON.stringify(config), ICON_JSON_PROPERTY);
 
   return [...names].sort();
 }

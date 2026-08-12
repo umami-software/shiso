@@ -16,6 +16,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
+import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
 const DEFAULT_HEAD_CLOSE = '<!--/shiso-default-head-->';
@@ -31,7 +32,7 @@ if (!template.includes('<!--app-html-->')) {
   );
 }
 
-const docsJson = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
+const { config: docsJson } = await loadDocsConfig({ root });
 const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
 
 const { render, getRoutes, getRedirects, getSitemapEntries, getMarkdownPages } = await import(

@@ -11,10 +11,10 @@
  * The middle tier preserves compatibility with configs from other docs
  * platforms by accepting recognized features Shiso has not implemented yet.
  */
-import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { Ajv } from 'ajv';
+import { loadDocsConfig, loadDocsSchema } from './load-docs-config.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 
@@ -101,9 +101,9 @@ export function validateConfig(config, schema) {
 
 // CLI entry point. Skipped when imported by tests.
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.meta.filename)) {
-  const [schema, config] = await Promise.all([
-    fs.readFile(path.join(root, 'docs.schema.json'), 'utf8').then(JSON.parse),
-    fs.readFile(path.join(root, 'docs.json'), 'utf8').then(JSON.parse),
+  const [{ schema }, { config }] = await Promise.all([
+    loadDocsSchema({ root }),
+    loadDocsConfig({ root }),
   ]);
 
   const { valid, errors, notices } = validateConfig(config, schema);
