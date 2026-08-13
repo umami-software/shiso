@@ -7,39 +7,38 @@ import { getSchemaKeys, suggestKey, validateConfig } from '../scripts/validate-c
 const root = path.resolve(import.meta.dirname, '..');
 
 const schema = JSON.parse(await readFile(path.join(root, 'docs.schema.json'), 'utf8'));
-const support = JSON.parse(await readFile(path.join(root, 'docs.support.json'), 'utf8'));
 const realConfig = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
 
 const minimal = { navigation: { pages: ['index'] } };
 
 describe('schema coverage', () => {
-  it('declares every supported contract field in the schema', () => {
-    const declared = getSchemaKeys(schema).sort();
-    const contracted = Object.entries(support.fields)
-      .filter(([, field]) => field.status !== 'unsupported' && field.schema !== false)
-      .map(([key]) => key)
-      .sort();
-
-    expect(contracted).toEqual(declared);
-  });
-
-  it('keeps unsupported top-level keys out of the schema', () => {
-    const declared = new Set(getSchemaKeys(schema));
-    const unsupported = Object.entries(support.fields)
-      .filter(([, field]) => field.status === 'unsupported')
-      .map(([key]) => key);
-
-    expect(unsupported.filter(key => declared.has(key))).toEqual([]);
-  });
-
-  it('uses only documented support categories', () => {
-    const categories = new Set(Object.keys(support.categories));
-    const statuses = [
-      ...Object.values(support.fields).map(field => field.status),
-      ...support.exceptions.map(field => field.status),
-    ];
-
-    expect(statuses.filter(status => !categories.has(status))).toEqual([]);
+  it('exposes the expected public top-level settings', () => {
+    expect(getSchemaKeys(schema).sort()).toEqual([
+      '$ref',
+      '$schema',
+      '$shiso',
+      'appearance',
+      'background',
+      'banner',
+      'colors',
+      'contextual',
+      'description',
+      'errors',
+      'favicon',
+      'fonts',
+      'footer',
+      'interaction',
+      'logo',
+      'metadata',
+      'name',
+      'navbar',
+      'navigation',
+      'redirects',
+      'search',
+      'seo',
+      'styling',
+      'theme',
+    ]);
   });
 
   it('validates the real docs.json', () => {

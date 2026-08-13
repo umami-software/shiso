@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = path.resolve(PACKAGE_ROOT, '../..');
-const TEMPLATE_ROOT = path.join(PACKAGE_ROOT, 'template');
+const DEFAULT_TEMPLATE_ROOT = path.join(PACKAGE_ROOT, 'template');
 const OVERRIDES_ROOT = path.join(PACKAGE_ROOT, 'template-overrides');
 const REPOSITORY_ONLY_SCRIPTS = new Set(['release:check', 'test', 'test:watch', 'test:create-app']);
 
@@ -19,8 +19,10 @@ const PROJECT_FILES = [
   'scripts/generate-icon-registry.mjs',
   'scripts/generate-last-modified.mjs',
   'scripts/generate-search-index.mjs',
+  'scripts/load-docs-config.mjs',
   'scripts/prerender.mjs',
   'scripts/validate-config.mjs',
+  'scripts/vite-docs-config.mjs',
   'src',
   'tsconfig.json',
   'vercel.json',
@@ -33,8 +35,8 @@ async function copyEntry(sourceRoot, targetRoot, entry) {
   await fs.cp(path.join(sourceRoot, entry), target, { recursive: true });
 }
 
-async function writeGeneratedStubs() {
-  const lib = path.join(TEMPLATE_ROOT, 'src/lib');
+async function writeGeneratedStubs(templateRoot) {
+  const lib = path.join(templateRoot, 'src/lib');
 
   await fs.writeFile(
     path.join(lib, 'icon-registry.generated.ts'),
@@ -54,7 +56,7 @@ export const SEARCH_INDEX: SearchRecord[] = [];
   );
 }
 
-async function writeProjectPackage() {
+async function writeProjectPackage(templateRoot) {
   const rootPackage = JSON.parse(
     await fs.readFile(path.join(REPOSITORY_ROOT, 'package.json'), 'utf8'),
   );
@@ -75,24 +77,33 @@ async function writeProjectPackage() {
   };
 
   await fs.writeFile(
-    path.join(TEMPLATE_ROOT, 'package.json'),
+    path.join(templateRoot, 'package.json'),
     `${JSON.stringify(projectPackage, null, 2)}\n`,
   );
 }
 
-await fs.rm(TEMPLATE_ROOT, { recursive: true, force: true });
-await fs.mkdir(TEMPLATE_ROOT, { recursive: true });
+export async function prepareTemplate({ templateRoot = DEFAULT_TEMPLATE_ROOT } = {}) {
+  await fs.rm(templateRoot, { recursive: true, force: true });
+  await fs.mkdir(templateRoot, { recursive: true });
 
-for (const entry of PROJECT_FILES) {
-  await copyEntry(REPOSITORY_ROOT, TEMPLATE_ROOT, entry);
+  for (const entry of PROJECT_FILES) {
+    await copyEntry(REPOSITORY_ROOT, templateRoot, entry);
+  }
+
+  for (const entry of await fs.readdir(OVERRIDES_ROOT)) {
+    await copyEntry(OVERRIDES_ROOT, templateRoot, entry);
+  }
+
+  await fs.copyFile(
+    path.join(REPOSITORY_ROOT, '.gitignore'),
+    path.join(templateRoot, '_gitignore'),
+  );
+  await writeProjectPackage(templateRoot);
+  await writeGeneratedStubs(templateRoot);
+
+  console.log(`Prepared the Shiso starter template at ${templateRoot}`);
 }
 
-for (const entry of await fs.readdir(OVERRIDES_ROOT)) {
-  await copyEntry(OVERRIDES_ROOT, TEMPLATE_ROOT, entry);
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.meta.filename)) {
+  await prepareTemplate();
 }
-
-await fs.copyFile(path.join(REPOSITORY_ROOT, '.gitignore'), path.join(TEMPLATE_ROOT, '_gitignore'));
-await writeProjectPackage();
-await writeGeneratedStubs();
-
-console.log(`Prepared the Shiso starter template at ${TEMPLATE_ROOT}`);

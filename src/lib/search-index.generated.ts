@@ -151,7 +151,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'Anchors',
     id: 'anchors',
-    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [...] } }',
+    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [ { "tab": "Docs", "pages": ["index", "installation"] } ] } }',
   },
   {
     url: '/docs/navigation',
