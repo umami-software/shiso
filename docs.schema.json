@@ -4,9 +4,13 @@
   "title": "Shiso docs.json",
   "description": "Configuration for a Shiso docs site. Recognized keys are annotated with \"x-shiso\": \"supported\" (implemented and strictly validated) or \"x-shiso\": \"reserved\" (recognized, accepted and ignored, and loosely validated). Keys absent from this file are rejected. See scripts/validate-config.mjs.",
   "type": "object",
-  "required": ["navigation"],
+  "anyOf": [{ "required": ["$ref"] }, { "required": ["navigation"] }],
   "additionalProperties": false,
   "properties": {
+    "$ref": {
+      "x-shiso": "supported",
+      "$ref": "#/definitions/configRef"
+    },
     "$schema": {
       "x-shiso": "supported",
       "type": "string",
@@ -18,6 +22,7 @@
       "description": "Shiso-only options. Namespaced so the rest of the file stays portable.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "docsPrefix": {
           "type": "string",
           "description": "Route prefix for docs pages. Defaults to \"/docs\"; use \"\" to serve docs at the site root.",
@@ -55,6 +60,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "primary": {
           "type": "string",
           "description": "Primary accent color (any CSS color)."
@@ -78,9 +84,14 @@
         },
         {
           "type": "object",
-          "anyOf": [{ "required": ["light"] }, { "required": ["dark"] }],
+          "anyOf": [
+            { "required": ["$ref"] },
+            { "required": ["light"] },
+            { "required": ["dark"] }
+          ],
           "additionalProperties": false,
           "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
             "light": { "type": "string", "description": "Logo shown in light mode." },
             "dark": { "type": "string", "description": "Logo shown in dark mode." },
             "href": {
@@ -106,6 +117,7 @@
       "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
         "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
         "anchors": { "type": "array", "items": { "$ref": "#/definitions/anchor" } },
@@ -140,6 +152,7 @@
       "description": "Visual styling configuration.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "eyebrows": {
           "enum": ["section", "breadcrumbs"],
           "description": "Page eyebrow style: the section name (default) or the full navigation path.",
@@ -161,9 +174,10 @@
       "x-shiso": "supported",
       "type": "object",
       "description": "Custom fonts. Google Fonts families load automatically; use source/format for self-hosted files.",
-      "required": ["family"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["family"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
         "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
         "source": { "type": "string", "description": "URL or path to a hosted font file." },
@@ -178,6 +192,7 @@
       "description": "Light/dark mode defaults.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "default": {
           "enum": ["system", "light", "dark"],
           "description": "Initial theme mode. \"system\" follows the OS preference.",
@@ -196,15 +211,21 @@
       "description": "Background color and image settings.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "image": {
           "description": "Background image, a single path or per-mode paths.",
           "oneOf": [
             { "type": "string" },
             {
               "type": "object",
-              "anyOf": [{ "required": ["light"] }, { "required": ["dark"] }],
+              "anyOf": [
+                { "required": ["$ref"] },
+                { "required": ["light"] },
+                { "required": ["dark"] }
+              ],
               "additionalProperties": false,
               "properties": {
+                "$ref": { "$ref": "#/definitions/configRef" },
                 "light": { "type": "string" },
                 "dark": { "type": "string" }
               }
@@ -220,6 +241,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
             "light": { "type": "string", "description": "Background color for light mode." },
             "dark": { "type": "string", "description": "Background color for dark mode." }
           }
@@ -232,6 +254,7 @@
       "description": "Navigation interaction settings.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "drilldown": {
           "type": "boolean",
           "description": "Collapsible-group click behavior: true navigates to the group's first page on expand, false only expands/collapses. Unset uses the default (headers with a root page navigate, others toggle)."
@@ -247,6 +270,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
             "prompt": {
               "type": "string",
               "description": "Placeholder text for the search input."
@@ -280,9 +304,10 @@
       "x-shiso": "supported",
       "type": "object",
       "description": "Contextual menu shown beside the page title. \"mcp\", \"cursor\", and \"vscode\" require a hosted MCP server and are accepted but skipped.",
-      "required": ["options"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["options"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "options": {
           "type": "array",
           "description": "Menu entries, in order; the first is the primary button.",
@@ -302,9 +327,10 @@
               },
               {
                 "type": "object",
-                "required": ["title", "href"],
+                "anyOf": [{ "required": ["$ref"] }, { "required": ["title", "href"] }],
                 "additionalProperties": false,
                 "properties": {
+                  "$ref": { "$ref": "#/definitions/configRef" },
                   "title": { "type": "string", "description": "Menu entry title." },
                   "description": { "type": "string", "description": "Menu entry description." },
                   "icon": { "type": "string", "description": "Icon name rendered with the action." },
@@ -329,17 +355,21 @@
       "description": "Links and primary button in the top navigation bar.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "links": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["href"],
             "anyOf": [
-              { "required": ["label"] },
-              { "required": ["icon"] }
+              { "required": ["$ref"] },
+              {
+                "required": ["href"],
+                "anyOf": [{ "required": ["label"] }, { "required": ["icon"] }]
+              }
             ],
             "additionalProperties": false,
             "properties": {
+              "$ref": { "$ref": "#/definitions/configRef" },
               "label": {
                 "type": "string",
                 "minLength": 1,
@@ -370,13 +400,16 @@
         },
         "primary": {
           "type": "object",
-          "required": ["href"],
           "anyOf": [
-            { "required": ["label"] },
-            { "required": ["icon"] }
+            { "required": ["$ref"] },
+            {
+              "required": ["href"],
+              "anyOf": [{ "required": ["label"] }, { "required": ["icon"] }]
+            }
           ],
           "additionalProperties": false,
           "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
             "label": { "type": "string", "minLength": 1, "description": "Visible button text. Omit for icon-only." },
             "href": { "type": "string", "minLength": 1, "description": "Button destination URL." },
             "icon": { "type": "string", "minLength": 1, "description": "Icon name." },
@@ -395,6 +428,7 @@
       "description": "Page metadata settings.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "timestamp": {
           "type": "boolean",
           "description": "Show the last-modified date (from git history) on all pages. Override per page with the `timestamp` frontmatter field.",
@@ -408,15 +442,22 @@
       "description": "Footer content: social links and link columns.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "socials": {
           "type": "array",
           "description": "Social links displayed in the footer.",
           "items": {
             "type": "object",
-            "required": ["href"],
-            "anyOf": [{ "required": ["label"] }, { "required": ["icon"] }],
+            "anyOf": [
+              { "required": ["$ref"] },
+              {
+                "required": ["href"],
+                "anyOf": [{ "required": ["label"] }, { "required": ["icon"] }]
+              }
+            ],
             "additionalProperties": false,
             "properties": {
+              "$ref": { "$ref": "#/definitions/configRef" },
               "href": { "type": "string" },
               "label": { "type": "string", "description": "Visible link text." },
               "icon": { "type": "string" },
@@ -430,17 +471,19 @@
           "description": "Link columns displayed above the footer bottom row.",
           "items": {
             "type": "object",
-            "required": ["items"],
+            "anyOf": [{ "required": ["$ref"] }, { "required": ["items"] }],
             "additionalProperties": false,
             "properties": {
+              "$ref": { "$ref": "#/definitions/configRef" },
               "header": { "type": "string", "description": "Column heading." },
               "items": {
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": ["label", "href"],
+                  "anyOf": [{ "required": ["$ref"] }, { "required": ["label", "href"] }],
                   "additionalProperties": false,
                   "properties": {
+                    "$ref": { "$ref": "#/definitions/configRef" },
                     "label": { "type": "string", "description": "Link text." },
                     "href": { "type": "string", "description": "Link destination URL." },
                     "target": { "enum": ["_self", "_blank"] }
@@ -461,9 +504,10 @@
       "x-shiso": "supported",
       "type": "object",
       "description": "Site-wide banner displayed above the header.",
-      "required": ["content"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["content"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "content": {
           "type": "string",
           "description": "Banner text. Supports basic markdown: links, bold, italic, and inline code."
@@ -481,9 +525,10 @@
       "description": "Redirects for moved, renamed, or deleted pages. Sources are matched exactly; wildcard patterns are not implemented yet and are skipped with a warning.",
       "items": {
         "type": "object",
-        "required": ["source", "destination"],
+        "anyOf": [{ "required": ["$ref"] }, { "required": ["source", "destination"] }],
         "additionalProperties": false,
         "properties": {
+          "$ref": { "$ref": "#/definitions/configRef" },
           "source": { "type": "string", "description": "Path to redirect from, e.g. \"/old-page\"." },
           "destination": {
             "type": "string",
@@ -504,6 +549,7 @@
       "description": "SEO indexing configuration.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "metatags": {
           "type": "object",
           "description": "Meta tags added to every page, e.g. { \"og:image\": \"/social.png\" }.",
@@ -523,11 +569,13 @@
       "description": "Error handling settings.",
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "404": {
           "type": "object",
           "description": "\"Page not found\" behavior.",
           "additionalProperties": false,
           "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
             "redirect": {
               "type": "boolean",
               "description": "Navigate to the docs home when a page is not found. Defaults to true.",
@@ -544,11 +592,17 @@
     }
   },
   "definitions": {
+    "configRef": {
+      "type": "string",
+      "pattern": "^(?![A-Za-z][A-Za-z0-9+.-]*:)(?![/\\\\]).+\\.json$",
+      "description": "Relative path to another JSON configuration file. Resolved relative to the file containing this reference."
+    },
     "fontSpec": {
       "type": "object",
-      "required": ["family"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["family"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
         "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
         "source": { "type": "string", "description": "URL or path to a hosted font file." },
@@ -556,7 +610,7 @@
       }
     },
     "pageItem": {
-      "oneOf": [
+      "anyOf": [
         {
           "type": "string",
           "description": "Page reference relative to the content directory, without extension (e.g. \"components/tabs\")."
@@ -568,9 +622,10 @@
     },
     "pageObject": {
       "type": "object",
-      "required": ["page"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["page"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "page": {
           "type": "string",
           "description": "Page reference relative to the content directory, without extension."
@@ -594,10 +649,16 @@
     "linkItem": {
       "type": "object",
       "description": "An external link in the navigation tree.",
-      "required": ["href"],
-      "anyOf": [{ "required": ["label"] }, { "required": ["anchor"] }],
+      "anyOf": [
+        { "required": ["$ref"] },
+        {
+          "required": ["href"],
+          "anyOf": [{ "required": ["label"] }, { "required": ["anchor"] }]
+        }
+      ],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "href": { "type": "string", "description": "Destination URL." },
         "label": { "type": "string", "description": "Link text." },
         "anchor": { "type": "string", "description": "Alias for label." },
@@ -608,9 +669,10 @@
     },
     "anchor": {
       "type": "object",
-      "required": ["anchor"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["anchor"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "anchor": { "type": "string", "description": "Anchor label." },
         "href": { "type": "string", "description": "Destination URL." },
         "icon": { "type": "string", "description": "Icon name shown beside the label." },
@@ -630,9 +692,10 @@
     },
     "group": {
       "type": "object",
-      "required": ["group", "pages"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["group", "pages"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "group": { "type": "string", "minLength": 1, "description": "Group heading shown in the sidebar." },
         "root": {
           "type": "string",
@@ -656,9 +719,10 @@
     },
     "dropdown": {
       "type": "object",
-      "required": ["dropdown"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["dropdown"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "dropdown": {
           "type": "string",
           "minLength": 1,
@@ -672,9 +736,10 @@
     },
     "tab": {
       "type": "object",
-      "required": ["tab"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["tab"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "tab": { "type": "string", "minLength": 1, "description": "Tab label shown in the top navigation." },
         "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
         "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
@@ -685,9 +750,10 @@
     },
     "version": {
       "type": "object",
-      "required": ["version"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["version"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "version": {
           "type": "string",
           "description": "Version label. Only the default (or first) version is rendered."
@@ -702,9 +768,10 @@
     },
     "language": {
       "type": "object",
-      "required": ["language"],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["language"] }],
       "additionalProperties": false,
       "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
         "language": {
           "type": "string",
           "description": "Language code or label. Only the default (or first) language is rendered."

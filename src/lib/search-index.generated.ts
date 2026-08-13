@@ -64,14 +64,14 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/configuration',
     page: 'Overview',
-    text: 'Use docs.json to configure your site-wide settings. It controls your site\'s name and branding, navigation, appearance, search, SEO, and other features. Only navigation is required. Start with a small configuration and add other sections when you need them: { "$schema": "./docs.schema.json", "navigation": { "groups": [ { "group": "Getting started", "pages": ["index", "installation"] } ] } }',
+    text: 'Use docs.json to configure your site-wide settings. It controls your site\'s name and branding, navigation, appearance, search, SEO, and other features. The resolved configuration only requires navigation. Start with a small configuration and add other sections when you need them: { "$schema": "./docs.schema.json", "navigation": { "groups": [ { "group": "Getting started", "pages": ["index", "installation"] } ] } }',
   },
   {
     url: '/docs/configuration',
     page: 'Overview',
     heading: 'Configuration sections',
     id: 'configuration-sections',
-    text: 'The pages below cover every docs.json setting that changes your Shiso site. Set your site name, description, logo, favicon, and theme. Organize pages into groups, tabs, dropdowns, versions, or languages. Choose colors, fonts, light and dark modes, backgrounds, and breadcrumbs. Add navbar links, a primary action, announcements, social profiles, and footer links. Configure site search, Markdown exports, and actions for AI assistants. Control indexing and metadata, redirect old URLs, customize the 404 page, and show update dates. Change the docs URL prefix or content folder, and set your production site URL. Fix missing pages, navigation problems, and invalid configuration values.',
+    text: 'The pages below cover every docs.json setting that changes your Shiso site. Set your site name, description, logo, favicon, and theme. Organize pages into groups, tabs, dropdowns, versions, or languages. Choose colors, fonts, light and dark modes, backgrounds, and breadcrumbs. Add navbar links, a primary action, announcements, social profiles, and footer links. Configure site search, Markdown exports, and actions for AI assistants. Control indexing and metadata, redirect old URLs, customize the 404 page, and show update dates. Change the docs URL prefix or content folder, and set your production site URL. Organize docs.json across reusable JSON files with $ref. Fix missing pages, navigation problems, and invalid configuration values.',
   },
   {
     url: '/docs/site-details',
@@ -433,6 +433,46 @@ export const SEARCH_INDEX: SearchRecord[] = [
     heading: 'Common mistakes',
     id: 'common-mistakes',
     text: 'The page is named in navigation, but its file does not exist. The file exists, but it is not included in navigation. A nested page name does not match its folder structure. siteUrl includes /docs, another path, or a trailing slash. See Troubleshooting for help with build and navigation errors.',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    text: 'Use $ref to move part or all of docs.json into another JSON file. Shiso resolves references before it validates or builds the site, so the resolved configuration behaves like one docs.json file.',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    heading: 'Reference the whole configuration',
+    id: 'reference-the-whole-configuration',
+    text: 'Keep the schema declaration in docs.json, then reference a configuration file with a relative path: docs.json: { "$schema": "./docs.schema.json", "$ref": "./config/site.json" } config/site.json: { "name": "Acme docs", "navigation": { "pages": ["index", "installation"] } } Reference paths must: Be relative paths to .json files. Stay inside the project root, including after symbolic links are resolved. Be relative to the JSON file containing the $ref, not always to docs.json. URLs, absolute paths, and paths that escape the project are rejected.',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    heading: 'Reference one section',
+    id: 'reference-one-section',
+    text: 'You can use $ref anywhere Shiso accepts a configuration object. This is useful for separating large navigation trees from site-wide settings: docs.json: { "$schema": "./docs.schema.json", "name": "Acme docs", "navigation": { "$ref": "./config/navigation.json" } } config/navigation.json: { "groups": [ { "group": "Getting started", "pages": ["index", "installation"] } ] } References also work for objects inside arrays. For example, a navigation group can live in its own file: config/navigation.json: { "groups": [ { "$ref": "./groups/getting-started.json" }, { "$ref": "./groups/api-reference.json" } ] } Because these references appear in config/navigation.json, both paths are resolved from the config folder.',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    heading: 'Override referenced values',
+    id: 'override-referenced-values',
+    text: 'Properties beside $ref override properties from a referenced object: docs.json: { "$schema": "./docs.schema.json", "$ref": "./config/site.json", "name": "Acme API docs" } If config/site.json sets name to "Acme docs", the resolved name is "Acme API docs". Overrides are shallow. Replacing an object property replaces that entire object rather than merging each of its properties. To override a nested value, put the $ref and override at that nested level: { "navigation": { "$ref": "./config/navigation.json", "anchors": [ { "anchor": "Status", "href": "https://status.example.com" } ] } }',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    heading: 'Reference arrays and other JSON values',
+    id: 'reference-arrays-and-other-json-values',
+    text: 'A referenced file can contain any JSON value, including an array. This can be useful for a long page list: docs.json: { "$schema": "./docs.schema.json", "navigation": { "pages": { "$ref": "./config/pages.json" } } } config/pages.json: ["index", "installation", "quickstart"] When a reference resolves to an array or primitive value, that value replaces the whole object containing $ref; sibling properties are ignored. The schema currently recognizes $ref directly wherever a configuration object is expected. Some editors may flag the array example above even though Shiso resolves and validates it correctly during development and builds.',
+  },
+  {
+    url: '/docs/configuration-references',
+    page: 'Split configuration with $ref',
+    heading: 'Nested references and errors',
+    id: 'nested-references-and-errors',
+    text: 'Referenced files can contain more $ref entries. Shiso resolves the complete tree and watches every referenced file during development, so changes reload without restarting the development server. Shiso stops with an error when a reference: Points to a missing file or invalid JSON. Uses a URL, absolute path, non-JSON extension, or path outside the project. Creates a circular chain, such as a.json referencing b.json while b.json references a.json. Run pnpm check:config to resolve all references and validate the resulting configuration without running a full build.',
   },
   {
     url: '/docs/troubleshooting',

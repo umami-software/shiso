@@ -59,6 +59,64 @@ describe('schema coverage', () => {
   });
 });
 
+describe('$ref schema support', () => {
+  it('accepts a relative JSON reference at the root', () => {
+    expect(validateConfig({ $ref: './config/site.json' }, schema)).toMatchObject({
+      valid: true,
+      errors: [],
+    });
+  });
+
+  it('accepts references for nested configuration objects and array items', () => {
+    const result = validateConfig(
+      {
+        navigation: {
+          groups: [{ $ref: './navigation/getting-started.json' }],
+          pages: [{ $ref: './navigation/index.json' }],
+        },
+        fonts: { $ref: './styles/fonts.json' },
+        navbar: {
+          links: [{ $ref: './links/github.json' }],
+        },
+        redirects: [{ $ref: './redirects/legacy.json' }],
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts inline object siblings beside a reference', () => {
+    const result = validateConfig(
+      {
+        navigation: {
+          $ref: './navigation/base.json',
+          anchors: [{ anchor: 'Status', href: 'https://status.example.com' }],
+        },
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it.each([
+    '',
+    '/absolute/config.json',
+    'https://example.com/config.json',
+    'file:///tmp/config.json',
+    './config.yaml',
+  ])('rejects an invalid reference path: %s', ref => {
+    expect(validateConfig({ $ref: ref }, schema).valid).toBe(false);
+  });
+
+  it('keeps required fields mandatory for ordinary inline objects', () => {
+    expect(validateConfig({ navigation: { groups: [{}] } }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, fonts: {} }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, banner: {} }, schema).valid).toBe(false);
+  });
+});
+
 describe('reserved keys', () => {
   it('accepts them and reports one notice each', () => {
     const result = validateConfig(

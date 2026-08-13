@@ -16,7 +16,6 @@
   "fields": {
     "$ref": {
       "status": "native",
-      "schema": false,
       "detail": "Relative JSON references are resolved before schema validation. Object siblings override referenced object fields."
     },
     "$schema": {

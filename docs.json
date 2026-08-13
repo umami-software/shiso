@@ -58,6 +58,7 @@
               { "page": "search-and-ai", "title": "Search and AI" },
               { "page": "seo", "title": "SEO, redirects, and errors" },
               { "page": "project-settings", "title": "URLs and content location" },
+              { "page": "configuration-references", "title": "Split configuration with $ref" },
               "troubleshooting"
             ]
           },

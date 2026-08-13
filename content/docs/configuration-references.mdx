@@ -1,0 +1,169 @@
+---
+title: Split configuration with $ref
+description: Organize docs.json across reusable JSON files.
+---
+
+Use `$ref` to move part or all of `docs.json` into another JSON file. Shiso
+resolves references before it validates or builds the site, so the resolved
+configuration behaves like one `docs.json` file.
+
+## Reference the whole configuration
+
+Keep the schema declaration in `docs.json`, then reference a configuration
+file with a relative path:
+
+`docs.json`:
+
+```json
+{
+  "$schema": "./docs.schema.json",
+  "$ref": "./config/site.json"
+}
+```
+
+`config/site.json`:
+
+```json
+{
+  "name": "Acme docs",
+  "navigation": {
+    "pages": ["index", "installation"]
+  }
+}
+```
+
+Reference paths must:
+
+- Be relative paths to `.json` files.
+- Stay inside the project root, including after symbolic links are resolved.
+- Be relative to the JSON file containing the `$ref`, not always to
+  `docs.json`.
+
+URLs, absolute paths, and paths that escape the project are rejected.
+
+## Reference one section
+
+You can use `$ref` anywhere Shiso accepts a configuration object. This is
+useful for separating large navigation trees from site-wide settings:
+
+`docs.json`:
+
+```json
+{
+  "$schema": "./docs.schema.json",
+  "name": "Acme docs",
+  "navigation": {
+    "$ref": "./config/navigation.json"
+  }
+}
+```
+
+`config/navigation.json`:
+
+```json
+{
+  "groups": [
+    {
+      "group": "Getting started",
+      "pages": ["index", "installation"]
+    }
+  ]
+}
+```
+
+References also work for objects inside arrays. For example, a navigation
+group can live in its own file:
+
+`config/navigation.json`:
+
+```json
+{
+  "groups": [
+    { "$ref": "./groups/getting-started.json" },
+    { "$ref": "./groups/api-reference.json" }
+  ]
+}
+```
+
+Because these references appear in `config/navigation.json`, both paths are
+resolved from the `config` folder.
+
+## Override referenced values
+
+Properties beside `$ref` override properties from a referenced object:
+
+`docs.json`:
+
+```json
+{
+  "$schema": "./docs.schema.json",
+  "$ref": "./config/site.json",
+  "name": "Acme API docs"
+}
+```
+
+If `config/site.json` sets `name` to `"Acme docs"`, the resolved name is
+`"Acme API docs"`.
+
+Overrides are shallow. Replacing an object property replaces that entire
+object rather than merging each of its properties. To override a nested value,
+put the `$ref` and override at that nested level:
+
+```json
+{
+  "navigation": {
+    "$ref": "./config/navigation.json",
+    "anchors": [
+      { "anchor": "Status", "href": "https://status.example.com" }
+    ]
+  }
+}
+```
+
+## Reference arrays and other JSON values
+
+A referenced file can contain any JSON value, including an array. This can be
+useful for a long page list:
+
+`docs.json`:
+
+```json
+{
+  "$schema": "./docs.schema.json",
+  "navigation": {
+    "pages": { "$ref": "./config/pages.json" }
+  }
+}
+```
+
+`config/pages.json`:
+
+```json
+["index", "installation", "quickstart"]
+```
+
+When a reference resolves to an array or primitive value, that value replaces
+the whole object containing `$ref`; sibling properties are ignored.
+
+<Callout variant="warning" title="Editor validation">
+  The schema currently recognizes `$ref` directly wherever a configuration
+  object is expected. Some editors may flag the array example above even
+  though Shiso resolves and validates it correctly during development and
+  builds.
+</Callout>
+
+## Nested references and errors
+
+Referenced files can contain more `$ref` entries. Shiso resolves the complete
+tree and watches every referenced file during development, so changes reload
+without restarting the development server.
+
+Shiso stops with an error when a reference:
+
+- Points to a missing file or invalid JSON.
+- Uses a URL, absolute path, non-JSON extension, or path outside the project.
+- Creates a circular chain, such as `a.json` referencing `b.json` while
+  `b.json` references `a.json`.
+
+Run `pnpm check:config` to resolve all references and validate the resulting
+configuration without running a full build.
