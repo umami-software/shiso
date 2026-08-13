@@ -58,8 +58,6 @@ export interface AnchorItem {
   icon?: string;
   hidden?: boolean;
   target?: LinkTarget;
-  groups?: GroupItem[];
-  pages?: PageItem[];
 }
 
 export interface VersionItem {
@@ -84,7 +82,6 @@ export interface LanguageItem {
 }
 
 export interface NavigationConfig {
-  global?: unknown;
   tabs?: TabItem[];
   dropdowns?: DropdownItem[];
   anchors?: AnchorItem[];
@@ -92,7 +89,6 @@ export interface NavigationConfig {
   languages?: LanguageItem[];
   groups?: GroupItem[];
   pages?: PageItem[];
-  products?: unknown;
 }
 
 export interface ThemeColors {
@@ -164,16 +160,10 @@ export interface BannerConfig {
   dismissible?: boolean;
 }
 
-/**
- * A redirect for a moved or renamed page. Sources are matched exactly;
- * wildcard patterns (`:slug*`) are recognized but not implemented.
- * `permanent` is accepted for portability — static hosting cannot vary the
- * status code, so every redirect renders as a meta refresh page.
- */
+/** A redirect for a moved or renamed page. Sources are matched exactly. */
 export interface RedirectRule {
   source: string;
   destination: string;
-  permanent?: boolean;
 }
 
 export interface SeoConfig {
@@ -210,9 +200,6 @@ export interface AppearanceConfig {
 export interface StylingConfig {
   /** Page eyebrow style: the section name (default) or the full breadcrumb path. */
   eyebrows?: 'section' | 'breadcrumbs';
-  /** Recognized for compatibility; accepted and ignored. */
-  latex?: unknown;
-  codeblocks?: unknown;
 }
 
 export interface FontSpec {
@@ -269,9 +256,6 @@ export type ContextualOption =
   | 'chatgpt'
   | 'claude'
   | 'perplexity'
-  | 'mcp'
-  | 'cursor'
-  | 'vscode'
   | ContextualOptionObject;
 
 export interface ContextualConfig {
@@ -281,8 +265,6 @@ export interface ContextualConfig {
 export interface BackgroundConfig {
   /** Background image, single or per-mode. */
   image?: string | { light?: string; dark?: string };
-  /** Recognized for compatibility; theme decorations are accepted and ignored. */
-  decoration?: string;
   /** Background color per mode. */
   color?: { light?: string; dark?: string };
 }
@@ -312,17 +294,6 @@ export interface DocsConfig {
   search?: false | SearchConfig;
   interaction?: InteractionConfig;
   contextual?: ContextualConfig;
-
-  /**
-   * Recognized config keys that are not implemented yet. They are
-   * accepted by the schema and ignored at runtime (see `scripts/validate-config.mjs`).
-   * Typed `unknown` deliberately: code must not grow a dependency on them until
-   * the corresponding feature lands and the key is given a real type above.
-   */
-  thumbnails?: unknown;
-  icons?: unknown;
-  api?: unknown;
-  integrations?: unknown;
 }
 
 /* ---------------------------------------------------------------------------

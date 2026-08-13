@@ -123,9 +123,7 @@ export function resolveSiteModel(config: DocsConfig, docs: NormalizedDocsConfig)
       eyebrows: config.styling?.eyebrows === 'breadcrumbs' ? 'breadcrumbs' : 'section',
     },
     search: resolveSearchConfig(config.search),
-    contextualOptions: (config.contextual?.options || []).filter(
-      option => typeof option !== 'string' || !['mcp', 'cursor', 'vscode'].includes(option),
-    ),
+    contextualOptions: config.contextual?.options || [],
     error404: { ...config.errors?.['404'], redirect: config.errors?.['404']?.redirect !== false },
     showTimestamp: config.metadata?.timestamp === true,
     drilldown: config.interaction?.drilldown,

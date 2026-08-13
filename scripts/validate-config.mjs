@@ -1,15 +1,8 @@
 /**
  * Validates docs.json against docs.schema.json.
  *
- * The schema is the source of truth for the config format, and it declares
- * every recognized docs.json key in one of three tiers:
- *
- *   supported  implemented, strictly validated
- *   reserved   recognized, accepted and ignored (loosely validated)
- *   unknown    not in the schema at all, rejected
- *
- * The middle tier preserves compatibility with configs from other docs
- * platforms by accepting recognized features Shiso has not implemented yet.
+ * The schema is the source of truth for the public config format. Documented
+ * settings are strictly validated and every other key is rejected.
  */
 import path from 'node:path';
 import process from 'node:process';
@@ -18,14 +11,9 @@ import { loadDocsConfig, loadDocsSchema } from './load-docs-config.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 
-/** Collects `key -> "supported" | "reserved"` from a schema's properties. */
-export function getKeyTiers(schema) {
-  return Object.fromEntries(
-    Object.entries(schema.properties || {}).map(([key, value]) => [
-      key,
-      value['x-shiso'] === 'reserved' ? 'reserved' : 'supported',
-    ]),
-  );
+/** Returns the top-level keys declared by the public config schema. */
+export function getSchemaKeys(schema) {
+  return Object.keys(schema.properties || {});
 }
 
 function levenshtein(a, b) {
@@ -67,13 +55,8 @@ export function suggestKey(unknownKey, knownKeys) {
 export function validateConfig(config, schema) {
   const ajv = new Ajv({ allErrors: true, allowUnionTypes: true });
 
-  // The tier annotation is metadata for this script, not a validation rule.
-  // Registering it keeps Ajv's strict mode from rejecting the schema.
-  ajv.addKeyword({ keyword: 'x-shiso', schemaType: 'string' });
-
   const validate = ajv.compile(schema);
-  const tiers = getKeyTiers(schema);
-  const knownKeys = Object.keys(tiers);
+  const knownKeys = getSchemaKeys(schema);
 
   if (!validate(config)) {
     const errors = (validate.errors ?? []).map(error => {
@@ -89,14 +72,10 @@ export function validateConfig(config, schema) {
       return `${location} ${error.message}`;
     });
 
-    return { valid: false, errors, notices: [] };
+    return { valid: false, errors };
   }
 
-  const notices = Object.keys(config)
-    .filter(key => tiers[key] === 'reserved')
-    .map(key => `"${key}" is recognized but is not implemented yet — it will be ignored.`);
-
-  return { valid: true, errors: [], notices };
+  return { valid: true, errors: [] };
 }
 
 // CLI entry point. Skipped when imported by tests.
@@ -106,7 +85,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.met
     loadDocsConfig({ root }),
   ]);
 
-  const { valid, errors, notices } = validateConfig(config, schema);
+  const { valid, errors } = validateConfig(config, schema);
 
   if (!valid) {
     console.error('docs.json failed schema validation:\n');
@@ -114,10 +93,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.met
       console.error(`  ${error}`);
     }
     process.exit(1);
-  }
-
-  for (const notice of notices) {
-    console.warn(`  notice: ${notice}`);
   }
 
   console.log('docs.json is valid.');

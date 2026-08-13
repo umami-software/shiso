@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Ajv } from 'ajv';
 import { describe, expect, it } from 'vitest';
-import { getKeyTiers, suggestKey, validateConfig } from '../scripts/validate-config.mjs';
+import { getSchemaKeys, suggestKey, validateConfig } from '../scripts/validate-config.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 
@@ -13,8 +13,8 @@ const realConfig = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8
 const minimal = { navigation: { pages: ['index'] } };
 
 describe('schema coverage', () => {
-  it('classifies every schema key in the Shiso support contract', () => {
-    const declared = Object.keys(getKeyTiers(schema)).sort();
+  it('declares every supported contract field in the schema', () => {
+    const declared = getSchemaKeys(schema).sort();
     const contracted = Object.entries(support.fields)
       .filter(([, field]) => field.status !== 'unsupported' && field.schema !== false)
       .map(([key]) => key)
@@ -24,7 +24,7 @@ describe('schema coverage', () => {
   });
 
   it('keeps unsupported top-level keys out of the schema', () => {
-    const declared = new Set(Object.keys(getKeyTiers(schema)));
+    const declared = new Set(getSchemaKeys(schema));
     const unsupported = Object.entries(support.fields)
       .filter(([, field]) => field.status === 'unsupported')
       .map(([key]) => key);
@@ -42,26 +42,12 @@ describe('schema coverage', () => {
     expect(statuses.filter(status => !categories.has(status))).toEqual([]);
   });
 
-  it('matches reserved schema keys to recognized contract fields', () => {
-    const reserved = Object.entries(getKeyTiers(schema))
-      .filter(([, tier]) => tier === 'reserved')
-      .map(([key]) => key)
-      .sort();
-    const recognized = Object.entries(support.fields)
-      .filter(([, field]) => field.status === 'recognized')
-      .map(([key]) => key)
-      .sort();
-
-    expect(recognized).toEqual(reserved);
-  });
-
   it('validates the real docs.json', () => {
     expect(validateConfig(realConfig, schema)).toMatchObject({ valid: true, errors: [] });
   });
 
   it('allows a value reference at every configuration position', () => {
     const ajv = new Ajv({ allowUnionTypes: true });
-    ajv.addKeyword({ keyword: 'x-shiso', schemaType: 'string' });
     const reference = { $ref: './value.json' };
     const failures = [];
 
@@ -235,20 +221,32 @@ describe('$ref schema support', () => {
   });
 });
 
-describe('reserved keys', () => {
-  it('accepts them and reports one notice each', () => {
-    const result = validateConfig(
-      { ...minimal, thumbnails: {}, integrations: {}, api: {} },
-      schema,
-    );
-
-    expect(result.valid).toBe(true);
-    expect(result.notices).toHaveLength(3);
-    expect(result.notices.join('\n')).toContain('"integrations"');
+describe('undocumented settings', () => {
+  it.each(['thumbnails', 'icons', 'api', 'integrations'])('rejects %s', key => {
+    expect(validateConfig({ ...minimal, [key]: {} }, schema).valid).toBe(false);
   });
 
-  it('reports nothing for a config that uses only supported keys', () => {
-    expect(validateConfig(minimal, schema).notices).toEqual([]);
+  it('rejects unused nested settings', () => {
+    expect(validateConfig({ navigation: { pages: ['index'], global: {} } }, schema).valid).toBe(
+      false,
+    );
+    expect(
+      validateConfig(
+        { ...minimal, navbar: { links: [{ label: 'GitHub', href: '/', iconType: 'brands' }] } },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            pages: ['index'],
+            anchors: [{ anchor: 'Guides', pages: ['guide'] }],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
   });
 });
 
@@ -269,7 +267,6 @@ describe('search, interaction, and contextual', () => {
             'view',
             'chatgpt',
             'claude',
-            'mcp',
             {
               title: 'Ask our bot',
               description: 'Send this page to the support bot',
@@ -281,7 +278,7 @@ describe('search, interaction, and contextual', () => {
       schema,
     );
 
-    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+    expect(result).toMatchObject({ valid: true, errors: [] });
   });
 
   it('accepts false to disable search', () => {
@@ -298,6 +295,12 @@ describe('search, interaction, and contextual', () => {
 
   it('rejects an unknown contextual option', () => {
     expect(validateConfig({ ...minimal, contextual: { options: ['bogus'] } }, schema).valid).toBe(
+      false,
+    );
+  });
+
+  it.each(['mcp', 'cursor', 'vscode'])('rejects the hosted contextual option %s', option => {
+    expect(validateConfig({ ...minimal, contextual: { options: [option] } }, schema).valid).toBe(
       false,
     );
   });
@@ -387,7 +390,7 @@ describe('supported keys stay strictly validated', () => {
       schema,
     );
 
-    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+    expect(result).toMatchObject({ valid: true, errors: [] });
   });
 
   it('rejects a navbar link without href', () => {
@@ -458,7 +461,7 @@ describe('supported keys stay strictly validated', () => {
     const result = validateConfig(
       {
         ...minimal,
-        redirects: [{ source: '/old', destination: '/new', permanent: false }],
+        redirects: [{ source: '/old', destination: '/new' }],
         seo: { metatags: { 'og:image': '/social.png' }, indexing: 'all' },
         errors: { 404: { redirect: false, title: 'Lost?', description: 'Try the **search**.' } },
         metadata: { timestamp: true },
@@ -466,13 +469,28 @@ describe('supported keys stay strictly validated', () => {
       schema,
     );
 
-    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+    expect(result).toMatchObject({ valid: true, errors: [] });
   });
 
   it('rejects a redirect without a destination', () => {
     expect(validateConfig({ ...minimal, redirects: [{ source: '/old' }] }, schema).valid).toBe(
       false,
     );
+  });
+
+  it('rejects wildcard and status-code redirect settings', () => {
+    expect(
+      validateConfig(
+        { ...minimal, redirects: [{ source: '/old/:slug*', destination: '/new' }] },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        { ...minimal, redirects: [{ source: '/old', destination: '/new', permanent: false }] },
+        schema,
+      ).valid,
+    ).toBe(false);
   });
 
   it('rejects an invalid seo.indexing value', () => {
@@ -494,13 +512,22 @@ describe('supported keys stay strictly validated', () => {
         background: {
           color: { light: '#ffffff', dark: '#0f172a' },
           image: { light: '/bg.png', dark: '/bg-dark.png' },
-          decoration: 'gradient',
         },
       },
       schema,
     );
 
-    expect(result).toMatchObject({ valid: true, errors: [], notices: [] });
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects unused styling and background settings', () => {
+    expect(validateConfig({ ...minimal, styling: { latex: true } }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, styling: { codeblocks: 'dark' } }, schema).valid).toBe(
+      false,
+    );
+    expect(
+      validateConfig({ ...minimal, background: { decoration: 'gradient' } }, schema).valid,
+    ).toBe(false);
   });
 
   it('rejects fonts without a family', () => {

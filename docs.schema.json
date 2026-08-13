@@ -2,22 +2,19 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "docs.schema.json",
   "title": "Shiso docs.json",
-  "description": "Configuration for a Shiso docs site. Recognized keys are annotated with \"x-shiso\": \"supported\" (implemented and strictly validated) or \"x-shiso\": \"reserved\" (recognized, accepted and ignored, and loosely validated). Keys absent from this file are rejected. See scripts/validate-config.mjs.",
+  "description": "Configuration for a Shiso docs site. Documented settings are strictly validated and unknown keys are rejected.",
   "type": "object",
   "anyOf": [{ "required": ["$ref"] }, { "required": ["navigation"] }],
   "additionalProperties": false,
   "properties": {
     "$ref": {
-      "x-shiso": "supported",
       "allOf": [{ "$ref": "#/definitions/configRef" }]
     },
     "$schema": {
-      "x-shiso": "supported",
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path or URL to this schema, for editor autocomplete."
     },
     "$shiso": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Shiso-only options. Namespaced so the rest of the file stays portable.",
       "additionalProperties": false,
@@ -44,17 +41,14 @@
       }
     },
     "name": {
-      "x-shiso": "supported",
       "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
       "description": "Site name, shown in the header and the page title."
     },
     "description": {
-      "x-shiso": "supported",
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Default meta description for pages without one."
     },
     "colors": {
-      "x-shiso": "supported",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -74,7 +68,6 @@
       }
     },
     "logo": {
-      "x-shiso": "supported",
       "oneOf": [
         {
           "type": "string",
@@ -105,12 +98,10 @@
       ]
     },
     "favicon": {
-      "x-shiso": "supported",
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path to the favicon, relative to the public directory."
     },
     "navigation": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
       "additionalProperties": false,
@@ -122,22 +113,11 @@
         "versions": { "$ref": "#/definitions/versionList" },
         "languages": { "$ref": "#/definitions/languageList" },
         "groups": { "$ref": "#/definitions/groupList" },
-        "pages": { "$ref": "#/definitions/pageItemList" },
-        "global": {
-          "x-shiso": "reserved",
-          "type": "object",
-          "description": "Navigation items shown across every tab and version."
-        },
-        "products": {
-          "x-shiso": "reserved",
-          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
-          "description": "Product switcher entries."
-        }
+        "pages": { "$ref": "#/definitions/pageItemList" }
       }
     },
 
     "theme": {
-      "x-shiso": "supported",
       "anyOf": [
         { "type": "string", "enum": ["shiso"] },
         { "$ref": "#/definitions/configRefValue" }
@@ -145,9 +125,7 @@
       "default": "shiso",
       "description": "Layout theme name. Only \"shiso\" is implemented."
     },
-    "thumbnails": { "x-shiso": "reserved", "type": "object" },
     "styling": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Visual styling configuration.",
       "additionalProperties": false,
@@ -160,21 +138,10 @@
           ],
           "description": "Page eyebrow style: the section name (default) or the full navigation path.",
           "default": "section"
-        },
-        "latex": {
-          "x-shiso": "reserved",
-          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
-          "description": "LaTeX stylesheet loading is not implemented yet; accepted and ignored."
-        },
-        "codeblocks": {
-          "x-shiso": "reserved",
-          "description": "Code block themes are not implemented yet; accepted and ignored."
         }
       }
     },
-    "icons": { "x-shiso": "reserved", "type": "object" },
     "fonts": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Custom fonts. Google Fonts families load automatically; use source/format for self-hosted files.",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["family"] }],
@@ -196,7 +163,6 @@
       }
     },
     "appearance": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Light/dark mode defaults.",
       "additionalProperties": false,
@@ -218,7 +184,6 @@
       }
     },
     "background": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Background color and image settings.",
       "additionalProperties": false,
@@ -244,14 +209,6 @@
             }
           ]
         },
-        "decoration": {
-          "x-shiso": "reserved",
-          "anyOf": [
-            { "enum": ["gradient", "grid", "windows"] },
-            { "$ref": "#/definitions/configRefValue" }
-          ],
-          "description": "Theme decorations are not implemented yet; accepted and ignored."
-        },
         "color": {
           "type": "object",
           "additionalProperties": false,
@@ -264,7 +221,6 @@
       }
     },
     "interaction": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Navigation interaction settings.",
       "additionalProperties": false,
@@ -277,7 +233,6 @@
       }
     },
     "search": {
-      "x-shiso": "supported",
       "description": "Search settings. Set to false to disable search.",
       "oneOf": [
         { "const": false },
@@ -315,9 +270,8 @@
       ]
     },
     "contextual": {
-      "x-shiso": "supported",
       "type": "object",
-      "description": "Contextual menu shown beside the page title. \"mcp\", \"cursor\", and \"vscode\" require a hosted MCP server and are accepted but skipped.",
+      "description": "Contextual menu shown beside the page title.",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["options"] }],
       "additionalProperties": false,
       "properties": {
@@ -334,10 +288,7 @@
                       "view",
                       "chatgpt",
                       "claude",
-                      "perplexity",
-                      "mcp",
-                      "cursor",
-                      "vscode"
+                      "perplexity"
                     ]
                   },
                   {
@@ -369,7 +320,6 @@
       }
     },
     "navbar": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Links and primary button in the top navigation bar.",
       "additionalProperties": false,
@@ -407,11 +357,6 @@
               "target": {
                 "allOf": [{ "$ref": "#/definitions/targetValue" }],
                 "description": "Browsing context. Defaults to _self for local links and _blank for external links."
-              },
-              "iconType": {
-                "x-shiso": "reserved",
-                "allOf": [{ "$ref": "#/definitions/stringValue" }],
-                "description": "Font Awesome icon style. Shiso uses the lucide icon set."
               }
             }
           }
@@ -441,7 +386,6 @@
       }
     },
     "metadata": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Page metadata settings.",
       "additionalProperties": false,
@@ -455,7 +399,6 @@
       }
     },
     "footer": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Footer content: social links and link columns.",
       "additionalProperties": false,
@@ -525,7 +468,6 @@
       }
     },
     "banner": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Site-wide banner displayed above the header.",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["content"] }],
@@ -544,33 +486,25 @@
       }
     },
     "redirects": {
-      "x-shiso": "supported",
       "type": ["array", "object"],
       "if": { "type": "object" },
       "then": { "$ref": "#/definitions/configRefValue" },
-      "description": "Redirects for moved, renamed, or deleted pages. Sources are matched exactly; wildcard patterns are not implemented yet and are skipped with a warning.",
+      "description": "Redirects for moved, renamed, or deleted pages. Sources are matched exactly.",
       "items": {
         "type": "object",
         "anyOf": [{ "required": ["$ref"] }, { "required": ["source", "destination"] }],
         "additionalProperties": false,
         "properties": {
           "$ref": { "$ref": "#/definitions/configRef" },
-          "source": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Path to redirect from, e.g. \"/old-page\"." },
+          "source": { "allOf": [{ "$ref": "#/definitions/redirectSourceValue" }], "description": "Exact path to redirect from, e.g. \"/docs/old-page\"." },
           "destination": {
             "allOf": [{ "$ref": "#/definitions/stringValue" }],
             "description": "Path or URL to redirect to, e.g. \"/new-page\"."
-          },
-          "permanent": {
-            "allOf": [{ "$ref": "#/definitions/booleanValue" }],
-            "description": "Accepted for portability. Static output cannot vary the status code; every redirect is a meta refresh page.",
-            "default": true
           }
         }
       }
     },
-    "api": { "x-shiso": "reserved", "type": "object" },
     "seo": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "SEO indexing configuration.",
       "additionalProperties": false,
@@ -591,9 +525,7 @@
         }
       }
     },
-    "integrations": { "x-shiso": "reserved", "type": "object" },
     "errors": {
-      "x-shiso": "supported",
       "type": "object",
       "description": "Error handling settings.",
       "additionalProperties": false,
@@ -665,9 +597,9 @@
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
-    "arrayValue": {
+    "redirectSourceValue": {
       "anyOf": [
-        { "type": "array" },
+        { "type": "string", "pattern": "^/[^*]*$" },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
@@ -799,17 +731,7 @@
         "href": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Destination URL." },
         "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
         "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the anchor." },
-        "target": { "$ref": "#/definitions/targetValue" },
-        "groups": {
-          "x-shiso": "reserved",
-          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
-          "description": "Anchors that contain pages are not implemented yet."
-        },
-        "pages": {
-          "x-shiso": "reserved",
-          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
-          "description": "Anchors that contain pages are not implemented yet."
-        }
+        "target": { "$ref": "#/definitions/targetValue" }
       }
     },
     "group": {
