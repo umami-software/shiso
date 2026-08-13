@@ -463,9 +463,9 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/configuration-references',
     page: 'Split configuration with $ref',
-    heading: 'Reference arrays and other JSON values',
-    id: 'reference-arrays-and-other-json-values',
-    text: 'A referenced file can contain any JSON value, including an array. This can be useful for a long page list: docs.json: { "$schema": "./docs.schema.json", "navigation": { "pages": { "$ref": "./config/pages.json" } } } config/pages.json: ["index", "installation", "quickstart"] When a reference resolves to an array or primitive value, that value replaces the whole object containing $ref; sibling properties are ignored. The schema currently recognizes $ref directly wherever a configuration object is expected. Some editors may flag the array example above even though Shiso resolves and validates it correctly during development and builds.',
+    heading: 'Reference arrays and primitive values',
+    id: 'reference-arrays-and-primitive-values',
+    text: 'A referenced file can contain any JSON value. For example, an array reference is useful for a long page list: docs.json: { "$schema": "./docs.schema.json", "navigation": { "pages": { "$ref": "./config/pages.json" } } } config/pages.json: ["index", "installation", "quickstart"] Primitive values work the same way: docs.json: { "$schema": "./docs.schema.json", "name": { "$ref": "./config/name.json" }, "navigation": { "$ref": "./config/navigation.json" } } config/name.json: "Acme docs" When a reference resolves to an array or primitive value, that value replaces the whole object containing $ref. Sibling properties are ignored because there is no object to override.',
   },
   {
     url: '/docs/configuration-references',

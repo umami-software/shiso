@@ -9,11 +9,11 @@
   "properties": {
     "$ref": {
       "x-shiso": "supported",
-      "$ref": "#/definitions/configRef"
+      "allOf": [{ "$ref": "#/definitions/configRef" }]
     },
     "$schema": {
       "x-shiso": "supported",
-      "type": "string",
+      "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path or URL to this schema, for editor autocomplete."
     },
     "$shiso": {
@@ -24,35 +24,33 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "docsPrefix": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Route prefix for docs pages. Defaults to \"/docs\"; use \"\" to serve docs at the site root.",
           "default": "/docs"
         },
         "contentDir": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Content directory relative to the project root.",
           "default": "content/docs"
         },
         "siteUrl": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Absolute site origin (e.g. \"https://docs.example.com\"). Required for canonical, og:url, and structured data."
         },
         "locale": {
-          "type": "string",
-          "minLength": 1,
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
           "description": "Locale used for dates and theme-provided interface copy. Defaults to en-US."
         }
       }
     },
     "name": {
       "x-shiso": "supported",
-      "type": "string",
-      "minLength": 1,
+      "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
       "description": "Site name, shown in the header and the page title."
     },
     "description": {
       "x-shiso": "supported",
-      "type": "string",
+      "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Default meta description for pages without one."
     },
     "colors": {
@@ -62,15 +60,15 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "primary": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Primary accent color (any CSS color)."
         },
         "light": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Accent color used in dark mode."
         },
         "dark": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Fallback accent color when primary is omitted."
         }
       }
@@ -92,14 +90,14 @@
           "additionalProperties": false,
           "properties": {
             "$ref": { "$ref": "#/definitions/configRef" },
-            "light": { "type": "string", "description": "Logo shown in light mode." },
-            "dark": { "type": "string", "description": "Logo shown in dark mode." },
+            "light": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Logo shown in light mode." },
+            "dark": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Logo shown in dark mode." },
             "href": {
-              "type": "string",
+              "allOf": [{ "$ref": "#/definitions/stringValue" }],
               "description": "URL the logo links to. Defaults to the docs root."
             },
             "target": {
-              "enum": ["_self", "_blank"],
+              "allOf": [{ "$ref": "#/definitions/targetValue" }],
               "description": "Browsing context for the logo link. Defaults from href."
             }
           }
@@ -108,7 +106,7 @@
     },
     "favicon": {
       "x-shiso": "supported",
-      "type": "string",
+      "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path to the favicon, relative to the public directory."
     },
     "navigation": {
@@ -118,13 +116,13 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
-        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
-        "anchors": { "type": "array", "items": { "$ref": "#/definitions/anchor" } },
-        "versions": { "type": "array", "items": { "$ref": "#/definitions/version" } },
-        "languages": { "type": "array", "items": { "$ref": "#/definitions/language" } },
-        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        "tabs": { "$ref": "#/definitions/tabList" },
+        "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "anchors": { "$ref": "#/definitions/anchorList" },
+        "versions": { "$ref": "#/definitions/versionList" },
+        "languages": { "$ref": "#/definitions/languageList" },
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" },
         "global": {
           "x-shiso": "reserved",
           "type": "object",
@@ -132,7 +130,7 @@
         },
         "products": {
           "x-shiso": "reserved",
-          "type": "array",
+          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
           "description": "Product switcher entries."
         }
       }
@@ -140,8 +138,10 @@
 
     "theme": {
       "x-shiso": "supported",
-      "type": "string",
-      "enum": ["shiso"],
+      "anyOf": [
+        { "type": "string", "enum": ["shiso"] },
+        { "$ref": "#/definitions/configRefValue" }
+      ],
       "default": "shiso",
       "description": "Layout theme name. Only \"shiso\" is implemented."
     },
@@ -154,13 +154,16 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "eyebrows": {
-          "enum": ["section", "breadcrumbs"],
+          "anyOf": [
+            { "enum": ["section", "breadcrumbs"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
           "description": "Page eyebrow style: the section name (default) or the full navigation path.",
           "default": "section"
         },
         "latex": {
           "x-shiso": "reserved",
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "LaTeX stylesheet loading is not implemented yet; accepted and ignored."
         },
         "codeblocks": {
@@ -178,12 +181,18 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
-        "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
-        "source": { "type": "string", "description": "URL or path to a hosted font file." },
-        "format": { "enum": ["woff", "woff2"], "description": "Font file format, for `source`." },
-        "heading": { "$ref": "#/definitions/fontSpec", "description": "Override for headings." },
-        "body": { "$ref": "#/definitions/fontSpec", "description": "Override for body text." }
+        "family": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Font family name, e.g. \"Open Sans\"." },
+        "weight": { "allOf": [{ "$ref": "#/definitions/numberValue" }], "description": "Font weight, e.g. 400 or 700." },
+        "source": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "URL or path to a hosted font file." },
+        "format": {
+          "anyOf": [
+            { "enum": ["woff", "woff2"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "Font file format, for `source`."
+        },
+        "heading": { "allOf": [{ "$ref": "#/definitions/fontSpec" }], "description": "Override for headings." },
+        "body": { "allOf": [{ "$ref": "#/definitions/fontSpec" }], "description": "Override for body text." }
       }
     },
     "appearance": {
@@ -194,12 +203,15 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "default": {
-          "enum": ["system", "light", "dark"],
+          "anyOf": [
+            { "enum": ["system", "light", "dark"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
           "description": "Initial theme mode. \"system\" follows the OS preference.",
           "default": "system"
         },
         "strict": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Hide the light/dark toggle and ignore stored preferences.",
           "default": false
         }
@@ -226,15 +238,18 @@
               "additionalProperties": false,
               "properties": {
                 "$ref": { "$ref": "#/definitions/configRef" },
-                "light": { "type": "string" },
-                "dark": { "type": "string" }
+                "light": { "$ref": "#/definitions/stringValue" },
+                "dark": { "$ref": "#/definitions/stringValue" }
               }
             }
           ]
         },
         "decoration": {
           "x-shiso": "reserved",
-          "enum": ["gradient", "grid", "windows"],
+          "anyOf": [
+            { "enum": ["gradient", "grid", "windows"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
           "description": "Theme decorations are not implemented yet; accepted and ignored."
         },
         "color": {
@@ -242,8 +257,8 @@
           "additionalProperties": false,
           "properties": {
             "$ref": { "$ref": "#/definitions/configRef" },
-            "light": { "type": "string", "description": "Background color for light mode." },
-            "dark": { "type": "string", "description": "Background color for dark mode." }
+            "light": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Background color for light mode." },
+            "dark": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Background color for dark mode." }
           }
         }
       }
@@ -256,7 +271,7 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "drilldown": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Collapsible-group click behavior: true navigates to the group's first page on expand, false only expands/collapses. Unset uses the default (headers with a root page navigate, others toggle)."
         }
       }
@@ -272,12 +287,11 @@
           "properties": {
             "$ref": { "$ref": "#/definitions/configRef" },
             "prompt": {
-              "type": "string",
+              "allOf": [{ "$ref": "#/definitions/stringValue" }],
               "description": "Placeholder text for the search input."
             },
             "provider": {
-              "type": "string",
-              "minLength": 1,
+              "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
               "description": "Registered search provider id. Defaults to local."
             },
             "options": {
@@ -288,12 +302,12 @@
               "description": "Single Cmd/Ctrl shortcut key, or false to disable it.",
               "oneOf": [
                 { "type": "string", "minLength": 1, "maxLength": 1 },
-                { "const": false }
+                { "const": false },
+                { "$ref": "#/definitions/configRefValue" }
               ]
             },
             "shortcutLabel": {
-              "type": "string",
-              "minLength": 1,
+              "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
               "description": "Text displayed for the configured search shortcut."
             }
           }
@@ -309,43 +323,48 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "options": {
-          "type": "array",
-          "description": "Menu entries, in order; the first is the primary button.",
-          "items": {
-            "oneOf": [
-              {
-                "enum": [
-                  "copy",
-                  "view",
-                  "chatgpt",
-                  "claude",
-                  "perplexity",
-                  "mcp",
-                  "cursor",
-                  "vscode"
-                ]
-              },
-              {
-                "type": "object",
-                "anyOf": [{ "required": ["$ref"] }, { "required": ["title", "href"] }],
-                "additionalProperties": false,
-                "properties": {
-                  "$ref": { "$ref": "#/definitions/configRef" },
-                  "title": { "type": "string", "description": "Menu entry title." },
-                  "description": { "type": "string", "description": "Menu entry description." },
-                  "icon": { "type": "string", "description": "Icon name rendered with the action." },
-                  "target": {
-                    "enum": ["_self", "_blank"],
-                    "description": "Browsing context for the action. Defaults from the destination URL."
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "enum": [
+                      "copy",
+                      "view",
+                      "chatgpt",
+                      "claude",
+                      "perplexity",
+                      "mcp",
+                      "cursor",
+                      "vscode"
+                    ]
                   },
-                  "href": {
-                    "type": "string",
-                    "description": "Destination URL. \"$path\" expands to the page path, \"$page\" to the page's markdown URL."
+                  {
+                    "type": "object",
+                    "anyOf": [{ "required": ["$ref"] }, { "required": ["title", "href"] }],
+                    "additionalProperties": false,
+                    "properties": {
+                      "$ref": { "$ref": "#/definitions/configRef" },
+                      "title": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Menu entry title." },
+                      "description": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Menu entry description." },
+                      "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name rendered with the action." },
+                      "target": {
+                        "allOf": [{ "$ref": "#/definitions/targetValue" }],
+                        "description": "Browsing context for the action. Defaults from the destination URL."
+                      },
+                      "href": {
+                        "allOf": [{ "$ref": "#/definitions/stringValue" }],
+                        "description": "Destination URL. \"$path\" expands to the page path, \"$page\" to the page's markdown URL."
+                      }
+                    }
                   }
-                }
+                ]
               }
-            ]
-          }
+            },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "Menu entries, in order; the first is the primary button."
         }
       }
     },
@@ -357,7 +376,9 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "links": {
-          "type": "array",
+          "type": ["array", "object"],
+          "if": { "type": "object" },
+          "then": { "$ref": "#/definitions/configRefValue" },
           "items": {
             "type": "object",
             "anyOf": [
@@ -371,28 +392,25 @@
             "properties": {
               "$ref": { "$ref": "#/definitions/configRef" },
               "label": {
-                "type": "string",
-                "minLength": 1,
+                "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
                 "description": "Visible link text. Omit for an icon-only link."
               },
-              "href": { "type": "string", "minLength": 1, "description": "Destination URL." },
+              "href": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Destination URL." },
               "ariaLabel": {
-                "type": "string",
-                "minLength": 1,
+                "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
                 "description": "Accessible text for an icon-only link."
               },
               "icon": {
-                "type": "string",
-                "minLength": 1,
+                "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
                 "description": "Icon name. Rendered alone when label is omitted."
               },
               "target": {
-                "enum": ["_self", "_blank"],
+                "allOf": [{ "$ref": "#/definitions/targetValue" }],
                 "description": "Browsing context. Defaults to _self for local links and _blank for external links."
               },
               "iconType": {
                 "x-shiso": "reserved",
-                "type": "string",
+                "allOf": [{ "$ref": "#/definitions/stringValue" }],
                 "description": "Font Awesome icon style. Shiso uses the lucide icon set."
               }
             }
@@ -410,12 +428,12 @@
           "additionalProperties": false,
           "properties": {
             "$ref": { "$ref": "#/definitions/configRef" },
-            "label": { "type": "string", "minLength": 1, "description": "Visible button text. Omit for icon-only." },
-            "href": { "type": "string", "minLength": 1, "description": "Button destination URL." },
-            "icon": { "type": "string", "minLength": 1, "description": "Icon name." },
-            "ariaLabel": { "type": "string", "minLength": 1, "description": "Accessible text for icon-only buttons." },
+            "label": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Visible button text. Omit for icon-only." },
+            "href": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Button destination URL." },
+            "icon": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Icon name." },
+            "ariaLabel": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Accessible text for icon-only buttons." },
             "target": {
-              "enum": ["_self", "_blank"],
+              "allOf": [{ "$ref": "#/definitions/targetValue" }],
               "description": "Browsing context. Defaults from the destination URL."
             }
           }
@@ -430,7 +448,7 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "timestamp": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Show the last-modified date (from git history) on all pages. Override per page with the `timestamp` frontmatter field.",
           "default": false
         }
@@ -444,7 +462,9 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "socials": {
-          "type": "array",
+          "type": ["array", "object"],
+          "if": { "type": "object" },
+          "then": { "$ref": "#/definitions/configRefValue" },
           "description": "Social links displayed in the footer.",
           "items": {
             "type": "object",
@@ -458,16 +478,18 @@
             "additionalProperties": false,
             "properties": {
               "$ref": { "$ref": "#/definitions/configRef" },
-              "href": { "type": "string" },
-              "label": { "type": "string", "description": "Visible link text." },
-              "icon": { "type": "string" },
-              "ariaLabel": { "type": "string" },
-              "target": { "enum": ["_self", "_blank"] }
+              "href": { "$ref": "#/definitions/stringValue" },
+              "label": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Visible link text." },
+              "icon": { "$ref": "#/definitions/stringValue" },
+              "ariaLabel": { "$ref": "#/definitions/stringValue" },
+              "target": { "$ref": "#/definitions/targetValue" }
             }
           }
         },
         "links": {
-          "type": "array",
+          "type": ["array", "object"],
+          "if": { "type": "object" },
+          "then": { "$ref": "#/definitions/configRefValue" },
           "description": "Link columns displayed above the footer bottom row.",
           "items": {
             "type": "object",
@@ -475,18 +497,20 @@
             "additionalProperties": false,
             "properties": {
               "$ref": { "$ref": "#/definitions/configRef" },
-              "header": { "type": "string", "description": "Column heading." },
+              "header": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Column heading." },
               "items": {
-                "type": "array",
+                "type": ["array", "object"],
+                "if": { "type": "object" },
+                "then": { "$ref": "#/definitions/configRefValue" },
                 "items": {
                   "type": "object",
                   "anyOf": [{ "required": ["$ref"] }, { "required": ["label", "href"] }],
                   "additionalProperties": false,
                   "properties": {
                     "$ref": { "$ref": "#/definitions/configRef" },
-                    "label": { "type": "string", "description": "Link text." },
-                    "href": { "type": "string", "description": "Link destination URL." },
-                    "target": { "enum": ["_self", "_blank"] }
+                    "label": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Link text." },
+                    "href": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Link destination URL." },
+                    "target": { "$ref": "#/definitions/targetValue" }
                   }
                 }
               }
@@ -494,7 +518,7 @@
           }
         },
         "attribution": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Show the Shiso attribution in the footer. Defaults to true.",
           "default": true
         }
@@ -509,11 +533,11 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "content": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Banner text. Supports basic markdown: links, bold, italic, and inline code."
         },
         "dismissible": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Show a dismiss button. Dismissal persists until the content changes.",
           "default": false
         }
@@ -521,7 +545,9 @@
     },
     "redirects": {
       "x-shiso": "supported",
-      "type": "array",
+      "type": ["array", "object"],
+      "if": { "type": "object" },
+      "then": { "$ref": "#/definitions/configRefValue" },
       "description": "Redirects for moved, renamed, or deleted pages. Sources are matched exactly; wildcard patterns are not implemented yet and are skipped with a warning.",
       "items": {
         "type": "object",
@@ -529,13 +555,13 @@
         "additionalProperties": false,
         "properties": {
           "$ref": { "$ref": "#/definitions/configRef" },
-          "source": { "type": "string", "description": "Path to redirect from, e.g. \"/old-page\"." },
+          "source": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Path to redirect from, e.g. \"/old-page\"." },
           "destination": {
-            "type": "string",
+            "allOf": [{ "$ref": "#/definitions/stringValue" }],
             "description": "Path or URL to redirect to, e.g. \"/new-page\"."
           },
           "permanent": {
-            "type": "boolean",
+            "allOf": [{ "$ref": "#/definitions/booleanValue" }],
             "description": "Accepted for portability. Static output cannot vary the status code; every redirect is a meta refresh page.",
             "default": true
           }
@@ -553,10 +579,13 @@
         "metatags": {
           "type": "object",
           "description": "Meta tags added to every page, e.g. { \"og:image\": \"/social.png\" }.",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": { "$ref": "#/definitions/stringValue" }
         },
         "indexing": {
-          "enum": ["navigable", "all"],
+          "anyOf": [
+            { "enum": ["navigable", "all"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
           "description": "\"navigable\" (default) marks hidden pages noindex and keeps them out of the sitemap; \"all\" indexes every page.",
           "default": "navigable"
         }
@@ -577,13 +606,13 @@
           "properties": {
             "$ref": { "$ref": "#/definitions/configRef" },
             "redirect": {
-              "type": "boolean",
+              "allOf": [{ "$ref": "#/definitions/booleanValue" }],
               "description": "Navigate to the docs home when a page is not found. Defaults to true.",
               "default": true
             },
-            "title": { "type": "string", "description": "Custom title for the 404 page." },
+            "title": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Custom title for the 404 page." },
             "description": {
-              "type": "string",
+              "allOf": [{ "$ref": "#/definitions/stringValue" }],
               "description": "Custom description. Supports basic markdown: links, bold, italic, and inline code."
             }
           }
@@ -597,16 +626,109 @@
       "pattern": "^(?![A-Za-z][A-Za-z0-9+.-]*:)(?![/\\\\]).+\\.json$",
       "description": "Relative path to another JSON configuration file. Resolved relative to the file containing this reference."
     },
+    "configRefValue": {
+      "type": "object",
+      "description": "Reference to a JSON file used in place of this configuration value.",
+      "required": ["$ref"],
+      "additionalProperties": true,
+      "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" }
+      }
+    },
+    "stringValue": {
+      "anyOf": [
+        { "type": "string" },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "nonEmptyStringValue": {
+      "anyOf": [
+        { "type": "string", "minLength": 1 },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "booleanValue": {
+      "anyOf": [
+        { "type": "boolean" },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "numberValue": {
+      "anyOf": [
+        { "type": "number" },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "targetValue": {
+      "anyOf": [
+        { "enum": ["_self", "_blank"] },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "arrayValue": {
+      "anyOf": [
+        { "type": "array" },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "pageItemList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "groupList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "dropdownList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "tabList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/tab" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "anchorList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/anchor" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "versionList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/version" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "languageList": {
+      "anyOf": [
+        { "type": "array", "items": { "$ref": "#/definitions/language" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
     "fontSpec": {
       "type": "object",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["family"] }],
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "family": { "type": "string", "description": "Font family name, e.g. \"Open Sans\"." },
-        "weight": { "type": "number", "description": "Font weight, e.g. 400 or 700." },
-        "source": { "type": "string", "description": "URL or path to a hosted font file." },
-        "format": { "enum": ["woff", "woff2"], "description": "Font file format, for `source`." }
+        "family": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Font family name, e.g. \"Open Sans\"." },
+        "weight": { "allOf": [{ "$ref": "#/definitions/numberValue" }], "description": "Font weight, e.g. 400 or 700." },
+        "source": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "URL or path to a hosted font file." },
+        "format": {
+          "anyOf": [
+            { "enum": ["woff", "woff2"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "Font file format, for `source`."
+        }
       }
     },
     "pageItem": {
@@ -627,21 +749,21 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "page": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Page reference relative to the content directory, without extension."
         },
         "title": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Custom sidebar label. Overrides the label derived from the file name."
         },
         "label": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Custom sidebar label. Takes precedence over title."
         },
-        "icon": { "type": "string", "description": "Icon name shown beside the label." },
-        "tag": { "type": "string", "description": "Short label shown after the page name." },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
+        "tag": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Short label shown after the page name." },
         "hidden": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Hide from the sidebar and search. The page is still built and reachable by URL."
         }
       }
@@ -659,12 +781,12 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "href": { "type": "string", "description": "Destination URL." },
-        "label": { "type": "string", "description": "Link text." },
-        "anchor": { "type": "string", "description": "Alias for label." },
-        "icon": { "type": "string", "description": "Icon name shown beside the label." },
-        "hidden": { "type": "boolean", "description": "Hide from the sidebar." },
-        "target": { "enum": ["_self", "_blank"] }
+        "href": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Destination URL." },
+        "label": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Link text." },
+        "anchor": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Alias for label." },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide from the sidebar." },
+        "target": { "$ref": "#/definitions/targetValue" }
       }
     },
     "anchor": {
@@ -673,19 +795,19 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "anchor": { "type": "string", "description": "Anchor label." },
-        "href": { "type": "string", "description": "Destination URL." },
-        "icon": { "type": "string", "description": "Icon name shown beside the label." },
-        "hidden": { "type": "boolean", "description": "Hide the anchor." },
-        "target": { "enum": ["_self", "_blank"] },
+        "anchor": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Anchor label." },
+        "href": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Destination URL." },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the anchor." },
+        "target": { "$ref": "#/definitions/targetValue" },
         "groups": {
           "x-shiso": "reserved",
-          "type": "array",
+          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
           "description": "Anchors that contain pages are not implemented yet."
         },
         "pages": {
           "x-shiso": "reserved",
-          "type": "array",
+          "allOf": [{ "$ref": "#/definitions/arrayValue" }],
           "description": "Anchors that contain pages are not implemented yet."
         }
       }
@@ -696,23 +818,23 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "group": { "type": "string", "minLength": 1, "description": "Group heading shown in the sidebar." },
+        "group": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Group heading shown in the sidebar." },
         "root": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Optional landing page for the group. When set, the group title links to this page (chevron still expands/collapses)."
         },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
-        "icon": { "type": "string", "description": "Icon name shown beside the heading." },
+        "pages": { "$ref": "#/definitions/pageItemList" },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the heading." },
         "expanded": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "When true, nested groups start expanded. Top-level groups start expanded by default. Groups that contain the current page always expand."
         },
         "collapsible": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "When false, the group stays expanded and its heading does not show a collapse control."
         },
         "hidden": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Hide the group and its pages from the sidebar."
         }
       }
@@ -724,14 +846,13 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "dropdown": {
-          "type": "string",
-          "minLength": 1,
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
           "description": "Dropdown label rendered by the selected theme."
         },
-        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
-        "icon": { "type": "string", "description": "Icon name shown beside the label." },
-        "hidden": { "type": "boolean", "description": "Hide the dropdown." }
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the dropdown." }
       }
     },
     "tab": {
@@ -740,12 +861,12 @@
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
-        "tab": { "type": "string", "minLength": 1, "description": "Tab label shown in the top navigation." },
-        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
-        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
-        "icon": { "type": "string", "description": "Icon name shown beside the tab label." },
-        "hidden": { "type": "boolean", "description": "Hide the tab from the top navigation." }
+        "tab": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Tab label shown in the top navigation." },
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" },
+        "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the tab label." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the tab from the top navigation." }
       }
     },
     "version": {
@@ -755,15 +876,15 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "version": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Version label. Only the default (or first) version is rendered."
         },
-        "default": { "type": "boolean", "description": "Marks this version as the one to render." },
-        "hidden": { "type": "boolean", "description": "Hide this version." },
-        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
-        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
-        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } }
+        "default": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Marks this version as the one to render." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this version." },
+        "tabs": { "$ref": "#/definitions/tabList" },
+        "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" }
       }
     },
     "language": {
@@ -773,19 +894,19 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "language": {
-          "type": "string",
+          "allOf": [{ "$ref": "#/definitions/stringValue" }],
           "description": "Language code or label. Only the default (or first) language is rendered."
         },
         "default": {
-          "type": "boolean",
+          "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Marks this language as the one to render."
         },
-        "hidden": { "type": "boolean", "description": "Hide this language." },
-        "versions": { "type": "array", "items": { "$ref": "#/definitions/version" } },
-        "tabs": { "type": "array", "items": { "$ref": "#/definitions/tab" } },
-        "dropdowns": { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
-        "groups": { "type": "array", "items": { "$ref": "#/definitions/group" } },
-        "pages": { "type": "array", "items": { "$ref": "#/definitions/pageItem" } }
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this language." },
+        "versions": { "$ref": "#/definitions/versionList" },
+        "tabs": { "$ref": "#/definitions/tabList" },
+        "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" }
       }
     }
   }

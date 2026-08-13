@@ -120,10 +120,10 @@ put the `$ref` and override at that nested level:
 }
 ```
 
-## Reference arrays and other JSON values
+## Reference arrays and primitive values
 
-A referenced file can contain any JSON value, including an array. This can be
-useful for a long page list:
+A referenced file can contain any JSON value. For example, an array reference
+is useful for a long page list:
 
 `docs.json`:
 
@@ -142,15 +142,29 @@ useful for a long page list:
 ["index", "installation", "quickstart"]
 ```
 
-When a reference resolves to an array or primitive value, that value replaces
-the whole object containing `$ref`; sibling properties are ignored.
+Primitive values work the same way:
 
-<Callout variant="warning" title="Editor validation">
-  The schema currently recognizes `$ref` directly wherever a configuration
-  object is expected. Some editors may flag the array example above even
-  though Shiso resolves and validates it correctly during development and
-  builds.
-</Callout>
+`docs.json`:
+
+```json
+{
+  "$schema": "./docs.schema.json",
+  "name": { "$ref": "./config/name.json" },
+  "navigation": {
+    "$ref": "./config/navigation.json"
+  }
+}
+```
+
+`config/name.json`:
+
+```json
+"Acme docs"
+```
+
+When a reference resolves to an array or primitive value, that value replaces
+the whole object containing `$ref`. Sibling properties are ignored because
+there is no object to override.
 
 ## Nested references and errors
 

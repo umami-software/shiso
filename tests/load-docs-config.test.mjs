@@ -125,21 +125,24 @@ describe('loadDocsConfig', () => {
     });
   });
 
-  it('allows references to arrays and ignores siblings on non-object targets', async () => {
+  it('allows references to arrays and primitives and ignores siblings on non-object targets', async () => {
     const root = await temporaryProject();
     await fs.mkdir(path.join(root, 'config'));
     await fs.writeFile(
       path.join(root, 'docs.json'),
       JSON.stringify({
+        name: { $ref: './config/name.json' },
         navigation: {
           pages: { $ref: './config/pages.json', ignored: true },
         },
       }),
     );
     await fs.writeFile(path.join(root, 'config/pages.json'), JSON.stringify(['index', 'guide']));
+    await fs.writeFile(path.join(root, 'config/name.json'), JSON.stringify('Referenced site'));
 
     const result = await loadDocsConfig({ root });
 
+    expect(result.config.name).toBe('Referenced site');
     expect(result.config.navigation.pages).toEqual(['index', 'guide']);
   });
 

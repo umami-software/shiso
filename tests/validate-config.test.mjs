@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { Ajv } from 'ajv';
 import { describe, expect, it } from 'vitest';
 import { getKeyTiers, suggestKey, validateConfig } from '../scripts/validate-config.mjs';
 
@@ -57,6 +58,61 @@ describe('schema coverage', () => {
   it('validates the real docs.json', () => {
     expect(validateConfig(realConfig, schema)).toMatchObject({ valid: true, errors: [] });
   });
+
+  it('allows a value reference at every configuration position', () => {
+    const ajv = new Ajv({ allowUnionTypes: true });
+    ajv.addKeyword({ keyword: 'x-shiso', schemaType: 'string' });
+    const reference = { $ref: './value.json' };
+    const failures = [];
+
+    const acceptsReference = valueSchema =>
+      ajv.compile({ ...valueSchema, definitions: schema.definitions })(reference);
+
+    const visit = (valueSchema, location) => {
+      if (!valueSchema || typeof valueSchema !== 'object' || Array.isArray(valueSchema)) {
+        return;
+      }
+
+      for (const [key, propertySchema] of Object.entries(valueSchema.properties ?? {})) {
+        if (key !== '$ref' && !acceptsReference(propertySchema)) {
+          failures.push(`${location}.${key}`);
+        }
+        visit(propertySchema, `${location}.${key}`);
+      }
+
+      if (valueSchema.items) {
+        if (!acceptsReference(valueSchema.items)) {
+          failures.push(`${location}[]`);
+        }
+        visit(valueSchema.items, `${location}[]`);
+      }
+
+      if (
+        valueSchema.additionalProperties &&
+        typeof valueSchema.additionalProperties === 'object'
+      ) {
+        if (!acceptsReference(valueSchema.additionalProperties)) {
+          failures.push(`${location}.*`);
+        }
+        visit(valueSchema.additionalProperties, `${location}.*`);
+      }
+
+      for (const keyword of ['oneOf', 'anyOf', 'allOf']) {
+        for (const [index, branch] of (valueSchema[keyword] ?? []).entries()) {
+          visit(branch, `${location}.${keyword}[${index}]`);
+        }
+      }
+    };
+
+    visit(schema, 'root');
+    for (const [name, definition] of Object.entries(schema.definitions)) {
+      if (name !== 'configRef') {
+        visit(definition, `definitions.${name}`);
+      }
+    }
+
+    expect(failures).toEqual([]);
+  });
 });
 
 describe('$ref schema support', () => {
@@ -79,6 +135,51 @@ describe('$ref schema support', () => {
           links: [{ $ref: './links/github.json' }],
         },
         redirects: [{ $ref: './redirects/legacy.json' }],
+      },
+      schema,
+    );
+
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts references wherever arrays and primitive values are expected', () => {
+    const result = validateConfig(
+      {
+        name: { $ref: './values/name.json' },
+        theme: { $ref: './values/theme.json' },
+        navigation: {
+          anchors: { $ref: './navigation/anchors.json' },
+          groups: [
+            {
+              group: { $ref: './values/group-name.json' },
+              pages: { $ref: './navigation/pages.json' },
+              hidden: { $ref: './values/hidden.json' },
+            },
+          ],
+        },
+        appearance: {
+          default: { $ref: './values/appearance.json' },
+          strict: { $ref: './values/strict.json' },
+        },
+        fonts: {
+          family: { $ref: './values/font-family.json' },
+          weight: { $ref: './values/font-weight.json' },
+          format: { $ref: './values/font-format.json' },
+        },
+        search: {
+          shortcut: { $ref: './values/search-shortcut.json' },
+        },
+        contextual: {
+          options: { $ref: './contextual/options.json' },
+        },
+        navbar: {
+          links: { $ref: './navbar/links.json' },
+        },
+        footer: {
+          socials: { $ref: './footer/socials.json' },
+          attribution: { $ref: './values/attribution.json' },
+        },
+        redirects: { $ref: './redirects/all.json' },
       },
       schema,
     );
@@ -114,6 +215,23 @@ describe('$ref schema support', () => {
     expect(validateConfig({ navigation: { groups: [{}] } }, schema).valid).toBe(false);
     expect(validateConfig({ ...minimal, fonts: {} }, schema).valid).toBe(false);
     expect(validateConfig({ ...minimal, banner: {} }, schema).valid).toBe(false);
+  });
+
+  it('keeps inline primitive and array values strictly validated', () => {
+    expect(validateConfig({ ...minimal, theme: 'unknown' }, schema).valid).toBe(false);
+    expect(validateConfig({ navigation: { pages: [42] } }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, appearance: { strict: 'yes' } }, schema).valid).toBe(false);
+  });
+
+  it('rejects malformed value references', () => {
+    expect(validateConfig({ ...minimal, name: { $ref: './name.yaml' } }, schema).valid).toBe(false);
+  });
+
+  it('accepts ignored siblings on references to non-object values', () => {
+    expect(
+      validateConfig({ navigation: { pages: { $ref: './pages.json', ignored: true } } }, schema)
+        .valid,
+    ).toBe(true);
   });
 });
 
