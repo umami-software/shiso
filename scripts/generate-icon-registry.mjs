@@ -109,7 +109,7 @@ function addMatches(names, source, pattern) {
   }
 }
 
-async function findIconNames() {
+async function findIconNames(config) {
   const names = new Set(ALWAYS_INCLUDE);
 
   for (const dir of SCAN_DIRS) {
@@ -121,8 +121,8 @@ async function findIconNames() {
   }
 
   // Navigation and navbar icons live in docs.json, not in content or source.
-  const { config } = await loadDocsConfig({ root: ROOT });
-  addMatches(names, JSON.stringify(config), ICON_JSON_PROPERTY);
+  const docsConfig = config ?? (await loadDocsConfig({ root: ROOT })).config;
+  addMatches(names, JSON.stringify(docsConfig), ICON_JSON_PROPERTY);
 
   return [...names].sort();
 }
@@ -151,8 +151,8 @@ ${mapping}
 `;
 }
 
-export async function generateIconRegistry() {
-  const names = await findIconNames();
+export async function generateIconRegistry({ config } = {}) {
+  const names = await findIconNames(config);
   const entries = [];
   const unknown = [];
 

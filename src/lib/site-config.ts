@@ -1,3 +1,4 @@
+import rawConfig from 'virtual:shiso-docs-config';
 import { resolveDocFile } from '@/lib/content';
 import { assertDocsConfig, normalizeDocsConfig } from '@/lib/docs-config';
 import { stripBase, stripDocsPrefix } from '@/lib/paths';
@@ -9,7 +10,6 @@ import type {
   RedirectRule,
   SeoConfig,
 } from '@/lib/types';
-import rawConfig from '../../docs.json';
 
 assertDocsConfig(rawConfig, 'docs.json');
 

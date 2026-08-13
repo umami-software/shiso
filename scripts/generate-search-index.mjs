@@ -160,8 +160,8 @@ function collectSections(tree) {
     .filter(section => section.heading || section.text);
 }
 
-export async function generateSearchIndex() {
-  const { config: docsJson } = await loadDocsConfig({ root: ROOT });
+export async function generateSearchIndex({ config } = {}) {
+  const docsJson = config ?? (await loadDocsConfig({ root: ROOT })).config;
   const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
   const contentDir = (docsJson.$shiso?.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
 

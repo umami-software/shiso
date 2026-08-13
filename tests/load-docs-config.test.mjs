@@ -12,8 +12,9 @@ const temporaryDirectories = [];
 
 async function temporaryProject() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'shiso-config-test-'));
-  temporaryDirectories.push(root);
-  return root;
+  const canonicalRoot = await fs.realpath(root);
+  temporaryDirectories.push(canonicalRoot);
+  return canonicalRoot;
 }
 
 afterEach(async () => {
@@ -32,6 +33,7 @@ describe('loadDocsConfig', () => {
     expect(result.config).toEqual({ navigation: { pages: ['index'] } });
     expect(result.projectRoot).toBe(root);
     expect(result.sourcePath).toBe(path.join(root, 'docs.json'));
+    expect(result.sourcePaths).toEqual([path.join(root, 'docs.json')]);
   });
 
   it('supports an alternate config filename relative to the project root', async () => {
@@ -69,6 +71,154 @@ describe('loadDocsConfig', () => {
       expect(error).toMatchObject({ code: 'INVALID_JSON', sourcePath });
       expect(error.message).toContain(sourcePath);
       expect(error.message).toMatch(/line \d+, column \d+/);
+    }
+  });
+
+  it('resolves nested references relative to the file that declares them', async () => {
+    const root = await temporaryProject();
+    await fs.mkdir(path.join(root, 'config/navigation'), { recursive: true });
+    await fs.writeFile(
+      path.join(root, 'docs.json'),
+      JSON.stringify({
+        name: 'Site override',
+        navigation: { $ref: './config/navigation/index.json' },
+      }),
+    );
+    await fs.writeFile(
+      path.join(root, 'config/navigation/index.json'),
+      JSON.stringify({ $ref: './pages.json', anchors: [{ anchor: 'Home', href: '/' }] }),
+    );
+    await fs.writeFile(
+      path.join(root, 'config/navigation/pages.json'),
+      JSON.stringify({ pages: ['index'], anchors: [{ anchor: 'Old', href: '/old' }] }),
+    );
+
+    const result = await loadDocsConfig({ root });
+
+    expect(result.config).toEqual({
+      name: 'Site override',
+      navigation: {
+        pages: ['index'],
+        anchors: [{ anchor: 'Home', href: '/' }],
+      },
+    });
+    expect(result.sourcePaths).toEqual([
+      path.join(root, 'docs.json'),
+      path.join(root, 'config/navigation/index.json'),
+      path.join(root, 'config/navigation/pages.json'),
+    ]);
+  });
+
+  it('merges root object siblings over a referenced config', async () => {
+    const root = await temporaryProject();
+    await fs.writeFile(
+      path.join(root, 'docs.json'),
+      JSON.stringify({ $ref: './base.json', name: 'Override' }),
+    );
+    await fs.writeFile(
+      path.join(root, 'base.json'),
+      JSON.stringify({ name: 'Base', navigation: { pages: ['index'] } }),
+    );
+
+    await expect(loadDocsConfig({ root })).resolves.toMatchObject({
+      config: { name: 'Override', navigation: { pages: ['index'] } },
+    });
+  });
+
+  it('allows references to arrays and ignores siblings on non-object targets', async () => {
+    const root = await temporaryProject();
+    await fs.mkdir(path.join(root, 'config'));
+    await fs.writeFile(
+      path.join(root, 'docs.json'),
+      JSON.stringify({
+        navigation: {
+          pages: { $ref: './config/pages.json', ignored: true },
+        },
+      }),
+    );
+    await fs.writeFile(path.join(root, 'config/pages.json'), JSON.stringify(['index', 'guide']));
+
+    const result = await loadDocsConfig({ root });
+
+    expect(result.config.navigation.pages).toEqual(['index', 'guide']);
+  });
+
+  it.each([
+    [{ navigation: { $ref: '' } }, 'INVALID_REF'],
+    [{ navigation: { $ref: 42 } }, 'INVALID_REF'],
+    [{ navigation: { $ref: 'navigation.yaml' } }, 'INVALID_REF'],
+    [{ navigation: { $ref: 'https://example.com/navigation.json' } }, 'INVALID_REF'],
+  ])('rejects an invalid reference value in %j', async (config, code) => {
+    const root = await temporaryProject();
+    await fs.writeFile(path.join(root, 'docs.json'), JSON.stringify(config));
+
+    await expect(loadDocsConfig({ root })).rejects.toMatchObject({
+      name: 'DocsConfigLoadError',
+      code,
+      sourcePath: path.join(root, 'docs.json'),
+    });
+  });
+
+  it('rejects references that leave the project root', async () => {
+    const root = await temporaryProject();
+    await fs.writeFile(path.join(root, 'docs.json'), JSON.stringify({ $ref: '../outside.json' }));
+
+    await expect(loadDocsConfig({ root })).rejects.toMatchObject({
+      code: 'REF_OUTSIDE_ROOT',
+      sourcePath: path.join(path.dirname(root), 'outside.json'),
+    });
+  });
+
+  it('rejects a root config filename outside the project root', async () => {
+    const root = await temporaryProject();
+
+    await expect(loadDocsConfig({ root, configFile: '../outside.json' })).rejects.toMatchObject({
+      code: 'REF_OUTSIDE_ROOT',
+      sourcePath: path.join(path.dirname(root), 'outside.json'),
+    });
+  });
+
+  it('rejects symlinks that resolve outside the project root', async () => {
+    const root = await temporaryProject();
+    const outside = await temporaryProject();
+    await fs.writeFile(path.join(outside, 'navigation.json'), JSON.stringify({ pages: ['index'] }));
+    await fs.symlink(path.join(outside, 'navigation.json'), path.join(root, 'navigation.json'));
+    await fs.writeFile(
+      path.join(root, 'docs.json'),
+      JSON.stringify({ navigation: { $ref: './navigation.json' } }),
+    );
+
+    await expect(loadDocsConfig({ root })).rejects.toMatchObject({
+      code: 'REF_OUTSIDE_ROOT',
+      sourcePath: path.join(root, 'navigation.json'),
+    });
+  });
+
+  it('reports missing referenced files separately from a missing root config', async () => {
+    const root = await temporaryProject();
+    await fs.writeFile(
+      path.join(root, 'docs.json'),
+      JSON.stringify({ navigation: { $ref: './missing.json' } }),
+    );
+
+    await expect(loadDocsConfig({ root })).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+      sourcePath: path.join(root, 'missing.json'),
+    });
+  });
+
+  it('detects direct and transitive reference cycles', async () => {
+    const root = await temporaryProject();
+    await fs.writeFile(path.join(root, 'docs.json'), JSON.stringify({ $ref: './a.json' }));
+    await fs.writeFile(path.join(root, 'a.json'), JSON.stringify({ $ref: './b.json' }));
+    await fs.writeFile(path.join(root, 'b.json'), JSON.stringify({ $ref: './a.json' }));
+
+    try {
+      await loadDocsConfig({ root });
+      throw new Error('Expected the reference cycle to fail.');
+    } catch (error) {
+      expect(error).toMatchObject({ code: 'CIRCULAR_REF', sourcePath: path.join(root, 'a.json') });
+      expect(error.message).toContain('a.json -> b.json -> a.json');
     }
   });
 });

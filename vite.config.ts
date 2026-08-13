@@ -1,29 +1,31 @@
+import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
-import docsConfig from './docs.json' with { type: 'json' };
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
 import { generateSearchIndex } from './scripts/generate-search-index.mjs';
+import { createDocsConfigModule } from './scripts/vite-docs-config.mjs';
+import type { DocsConfig } from './src/lib/types.ts';
 
 /**
  * Keeps src/lib/icon-registry.generated.ts in sync with the `icon="name"` values
  * used in content, so string icon names resolve without bundling all of lucide.
  */
-function shisoIconRegistry(): Plugin {
+function shisoIconRegistry(getDocsConfig: () => DocsConfig): Plugin {
   return {
     name: 'shiso-icon-registry',
     async buildStart() {
-      const { unknown } = await generateIconRegistry();
+      const { unknown } = await generateIconRegistry({ config: getDocsConfig() });
 
       if (unknown.length) {
         this.warn(`Unknown icon names (not in lucide): ${unknown.join(', ')}`);
       }
     },
     async handleHotUpdate({ file }) {
-      if (/\.(md|mdx|tsx)$/.test(file)) {
-        await generateIconRegistry();
+      if (/\.(md|mdx|tsx)$/.test(file) || file.endsWith('docs.json')) {
+        await generateIconRegistry({ config: getDocsConfig() });
       }
     },
   };
@@ -33,19 +35,20 @@ function shisoIconRegistry(): Plugin {
  * Keeps src/lib/search-index.generated.ts in sync with content, so the search
  * dialog can query page text without a server.
  */
-function shisoSearchIndex(): Plugin {
-  const enabled = (docsConfig as { search?: unknown }).search !== false;
-
+function shisoSearchIndex(getDocsConfig: () => DocsConfig): Plugin {
   return {
     name: 'shiso-search-index',
     async buildStart() {
-      if (enabled) {
-        await generateSearchIndex();
+      if (getDocsConfig().search !== false) {
+        await generateSearchIndex({ config: getDocsConfig() });
       }
     },
     async handleHotUpdate({ file }) {
-      if (enabled && (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json'))) {
-        await generateSearchIndex();
+      if (
+        getDocsConfig().search !== false &&
+        (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json'))
+      ) {
+        await generateSearchIndex({ config: getDocsConfig() });
       }
     },
   };
@@ -118,7 +121,7 @@ function fontFaceRule(spec: FontSpec): string {
 }
 
 /** CSS custom-property overrides from `colors`, `fonts`, and `background`. */
-function buildThemeCss(config: typeof docsConfig): string {
+function buildThemeCss(config: DocsConfig): string {
   const { colors, background } = config as {
     colors?: { primary?: string; light?: string; dark?: string };
     background?: {
@@ -215,16 +218,16 @@ function buildThemeCss(config: typeof docsConfig): string {
     .join('');
 }
 
-function shisoHtml(): Plugin {
+function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
   return {
     name: 'shiso-html',
     transformIndexHtml(html) {
+      const docsConfig = getDocsConfig();
       const name = docsConfig.name?.trim();
-      const description = (docsConfig as { description?: string }).description;
-      const favicon = (docsConfig as { favicon?: string }).favicon;
-      const appearance = (docsConfig as { appearance?: { default?: string; strict?: boolean } })
-        .appearance;
-      const fonts = (docsConfig as { fonts?: FontsOption }).fonts;
+      const description = docsConfig.description;
+      const favicon = docsConfig.favicon;
+      const appearance = docsConfig.appearance;
+      const fonts = docsConfig.fonts;
 
       const defaults = [
         DEFAULT_HEAD_OPEN,
@@ -282,19 +285,27 @@ function shisoHtml(): Plugin {
   };
 }
 
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    shisoIconRegistry(),
-    shisoLastModified(),
-    shisoSearchIndex(),
-    shisoHtml(),
-    shisoMdx(),
-    react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
-  ],
-  resolve: {
-    alias: {
-      '@': new URL('./src', import.meta.url).pathname,
+export default defineConfig(async () => {
+  const configModule = await createDocsConfigModule({
+    root: fileURLToPath(new URL('.', import.meta.url)),
+  });
+  const getDocsConfig = configModule.getConfig as () => DocsConfig;
+
+  return {
+    plugins: [
+      configModule.plugin,
+      tailwindcss(),
+      shisoIconRegistry(getDocsConfig),
+      shisoLastModified(),
+      shisoSearchIndex(getDocsConfig),
+      shisoHtml(getDocsConfig),
+      shisoMdx(),
+      react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
+    ],
+    resolve: {
+      alias: {
+        '@': new URL('./src', import.meta.url).pathname,
+      },
     },
-  },
+  };
 });

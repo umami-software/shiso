@@ -15,8 +15,9 @@
   ],
   "fields": {
     "$ref": {
-      "status": "unsupported",
-      "detail": "Split configuration files are not implemented yet."
+      "status": "native",
+      "schema": false,
+      "detail": "Relative JSON references are resolved before schema validation. Object siblings override referenced object fields."
     },
     "$schema": {
       "status": "native"

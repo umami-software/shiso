@@ -15,7 +15,7 @@ describe('schema coverage', () => {
   it('classifies every schema key in the Shiso support contract', () => {
     const declared = Object.keys(getKeyTiers(schema)).sort();
     const contracted = Object.entries(support.fields)
-      .filter(([, field]) => field.status !== 'unsupported')
+      .filter(([, field]) => field.status !== 'unsupported' && field.schema !== false)
       .map(([key]) => key)
       .sort();
 

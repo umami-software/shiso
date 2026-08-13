@@ -1,5 +1,5 @@
+import rawConfig from 'virtual:shiso-docs-config';
 import type { ShisoOptions } from '@/lib/types';
-import rawConfig from '../../docs.json';
 
 /**
  * All URL construction goes through this module.
