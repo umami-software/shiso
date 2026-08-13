@@ -2,11 +2,17 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Ajv } from 'ajv';
 import { describe, expect, it } from 'vitest';
-import { getSchemaKeys, suggestKey, validateConfig } from '../scripts/validate-config.mjs';
+import {
+  getSchemaKeys,
+  suggestKey,
+  validateConfig,
+} from '../packages/shiso/scripts/validate-config.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 
-const schema = JSON.parse(await readFile(path.join(root, 'docs.schema.json'), 'utf8'));
+const schema = JSON.parse(
+  await readFile(path.join(root, 'packages/shiso/docs.schema.json'), 'utf8'),
+);
 const realConfig = JSON.parse(await readFile(path.join(root, 'docs.json'), 'utf8'));
 
 const minimal = { navigation: { pages: ['index'] } };

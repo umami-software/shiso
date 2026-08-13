@@ -4,10 +4,16 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PACKAGE_ROOT = path.join(REPOSITORY_ROOT, 'packages/create-shiso-app');
-const PACKAGE_FILE = path.join(PACKAGE_ROOT, 'package.json');
-const CHANGELOG_FILE = path.join(PACKAGE_ROOT, 'CHANGELOG.md');
-const TAG_PREFIX = 'create-shiso-app-v';
+const RELEASE_PACKAGES = {
+  'create-shiso-app': {
+    root: path.join(REPOSITORY_ROOT, 'packages/create-shiso-app'),
+    tagPrefix: 'create-shiso-app-v',
+  },
+  shiso: {
+    root: path.join(REPOSITORY_ROOT, 'packages/shiso'),
+    tagPrefix: 'shiso-v',
+  },
+};
 const SEMVER_PATTERN =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
@@ -16,12 +22,20 @@ function parseArguments(argv) {
     tag: undefined,
     outputDirectory: undefined,
     checkRegistry: false,
+    packageName: 'create-shiso-app',
   };
 
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
 
-    if (argument === '--output-dir') {
+    if (argument === '--package') {
+      options.packageName = argv[index + 1];
+      index += 1;
+
+      if (!RELEASE_PACKAGES[options.packageName]) {
+        throw new Error(`--package must be one of: ${Object.keys(RELEASE_PACKAGES).join(', ')}.`);
+      }
+    } else if (argument === '--output-dir') {
       options.outputDirectory = argv[index + 1];
       index += 1;
 
@@ -105,8 +119,11 @@ async function appendGitHubOutputs(outputs) {
 
 async function main() {
   const options = parseArguments(process.argv.slice(2));
-  const packageMetadata = JSON.parse(await fs.readFile(PACKAGE_FILE, 'utf8'));
-  const changelog = await fs.readFile(CHANGELOG_FILE, 'utf8');
+  const releasePackage = RELEASE_PACKAGES[options.packageName];
+  const packageFile = path.join(releasePackage.root, 'package.json');
+  const changelogFile = path.join(releasePackage.root, 'CHANGELOG.md');
+  const packageMetadata = JSON.parse(await fs.readFile(packageFile, 'utf8'));
+  const changelog = await fs.readFile(changelogFile, 'utf8');
   const { name, version, publishConfig, repository } = packageMetadata;
 
   const semver = version.match(SEMVER_PATTERN);
@@ -125,19 +142,19 @@ async function main() {
     throw new Error(`Package version "${version}" has a numeric prerelease with a leading zero.`);
   }
 
-  if (name !== 'create-shiso-app') {
-    throw new Error(`Expected package name "create-shiso-app", got "${name}".`);
+  if (name !== options.packageName) {
+    throw new Error(`Expected package name "${options.packageName}", got "${name}".`);
   }
 
   if (publishConfig?.access !== 'public') {
-    throw new Error('create-shiso-app must use public npm access.');
+    throw new Error(`${name} must use public npm access.`);
   }
 
   if (repository?.url !== 'https://github.com/umami-software/shiso.git') {
     throw new Error('The package repository must match the trusted GitHub repository.');
   }
 
-  const expectedTag = `${TAG_PREFIX}${version}`;
+  const expectedTag = `${releasePackage.tagPrefix}${version}`;
   const tag = options.tag || expectedTag;
 
   if (tag !== expectedTag) {

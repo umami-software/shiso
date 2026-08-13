@@ -16,7 +16,7 @@ file with a relative path:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "$ref": "./config/site.json"
 }
 ```
@@ -50,7 +50,7 @@ useful for separating large navigation trees from site-wide settings:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "name": "Acme docs",
   "navigation": {
     "$ref": "./config/navigation.json"
@@ -96,7 +96,7 @@ Properties beside `$ref` override properties from a referenced object:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "$ref": "./config/site.json",
   "name": "Acme API docs"
 }
@@ -129,7 +129,7 @@ is useful for a long page list:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "navigation": {
     "pages": { "$ref": "./config/pages.json" }
   }
@@ -148,7 +148,7 @@ Primitive values work the same way:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "name": { "$ref": "./config/name.json" },
   "navigation": {
     "$ref": "./config/navigation.json"
@@ -179,5 +179,5 @@ Shiso stops with an error when a reference:
 - Creates a circular chain, such as `a.json` referencing `b.json` while
   `b.json` references `a.json`.
 
-Run `pnpm check:config` to resolve all references and validate the resulting
+Run `pnpm check` to resolve all references and validate the resulting
 configuration without running a full build.

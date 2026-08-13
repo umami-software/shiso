@@ -7,9 +7,9 @@ Use `Icon` for inline icons, or pass the same names to any component that
 accepts an `icon` prop (`Card`, `Callout`, `Accordion`, and more).
 
 Names are case-insensitive and accept `circle-check`, `circle_check`, or
-`CircleCheck`. They are collected from content and `docs.json` at build time
-into `src/lib/icon-registry.generated.ts`. An unrecognized name renders
-nothing and logs a warning in development.
+`CircleCheck`. They are collected from content and `docs.json` at build time.
+Shiso stores its generated registry under `.shiso`; an unrecognized name
+renders nothing and logs a warning in development.
 
 ## Basic usage
 

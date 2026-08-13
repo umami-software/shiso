@@ -6,13 +6,15 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { describe, expect, it } from 'vitest';
-import { getSchemaKeys, validateConfig } from '../scripts/validate-config.mjs';
-import { headingText, walkTree } from '../src/lib/mdast.ts';
-import { createSlugger } from '../src/lib/slug.ts';
+import { getSchemaKeys, validateConfig } from '../packages/shiso/scripts/validate-config.mjs';
+import { headingText, walkTree } from '../packages/shiso/src/lib/mdast.ts';
+import { createSlugger } from '../packages/shiso/src/lib/slug.ts';
 
 const root = path.resolve(import.meta.dirname, '..');
 const contentRoot = path.join(root, 'content/docs');
-const schema = JSON.parse(await readFile(path.join(root, 'docs.schema.json'), 'utf8'));
+const schema = JSON.parse(
+  await readFile(path.join(root, 'packages/shiso/docs.schema.json'), 'utf8'),
+);
 const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter);
 
 const FIELD_DOCUMENTATION = {

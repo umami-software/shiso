@@ -9,10 +9,14 @@ const script = path.join(repositoryRoot, 'scripts/prepare-release.mjs');
 const packageMetadata = JSON.parse(
   fs.readFileSync(path.join(repositoryRoot, 'packages/create-shiso-app/package.json'), 'utf8'),
 );
+const frameworkMetadata = JSON.parse(
+  fs.readFileSync(path.join(repositoryRoot, 'packages/shiso/package.json'), 'utf8'),
+);
 const expectedTag = `create-shiso-app-v${packageMetadata.version}`;
 
-function runReleaseCheck(tag: string) {
-  return spawnSync(process.execPath, [script, tag], {
+function runReleaseCheck(tag: string, packageName?: string) {
+  const args = packageName ? [script, '--package', packageName, tag] : [script, tag];
+  return spawnSync(process.execPath, args, {
     cwd: repositoryRoot,
     encoding: 'utf8',
   });
@@ -31,5 +35,13 @@ describe('release metadata validation', () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('does not match package version');
+  });
+
+  it('accepts the Shiso framework tag and changelog', () => {
+    const tag = `shiso-v${frameworkMetadata.version}`;
+    const result = runReleaseCheck(tag, 'shiso');
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain(`Release metadata is valid: ${tag}`);
   });
 });

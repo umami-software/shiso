@@ -2,7 +2,10 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createDocsConfigModule, VIRTUAL_DOCS_CONFIG_ID } from '../scripts/vite-docs-config.mjs';
+import {
+  createDocsConfigModule,
+  VIRTUAL_DOCS_CONFIG_ID,
+} from '../packages/shiso/scripts/vite-docs-config.mjs';
 
 const temporaryDirectories = [];
 

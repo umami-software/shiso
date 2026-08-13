@@ -1,5 +1,5 @@
 /**
- * Generates src/generated/last-modified.ts.
+ * Generates the project-local .shiso/last-modified.ts cache.
  *
  * The `metadata.timestamp` config key shows a last-modified date on pages.
  * That date comes from git history, which only exists at build time, so a
@@ -12,13 +12,12 @@
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUTPUT = path.join(ROOT, 'src/generated/last-modified.ts');
+const DEFAULT_ROOT = process.cwd();
 const CONTENT_EXTENSIONS = new Set(['.md', '.mdx']);
 
 async function collectContentFiles(dir, files = []) {
@@ -44,14 +43,14 @@ async function collectContentFiles(dir, files = []) {
 }
 
 /** Latest commit date per repo path, from one newest-first `git log` pass. */
-async function getGitDates() {
+async function getGitDates(root) {
   const dates = new Map();
 
   try {
     const { stdout } = await execFileAsync(
       'git',
       ['-c', 'core.quotePath=false', 'log', '--format=@%cI', '--name-only', '--', 'content'],
-      { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 },
+      { cwd: root, maxBuffer: 64 * 1024 * 1024 },
     );
 
     let current = '';
@@ -70,13 +69,16 @@ async function getGitDates() {
   return dates;
 }
 
-export async function generateLastModified() {
-  const files = await collectContentFiles(path.join(ROOT, 'content'));
-  const gitDates = await getGitDates();
+export async function generateLastModified({
+  root = DEFAULT_ROOT,
+  output = path.join(root, '.shiso/last-modified.ts'),
+} = {}) {
+  const files = await collectContentFiles(path.join(root, 'content'));
+  const gitDates = await getGitDates(root);
   const entries = [];
 
   for (const file of files.sort()) {
-    const repoPath = path.relative(ROOT, file).split(path.sep).join('/');
+    const repoPath = path.relative(root, file).split(path.sep).join('/');
     let date = gitDates.get(repoPath);
 
     if (!date) {
@@ -95,26 +97,26 @@ ${mapping}
 };
 `;
 
-  const previous = await fs.readFile(OUTPUT, 'utf8').catch(() => '');
+  const previous = await fs.readFile(output, 'utf8').catch(() => '');
 
   if (previous !== contents) {
-    await fs.mkdir(path.dirname(OUTPUT), { recursive: true });
-    await fs.writeFile(OUTPUT, contents);
+    await fs.mkdir(path.dirname(output), { recursive: true });
+    await fs.writeFile(output, contents);
   }
 
   return { count: entries.length, changed: previous !== contents };
 }
 
 /** Ensures consumers can import the generated module before Vite loads app code. */
-export function shisoLastModified() {
+export function shisoLastModified(options = {}) {
   return {
     name: 'shiso-last-modified',
     async buildStart() {
-      await generateLastModified();
+      await generateLastModified(options);
     },
     async handleHotUpdate({ file }) {
       if (/\.(md|mdx)$/.test(file)) {
-        await generateLastModified();
+        await generateLastModified(options);
       }
     },
   };

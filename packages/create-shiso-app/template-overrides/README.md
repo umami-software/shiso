@@ -16,6 +16,15 @@ Open the local URL shown in your terminal, then edit
 
 Site configuration and navigation live in `docs.json`.
 
+## Upgrade Shiso
+
+Shiso is installed as a regular project dependency. Upgrade it independently
+of this starter with:
+
+```bash
+pnpm update shiso
+```
+
 ## Production
 
 ```bash

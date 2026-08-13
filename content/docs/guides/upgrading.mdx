@@ -1,0 +1,59 @@
+---
+title: Upgrading Shiso
+description: Upgrade the Shiso framework without recreating your documentation project.
+---
+
+Shiso is a regular dependency of your documentation project. You use
+`create-shiso-app` once; later releases are installed through your package
+manager.
+
+## Upgrade within the current range
+
+```bash
+pnpm update shiso
+```
+
+This installs the newest version allowed by the range in `package.json` and
+updates the lockfile. Run the normal checks afterward:
+
+```bash
+pnpm check
+pnpm build
+```
+
+## Upgrade to the latest release
+
+When the version in `package.json` does not allow the newest release, update
+the dependency explicitly:
+
+```bash
+pnpm add shiso@latest
+```
+
+The framework package owns rendering, schema validation, search generation,
+and the build pipeline. Your `content`, `docs.json`, `public` assets,
+`styles.css`, and `entry-client.tsx` remain user-owned.
+
+## Moving from a copied-source project
+
+Projects created before Shiso became an installable framework contain copied
+framework source. To migrate one:
+
+1. Add `shiso`, `react`, and `react-dom` as dependencies.
+2. Replace the project scripts with `shiso dev`, `shiso check`, `shiso build`,
+   and `shiso preview --outDir dist/client`.
+3. Point `$schema` at `./node_modules/shiso/docs.schema.json`.
+4. Replace the client entry with:
+
+   ```tsx
+   import { mount } from 'shiso/client';
+
+   mount();
+   ```
+
+5. Preserve `content`, `public`, and `docs.json`.
+6. Review any changes you made under the old `src` or `scripts` folders before
+   removing those copied framework files.
+
+If you registered a custom search provider, move that registration into
+`entry-client.tsx` and import it from `shiso/search`.

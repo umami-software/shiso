@@ -15,17 +15,18 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "node"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./packages/shiso/src/*"]
     },
     "target": "es2022"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "declarations.d.ts",
+    "entry-client.tsx",
+    "packages/shiso/src/**/*.ts",
+    "packages/shiso/src/**/*.tsx",
     "tests/**/*.ts",
-    "vite.config.ts",
+    "packages/shiso/vite.config.ts",
     "vitest.config.ts",
-    "mdx.config.ts",
     "docs.json"
   ],
   "exclude": ["node_modules", "dist"]

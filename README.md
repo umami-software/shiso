@@ -16,12 +16,15 @@ Shiso includes:
 ## Create a documentation site
 
 ```bash
-pnpm create shiso-app my-docs
+pnpm create shiso-app@latest my-docs
 cd my-docs
 pnpm dev
 ```
 
 Open the local URL shown in your terminal to view the site.
+
+Shiso is installed as a project dependency. Upgrade the framework later with
+`pnpm update shiso`; you do not need to recreate the project.
 
 ## Add and organize pages
 
@@ -41,7 +44,7 @@ sidebar:
 
 ```json
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "name": "Acme Docs",
   "navigation": {
     "groups": [

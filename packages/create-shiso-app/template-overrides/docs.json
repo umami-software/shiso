@@ -1,5 +1,5 @@
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "theme": "shiso",
   "name": "My Docs",
   "description": "Documentation for my project.",

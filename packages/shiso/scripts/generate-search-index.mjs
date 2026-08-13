@@ -1,5 +1,5 @@
 /**
- * Generates src/lib/search-index.generated.ts.
+ * Generates the project-local .shiso/search-index.generated.ts cache.
  *
  * Client-side search needs the plain text of every page, which only exists in
  * the MDX sources at build time. Each navigable page is parsed to mdast and
@@ -15,7 +15,7 @@
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
@@ -25,8 +25,7 @@ import { headingText } from '../src/lib/mdast.ts';
 import { createSlugger } from '../src/lib/slug.ts';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUTPUT = path.join(ROOT, 'src/lib/search-index.generated.ts');
+const DEFAULT_ROOT = process.cwd();
 
 const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter).use(remarkGfm);
 
@@ -160,8 +159,13 @@ function collectSections(tree) {
     .filter(section => section.heading || section.text);
 }
 
-export async function generateSearchIndex({ config } = {}) {
-  const docsJson = config ?? (await loadDocsConfig({ root: ROOT })).config;
+/** @param {{ config?: object, root?: string, output?: string }} [options] */
+export async function generateSearchIndex({
+  config,
+  root = DEFAULT_ROOT,
+  output = path.join(root, '.shiso/search-index.generated.ts'),
+} = {}) {
+  const docsJson = config ?? (await loadDocsConfig({ root })).config;
   const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
   const contentDir = (docsJson.$shiso?.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
 
@@ -179,7 +183,7 @@ export async function generateSearchIndex({ config } = {}) {
     let filePath;
 
     for (const extension of ['mdx', 'md']) {
-      filePath = path.join(ROOT, contentDir, `${fileSlug}.${extension}`);
+      filePath = path.join(root, contentDir, `${fileSlug}.${extension}`);
       source = await fs.readFile(filePath, 'utf8').catch(() => undefined);
 
       if (source !== undefined) {
@@ -232,11 +236,11 @@ ${body}
 ];
 `;
 
-  const previous = await fs.readFile(OUTPUT, 'utf8').catch(() => '');
+  const previous = await fs.readFile(output, 'utf8').catch(() => '');
 
   if (previous !== contents) {
-    await fs.mkdir(path.dirname(OUTPUT), { recursive: true });
-    await fs.writeFile(OUTPUT, contents);
+    await fs.mkdir(path.dirname(output), { recursive: true });
+    await fs.writeFile(output, contents);
   }
 
   return { pages: seen.size, records: records.length, changed: previous !== contents };

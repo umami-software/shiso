@@ -1,9 +1,9 @@
-name: Release create-shiso-app
+name: Release shiso
 
 on:
   push:
     tags:
-      - create-shiso-app-v*
+      - shiso-v*
 
 permissions:
   contents: write
@@ -31,19 +31,17 @@ jobs:
         run: git merge-base --is-ancestor "$GITHUB_SHA" origin/master
       - name: Validate release metadata
         id: release
-        run: pnpm release:check "$GITHUB_REF_NAME" --output-dir artifacts --check-registry
-      - name: Verify Shiso framework is published
         run: >-
-          pnpm view
-          "shiso@$(node -p 'require("./packages/shiso/package.json").version')"
-          version
+          pnpm release:check:shiso "$GITHUB_REF_NAME"
+          --output-dir artifacts
+          --check-registry
       - run: pnpm lint
       - run: pnpm exec tsc --noEmit
       - run: pnpm test
       - run: pnpm build
       - run: pnpm test:create-app
       - name: Pack npm artifact
-        run: pnpm --dir packages/create-shiso-app pack --out "${{ steps.release.outputs.tarball }}"
+        run: pnpm --dir packages/shiso pack --out "${{ steps.release.outputs.tarball }}"
       - name: Publish to npm
         if: steps.release.outputs.published != 'true'
         run: >-
@@ -60,7 +58,7 @@ jobs:
             "$GITHUB_REF_NAME"
             "${{ steps.release.outputs.tarball }}#npm package"
             --verify-tag
-            --title "create-shiso-app ${{ steps.release.outputs.version }}"
+            --title "shiso ${{ steps.release.outputs.version }}"
             --notes-file "${{ steps.release.outputs.notes_file }}"
           )
 

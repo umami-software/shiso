@@ -3,6 +3,14 @@
 All notable changes to `create-shiso-app` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 0.2.0 - 2026-08-13
+
+### Changed
+
+- Generated projects now install Shiso as an upgradeable framework dependency.
+- Starters contain only user-owned content, configuration, assets, and a client entry point.
+- Framework rendering, build scripts, schema validation, and generated caches are no longer copied.
+
 ## 0.1.0 - 2026-08-09
 
 ### Added

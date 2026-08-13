@@ -7,16 +7,18 @@ import { fileURLToPath } from 'node:url';
 
 const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PACKAGE_ROOT = path.join(REPOSITORY_ROOT, 'packages/create-shiso-app');
+const FRAMEWORK_ROOT = path.join(REPOSITORY_ROOT, 'packages/shiso');
 
 function executable(command) {
   return process.platform === 'win32' ? `${command}.cmd` : command;
 }
 
-function run(command, args, cwd) {
+function run(command, args, cwd, env = {}) {
   const result = spawnSync(executable(command), args, {
     cwd,
     env: {
       ...process.env,
+      ...env,
       CI: '1',
     },
     stdio: 'inherit',
@@ -41,11 +43,17 @@ async function assertFile(file) {
 
 const temporaryRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'shiso-create-app-'));
 const archive = path.join(temporaryRoot, 'create-shiso-app.tgz');
+const frameworkArchive = path.join(temporaryRoot, 'shiso.tgz');
 const project = path.join(temporaryRoot, 'shiso-smoke-site');
 
 try {
+  console.log('\nPacking shiso...\n');
+  run('pnpm', ['pack', '--out', frameworkArchive], FRAMEWORK_ROOT);
+
   console.log('\nPacking create-shiso-app...\n');
-  run('pnpm', ['pack', '--out', archive], PACKAGE_ROOT);
+  run('pnpm', ['pack', '--out', archive], PACKAGE_ROOT, {
+    SHISO_FRAMEWORK_SPECIFIER: `file:${frameworkArchive}`,
+  });
 
   console.log('\nCreating a site from the packed artifact...\n');
   run('pnpm', ['dlx', archive, project, '--use-pnpm', '--disable-git'], temporaryRoot);
@@ -55,6 +63,25 @@ try {
   if (projectPackage.name !== 'shiso-smoke-site') {
     throw new Error(
       `Expected generated package name "shiso-smoke-site", got "${projectPackage.name}".`,
+    );
+  }
+
+  if (projectPackage.dependencies.shiso !== `file:${frameworkArchive}`) {
+    throw new Error('Generated project did not retain the packed Shiso dependency.');
+  }
+
+  for (const copiedInternal of ['src', 'scripts', 'vite.config.ts', 'docs.schema.json']) {
+    await fs.access(path.join(project, copiedInternal)).then(
+      () => {
+        throw new Error(
+          `Framework internal "${copiedInternal}" leaked into the generated project.`,
+        );
+      },
+      error => {
+        if (error.code !== 'ENOENT') {
+          throw error;
+        }
+      },
     );
   }
 
@@ -77,6 +104,7 @@ try {
   );
 
   console.log('\nBuilding the generated site...\n');
+  run('pnpm', ['exec', 'tsc', '--noEmit'], project);
   run('pnpm', ['build'], project);
 
   await Promise.all([

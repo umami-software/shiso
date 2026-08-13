@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -13,11 +14,11 @@ import type { DocsConfig } from './src/lib/types.ts';
  * Keeps src/lib/icon-registry.generated.ts in sync with the `icon="name"` values
  * used in content, so string icon names resolve without bundling all of lucide.
  */
-function shisoIconRegistry(getDocsConfig: () => DocsConfig): Plugin {
+function shisoIconRegistry(getDocsConfig: () => DocsConfig, root: string, output: string): Plugin {
   return {
     name: 'shiso-icon-registry',
     async buildStart() {
-      const { unknown } = await generateIconRegistry({ config: getDocsConfig() });
+      const { unknown } = await generateIconRegistry({ config: getDocsConfig(), root, output });
 
       if (unknown.length) {
         this.warn(`Unknown icon names (not in lucide): ${unknown.join(', ')}`);
@@ -25,7 +26,7 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig): Plugin {
     },
     async handleHotUpdate({ file }) {
       if (/\.(md|mdx|tsx)$/.test(file) || file.endsWith('docs.json')) {
-        await generateIconRegistry({ config: getDocsConfig() });
+        await generateIconRegistry({ config: getDocsConfig(), root, output });
       }
     },
   };
@@ -35,20 +36,15 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig): Plugin {
  * Keeps src/lib/search-index.generated.ts in sync with content, so the search
  * dialog can query page text without a server.
  */
-function shisoSearchIndex(getDocsConfig: () => DocsConfig): Plugin {
+function shisoSearchIndex(getDocsConfig: () => DocsConfig, root: string, output: string): Plugin {
   return {
     name: 'shiso-search-index',
     async buildStart() {
-      if (getDocsConfig().search !== false) {
-        await generateSearchIndex({ config: getDocsConfig() });
-      }
+      await generateSearchIndex({ config: getDocsConfig(), root, output });
     },
     async handleHotUpdate({ file }) {
-      if (
-        getDocsConfig().search !== false &&
-        (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json'))
-      ) {
-        await generateSearchIndex({ config: getDocsConfig() });
+      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json')) {
+        await generateSearchIndex({ config: getDocsConfig(), root, output });
       }
     },
   };
@@ -285,9 +281,18 @@ function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
   };
 }
 
+const PACKAGE_ROOT = fileURLToPath(new URL('.', import.meta.url));
+const MDX_REACT_ENTRY = fileURLToPath(import.meta.resolve('@mdx-js/react'));
+const LUCIDE_REACT_ENTRY = path.join(
+  path.dirname(fileURLToPath(import.meta.resolve('lucide-react/package.json'))),
+  'dist/esm/lucide-react.mjs',
+);
+
 export default defineConfig(async () => {
+  const projectRoot = process.cwd();
+  const generatedRoot = path.join(projectRoot, '.shiso');
   const configModule = await createDocsConfigModule({
-    root: fileURLToPath(new URL('.', import.meta.url)),
+    root: projectRoot,
   });
   const getDocsConfig = configModule.getConfig as () => DocsConfig;
 
@@ -295,17 +300,43 @@ export default defineConfig(async () => {
     plugins: [
       configModule.plugin,
       tailwindcss(),
-      shisoIconRegistry(getDocsConfig),
-      shisoLastModified(),
-      shisoSearchIndex(getDocsConfig),
+      shisoIconRegistry(
+        getDocsConfig,
+        projectRoot,
+        path.join(generatedRoot, 'icon-registry.generated.ts'),
+      ),
+      shisoLastModified({
+        root: projectRoot,
+        output: path.join(generatedRoot, 'last-modified.ts'),
+      }),
+      shisoSearchIndex(
+        getDocsConfig,
+        projectRoot,
+        path.join(generatedRoot, 'search-index.generated.ts'),
+      ),
       shisoHtml(getDocsConfig),
       shisoMdx(),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],
     resolve: {
-      alias: {
-        '@': new URL('./src', import.meta.url).pathname,
-      },
+      alias: [
+        { find: '@mdx-js/react', replacement: MDX_REACT_ENTRY },
+        { find: 'lucide-react', replacement: LUCIDE_REACT_ENTRY },
+        {
+          find: '@/lib/icon-registry.generated',
+          replacement: path.join(generatedRoot, 'icon-registry.generated.ts'),
+        },
+        {
+          find: '@/lib/search-index.generated',
+          replacement: path.join(generatedRoot, 'search-index.generated.ts'),
+        },
+        {
+          find: '@/generated/last-modified',
+          replacement: path.join(generatedRoot, 'last-modified.ts'),
+        },
+        { find: '@', replacement: path.join(PACKAGE_ROOT, 'src') },
+      ],
+      dedupe: ['react', 'react-dom'],
     },
   };
 });

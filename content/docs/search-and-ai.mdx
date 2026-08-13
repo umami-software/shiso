@@ -41,10 +41,11 @@ with `search.provider`; `options` are passed directly to its factory:
 }
 ```
 
-Register custom providers in `src/entry-client.tsx` before hydration:
+Register custom providers in `entry-client.tsx` before mounting Shiso:
 
 ```tsx
-import { registerSearchProvider } from '@/lib/search/provider';
+import { mount } from 'shiso/client';
+import { registerSearchProvider } from 'shiso/search';
 
 registerSearchProvider('hosted', options => ({
   async search(query, limit = 10) {
@@ -54,6 +55,8 @@ registerSearchProvider('hosted', options => ({
     return response.json();
   },
 }));
+
+mount();
 ```
 
 Every provider returns normalized results with `url`, `page`, `score`, and

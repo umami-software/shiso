@@ -1,5 +1,5 @@
 {
-  "name": "shiso",
+  "name": "shiso-repository",
   "version": "0.61.0",
   "private": true,
   "description": "Open-source docs site generator built with Vite, React, and MDX. Configured with a single docs.json file.",
@@ -11,22 +11,24 @@
   "packageManager": "pnpm@11.21.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "check:config": "node scripts/validate-config.mjs",
-    "build": "node scripts/validate-config.mjs && vite build --outDir dist/client --emptyOutDir && vite build --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir && node scripts/prerender.mjs",
+    "dev": "shiso dev",
+    "check:config": "shiso check",
+    "build": "shiso build",
     "release:check": "node scripts/prepare-release.mjs",
+    "release:check:shiso": "node scripts/prepare-release.mjs --package shiso",
     "test:create-app": "node scripts/smoke-create-shiso-app.mjs",
-    "preview": "vite preview --outDir dist/client",
+    "preview": "shiso preview --outDir dist/client",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "biome check . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "lint:fix": "biome check --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
     "format": "biome format --write . --vcs-use-ignore-file=true --files-ignore-unknown=true",
-    "icons:registry": "node scripts/generate-icon-registry.mjs",
-    "timestamps": "node scripts/generate-last-modified.mjs",
-    "search:index": "node scripts/generate-search-index.mjs"
+    "icons:registry": "node packages/shiso/scripts/generate-icon-registry.mjs",
+    "timestamps": "node packages/shiso/scripts/generate-last-modified.mjs",
+    "search:index": "node packages/shiso/scripts/generate-search-index.mjs"
   },
   "dependencies": {
+    "shiso": "workspace:*",
     "@base-ui/react": "^1.7.0",
     "@fontsource/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",

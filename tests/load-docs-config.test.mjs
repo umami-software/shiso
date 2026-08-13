@@ -6,7 +6,7 @@ import {
   DocsConfigLoadError,
   loadDocsConfig,
   loadDocsSchema,
-} from '../scripts/load-docs-config.mjs';
+} from '../packages/shiso/scripts/load-docs-config.mjs';
 
 const temporaryDirectories = [];
 

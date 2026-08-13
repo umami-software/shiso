@@ -1,5 +1,5 @@
 /**
- * Generates src/lib/icon-registry.generated.ts.
+ * Generates the project-local .shiso/icon-registry.generated.ts cache.
  *
  * Authors reference icons by name in MDX (`<Card icon="rocket">`). Importing all of
  * lucide-react to support that would pull in ~4000 modules, so instead we scan the
@@ -14,8 +14,7 @@ import { fileURLToPath } from 'node:url';
 import * as lucide from 'lucide-react';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUTPUT = path.join(ROOT, 'src/lib/icon-registry.generated.ts');
+const DEFAULT_ROOT = process.cwd();
 const SCAN_DIRS = ['content', 'src'];
 const SCAN_EXTENSIONS = new Set(['.md', '.mdx', '.tsx']);
 
@@ -109,11 +108,11 @@ function addMatches(names, source, pattern) {
   }
 }
 
-async function findIconNames(config) {
+async function findIconNames(config, root) {
   const names = new Set(ALWAYS_INCLUDE);
 
   for (const dir of SCAN_DIRS) {
-    const files = await collectFiles(path.join(ROOT, dir));
+    const files = await collectFiles(path.join(root, dir));
 
     for (const file of files) {
       addMatches(names, await fs.readFile(file, 'utf8'), ICON_ATTRIBUTE);
@@ -121,7 +120,7 @@ async function findIconNames(config) {
   }
 
   // Navigation and navbar icons live in docs.json, not in content or source.
-  const docsConfig = config ?? (await loadDocsConfig({ root: ROOT })).config;
+  const docsConfig = config ?? (await loadDocsConfig({ root })).config;
   addMatches(names, JSON.stringify(docsConfig), ICON_JSON_PROPERTY);
 
   return [...names].sort();
@@ -151,8 +150,13 @@ ${mapping}
 `;
 }
 
-export async function generateIconRegistry({ config } = {}) {
-  const names = await findIconNames(config);
+/** @param {{ config?: object, root?: string, output?: string }} [options] */
+export async function generateIconRegistry({
+  config,
+  root = DEFAULT_ROOT,
+  output = path.join(root, '.shiso/icon-registry.generated.ts'),
+} = {}) {
+  const names = await findIconNames(config, root);
   const entries = [];
   const unknown = [];
 
@@ -171,11 +175,11 @@ export async function generateIconRegistry({ config } = {}) {
   }
 
   const contents = renderModule(entries);
-  const previous = await fs.readFile(OUTPUT, 'utf8').catch(() => '');
+  const previous = await fs.readFile(output, 'utf8').catch(() => '');
 
   if (previous !== contents) {
-    await fs.mkdir(path.dirname(OUTPUT), { recursive: true });
-    await fs.writeFile(OUTPUT, contents);
+    await fs.mkdir(path.dirname(output), { recursive: true });
+    await fs.writeFile(output, contents);
   }
 
   return { count: entries.length, unknown, changed: previous !== contents };

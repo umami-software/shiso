@@ -1,14 +1,13 @@
 # dependencies
 /node_modules
+/packages/*/node_modules
 
 # testing
 /coverage
 
 # production
 /dist
-
-# generated build artifacts
-/src/generated/
+/.shiso
 
 # misc
 .DS_Store

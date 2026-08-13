@@ -3,8 +3,8 @@ title: Installation
 description: Create a standalone Shiso documentation site with create-shiso-app.
 ---
 
-Use `create-shiso-app` to start a new Shiso site. The generator creates a
-standalone project instead of cloning the Shiso source repository.
+Use `create-shiso-app` to start a new Shiso site. The generator creates a small
+project that installs the upgradeable `shiso` framework dependency.
 
 ## Create a project
 
@@ -12,7 +12,7 @@ Choose the command for your package manager:
 
 <CodeGroup>
   ```bash pnpm
-  pnpm create shiso-app my-docs
+  pnpm create shiso-app@latest my-docs
   ```
 
   ```bash npm
@@ -20,7 +20,7 @@ Choose the command for your package manager:
   ```
 
   ```bash yarn
-  yarn create shiso-app my-docs
+  yarn create shiso-app@latest my-docs
   ```
 
   ```bash bun
@@ -34,6 +34,7 @@ it already exists.
 The generator:
 
 - Copies a minimal Shiso starter site
+- Installs Shiso as a regular project dependency
 - Sets the package name from the project directory
 - Installs dependencies with the package manager that invoked it
 - Initializes a fresh Git repository on the `main` branch
@@ -68,6 +69,32 @@ Move into the generated project and start the development server:
 Open the local URL shown in your terminal. Edit
 `content/docs/index.mdx` to change the first page and `docs.json` to configure
 the site and navigation.
+
+## Upgrade Shiso
+
+The generator is only used to create the project. Upgrade the framework later
+through your package manager:
+
+<CodeGroup>
+  ```bash pnpm
+  pnpm update shiso
+  ```
+
+  ```bash npm
+  npm update shiso
+  ```
+
+  ```bash yarn
+  yarn upgrade shiso
+  ```
+
+  ```bash bun
+  bun update shiso
+  ```
+</CodeGroup>
+
+Your content, `docs.json`, `styles.css`, and files under `public` remain in your
+project; rendering and build internals update with the dependency.
 
 ## CLI options
 

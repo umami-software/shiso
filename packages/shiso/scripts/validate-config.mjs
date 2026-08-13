@@ -9,7 +9,7 @@ import process from 'node:process';
 import { Ajv } from 'ajv';
 import { loadDocsConfig, loadDocsSchema } from './load-docs-config.mjs';
 
-const root = path.resolve(import.meta.dirname, '..');
+const packageRoot = path.resolve(import.meta.dirname, '..');
 
 /** Returns the top-level keys declared by the public config schema. */
 export function getSchemaKeys(schema) {
@@ -78,14 +78,19 @@ export function validateConfig(config, schema) {
   return { valid: true, errors: [] };
 }
 
-// CLI entry point. Skipped when imported by tests.
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.meta.filename)) {
+/** Validates one consuming project against the schema bundled with this Shiso version. */
+export async function validateProject({ root = process.cwd() } = {}) {
   const [{ schema }, { config }] = await Promise.all([
-    loadDocsSchema({ root }),
+    loadDocsSchema({ root: packageRoot }),
     loadDocsConfig({ root }),
   ]);
 
-  const { valid, errors } = validateConfig(config, schema);
+  return validateConfig(config, schema);
+}
+
+// CLI entry point. Skipped when imported by tests.
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(import.meta.filename)) {
+  const { valid, errors } = await validateProject();
 
   if (!valid) {
     console.error('docs.json failed schema validation:\n');

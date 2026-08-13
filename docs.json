@@ -1,5 +1,5 @@
 {
-  "$schema": "./docs.schema.json",
+  "$schema": "./node_modules/shiso/docs.schema.json",
   "$shiso": {
     "siteUrl": "https://shiso.umami.is"
   },
@@ -102,6 +102,7 @@
             "collapsible": false,
             "pages": [
               "guides/deployment",
+              "guides/upgrading",
               { "page": "guides/migrating", "title": "Migrating from Mintlify" }
             ]
           }

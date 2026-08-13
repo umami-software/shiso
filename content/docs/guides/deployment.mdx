@@ -80,11 +80,11 @@ Vercel serves the site nested in `dist/client`.
 ## Deploying under a subpath
 
 When the site lives at `https://example.com/my-docs/` rather than a domain
-root, pass Vite's `--base` flag to both build steps in the `build` script:
+root, pass the base path to `shiso build`:
 
 ```json
 {
-  "build": "node scripts/validate-config.mjs && vite build --base=/my-docs/ --outDir dist/client --emptyOutDir && vite build --base=/my-docs/ --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir && node scripts/prerender.mjs"
+  "build": "shiso build --base=/my-docs/"
 }
 ```
 
