@@ -42,25 +42,13 @@ Common causes:
 - Invalid object structure in navigation
 - A malformed value under a supported key (e.g. a `navbar` link without `href`)
 
-## The build prints a notice about an ignored key
-
-```text
-notice: "integrations" is recognized but not implemented yet — it will be ignored.
-```
-
-This is expected: recognized keys that Shiso does not implement yet are accepted
-and skipped so a shared config still builds. See
-[Configuration](/docs/configuration#how-shiso-treats-config-keys) for the tier
-policy.
-
 ## A redirect is not working
 
 - Sources are matched exactly against the full route, including the docs
   prefix: `/docs/old-page`, not `old-page`.
-- Wildcard patterns (`/old/:slug*`) are not implemented and are skipped with a
-  build warning.
-- A redirect whose source collides with a real page is skipped — pages always
-  win.
+- Wildcard patterns such as `/old/:slug*` are not supported; use an exact
+  source for each redirect.
+- Pages take precedence when a redirect source matches an existing page.
 
 ## An icon does not render
 

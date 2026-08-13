@@ -66,29 +66,21 @@ the subset of features Shiso implements today.
 
 ## Behavior differences to expect
 
-### Config keys Shiso ignores
-
-Recognized keys that are not implemented yet are **accepted and skipped** with
-a build notice — they do not fail the build.
-That includes things like `api`, `integrations`, `thumbnails`, and MCP-based
-`contextual` options. Set `theme` to `"shiso"` (or omit it) — other theme
-names from Mintlify are not supported yet.
-
-See [Configuration](/docs/configuration#how-shiso-treats-config-keys) for the
-supported / reserved / unknown tier policy.
+The pages under [Configuration](/docs/configuration) describe Shiso's complete
+configuration surface. Remove other settings from the migrated `docs.json` and
+set `theme` to `"shiso"`, or omit it.
 
 ### Versions and languages
 
 If your config uses `navigation.versions` or `navigation.languages`, Shiso
-renders only the **default** entry and reports the others as skipped. Plan a
-separate site or branch per version/locale until full multi-version support
-lands.
+renders only the **default** entry. Use a separate site or branch per
+version/locale when you need to publish more than one.
 
 ### Redirects
 
-Only exact-match `source` values work. Wildcard patterns such as
-`/old/:slug*` are skipped with a warning. Sources must include the full path
-(including the docs prefix), for example `/docs/old-page`.
+Use an exact `source` value for each redirect; wildcard patterns are not
+supported. Sources must include the full path (including the docs prefix), for
+example `/docs/old-page`.
 
 ### Hosted features that do not apply
 

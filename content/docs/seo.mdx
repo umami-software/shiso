@@ -67,10 +67,8 @@ routing follows the same rules for unknown paths.
 }
 ```
 
-Sources are matched exactly. Wildcard patterns (`/old/:slug*`) are part of the
-standard but not implemented yet — they are skipped with a build warning.
-`permanent` is accepted for portability, but static output cannot vary the
-HTTP status code.
+Sources are matched exactly. Wildcard patterns such as `/old/:slug*` are not
+supported; add an exact entry for each source path.
 
 ## 404 page
 

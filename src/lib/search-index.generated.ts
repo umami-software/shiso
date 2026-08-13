@@ -130,7 +130,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'When to use each pattern',
     id: 'when-to-use-each-pattern',
-    text: 'navigation.tabs: best default for most docs sites navigation.dropdowns: top-level categories rendered as menus by the Shiso theme navigation.groups + navigation.pages: good for a single simple section navigation.versions: multiple product versions — only the default version renders today; the others are reported and skipped navigation.languages: translated docs — same current limitation as versions',
+    text: 'navigation.tabs: best default for most docs sites navigation.dropdowns: top-level categories rendered as menus by the Shiso theme navigation.groups + navigation.pages: good for a single simple section navigation.versions: multiple product versions — only the default version renders navigation.languages: translated docs — same current limitation as versions',
   },
   {
     url: '/docs/navigation',
@@ -151,7 +151,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Navigation',
     heading: 'Anchors',
     id: 'anchors',
-    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [...] } } Anchors that contain their own pages or groups are recognized but not implemented yet.',
+    text: 'Anchors render as prominent links above the sidebar: { "navigation": { "anchors": [ { "anchor": "Community", "href": "https://discord.gg/example", "icon": "users" } ], "tabs": [...] } }',
   },
   {
     url: '/docs/navigation',
@@ -324,7 +324,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Search and AI',
     heading: 'Contextual menu',
     id: 'contextual-menu',
-    text: 'The contextual key adds a menu beside the page title for AI-optimized actions. The first option is the primary button; the rest go in a dropdown. { "contextual": { "options": ["copy", "view", "chatgpt", "claude", "perplexity"] } } copy: copy the page as Markdown to the clipboard view: open the page\'s markdown source in a new tab chatgpt, claude, perplexity: open the assistant with a prompt pointing at the page\'s markdown URL (requires $shiso.siteUrl) The MCP-based options from the standard (mcp, cursor, vscode) require a hosted MCP server, which Shiso does not provide — they are accepted and skipped with a build notice.',
+    text: 'The contextual key adds a menu beside the page title for AI-optimized actions. The first option is the primary button; the rest go in a dropdown. { "contextual": { "options": ["copy", "view", "chatgpt", "claude", "perplexity"] } } copy: copy the page as Markdown to the clipboard view: open the page\'s markdown source in a new tab chatgpt, claude, perplexity: open the assistant with a prompt pointing at the page\'s markdown URL (requires $shiso.siteUrl)',
   },
   {
     url: '/docs/search-and-ai',
@@ -364,7 +364,7 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'SEO, redirects, and errors',
     heading: 'Redirects',
     id: 'redirects',
-    text: 'The redirects key maps moved or renamed pages to their new locations. Each source becomes a static redirect page in the build output, and client-side routing follows the same rules for unknown paths. { "redirects": [ { "source": "/docs/old-page", "destination": "/docs/new-page" }, { "source": "/docs/legacy", "destination": "https://example.com/archive" } ] } Sources are matched exactly. Wildcard patterns (/old/:slug*) are part of the standard but not implemented yet — they are skipped with a build warning. permanent is accepted for portability, but static output cannot vary the HTTP status code.',
+    text: 'The redirects key maps moved or renamed pages to their new locations. Each source becomes a static redirect page in the build output, and client-side routing follows the same rules for unknown paths. { "redirects": [ { "source": "/docs/old-page", "destination": "/docs/new-page" }, { "source": "/docs/legacy", "destination": "https://example.com/archive" } ] } Sources are matched exactly. Wildcard patterns such as /old/:slug* are not supported; add an exact entry for each source path.',
   },
   {
     url: '/docs/seo',
@@ -503,16 +503,9 @@ export const SEARCH_INDEX: SearchRecord[] = [
   {
     url: '/docs/troubleshooting',
     page: 'Troubleshooting',
-    heading: 'The build prints a notice about an ignored key',
-    id: 'the-build-prints-a-notice-about-an-ignored-key',
-    text: 'notice: "integrations" is recognized but not implemented yet — it will be ignored. This is expected: recognized keys that Shiso does not implement yet are accepted and skipped so a shared config still builds. See Configuration for the tier policy.',
-  },
-  {
-    url: '/docs/troubleshooting',
-    page: 'Troubleshooting',
     heading: 'A redirect is not working',
     id: 'a-redirect-is-not-working',
-    text: 'Sources are matched exactly against the full route, including the docs prefix: /docs/old-page, not old-page. Wildcard patterns (/old/:slug*) are not implemented and are skipped with a build warning. A redirect whose source collides with a real page is skipped — pages always win.',
+    text: 'Sources are matched exactly against the full route, including the docs prefix: /docs/old-page, not old-page. Wildcard patterns such as /old/:slug* are not supported; use an exact source for each redirect. Pages take precedence when a redirect source matches an existing page.',
   },
   {
     url: '/docs/troubleshooting',
@@ -1445,28 +1438,21 @@ export const SEARCH_INDEX: SearchRecord[] = [
     page: 'Migrating from Mintlify',
     heading: 'Behavior differences to expect',
     id: 'behavior-differences-to-expect',
-    text: '',
-  },
-  {
-    url: '/docs/guides/migrating',
-    page: 'Migrating from Mintlify',
-    heading: 'Config keys Shiso ignores',
-    id: 'config-keys-shiso-ignores',
-    text: 'Recognized keys that are not implemented yet are accepted and skipped with a build notice — they do not fail the build. That includes things like api, integrations, thumbnails, and MCP-based contextual options. Set theme to "shiso" (or omit it) — other theme names from Mintlify are not supported yet. See Configuration for the supported / reserved / unknown tier policy.',
+    text: 'The pages under Configuration describe Shiso\'s complete configuration surface. Remove other settings from the migrated docs.json and set theme to "shiso", or omit it.',
   },
   {
     url: '/docs/guides/migrating',
     page: 'Migrating from Mintlify',
     heading: 'Versions and languages',
     id: 'versions-and-languages',
-    text: 'If your config uses navigation.versions or navigation.languages, Shiso renders only the default entry and reports the others as skipped. Plan a separate site or branch per version/locale until full multi-version support lands.',
+    text: 'If your config uses navigation.versions or navigation.languages, Shiso renders only the default entry. Use a separate site or branch per version/locale when you need to publish more than one.',
   },
   {
     url: '/docs/guides/migrating',
     page: 'Migrating from Mintlify',
     heading: 'Redirects',
     id: 'redirects',
-    text: 'Only exact-match source values work. Wildcard patterns such as /old/:slug* are skipped with a warning. Sources must include the full path (including the docs prefix), for example /docs/old-page.',
+    text: 'Use an exact source value for each redirect; wildcard patterns are not supported. Sources must include the full path (including the docs prefix), for example /docs/old-page.',
   },
   {
     url: '/docs/guides/migrating',
