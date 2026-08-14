@@ -22,7 +22,7 @@ Shiso is installed as a regular project dependency. Upgrade it independently
 of this starter with:
 
 ```bash
-pnpm update shiso
+pnpm update @umami/shiso
 ```
 
 ## Production

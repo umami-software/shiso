@@ -14,7 +14,7 @@ yarn create shiso-app@latest my-docs
 bunx create-shiso-app@latest my-docs
 ```
 
-The CLI copies a minimal starter, installs the upgradeable `shiso` framework
+The CLI copies a minimal starter, installs the upgradeable `@umami/shiso` framework
 dependency with the invoking package manager, and initializes a fresh Git
 repository without an upstream remote.
 

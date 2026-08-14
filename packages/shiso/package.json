@@ -1,6 +1,6 @@
 {
-  "name": "shiso",
-  "version": "0.1.0",
+  "name": "@umami/shiso",
+  "version": "0.61.0",
   "description": "Open-source documentation framework for Markdown and MDX sites.",
   "type": "module",
   "bin": {

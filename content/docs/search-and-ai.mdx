@@ -44,8 +44,8 @@ with `search.provider`; `options` are passed directly to its factory:
 Register custom providers in `entry-client.tsx` before mounting Shiso:
 
 ```tsx
-import { mount } from 'shiso/client';
-import { registerSearchProvider } from 'shiso/search';
+import { mount } from '@umami/shiso/client';
+import { registerSearchProvider } from '@umami/shiso/search';
 
 registerSearchProvider('hosted', options => ({
   async search(query, limit = 10) {

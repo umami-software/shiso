@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -43,5 +44,29 @@ describe('release metadata validation', () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(`Release metadata is valid: ${tag}`);
+  });
+
+  it('uses a filesystem-safe tarball name for the scoped framework package', () => {
+    const outputDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'shiso-release-test-'));
+    const outputsFile = path.join(outputDirectory, 'github-output.txt');
+    const tag = `shiso-v${frameworkMetadata.version}`;
+    const result = spawnSync(
+      process.execPath,
+      [script, '--package', 'shiso', tag, '--output-dir', outputDirectory],
+      {
+        cwd: repositoryRoot,
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_OUTPUT: outputsFile },
+      },
+    );
+
+    try {
+      expect(result.status).toBe(0);
+      expect(fs.readFileSync(outputsFile, 'utf8')).toContain(
+        `umami-shiso-${frameworkMetadata.version}.tgz`,
+      );
+    } finally {
+      fs.rmSync(outputDirectory, { recursive: true, force: true });
+    }
   });
 });

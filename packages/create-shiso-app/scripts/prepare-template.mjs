@@ -47,7 +47,7 @@ async function writeProjectPackage(templateRoot) {
       preview: 'shiso preview --outDir dist/client',
     },
     dependencies: {
-      shiso: frameworkSpecifier,
+      [frameworkPackage.name]: frameworkSpecifier,
       react: rootPackage.dependencies.react,
       'react-dom': rootPackage.dependencies['react-dom'],
     },

@@ -22,7 +22,9 @@ describe('create-shiso-app template', () => {
         await readFile(path.join(root, 'packages/shiso/package.json'), 'utf8'),
       );
 
-      expect(projectPackage.dependencies.shiso).toBe(`^${frameworkPackage.version}`);
+      expect(projectPackage.dependencies[frameworkPackage.name]).toBe(
+        `^${frameworkPackage.version}`,
+      );
       expect(projectPackage.scripts).toEqual({
         dev: 'shiso dev',
         check: 'shiso check',

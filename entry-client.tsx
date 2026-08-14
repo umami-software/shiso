@@ -1,4 +1,4 @@
-import { mount } from 'shiso/client';
+import { mount } from '@umami/shiso/client';
 import './styles.css';
 
 mount();

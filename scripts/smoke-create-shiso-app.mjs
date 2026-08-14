@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PACKAGE_ROOT = path.join(REPOSITORY_ROOT, 'packages/create-shiso-app');
 const FRAMEWORK_ROOT = path.join(REPOSITORY_ROOT, 'packages/shiso');
+const FRAMEWORK_PACKAGE = JSON.parse(
+  await fs.readFile(path.join(FRAMEWORK_ROOT, 'package.json'), 'utf8'),
+);
 
 function executable(command) {
   return process.platform === 'win32' ? `${command}.cmd` : command;
@@ -66,7 +69,7 @@ try {
     );
   }
 
-  if (projectPackage.dependencies.shiso !== `file:${frameworkArchive}`) {
+  if (projectPackage.dependencies[FRAMEWORK_PACKAGE.name] !== `file:${frameworkArchive}`) {
     throw new Error('Generated project did not retain the packed Shiso dependency.');
   }
 

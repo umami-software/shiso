@@ -12,4 +12,4 @@ pnpm preview
 pnpm check
 ```
 
-Upgrade an existing project with `pnpm update shiso`.
+Upgrade an existing project with `pnpm update @umami/shiso`.

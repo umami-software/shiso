@@ -20,6 +20,9 @@ importers:
       '@mdx-js/react':
         specifier: ^3.1.1
         version: 3.1.1(@types/react@19.2.18)(react@19.2.8)
+      '@umami/shiso':
+        specifier: workspace:*
+        version: link:packages/shiso
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -65,9 +68,6 @@ importers:
       remark-gfm:
         specifier: ^4.0.0
         version: 4.0.1
-      shiso:
-        specifier: workspace:*
-        version: link:packages/shiso
       simple-icons:
         specifier: ^16.28.0
         version: 16.28.0

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `shiso` are documented here. This project follows
+All notable changes to `@umami/shiso` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
 ## 0.61.0 - 2026-08-13

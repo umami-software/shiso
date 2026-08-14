@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/shiso/docs.schema.json",
+  "$schema": "./node_modules/@umami/shiso/docs.schema.json",
   "$shiso": {
     "siteUrl": "https://shiso.umami.is"
   },

@@ -6,10 +6,12 @@ import { fileURLToPath } from 'node:url';
 const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RELEASE_PACKAGES = {
   'create-shiso-app': {
+    name: 'create-shiso-app',
     root: path.join(REPOSITORY_ROOT, 'packages/create-shiso-app'),
     tagPrefix: 'create-shiso-app-v',
   },
   shiso: {
+    name: '@umami/shiso',
     root: path.join(REPOSITORY_ROOT, 'packages/shiso'),
     tagPrefix: 'shiso-v',
   },
@@ -142,8 +144,8 @@ async function main() {
     throw new Error(`Package version "${version}" has a numeric prerelease with a leading zero.`);
   }
 
-  if (name !== options.packageName) {
-    throw new Error(`Expected package name "${options.packageName}", got "${name}".`);
+  if (name !== releasePackage.name) {
+    throw new Error(`Expected package name "${releasePackage.name}", got "${name}".`);
   }
 
   if (publishConfig?.access !== 'public') {
@@ -171,7 +173,8 @@ async function main() {
     const outputDirectory = path.resolve(REPOSITORY_ROOT, options.outputDirectory);
     await fs.mkdir(outputDirectory, { recursive: true });
     notesFile = path.join(outputDirectory, `${tag}.md`);
-    tarball = path.join(outputDirectory, `${name}-${version}.tgz`);
+    const archiveName = name.replace(/^@/, '').replaceAll('/', '-');
+    tarball = path.join(outputDirectory, `${archiveName}-${version}.tgz`);
     await fs.writeFile(notesFile, `${notes}\n`);
     notesFile = path.relative(REPOSITORY_ROOT, notesFile).split(path.sep).join('/');
     tarball = path.relative(REPOSITORY_ROOT, tarball).split(path.sep).join('/');

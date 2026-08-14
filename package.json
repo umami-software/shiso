@@ -28,7 +28,7 @@
     "search:index": "node packages/shiso/scripts/generate-search-index.mjs"
   },
   "dependencies": {
-    "shiso": "workspace:*",
+    "@umami/shiso": "workspace:*",
     "@base-ui/react": "^1.7.0",
     "@fontsource/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",

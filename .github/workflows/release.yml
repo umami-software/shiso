@@ -35,7 +35,7 @@ jobs:
       - name: Verify Shiso framework is published
         run: >-
           pnpm view
-          "shiso@$(node -p 'require("./packages/shiso/package.json").version')"
+          "@umami/shiso@$(node -p 'require("./packages/shiso/package.json").version')"
           version
       - run: pnpm lint
       - run: pnpm exec tsc --noEmit
