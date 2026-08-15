@@ -3,16 +3,19 @@ import { slugifyId } from '@/lib/slug';
 import type {
   AnchorItem,
   DocsConfig,
+  DocsScope,
   DropdownItem,
   GroupItem,
   LanguageItem,
   LinkTarget,
   NavGroupNode,
+  NavigationConfig,
   NavLinkNode,
   NavNode,
   NavPageNode,
   NormalizedDocsConfig,
   NormalizedDocsPage,
+  NormalizedDocsSite,
   NormalizeOptions,
   PageItem,
   TabItem,
@@ -32,17 +35,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function normalizeLinkTarget(href: string, target?: LinkTarget): LinkTarget {
   return target || (/^(?:#|\/|\.\.?\/)/.test(href) ? '_self' : '_blank');
-}
-
-const warned = new Set<string>();
-
-function warnOnce(message: string) {
-  if (warned.has(message)) {
-    return;
-  }
-
-  warned.add(message);
-  console.warn(`[shiso] ${message}`);
 }
 
 export function assertDocsConfig(value: unknown, sourceName: string): asserts value is DocsConfig {
@@ -99,10 +91,6 @@ function getDefaultLabel(fileSlug: string): string {
 function pageToUrl(slug: string, docsPrefix: string): string {
   const base = docsPrefix || '';
   return slug === 'index' ? base || '/' : `${base}/${slug}`;
-}
-
-function pickDefaultItem<T extends { default?: boolean }>(items: T[]): T {
-  return items.find(item => item.default) || items[0];
 }
 
 function dropdownsToTabs(dropdowns: DropdownItem[]): TabItem[] {
@@ -163,6 +151,18 @@ function getNavigationModes(container: NavContainer): string[] {
   return modes;
 }
 
+/** Rejects a container that declares more than one primary navigation mode. */
+function assertSingleMode(container: NavContainer, where: string): void {
+  const modes = getNavigationModes(container);
+
+  if (modes.length > 1) {
+    throw new Error(
+      `Invalid docs config: ${where} must define exactly one of tabs, dropdowns, ` +
+        `versions, languages, or groups/pages — found ${modes.join(' and ')}.`,
+    );
+  }
+}
+
 /** Rejects arrays where more than one entry claims to be the default. */
 function assertSingleDefault<T extends { default?: boolean }>(
   items: T[],
@@ -181,24 +181,16 @@ function assertSingleDefault<T extends { default?: boolean }>(
   }
 }
 
+/** Explicit default first, then the first visible entry, then the first entry. */
+function pickDefaultEntry<T extends { default?: boolean; hidden?: boolean }>(items: T[]): T {
+  return items.find(item => item.default === true) || items.find(item => !item.hidden) || items[0];
+}
+
 /**
- * Resolves a navigation container down to a flat list of tabs.
- *
- * Versions and languages collapse to their default entry for now. That is a
- * real limitation, so the skipped entries are reported rather than silently
- * dropped; the multi-scope phases replace this by normalizing once per
- * version/locale.
+ * Resolves a leaf navigation container (one that no longer carries versions or
+ * languages) down to a flat list of tabs.
  */
-function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabItem[] {
-  const modes = getNavigationModes(container);
-
-  if (modes.length > 1) {
-    throw new Error(
-      'Invalid docs config: navigation must define exactly one of tabs, dropdowns, ' +
-        `versions, languages, or groups/pages — found ${modes.join(' and ')}.`,
-    );
-  }
-
+function getTabsFromLeafContainer(container: NavContainer, fallbackLabel = ''): TabItem[] {
   if (Array.isArray(container.tabs)) {
     if (!container.tabs.length) {
       throw new Error('Invalid docs config: "tabs" must contain at least one tab.');
@@ -225,70 +217,140 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabI
     ];
   }
 
-  if (Array.isArray(container.versions)) {
-    if (!container.versions.length) {
-      throw new Error('Invalid docs config: "versions" must contain at least one version.');
-    }
-
-    assertSingleDefault(container.versions, 'versions', (item: VersionItem) => item.version);
-
-    const version = pickDefaultItem(container.versions);
-    const skipped = container.versions.filter(item => item !== version).map(item => item.version);
-
-    if (skipped.length) {
-      warnOnce(
-        `Only the default version "${version.version}" is rendered; skipped: ${skipped.join(', ')}. ` +
-          'Multi-version output is not implemented yet.',
-      );
-    }
-
-    return getTabsFromContainer(version, version.version?.trim() || fallbackLabel);
-  }
-
-  if (Array.isArray(container.languages)) {
-    if (!container.languages.length) {
-      throw new Error('Invalid docs config: "languages" must contain at least one language.');
-    }
-
-    assertSingleDefault(container.languages, 'languages', (item: LanguageItem) => item.language);
-
-    const language = pickDefaultItem(container.languages);
-    const skipped = container.languages
-      .filter(item => item !== language)
-      .map(item => item.language);
-
-    if (skipped.length) {
-      warnOnce(
-        `Only the default language "${language.language}" is rendered; skipped: ${skipped.join(', ')}. ` +
-          'Multi-language output is not implemented yet.',
-      );
-    }
-
-    return getTabsFromContainer(language, language.language?.trim() || fallbackLabel);
-  }
-
   throw new Error(
     'Invalid docs config: navigation must define tabs, dropdowns, groups, pages, versions, or languages.',
   );
 }
 
 function hasExplicitTopNavigation(container: NavContainer): boolean {
-  if (
+  return (
     (Array.isArray(container.tabs) && container.tabs.length > 0) ||
     (Array.isArray(container.dropdowns) && container.dropdowns.length > 0)
-  ) {
-    return true;
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Scope collection
+ *
+ * A docs site normalizes into one or more scopes: the ordinary navigation, one
+ * per version, one per language, or one per version nested inside a language.
+ * Page references alone determine URLs — scopes never add URL prefixes.
+ * ------------------------------------------------------------------------- */
+
+interface ScopeSource {
+  id: string;
+  language?: string;
+  version?: string;
+  hidden?: boolean;
+  isDefault: boolean;
+  /** Leaf navigation container for this scope. */
+  container: NavContainer;
+  /** Label used for the synthetic tab in simple groups/pages navigation. */
+  fallbackLabel: string;
+}
+
+function makeVersionScopeSource(
+  version: VersionItem,
+  language: LanguageItem | undefined,
+  isDefault: boolean,
+): ScopeSource {
+  const versionLabel = version.version?.trim();
+
+  if (!versionLabel) {
+    throw new Error('Invalid docs config: version entry is missing "version".');
   }
 
-  if (Array.isArray(container.versions) && container.versions.length) {
-    return hasExplicitTopNavigation(pickDefaultItem(container.versions));
+  assertSingleMode(version, `version "${versionLabel}"`);
+
+  const languageLabel = language?.language?.trim();
+  const idBase = [languageLabel, versionLabel].filter(Boolean).join('-');
+
+  return {
+    id: slugifyId(idBase, 'scope'),
+    language: languageLabel || undefined,
+    version: versionLabel,
+    hidden: version.hidden || language?.hidden || undefined,
+    isDefault,
+    container: version,
+    fallbackLabel: versionLabel,
+  };
+}
+
+function collectScopeSources(navigation: NavigationConfig): ScopeSource[] {
+  assertSingleMode(navigation, 'navigation');
+
+  if (navigation.versions !== undefined) {
+    const versions = navigation.versions;
+
+    if (!Array.isArray(versions) || !versions.length) {
+      throw new Error('Invalid docs config: "versions" must contain at least one version.');
+    }
+
+    assertSingleDefault(versions, 'versions', item => item.version);
+
+    const defaultVersion = pickDefaultEntry(versions);
+
+    return versions.map(version =>
+      makeVersionScopeSource(version, undefined, version === defaultVersion),
+    );
   }
 
-  if (Array.isArray(container.languages) && container.languages.length) {
-    return hasExplicitTopNavigation(pickDefaultItem(container.languages));
+  if (navigation.languages !== undefined) {
+    const languages = navigation.languages;
+
+    if (!Array.isArray(languages) || !languages.length) {
+      throw new Error('Invalid docs config: "languages" must contain at least one language.');
+    }
+
+    assertSingleDefault(languages, 'languages', item => item.language);
+
+    const defaultLanguage = pickDefaultEntry(languages);
+
+    return languages.flatMap(language => {
+      const languageLabel = language.language?.trim();
+
+      if (!languageLabel) {
+        throw new Error('Invalid docs config: language entry is missing "language".');
+      }
+
+      assertSingleMode(language, `language "${languageLabel}"`);
+
+      if (language.versions !== undefined) {
+        const versions = language.versions;
+
+        if (!Array.isArray(versions) || !versions.length) {
+          throw new Error(
+            `Invalid docs config: language "${languageLabel}" "versions" must contain at least one version.`,
+          );
+        }
+
+        assertSingleDefault(versions, `language "${languageLabel}" versions`, item => item.version);
+
+        const defaultVersion = pickDefaultEntry(versions);
+
+        return versions.map(version =>
+          makeVersionScopeSource(
+            version,
+            language,
+            language === defaultLanguage && version === defaultVersion,
+          ),
+        );
+      }
+
+      return [
+        {
+          id: slugifyId(languageLabel, 'scope'),
+          language: languageLabel,
+          hidden: language.hidden || undefined,
+          isDefault: language === defaultLanguage,
+          container: language,
+          fallbackLabel: languageLabel,
+        },
+      ];
+    });
   }
 
-  return false;
+  return [{ id: 'default', isDefault: true, container: navigation, fallbackLabel: '' }];
 }
 
 /* ---------------------------------------------------------------------------
@@ -487,14 +549,15 @@ function collectAnchors(anchors: AnchorItem[] | undefined): NavLinkNode[] {
  * Normalization
  * ------------------------------------------------------------------------- */
 
-export function normalizeDocsConfig(
-  docsConfig: DocsConfig,
+function normalizeScope(
+  name: string | undefined,
+  source: ScopeSource,
+  anchors: AnchorItem[] | undefined,
   resolveDocFile: DocFileResolver,
-  options: NormalizeOptions = {},
+  docsPrefix: string,
 ): NormalizedDocsConfig {
-  const docsPrefix = options.docsPrefix ?? DOCS_PREFIX;
-  const tabs = getTabsFromContainer(docsConfig.navigation);
-  const showTabs = hasExplicitTopNavigation(docsConfig.navigation);
+  const tabs = getTabsFromLeafContainer(source.container, source.fallbackLabel);
+  const showTabs = hasExplicitTopNavigation(source.container);
   const state: WalkState = { pages: [], order: { value: 0 } };
   const treeByTab = new Map<string, PendingNode[]>();
   const seenTabIds = new Set<string>();
@@ -644,6 +707,9 @@ export function normalizeDocsConfig(
       ...page,
       url: pageToUrl(page.slug, docsPrefix),
       filePath,
+      scopeId: source.id,
+      language: source.language,
+      version: source.version,
     };
 
     pages.push(normalized);
@@ -708,15 +774,132 @@ export function normalizeDocsConfig(
   });
 
   return {
-    name: docsConfig.name,
+    name,
     tabs: normalizedTabs,
     showTabs,
     navigation,
-    anchors: collectAnchors(docsConfig.navigation.anchors),
+    anchors: collectAnchors(anchors),
     pages,
     pageBySlug,
     pageByLookupSlug,
   };
+}
+
+/**
+ * Normalizes the complete docs site: one scope for ordinary navigation, one per
+ * version, one per language, and one per version nested inside a language.
+ * Every scope builds, including hidden ones; hidden scopes are only omitted
+ * from switcher UI. Page references and route URLs are validated globally.
+ */
+export function normalizeDocsSite(
+  docsConfig: DocsConfig,
+  resolveDocFile: DocFileResolver,
+  options: NormalizeOptions = {},
+): NormalizedDocsSite {
+  const docsPrefix = options.docsPrefix ?? DOCS_PREFIX;
+  const sources = collectScopeSources(docsConfig.navigation);
+  const anchors = docsConfig.navigation.anchors;
+
+  const seenScopeIds = new Set<string>();
+
+  for (const source of sources) {
+    if (seenScopeIds.has(source.id)) {
+      throw new Error(
+        `Invalid docs config: duplicate version/language label resolves to duplicate scope id "${source.id}".`,
+      );
+    }
+
+    seenScopeIds.add(source.id);
+  }
+
+  const scopes: DocsScope[] = sources.map(source => {
+    const docs = normalizeScope(docsConfig.name, source, anchors, resolveDocFile, docsPrefix);
+    const firstPage = docs.pages.find(page => !page.hidden) || docs.pages[0];
+
+    return {
+      id: source.id,
+      language: source.language,
+      version: source.version,
+      hidden: source.hidden,
+      isDefault: source.isDefault,
+      firstPageUrl: firstPage.url,
+      docs,
+    };
+  });
+
+  const pages: NormalizedDocsPage[] = [];
+  const pageByUrl: Record<string, NormalizedDocsPage> = {};
+  const fileOwners = new Map<string, string>();
+
+  for (const scope of scopes) {
+    for (const page of scope.docs.pages) {
+      const owner = fileOwners.get(page.fileSlug);
+
+      if (owner !== undefined) {
+        throw new Error(
+          `Invalid docs config: page "${page.fileSlug}" is referenced by multiple navigation ` +
+            'scopes. Each version/language must reference its own content files.',
+        );
+      }
+
+      fileOwners.set(page.fileSlug, scope.id);
+
+      if (pageByUrl[page.url]) {
+        throw new Error(
+          `Invalid docs config: duplicate route URL "${page.url}" across versions/languages.`,
+        );
+      }
+
+      pageByUrl[page.url] = page;
+      pages.push(page);
+    }
+  }
+
+  const defaultScope = scopes.find(scope => scope.isDefault) || scopes[0];
+
+  return { scopes, defaultScopeId: defaultScope.id, pages, pageByUrl };
+}
+
+/**
+ * Normalizes only the default scope of a site. Retained for callers that need
+ * a single navigation; multi-scope consumers use `normalizeDocsSite`.
+ */
+export function normalizeDocsConfig(
+  docsConfig: DocsConfig,
+  resolveDocFile: DocFileResolver,
+  options: NormalizeOptions = {},
+): NormalizedDocsConfig {
+  return getDefaultScope(normalizeDocsSite(docsConfig, resolveDocFile, options)).docs;
+}
+
+/* ---------------------------------------------------------------------------
+ * Site helpers
+ * ------------------------------------------------------------------------- */
+
+export function getDefaultScope(site: NormalizedDocsSite): DocsScope {
+  return site.scopes.find(scope => scope.id === site.defaultScopeId) || site.scopes[0];
+}
+
+export function getScopeById(site: NormalizedDocsSite, scopeId: string): DocsScope | null {
+  return site.scopes.find(scope => scope.id === scopeId) || null;
+}
+
+export function getScopeForPage(site: NormalizedDocsSite, page: NormalizedDocsPage): DocsScope {
+  return getScopeById(site, page.scopeId) || getDefaultScope(site);
+}
+
+/**
+ * Exact page lookup by pathname. Tolerates trailing slashes and explicit
+ * `/index` suffixes; everything else must match a page URL exactly.
+ */
+export function getPageByPathname(
+  site: NormalizedDocsSite,
+  pathname: string,
+): NormalizedDocsPage | null {
+  const trimmed = pathname.replace(/\/+$/, '') || '/';
+  const collapsed = trimmed === '/index' ? '/' : trimmed.replace(/\/index$/, '') || '/';
+
+  return site.pageByUrl[trimmed] || site.pageByUrl[collapsed] || null;
 }
 
 /** Flattens a navigation tree to the routed pages it contains, in document order. */

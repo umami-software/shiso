@@ -318,6 +318,12 @@ export interface NormalizedDocsPage {
   tabId: string;
   tabLabel: string;
   order: number;
+  /** Id of the navigation scope (version/language) this page belongs to. */
+  scopeId: string;
+  /** Language label of the owning scope, when the site defines languages. */
+  language?: string;
+  /** Version label of the owning scope, when the site defines versions. */
+  version?: string;
   /**
    * Hidden pages are still routed and prerendered, so they remain reachable by
    * URL, but are excluded from the sidebar, prev/next, the
@@ -377,8 +383,37 @@ export interface NormalizedDocsConfig {
 }
 
 export interface NormalizeOptions {
-  /** Route prefix for docs pages. Phases 6/7 pass "/v2/docs", "/es/docs", etc. */
+  /** Route prefix for docs pages. Default "/docs"; "" serves docs at the root. */
   docsPrefix?: string;
+}
+
+/**
+ * One navigation scope of a site: the ordinary navigation, a version, a
+ * language, or a version nested inside a language. Page references alone
+ * determine URLs; scopes never add their own URL prefixes.
+ */
+export interface DocsScope {
+  id: string;
+  /** Language label, when this scope belongs to a language. */
+  language?: string;
+  /** Version label, when this scope belongs to a version. */
+  version?: string;
+  /** Hidden scopes still build, but are omitted from switchers. */
+  hidden?: boolean;
+  isDefault: boolean;
+  /** URL of the scope's first visible page — the landing page for switchers. */
+  firstPageUrl: string;
+  docs: NormalizedDocsConfig;
+}
+
+/** The complete normalized site: every scope, with global page lookups. */
+export interface NormalizedDocsSite {
+  scopes: DocsScope[];
+  defaultScopeId: string;
+  /** Every routed page across all scopes, in scope order. */
+  pages: NormalizedDocsPage[];
+  /** Exact canonical URL to page, across all scopes. */
+  pageByUrl: Record<string, NormalizedDocsPage>;
 }
 
 export interface NormalizedLink extends ConfigLink {

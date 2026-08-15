@@ -1,5 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { flattenNav, isNodeHidden, normalizeDocsConfig } from '@/lib/docs-config';
+import {
+  flattenNav,
+  getDefaultScope,
+  getPageByPathname,
+  getScopeById,
+  getScopeForPage,
+  isNodeHidden,
+  normalizeDocsConfig,
+  normalizeDocsSite,
+} from '@/lib/docs-config';
 import type { DocsConfig, NavGroupNode, NavLinkNode, NavPageNode } from '@/lib/types';
 
 /** Pretends every referenced page exists, so tests exercise the parser only. */
@@ -7,6 +16,10 @@ const resolveAll = (fileSlug: string) => `/content/docs/${fileSlug}.mdx`;
 
 function normalize(navigation: DocsConfig['navigation']) {
   return normalizeDocsConfig({ navigation } as DocsConfig, resolveAll, { docsPrefix: '/docs' });
+}
+
+function normalizeSite(navigation: DocsConfig['navigation']) {
+  return normalizeDocsSite({ navigation } as DocsConfig, resolveAll, { docsPrefix: '/docs' });
 }
 
 beforeEach(() => {
@@ -246,7 +259,7 @@ describe('validation that must keep failing', () => {
 });
 
 describe('versions and languages', () => {
-  it('renders the default version and reports the ones it skipped', () => {
+  it('returns the default version from normalizeDocsConfig without warnings', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const config = normalize({
@@ -257,7 +270,7 @@ describe('versions and languages', () => {
     });
 
     expect(config.pages.map(page => page.fileSlug)).toEqual(['v2/index']);
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('v1'));
+    expect(warn).not.toHaveBeenCalled();
   });
 
   it('rejects multiple versions marked default', () => {
@@ -283,8 +296,6 @@ describe('versions and languages', () => {
   });
 
   it('rejects a version mixing primary modes', () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     expect(() =>
       normalize({
         versions: [
@@ -328,5 +339,191 @@ describe('anchors', () => {
     expect(() =>
       normalize({ pages: ['index'], anchors: [{ href: 'https://example.com' } as never] }),
     ).toThrow(/must define both "anchor" and "href"/);
+  });
+});
+
+describe('multi-scope normalization', () => {
+  it('produces pages for every version', () => {
+    const site = normalizeSite({
+      versions: [
+        { version: 'v1', pages: ['v1/index', 'v1/guide'] },
+        { version: 'v2', default: true, pages: ['v2/index'] },
+      ],
+    });
+
+    expect(site.scopes.map(scope => [scope.id, scope.version, scope.isDefault])).toEqual([
+      ['v1', 'v1', false],
+      ['v2', 'v2', true],
+    ]);
+    expect(site.pages.map(page => page.url)).toEqual(['/docs/v1', '/docs/v1/guide', '/docs/v2']);
+    expect(site.defaultScopeId).toBe('v2');
+  });
+
+  it('produces pages for every language', () => {
+    const site = normalizeSite({
+      languages: [
+        { language: 'en', pages: ['index'] },
+        { language: 'es', pages: ['es/index'] },
+      ],
+    });
+
+    expect(site.scopes.map(scope => [scope.id, scope.language])).toEqual([
+      ['en', 'en'],
+      ['es', 'es'],
+    ]);
+    expect(site.pages.map(page => page.url)).toEqual(['/docs', '/docs/es']);
+    expect(site.defaultScopeId).toBe('en');
+  });
+
+  it('produces one scope per version inside a language', () => {
+    const site = normalizeSite({
+      languages: [
+        { language: 'en', pages: ['index'] },
+        {
+          language: 'es',
+          versions: [
+            { version: 'v1', pages: ['es/v1/index'] },
+            { version: 'v2', default: true, pages: ['es/index'] },
+          ],
+        },
+      ],
+    });
+
+    expect(site.scopes.map(scope => [scope.id, scope.language, scope.version])).toEqual([
+      ['en', 'en', undefined],
+      ['es-v1', 'es', 'v1'],
+      ['es-v2', 'es', 'v2'],
+    ]);
+    expect(site.defaultScopeId).toBe('en');
+  });
+
+  it("uses the default language's default version as the site default", () => {
+    const site = normalizeSite({
+      languages: [
+        { language: 'en', pages: ['index'] },
+        {
+          language: 'es',
+          default: true,
+          versions: [
+            { version: 'v1', pages: ['es/v1/index'] },
+            { version: 'v2', default: true, pages: ['es/index'] },
+          ],
+        },
+      ],
+    });
+
+    expect(site.defaultScopeId).toBe('es-v2');
+    expect(getDefaultScope(site).firstPageUrl).toBe('/docs/es');
+  });
+
+  it('prefers the first visible entry when nothing is marked default', () => {
+    const site = normalizeSite({
+      versions: [
+        { version: 'v1', hidden: true, pages: ['v1/index'] },
+        { version: 'v2', pages: ['v2/index'] },
+      ],
+    });
+
+    expect(site.defaultScopeId).toBe('v2');
+  });
+
+  it('builds hidden scopes but flags them', () => {
+    const site = normalizeSite({
+      versions: [
+        { version: 'v1', default: true, pages: ['v1/index'] },
+        { version: 'v0', hidden: true, pages: ['v0/index'] },
+      ],
+    });
+
+    const hiddenScope = getScopeById(site, 'v0');
+
+    expect(hiddenScope?.hidden).toBe(true);
+    expect(hiddenScope?.docs.pages).toHaveLength(1);
+    expect(site.pageByUrl['/docs/v0']).toBeDefined();
+  });
+
+  it('skips hidden pages when picking a scope landing page', () => {
+    const site = normalizeSite({
+      versions: [{ version: 'v1', pages: [{ page: 'v1/secret', hidden: true }, 'v1/index'] }],
+    });
+
+    expect(site.scopes[0].firstPageUrl).toBe('/docs/v1');
+  });
+
+  it('annotates pages with their scope', () => {
+    const site = normalizeSite({
+      languages: [
+        {
+          language: 'es',
+          versions: [{ version: 'v1', pages: ['es/v1/index'] }],
+        },
+      ],
+    });
+
+    const page = site.pages[0];
+
+    expect(page.scopeId).toBe('es-v1');
+    expect(page.language).toBe('es');
+    expect(page.version).toBe('v1');
+    expect(getScopeForPage(site, page).id).toBe('es-v1');
+  });
+
+  it('rejects the same page reference across scopes', () => {
+    expect(() =>
+      normalizeSite({
+        versions: [
+          { version: 'v1', pages: ['shared'] },
+          { version: 'v2', pages: ['shared'] },
+        ],
+      }),
+    ).toThrow(/referenced by multiple navigation scopes/);
+  });
+
+  it('rejects duplicate version labels', () => {
+    expect(() =>
+      normalizeSite({
+        versions: [
+          { version: 'v1', pages: ['a'] },
+          { version: 'V1', pages: ['b'] },
+        ],
+      }),
+    ).toThrow(/duplicate scope id/);
+  });
+
+  it('keeps ordinary single navigation as one default scope', () => {
+    const site = normalizeSite({ pages: ['index', 'alpha'] });
+
+    expect(site.scopes).toHaveLength(1);
+    expect(site.scopes[0]).toMatchObject({ id: 'default', isDefault: true, firstPageUrl: '/docs' });
+    expect(site.pages.map(page => page.url)).toEqual(['/docs', '/docs/alpha']);
+    expect(normalize({ pages: ['index', 'alpha'] }).pages.map(page => page.url)).toEqual(
+      site.pages.map(page => page.url),
+    );
+  });
+
+  it('shares top-level anchors with every scope', () => {
+    const site = normalizeSite({
+      anchors: [{ anchor: 'Community', href: 'https://example.com' }],
+      versions: [
+        { version: 'v1', pages: ['v1/index'] },
+        { version: 'v2', pages: ['v2/index'] },
+      ],
+    });
+
+    expect(site.scopes.map(scope => scope.docs.anchors.length)).toEqual([1, 1]);
+  });
+
+  it('looks up pages by exact URL with trailing-slash and index tolerance', () => {
+    const site = normalizeSite({
+      versions: [
+        { version: 'v1', pages: ['v1/index', 'v1/guide'] },
+        { version: 'v2', default: true, pages: ['v2/index'] },
+      ],
+    });
+
+    expect(getPageByPathname(site, '/docs/v1/guide')?.fileSlug).toBe('v1/guide');
+    expect(getPageByPathname(site, '/docs/v1/guide/')?.fileSlug).toBe('v1/guide');
+    expect(getPageByPathname(site, '/docs/v1/index')?.fileSlug).toBe('v1/index');
+    expect(getPageByPathname(site, '/docs/nope')).toBeNull();
   });
 });

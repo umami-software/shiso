@@ -1,12 +1,18 @@
 import rawConfig from 'virtual:shiso-docs-config';
 import { resolveDocFile } from '@/lib/content';
-import { assertDocsConfig, normalizeDocsConfig } from '@/lib/docs-config';
-import { stripBase, stripDocsPrefix } from '@/lib/paths';
+import {
+  assertDocsConfig,
+  getDefaultScope,
+  getPageByPathname as getSitePageByPathname,
+  normalizeDocsSite,
+} from '@/lib/docs-config';
+import { stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
 import type {
   DocsConfig,
   NormalizedDocsConfig,
   NormalizedDocsPage,
+  NormalizedDocsSite,
   RedirectRule,
   SeoConfig,
 } from '@/lib/types';
@@ -15,7 +21,11 @@ assertDocsConfig(rawConfig, 'docs.json');
 
 export const siteConfig: DocsConfig = rawConfig;
 
-export const docsConfig: NormalizedDocsConfig = normalizeDocsConfig(siteConfig, resolveDocFile);
+/** The complete normalized site: every version/language scope. */
+export const docsSite: NormalizedDocsSite = normalizeDocsSite(siteConfig, resolveDocFile);
+
+/** The default scope's navigation, used where a single navigation is expected. */
+export const docsConfig: NormalizedDocsConfig = getDefaultScope(docsSite).docs;
 
 export const siteModel = resolveSiteModel(siteConfig, docsConfig);
 
@@ -76,23 +86,8 @@ export function showTimestamp(frontmatterValue: unknown): boolean {
   return siteModel.showTimestamp;
 }
 
-export function normalizeParamSlug(slug: string): string {
-  const cleaned = slug.replace(/^\/+|\/+$/g, '');
-
-  if (!cleaned) {
-    return 'index';
-  }
-
-  if (cleaned === 'index') {
-    return cleaned;
-  }
-
-  return cleaned.replace(/\/index$/, '') || 'index';
-}
-
 export function getPageByPathname(pathname: string): NormalizedDocsPage | null {
-  const slug = normalizeParamSlug(stripDocsPrefix(stripBase(pathname)));
-  return docsConfig.pageByLookupSlug[slug] || null;
+  return getSitePageByPathname(docsSite, stripBase(pathname));
 }
 
 export function getPageTitle(pageTitle?: string): string {

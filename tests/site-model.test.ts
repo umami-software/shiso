@@ -107,6 +107,7 @@ describe('contextual actions', () => {
       tabId: 'docs',
       tabLabel: 'Docs',
       order: 0,
+      scopeId: 'default',
       filePath: '/content/docs/guide.mdx',
     } satisfies NormalizedDocsPage;
 
