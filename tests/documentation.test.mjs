@@ -101,7 +101,10 @@ function validateExample(value) {
   const topLevelKeys = new Set(getSchemaKeys(schema));
 
   if (keys.some(key => topLevelKeys.has(key))) {
-    const config = 'navigation' in value || '$ref' in value ? value : { ...value, navigation: {} };
+    const config =
+      'navigation' in value || '$ref' in value
+        ? value
+        : { ...value, navigation: { pages: ['index'] } };
     return validateConfig(config, schema).valid;
   }
 

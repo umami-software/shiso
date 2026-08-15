@@ -3,6 +3,14 @@
 All notable changes to `create-shiso-app` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 0.3.0 - 2026-08-15
+
+### Changed
+
+- New projects install `@umami/shiso` 1.x as an upgradeable dependency.
+- The supported Node.js range now matches the framework and Vite:
+  `^20.19.0 || >=22.12.0`.
+
 ## 0.2.0 - 2026-08-13
 
 ### Changed

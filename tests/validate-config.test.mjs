@@ -492,6 +492,12 @@ describe('supported keys stay strictly validated', () => {
     ).toBe(false);
     expect(
       validateConfig(
+        { ...minimal, redirects: [{ source: '/old/:slug', destination: '/new' }] },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
         { ...minimal, redirects: [{ source: '/old', destination: '/new', permanent: false }] },
         schema,
       ).valid,
@@ -627,6 +633,18 @@ describe('navigation mode exclusivity', () => {
   it('rejects empty versions and languages arrays', () => {
     expect(validateConfig({ navigation: { versions: [] } }, schema).valid).toBe(false);
     expect(validateConfig({ navigation: { languages: [] } }, schema).valid).toBe(false);
+  });
+
+  it('requires exactly one non-empty navigation mode at every level', () => {
+    expect(validateConfig({ navigation: {} }, schema).valid).toBe(false);
+    expect(validateConfig({ navigation: { pages: [] } }, schema).valid).toBe(false);
+    expect(validateConfig({ navigation: { tabs: [{ tab: 'Docs' }] } }, schema).valid).toBe(false);
+    expect(validateConfig({ navigation: { versions: [{ version: 'v1' }] } }, schema).valid).toBe(
+      false,
+    );
+    expect(validateConfig({ navigation: { languages: [{ language: 'en' }] } }, schema).valid).toBe(
+      false,
+    );
   });
 
   it('applies exclusivity inside versions and languages', () => {

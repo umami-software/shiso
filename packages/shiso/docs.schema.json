@@ -104,6 +104,15 @@
     "navigation": {
       "type": "object",
       "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
+      "anyOf": [
+        { "required": ["$ref"] },
+        { "required": ["tabs"] },
+        { "required": ["dropdowns"] },
+        { "required": ["versions"] },
+        { "required": ["languages"] },
+        { "required": ["groups"] },
+        { "required": ["pages"] }
+      ],
       "not": {
         "anyOf": [
           { "required": ["tabs", "dropdowns"] },
@@ -617,31 +626,31 @@
     },
     "redirectSourceValue": {
       "anyOf": [
-        { "type": "string", "pattern": "^/[^*]*$" },
+        { "type": "string", "pattern": "^/[^*:]*$" },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
     "pageItemList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/pageItem" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/pageItem" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
     "groupList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/group" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/group" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
     "dropdownList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/dropdown" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/dropdown" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
     "tabList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/tab" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/tab" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
@@ -781,7 +790,10 @@
     },
     "dropdown": {
       "type": "object",
-      "anyOf": [{ "required": ["$ref"] }, { "required": ["dropdown"] }],
+      "allOf": [
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["dropdown"] }] },
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }] }
+      ],
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
@@ -797,7 +809,10 @@
     },
     "tab": {
       "type": "object",
-      "anyOf": [{ "required": ["$ref"] }, { "required": ["tab"] }],
+      "allOf": [
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["tab"] }] },
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["dropdowns"] }] }
+      ],
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
@@ -811,7 +826,10 @@
     },
     "version": {
       "type": "object",
-      "anyOf": [{ "required": ["$ref"] }, { "required": ["version"] }],
+      "allOf": [
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["version"] }] },
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["tabs"] }, { "required": ["dropdowns"] }, { "required": ["groups"] }, { "required": ["pages"] }] }
+      ],
       "not": {
         "anyOf": [
           { "required": ["tabs", "dropdowns"] },
@@ -825,11 +843,11 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "version": {
-          "allOf": [{ "$ref": "#/definitions/stringValue" }],
-          "description": "Version label. Only the default (or first) version is rendered."
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Version label, shown in the version selector. Every version builds; page references determine its URLs."
         },
-        "default": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Marks this version as the one to render." },
-        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this version." },
+        "default": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Marks this version as the default. At most one version may be the default; without one, the first visible version is used." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this version from the version selector, sitemap, and search. Its pages still build and stay reachable by URL." },
         "tabs": { "$ref": "#/definitions/tabList" },
         "dropdowns": { "$ref": "#/definitions/dropdownList" },
         "groups": { "$ref": "#/definitions/groupList" },
@@ -838,7 +856,10 @@
     },
     "language": {
       "type": "object",
-      "anyOf": [{ "required": ["$ref"] }, { "required": ["language"] }],
+      "allOf": [
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["language"] }] },
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["versions"] }, { "required": ["tabs"] }, { "required": ["dropdowns"] }, { "required": ["groups"] }, { "required": ["pages"] }] }
+      ],
       "not": {
         "anyOf": [
           { "required": ["tabs", "dropdowns"] },
@@ -856,14 +877,14 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "language": {
-          "allOf": [{ "$ref": "#/definitions/stringValue" }],
-          "description": "Language code or label. Only the default (or first) language is rendered."
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Language code (e.g. \"es\"), shown in the language selector and used as the page locale when valid. Every language builds; page references determine its URLs."
         },
         "default": {
           "allOf": [{ "$ref": "#/definitions/booleanValue" }],
-          "description": "Marks this language as the one to render."
+          "description": "Marks this language as the default. At most one language may be the default; without one, the first visible language is used."
         },
-        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this language." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide this language from the language selector, sitemap, and search. Its pages still build and stay reachable by URL." },
         "versions": { "$ref": "#/definitions/versionList" },
         "tabs": { "$ref": "#/definitions/tabList" },
         "dropdowns": { "$ref": "#/definitions/dropdownList" },

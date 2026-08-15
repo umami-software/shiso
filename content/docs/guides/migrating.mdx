@@ -73,8 +73,10 @@ set `theme` to `"shiso"`, or omit it.
 ### Versions and languages
 
 If your config uses `navigation.versions` or `navigation.languages`, Shiso
-renders only the **default** entry. Use a separate site or branch per
-version/locale when you need to publish more than one.
+builds every entry and adds version and language selectors to the header.
+Each entry must reference its own content files; page references determine
+the URLs, so keep older versions and translations in their own directories.
+See [Navigation](/docs/navigation#versions) for examples.
 
 ### Redirects
 

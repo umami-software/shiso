@@ -1,6 +1,6 @@
 {
   "name": "shiso-repository",
-  "version": "0.61.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Open-source docs site generator built with Vite, React, and MDX. Configured with a single docs.json file.",
   "homepage": "https://shiso.umami.is",

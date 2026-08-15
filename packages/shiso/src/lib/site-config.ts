@@ -56,8 +56,8 @@ function toRouteKey(routePath: string): string {
 }
 
 /**
- * Redirect rules with exact-match sources. Wildcard patterns are part of the
- * standard but not implemented; they are skipped with a warning.
+ * Redirect rules with exact-match sources. Wildcard patterns are rejected by
+ * the schema; this guard covers configs that bypassed validation.
  */
 export function getRedirects(): RedirectRule[] {
   return (siteConfig.redirects || []).filter(rule => {
@@ -68,7 +68,7 @@ export function getRedirects(): RedirectRule[] {
     if (/[:*]/.test(rule.source)) {
       console.warn(
         `[shiso] Redirect source "${rule.source}" uses a wildcard pattern, which is not ` +
-          'implemented yet — it will be skipped.',
+          'supported — it will be skipped. Use an exact source path.',
       );
       return false;
     }

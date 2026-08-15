@@ -30,15 +30,16 @@ Use one tab with one group:
 - `navigation.tabs`: best default for most docs sites
 - `navigation.dropdowns`: top-level categories rendered as menus by the Shiso theme
 - `navigation.groups` + `navigation.pages`: good for a single simple section
-- `navigation.versions`: multiple product versions — only the default version
-  renders
-- `navigation.languages`: translated docs — same current limitation as versions
+- `navigation.versions`: multiple product versions, each with its own
+  navigation and a version selector in the header
+- `navigation.languages`: translated docs, each with its own navigation and a
+  language selector — languages may nest their own `versions`
 
 These modes are mutually exclusive: define exactly one of `tabs`, `dropdowns`,
 `versions`, `languages`, or top-level `groups`/`pages` (which combine into one
 simple mode). The same rule applies inside each version and language entry.
 At most one version or language may set `default: true`; without an explicit
-default, the first entry is used.
+default, the first visible entry is used.
 
 ## Page entries
 
@@ -153,6 +154,10 @@ prerendered and reachable by URL, but they:
 
 ### Versions
 
+Every version builds. The header shows a version selector; picking a version
+navigates to its first visible page. Each version defines its own navigation
+(tabs, dropdowns, or groups/pages):
+
 ```json
 {
   "navigation": {
@@ -166,13 +171,34 @@ prerendered and reachable by URL, but they:
             "pages": ["index", "installation"]
           }
         ]
+      },
+      {
+        "version": "v1",
+        "pages": ["v1/index", "v1/installation"]
       }
     ]
   }
 }
 ```
 
+**URLs come from page references, never from version labels.** In the example
+above, `"v1/index"` is served at `/docs/v1` because the files live in a `v1/`
+directory — the `version` label adds no URL prefix. Keep each version's files
+in their own directory; the same file cannot appear in two versions.
+
+Set `hidden: true` on a version to keep it out of the selector, the sitemap,
+and search. Its pages still build and stay reachable by URL — useful for
+unreleased or archived versions. Setting [`seo.indexing`](/docs/seo#indexing)
+to `"all"` includes hidden version pages in the sitemap, just like other
+hidden pages.
+
 ### Languages
+
+Every language builds, with a language selector in the header. Switching
+languages navigates to that language's first page. The `language` value should
+be a language code (`en`, `es`, `pt-BR`): it becomes the document language of
+its pages, sets the date-formatting locale, and drives right-to-left layout
+for languages such as Arabic and Hebrew.
 
 ```json
 {
@@ -187,11 +213,51 @@ prerendered and reachable by URL, but they:
             "pages": ["index", "installation"]
           }
         ]
+      },
+      {
+        "language": "es",
+        "pages": ["es/index", "es/installation"]
       }
     ]
   }
 }
 ```
+
+As with versions, URLs come from page references: keep each translation's
+files in their own directory (`es/`, `fr/`, ...).
+
+### Versions inside languages
+
+Each language may define its own `versions`. The version selector then only
+offers the versions of the active language, and switching languages lands on
+that language's default version:
+
+```json
+{
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "versions": [
+          { "version": "v2", "default": true, "pages": ["index"] },
+          { "version": "v1", "pages": ["v1/index"] }
+        ]
+      },
+      {
+        "language": "es",
+        "versions": [
+          { "version": "v2", "default": true, "pages": ["es/index"] },
+          { "version": "v1", "pages": ["es/v1/index"] }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Built-in search stays inside the active version and language, so results
+never mix scopes.
 
 ## Common mistakes
 
