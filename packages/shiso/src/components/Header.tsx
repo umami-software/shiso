@@ -1,8 +1,10 @@
+import { useLocation } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { Search } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
-import { DOCS_PREFIX } from '@/lib/paths';
+import { VersionSwitcher } from '@/components/VersionSwitcher';
+import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
 import type { NormalizedLink, SiteModel } from '@/lib/types';
 
 function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; primary?: boolean }) {
@@ -28,8 +30,11 @@ function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; prima
 }
 
 export function Header({ site }: { site: SiteModel }) {
-  const { logo, navbar, name, appearance, docs, labels, search } = site;
-  const brandHref = logo?.href || DOCS_PREFIX || '/';
+  const { logo, navbar, name, appearance, labels, search } = site;
+  const { pathname } = useLocation();
+  // The header renders the navigation of whichever scope owns the current page.
+  const docs = getScopeByPathname(pathname).docs;
+  const brandHref = logo?.href || docsHomeUrl;
   const hasBrand = !!name || !!logo?.light || !!logo?.dark;
 
   return (
@@ -56,6 +61,9 @@ export function Header({ site }: { site: SiteModel }) {
               {name ? <span>{name}</span> : null}
             </a>
           ) : null}
+          <div className="hidden lg:block">
+            <VersionSwitcher />
+          </div>
         </div>
         {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}
         <div className="flex min-w-0 items-center gap-2 justify-self-end">

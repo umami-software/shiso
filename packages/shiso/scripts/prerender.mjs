@@ -16,7 +16,6 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
-import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
 const DEFAULT_HEAD_CLOSE = '<!--/shiso-default-head-->';
@@ -32,12 +31,8 @@ if (!template.includes('<!--app-html-->')) {
   );
 }
 
-const { config: docsJson } = await loadDocsConfig({ root });
-const docsPrefix = (docsJson.$shiso?.docsPrefix ?? '/docs').replace(/\/+$/, '');
-
-const { render, getRoutes, getRedirects, getSitemapEntries, getMarkdownPages } = await import(
-  pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href
-);
+const { render, getRoutes, getRedirects, getSitemapEntries, getMarkdownPages, docsHomeUrl } =
+  await import(pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href);
 
 /** Vite's `base`, normalized to "" or "/prefix". */
 function readBase() {
@@ -79,11 +74,11 @@ for (const route of routes) {
   await writePage(outputPathFor(route), fillTemplate(head, html));
 }
 
-// Root entry. When docs live at a prefix the root is a redirect; a meta refresh
-// alone is slow and SEO-hostile, so pair it with a canonical link and an
-// immediate history-replacing navigation.
-if (docsPrefix) {
-  const target = withBase(`${docsPrefix}/`);
+// Root entry. When the default scope's landing page is not the root itself the
+// root is a redirect; a meta refresh alone is slow and SEO-hostile, so pair it
+// with a canonical link and an immediate history-replacing navigation.
+if (docsHomeUrl && docsHomeUrl !== '/') {
+  const target = withBase(`${docsHomeUrl}/`);
 
   await writePage(
     path.join(clientDir, 'index.html'),

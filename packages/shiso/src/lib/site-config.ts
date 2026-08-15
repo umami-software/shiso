@@ -3,6 +3,7 @@ import { resolveDocFile } from '@/lib/content';
 import {
   assertDocsConfig,
   getDefaultScope,
+  getScopeForPage,
   getPageByPathname as getSitePageByPathname,
   normalizeDocsSite,
 } from '@/lib/docs-config';
@@ -10,6 +11,7 @@ import { stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
 import type {
   DocsConfig,
+  DocsScope,
   NormalizedDocsConfig,
   NormalizedDocsPage,
   NormalizedDocsSite,
@@ -27,7 +29,16 @@ export const docsSite: NormalizedDocsSite = normalizeDocsSite(siteConfig, resolv
 /** The default scope's navigation, used where a single navigation is expected. */
 export const docsConfig: NormalizedDocsConfig = getDefaultScope(docsSite).docs;
 
+/** Landing page of the default scope: the site-wide "docs home" URL. */
+export const docsHomeUrl = getDefaultScope(docsSite).firstPageUrl;
+
 export const siteModel = resolveSiteModel(siteConfig, docsConfig);
+
+/** Scope that owns the current pathname; the default scope for unknown paths. */
+export function getScopeByPathname(pathname: string): DocsScope {
+  const page = getPageByPathname(pathname);
+  return page ? getScopeForPage(docsSite, page) : getDefaultScope(docsSite);
+}
 
 export const siteName = siteModel.name;
 

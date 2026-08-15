@@ -11,8 +11,7 @@ import { CodeBlock } from '@/components/CodeBlock';
 import * as docsComponents from '@/components/docs/index';
 import { Layout } from '@/components/Layout';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { DOCS_PREFIX } from '@/lib/paths';
-import { siteModel } from '@/lib/site-config';
+import { docsHomeUrl, siteModel } from '@/lib/site-config';
 import { DocPage } from '@/pages/DocPage';
 
 const mdxComponents = {
@@ -26,9 +25,9 @@ export function App() {
       <MDXProvider components={mdxComponents}>
         <Layout site={siteModel}>
           <Routes>
-            {/* When docs are mounted at the site root there is nothing to redirect. */}
-            {DOCS_PREFIX ? (
-              <Route path="/" element={<Navigate to={DOCS_PREFIX} replace />} />
+            {/* When the default scope's landing page is the root there is nothing to redirect. */}
+            {docsHomeUrl !== '/' ? (
+              <Route path="/" element={<Navigate to={docsHomeUrl} replace />} />
             ) : null}
             <Route path="*" element={<DocPage site={siteModel} />} />
           </Routes>

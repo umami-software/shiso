@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type SearchRecord, searchIndex } from '@/lib/search';
+import { filterRecordsByScope, type SearchRecord, searchIndex } from '@/lib/search';
 
 const records: SearchRecord[] = [
   { url: '/docs', page: 'Overview', text: 'Shiso is a static docs generator.' },
@@ -50,5 +50,42 @@ describe('searchIndex', () => {
 
   it('respects the limit', () => {
     expect(searchIndex(records, 'docs', 1)).toHaveLength(1);
+  });
+});
+
+describe('filterRecordsByScope', () => {
+  const scoped: SearchRecord[] = [
+    {
+      url: '/docs/v1',
+      page: 'V1 Overview',
+      text: 'Legacy setup guide.',
+      scopeId: 'v1',
+      version: 'v1',
+    },
+    {
+      url: '/docs/v2',
+      page: 'V2 Overview',
+      text: 'Current setup guide.',
+      scopeId: 'v2',
+      version: 'v2',
+    },
+    { url: '/docs/shared', page: 'Shared', text: 'Unscoped record.' },
+  ];
+
+  it('returns everything without a scope context', () => {
+    expect(filterRecordsByScope(scoped)).toEqual(scoped);
+    expect(filterRecordsByScope(scoped, {})).toEqual(scoped);
+  });
+
+  it('keeps only the active scope plus unscoped records', () => {
+    const filtered = filterRecordsByScope(scoped, { scopeId: 'v1' });
+
+    expect(filtered.map(record => record.url)).toEqual(['/docs/v1', '/docs/shared']);
+  });
+
+  it('does not mix versions in search results', () => {
+    const results = searchIndex(filterRecordsByScope(scoped, { scopeId: 'v2' }), 'setup');
+
+    expect(results.map(result => result.url)).toEqual(['/docs/v2']);
   });
 });

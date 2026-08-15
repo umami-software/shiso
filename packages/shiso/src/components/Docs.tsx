@@ -7,8 +7,9 @@ import { PageLinks } from '@/components/PageLinks';
 import { SideNav } from '@/components/SideNav';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
-import { DOCS_PREFIX } from '@/lib/paths';
+import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
 import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
 /**
@@ -23,7 +24,7 @@ function NotFound({ site }: { site: SiteModel }) {
 
   useEffect(() => {
     if (redirect) {
-      navigate(DOCS_PREFIX || '/', { replace: true });
+      navigate(docsHomeUrl, { replace: true });
     }
   }, [redirect, navigate]);
 
@@ -44,7 +45,9 @@ export interface DocsProps {
 export function Docs({ page, doc, site }: DocsProps) {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { tabs, navigation } = site.docs;
+  // Navigation follows the scope (version/language) that owns the current page.
+  const scopeDocs = getScopeByPathname(pathname).docs;
+  const { tabs, navigation } = scopeDocs;
 
   // Close the mobile menu and start each newly loaded page at the top. Hash
   // links keep their native section-scrolling behavior.
@@ -82,10 +85,13 @@ export function Docs({ page, doc, site }: DocsProps) {
         >
           <SheetTitle className="sr-only">{site.labels.documentationNavigation}</SheetTitle>
           <div className="pt-8">
+            <div className="pb-4 lg:hidden">
+              <VersionSwitcher />
+            </div>
             <SideNav
               tabs={tabs}
               navigation={navigation}
-              anchors={site.docs.anchors}
+              anchors={scopeDocs.anchors}
               drilldown={site.drilldown}
               navigationLabel={site.labels.documentationNavigation}
               expandLabel={site.labels.expand}
@@ -99,7 +105,7 @@ export function Docs({ page, doc, site }: DocsProps) {
           <SideNav
             tabs={tabs}
             navigation={navigation}
-            anchors={site.docs.anchors}
+            anchors={scopeDocs.anchors}
             isSticky
             drilldown={site.drilldown}
             navigationLabel={site.labels.documentationNavigation}

@@ -1,7 +1,12 @@
-import type { SearchResult } from '@/lib/search';
+import type { SearchContext, SearchResult } from '@/lib/search';
 
 export interface SearchProvider {
-  search(query: string, limit?: number): Promise<SearchResult[]>;
+  /**
+   * `context` describes the active version/language scope. Providers may
+   * ignore it; the built-in local provider uses it to keep results inside
+   * the scope being browsed.
+   */
+  search(query: string, limit?: number, context?: SearchContext): Promise<SearchResult[]>;
 }
 
 export type SearchProviderFactory = (

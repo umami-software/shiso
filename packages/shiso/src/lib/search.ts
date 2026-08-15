@@ -18,6 +18,34 @@ export interface SearchRecord {
   id?: string;
   /** Plain text of the section. */
   text: string;
+  /** Navigation scope id, absent for single-scope sites. */
+  scopeId?: string;
+  /** Language label of the owning scope, when the site defines languages. */
+  language?: string;
+  /** Version label of the owning scope, when the site defines versions. */
+  version?: string;
+}
+
+/** Where a search originates, so providers can stay inside the active scope. */
+export interface SearchContext {
+  scopeId?: string;
+  language?: string;
+  version?: string;
+}
+
+/**
+ * Restricts records to the active scope. Records without a scope id (from
+ * single-scope indexes or older caches) always pass.
+ */
+export function filterRecordsByScope(
+  records: SearchRecord[],
+  context?: SearchContext,
+): SearchRecord[] {
+  if (!context?.scopeId) {
+    return records;
+  }
+
+  return records.filter(record => !record.scopeId || record.scopeId === context.scopeId);
 }
 
 export interface SearchResult {

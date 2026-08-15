@@ -2,6 +2,8 @@ import { Link } from 'react-router';
 import { ContextualMenu } from '@/components/ContextualMenu';
 import { ChevronRight } from '@/components/icons';
 import { getLastModified } from '@/lib/content';
+import { getScopeForPage } from '@/lib/docs-config';
+import { docsSite } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
 import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
@@ -12,7 +14,8 @@ export interface DocContentProps {
 }
 
 export function DocContent({ page, doc, site }: DocContentProps) {
-  const pagerPages = site.docs.pages.filter(item => !item.hidden);
+  // Prev/next paging never crosses a version or language boundary.
+  const pagerPages = getScopeForPage(docsSite, page).docs.pages.filter(item => !item.hidden);
   const pageIndex = pagerPages.findIndex(item => item.slug === page.slug);
   const prev = pageIndex > 0 ? pagerPages[pageIndex - 1] : undefined;
   const next = pageIndex >= 0 ? pagerPages[pageIndex + 1] : undefined;

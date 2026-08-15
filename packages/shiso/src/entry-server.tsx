@@ -4,7 +4,7 @@ import { App } from '@/App';
 import { getDocModule, getLastModified } from '@/lib/content';
 import { buildHead, renderHeadToString } from '@/lib/head';
 import { BASE_URL, toAbsoluteUrl } from '@/lib/paths';
-import { docsConfig, getRedirects, getSeo, siteName } from '@/lib/site-config';
+import { docsHomeUrl, docsSite, getRedirects, getSeo, siteName } from '@/lib/site-config';
 
 export interface RenderResult {
   html: string;
@@ -16,9 +16,9 @@ export interface SitemapEntry {
   lastmod?: string;
 }
 
-/** Base-relative routes. The prerenderer prepends the deploy base itself. */
+/** Base-relative routes for every scope. The prerenderer prepends the deploy base itself. */
 export function getRoutes(): string[] {
-  return docsConfig.pages.map(page => page.url);
+  return docsSite.pages.map(page => page.url);
 }
 
 /** Redirect rules with exact-match sources, for static redirect pages. */
@@ -31,7 +31,7 @@ export { getRedirects };
  * "/content/docs/index.mdx", resolved against the project root.
  */
 export function getMarkdownPages(): { route: string; filePath: string }[] {
-  return docsConfig.pages.map(page => ({ route: page.url, filePath: page.filePath }));
+  return docsSite.pages.map(page => ({ route: page.url, filePath: page.filePath }));
 }
 
 /**
@@ -43,7 +43,7 @@ export function getSitemapEntries(): SitemapEntry[] {
   const { indexing } = getSeo();
   const entries: SitemapEntry[] = [];
 
-  for (const page of docsConfig.pages) {
+  for (const page of docsSite.pages) {
     if (page.hidden && indexing !== 'all') {
       continue;
     }
@@ -74,4 +74,4 @@ export function render(url: string): RenderResult {
   return { html, head: renderHeadToString(buildHead(url)) };
 }
 
-export { siteName };
+export { docsHomeUrl, siteName };

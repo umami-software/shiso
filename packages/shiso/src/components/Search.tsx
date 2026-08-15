@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Search as SearchIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import type { SearchResult } from '@/lib/search';
 import type { ResolvedSearchConfig } from '@/lib/search/config';
 import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provider';
+import { getScopeByPathname } from '@/lib/site-config';
 import type { ThemeLabels } from '@/lib/types';
 
 /**
@@ -22,6 +23,7 @@ import type { ThemeLabels } from '@/lib/types';
  */
 export function Search({ config, labels }: { config: ResolvedSearchConfig; labels: ThemeLabels }) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -66,7 +68,14 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
 
       try {
         const activeProvider = await loadProvider();
-        const nextResults = await activeProvider.search(value);
+        // Search stays inside the version/language scope being browsed.
+        // Providers that predate the context argument simply ignore it.
+        const scope = getScopeByPathname(pathname);
+        const nextResults = await activeProvider.search(value, undefined, {
+          scopeId: scope.id,
+          language: scope.language,
+          version: scope.version,
+        });
 
         if (currentRequest === requestId.current) {
           setResults(nextResults);
@@ -80,7 +89,7 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
         }
       }
     },
-    [loadProvider],
+    [loadProvider, pathname],
   );
 
   const openDialog = useCallback(() => {

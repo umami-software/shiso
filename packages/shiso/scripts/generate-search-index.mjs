@@ -22,7 +22,7 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from '../src/lib/mdast.ts';
-import { createSlugger } from '../src/lib/slug.ts';
+import { createSlugger, slugifyId } from '../src/lib/slug.ts';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_ROOT = process.cwd();
@@ -50,6 +50,53 @@ function normalizePageReference(pageRef) {
 }
 
 /**
+ * One entry per navigation scope, mirroring collectScopeSources in
+ * src/lib/docs-config.ts: ordinary navigation, versions, languages, and
+ * versions nested inside languages. Hidden scopes are excluded from search,
+ * matching how hidden pages are excluded.
+ */
+function collectScopes(navigation) {
+  if (Array.isArray(navigation.versions)) {
+    return navigation.versions
+      .filter(version => !version.hidden)
+      .map(version => ({
+        id: slugifyId(version.version?.trim() || '', 'scope'),
+        version: version.version?.trim(),
+        container: version,
+      }));
+  }
+
+  if (Array.isArray(navigation.languages)) {
+    return navigation.languages
+      .filter(language => !language.hidden)
+      .flatMap(language => {
+        const languageLabel = language.language?.trim();
+
+        if (Array.isArray(language.versions)) {
+          return language.versions
+            .filter(version => !version.hidden)
+            .map(version => ({
+              id: slugifyId(`${languageLabel}-${version.version?.trim()}`, 'scope'),
+              language: languageLabel,
+              version: version.version?.trim(),
+              container: version,
+            }));
+        }
+
+        return [
+          {
+            id: slugifyId(languageLabel || '', 'scope'),
+            language: languageLabel,
+            container: language,
+          },
+        ];
+      });
+  }
+
+  return [{ id: 'default', container: navigation }];
+}
+
+/**
  * Collects `{ fileSlug, slug }` for every non-hidden page in the navigation
  * tree. A simplified mirror of the config walker: search only needs page refs
  * and hidden inheritance, not labels or ordering.
@@ -61,15 +108,6 @@ function collectVisiblePages(container, pages = [], hidden = false) {
     ...(container.tabs || []),
     ...(container.dropdowns || []),
   ];
-
-  // Versions and languages collapse to their default entry, like the app does.
-  for (const key of ['versions', 'languages']) {
-    const entries = container[key];
-
-    if (Array.isArray(entries) && entries.length) {
-      items.push(entries.find(entry => entry.default) || entries[0]);
-    }
-  }
 
   for (const item of items) {
     if (typeof item === 'string') {
@@ -172,36 +210,44 @@ export async function generateSearchIndex({
   const seen = new Set();
   const records = [];
 
-  for (const { fileSlug, slug } of collectVisiblePages(docsJson.navigation || {})) {
-    if (seen.has(fileSlug)) {
-      continue;
-    }
+  for (const scope of collectScopes(docsJson.navigation || {})) {
+    // Single-scope sites omit scope fields so their index stays unchanged.
+    const scopeFields =
+      scope.id === 'default'
+        ? {}
+        : { scopeId: scope.id, language: scope.language, version: scope.version };
 
-    seen.add(fileSlug);
-
-    let source;
-    let filePath;
-
-    for (const extension of ['mdx', 'md']) {
-      filePath = path.join(root, contentDir, `${fileSlug}.${extension}`);
-      source = await fs.readFile(filePath, 'utf8').catch(() => undefined);
-
-      if (source !== undefined) {
-        break;
+    for (const { fileSlug, slug } of collectVisiblePages(scope.container)) {
+      if (seen.has(fileSlug)) {
+        continue;
       }
-    }
 
-    if (source === undefined) {
-      // Missing files fail config normalization; search just skips them.
-      continue;
-    }
+      seen.add(fileSlug);
 
-    const tree = parser.parse(source);
-    const url = slug === 'index' ? docsPrefix || '/' : `${docsPrefix}/${slug}`;
-    const page = frontmatterTitle(tree) || fileSlug;
+      let source;
+      let filePath;
 
-    for (const { heading, id, text } of collectSections(tree)) {
-      records.push({ url, page, heading, id, text });
+      for (const extension of ['mdx', 'md']) {
+        filePath = path.join(root, contentDir, `${fileSlug}.${extension}`);
+        source = await fs.readFile(filePath, 'utf8').catch(() => undefined);
+
+        if (source !== undefined) {
+          break;
+        }
+      }
+
+      if (source === undefined) {
+        // Missing files fail config normalization; search just skips them.
+        continue;
+      }
+
+      const tree = parser.parse(source);
+      const url = slug === 'index' ? docsPrefix || '/' : `${docsPrefix}/${slug}`;
+      const page = frontmatterTitle(tree) || fileSlug;
+
+      for (const { heading, id, text } of collectSections(tree)) {
+        records.push({ url, page, heading, id, text, ...scopeFields });
+      }
     }
   }
 
