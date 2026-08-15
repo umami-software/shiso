@@ -401,6 +401,8 @@ export interface DocsScope {
   /** Hidden scopes still build, but are omitted from switchers. */
   hidden?: boolean;
   isDefault: boolean;
+  /** Landing scope of its language: the language's default version. */
+  isLanguageDefault: boolean;
   /** URL of the scope's first visible page — the landing page for switchers. */
   firstPageUrl: string;
   docs: NormalizedDocsConfig;

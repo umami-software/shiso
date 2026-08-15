@@ -47,11 +47,20 @@ function withBase(routePath) {
   return `${base}${routePath}`.replace(/\/{2,}/g, '/') || '/';
 }
 
-function fillTemplate(head, html) {
+function fillTemplate(head, html, htmlAttrs) {
   // Per-page head tags supersede the site-level defaults injected at build time.
-  const output = head
+  let output = head
     ? template.replace(new RegExp(`${DEFAULT_HEAD_OPEN}[\\s\\S]*?${DEFAULT_HEAD_CLOSE}`), '')
     : template;
+
+  // Per-page document language and direction, replacing the template's own.
+  if (htmlAttrs) {
+    output = output.replace(/<html([^>]*)>/, (_match, attrs) => {
+      const kept = attrs.replace(/\s+lang="[^"]*"/, '').replace(/\s+dir="[^"]*"/, '');
+      const dir = htmlAttrs.dir === 'rtl' ? ' dir="rtl"' : '';
+      return `<html${kept} lang="${htmlAttrs.lang}"${dir}>`;
+    });
+  }
 
   return output.replace('<!--app-head-->', head).replace('<!--app-html-->', html);
 }
@@ -70,8 +79,8 @@ function outputPathFor(routePath) {
 const routes = getRoutes();
 
 for (const route of routes) {
-  const { html, head } = render(route);
-  await writePage(outputPathFor(route), fillTemplate(head, html));
+  const { html, head, htmlAttrs } = render(route);
+  await writePage(outputPathFor(route), fillTemplate(head, html, htmlAttrs));
 }
 
 // Root entry. When the default scope's landing page is not the root itself the
@@ -161,7 +170,10 @@ if (sitemapEntries.length) {
 // 404 fallback renders the app shell so client routing can take over
 // on hosts that serve 404.html for unknown paths (e.g. GitHub Pages).
 const notFound = render('/404');
-await writePage(path.join(clientDir, '404.html'), fillTemplate(notFound.head, notFound.html));
+await writePage(
+  path.join(clientDir, '404.html'),
+  fillTemplate(notFound.head, notFound.html, notFound.htmlAttrs),
+);
 
 // Guard against a base/route mismatch silently producing unreachable files.
 const stray = routes.filter(route => !withBase(route).startsWith(base || '/'));

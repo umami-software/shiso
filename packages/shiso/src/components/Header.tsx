@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Search } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
@@ -61,8 +62,9 @@ export function Header({ site }: { site: SiteModel }) {
               {name ? <span>{name}</span> : null}
             </a>
           ) : null}
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-2 lg:flex">
             <VersionSwitcher />
+            <LanguageSwitcher />
           </div>
         </div>
         {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}

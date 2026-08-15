@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { getDocModule, getLastModified } from '@/lib/content';
+import { resolveLocale } from '@/lib/locale';
 import { SITE_URL, toAbsoluteUrl } from '@/lib/paths';
 import {
+  getLocaleByPathname,
   getPageByPathname,
   getPageTitle,
   getSeo,
   showTimestamp,
   siteConfig,
+  siteModel,
   siteName,
 } from '@/lib/site-config';
 
@@ -140,6 +143,7 @@ export function buildHead(pathname: string): HeadTag[] {
           headline: pageTitle || page.label,
           description,
           url: canonical,
+          inLanguage: resolveLocale(page.language, siteModel.locale),
           ...(siteName ? { isPartOf: { '@type': 'WebSite', name: siteName, url: SITE_URL } } : {}),
         },
         {
@@ -216,5 +220,11 @@ export function useHead(pathname: string) {
     }
 
     applyHead(buildHead(pathname));
+
+    // Keep the document language and direction in sync when navigating
+    // between language scopes.
+    const { lang, dir } = getLocaleByPathname(pathname);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = dir;
   }, [pathname]);
 }

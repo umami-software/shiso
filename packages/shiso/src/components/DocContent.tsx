@@ -3,6 +3,7 @@ import { ContextualMenu } from '@/components/ContextualMenu';
 import { ChevronRight } from '@/components/icons';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
+import { resolveLocale } from '@/lib/locale';
 import { docsSite } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
 import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
@@ -33,7 +34,8 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       ? [...new Set([page.tabLabel, page.section])].filter(Boolean).join(' / ')
       : page.section;
   const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
-  const dateFormat = new Intl.DateTimeFormat(site.locale, {
+  // Dates follow the page's language when it is a valid locale code.
+  const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
     dateStyle: 'medium',
     timeZone: 'UTC',
   });

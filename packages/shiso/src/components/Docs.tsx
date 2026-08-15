@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
 import { Footer } from '@/components/Footer';
 import { Menu } from '@/components/icons';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { PageLinks } from '@/components/PageLinks';
 import { SideNav } from '@/components/SideNav';
 import { Button } from '@/components/ui/button';
@@ -85,8 +86,9 @@ export function Docs({ page, doc, site }: DocsProps) {
         >
           <SheetTitle className="sr-only">{site.labels.documentationNavigation}</SheetTitle>
           <div className="pt-8">
-            <div className="pb-4 lg:hidden">
+            <div className="flex items-center gap-2 pb-4 lg:hidden">
               <VersionSwitcher />
+              <LanguageSwitcher />
             </div>
             <SideNav
               tabs={tabs}

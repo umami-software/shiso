@@ -243,6 +243,8 @@ interface ScopeSource {
   version?: string;
   hidden?: boolean;
   isDefault: boolean;
+  /** Landing scope of its language: the language's default version. */
+  isLanguageDefault: boolean;
   /** Leaf navigation container for this scope. */
   container: NavContainer;
   /** Label used for the synthetic tab in simple groups/pages navigation. */
@@ -253,6 +255,7 @@ function makeVersionScopeSource(
   version: VersionItem,
   language: LanguageItem | undefined,
   isDefault: boolean,
+  isLanguageDefault: boolean,
 ): ScopeSource {
   const versionLabel = version.version?.trim();
 
@@ -271,6 +274,7 @@ function makeVersionScopeSource(
     version: versionLabel,
     hidden: version.hidden || language?.hidden || undefined,
     isDefault,
+    isLanguageDefault,
     container: version,
     fallbackLabel: versionLabel,
   };
@@ -291,7 +295,12 @@ function collectScopeSources(navigation: NavigationConfig): ScopeSource[] {
     const defaultVersion = pickDefaultEntry(versions);
 
     return versions.map(version =>
-      makeVersionScopeSource(version, undefined, version === defaultVersion),
+      makeVersionScopeSource(
+        version,
+        undefined,
+        version === defaultVersion,
+        version === defaultVersion,
+      ),
     );
   }
 
@@ -333,6 +342,7 @@ function collectScopeSources(navigation: NavigationConfig): ScopeSource[] {
             version,
             language,
             language === defaultLanguage && version === defaultVersion,
+            version === defaultVersion,
           ),
         );
       }
@@ -343,6 +353,7 @@ function collectScopeSources(navigation: NavigationConfig): ScopeSource[] {
           language: languageLabel,
           hidden: language.hidden || undefined,
           isDefault: language === defaultLanguage,
+          isLanguageDefault: true,
           container: language,
           fallbackLabel: languageLabel,
         },
@@ -350,7 +361,15 @@ function collectScopeSources(navigation: NavigationConfig): ScopeSource[] {
     });
   }
 
-  return [{ id: 'default', isDefault: true, container: navigation, fallbackLabel: '' }];
+  return [
+    {
+      id: 'default',
+      isDefault: true,
+      isLanguageDefault: true,
+      container: navigation,
+      fallbackLabel: '',
+    },
+  ];
 }
 
 /* ---------------------------------------------------------------------------
@@ -822,6 +841,7 @@ export function normalizeDocsSite(
       version: source.version,
       hidden: source.hidden,
       isDefault: source.isDefault,
+      isLanguageDefault: source.isLanguageDefault,
       firstPageUrl: firstPage.url,
       docs,
     };
@@ -886,6 +906,37 @@ export function getScopeById(site: NormalizedDocsSite, scopeId: string): DocsSco
 
 export function getScopeForPage(site: NormalizedDocsSite, page: NormalizedDocsPage): DocsScope {
   return getScopeById(site, page.scopeId) || getDefaultScope(site);
+}
+
+/**
+ * One landing scope per language, for language switchers: the language's
+ * default-version scope, or its first visible scope when the default is
+ * hidden. Fully hidden languages are omitted.
+ */
+export function getLanguageScopes(site: NormalizedDocsSite): DocsScope[] {
+  const byLanguage = new Map<string, DocsScope[]>();
+
+  for (const scope of site.scopes) {
+    if (!scope.language) {
+      continue;
+    }
+
+    const list = byLanguage.get(scope.language) || [];
+    list.push(scope);
+    byLanguage.set(scope.language, list);
+  }
+
+  const landings: DocsScope[] = [];
+
+  for (const scopes of byLanguage.values()) {
+    const visible = scopes.filter(scope => !scope.hidden);
+
+    if (visible.length) {
+      landings.push(visible.find(scope => scope.isLanguageDefault) || visible[0]);
+    }
+  }
+
+  return landings;
 }
 
 /**

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   flattenNav,
   getDefaultScope,
+  getLanguageScopes,
   getPageByPathname,
   getScopeById,
   getScopeForPage,
@@ -525,5 +526,59 @@ describe('multi-scope normalization', () => {
     expect(getPageByPathname(site, '/docs/v1/guide/')?.fileSlug).toBe('v1/guide');
     expect(getPageByPathname(site, '/docs/v1/index')?.fileSlug).toBe('v1/index');
     expect(getPageByPathname(site, '/docs/nope')).toBeNull();
+  });
+});
+
+describe('language landing scopes', () => {
+  it('marks each language default version as the language landing scope', () => {
+    const site = normalizeSite({
+      languages: [
+        {
+          language: 'en',
+          versions: [
+            { version: 'v1', pages: ['v1/index'] },
+            { version: 'v2', default: true, pages: ['index'] },
+          ],
+        },
+        { language: 'es', pages: ['es/index'] },
+      ],
+    });
+
+    expect(site.scopes.map(scope => [scope.id, scope.isLanguageDefault])).toEqual([
+      ['en-v1', false],
+      ['en-v2', true],
+      ['es', true],
+    ]);
+    expect(getLanguageScopes(site).map(scope => [scope.language, scope.firstPageUrl])).toEqual([
+      ['en', '/docs'],
+      ['es', '/docs/es'],
+    ]);
+  });
+
+  it('falls back to the first visible scope when a language default is hidden', () => {
+    const site = normalizeSite({
+      languages: [
+        {
+          language: 'en',
+          versions: [
+            { version: 'v1', pages: ['v1/index'] },
+            { version: 'v2', default: true, hidden: true, pages: ['index'] },
+          ],
+        },
+      ],
+    });
+
+    expect(getLanguageScopes(site).map(scope => scope.id)).toEqual(['en-v1']);
+  });
+
+  it('omits fully hidden languages', () => {
+    const site = normalizeSite({
+      languages: [
+        { language: 'en', pages: ['index'] },
+        { language: 'es', hidden: true, pages: ['es/index'] },
+      ],
+    });
+
+    expect(getLanguageScopes(site).map(scope => scope.language)).toEqual(['en']);
   });
 });

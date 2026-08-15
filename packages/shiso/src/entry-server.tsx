@@ -4,11 +4,20 @@ import { App } from '@/App';
 import { getDocModule, getLastModified } from '@/lib/content';
 import { buildHead, renderHeadToString } from '@/lib/head';
 import { BASE_URL, toAbsoluteUrl } from '@/lib/paths';
-import { docsHomeUrl, docsSite, getRedirects, getSeo, siteName } from '@/lib/site-config';
+import {
+  docsHomeUrl,
+  docsSite,
+  getLocaleByPathname,
+  getRedirects,
+  getSeo,
+  siteName,
+} from '@/lib/site-config';
 
 export interface RenderResult {
   html: string;
   head: string;
+  /** Attributes for the document element: language and text direction. */
+  htmlAttrs: { lang: string; dir: 'ltr' | 'rtl' };
 }
 
 export interface SitemapEntry {
@@ -71,7 +80,7 @@ export function render(url: string): RenderResult {
     </StaticRouter>,
   );
 
-  return { html, head: renderHeadToString(buildHead(url)) };
+  return { html, head: renderHeadToString(buildHead(url)), htmlAttrs: getLocaleByPathname(url) };
 }
 
 export { docsHomeUrl, siteName };

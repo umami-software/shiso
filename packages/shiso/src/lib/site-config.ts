@@ -7,6 +7,7 @@ import {
   getPageByPathname as getSitePageByPathname,
   normalizeDocsSite,
 } from '@/lib/docs-config';
+import { getTextDirection, resolveLocale } from '@/lib/locale';
 import { stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
 import type {
@@ -38,6 +39,12 @@ export const siteModel = resolveSiteModel(siteConfig, docsConfig);
 export function getScopeByPathname(pathname: string): DocsScope {
   const page = getPageByPathname(pathname);
   return page ? getScopeForPage(docsSite, page) : getDefaultScope(docsSite);
+}
+
+/** Document language and direction for a pathname, from its scope's language. */
+export function getLocaleByPathname(pathname: string): { lang: string; dir: 'ltr' | 'rtl' } {
+  const lang = resolveLocale(getScopeByPathname(pathname).language, siteModel.locale);
+  return { lang, dir: getTextDirection(lang) };
 }
 
 export const siteName = siteModel.name;
