@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (() => {
+        // Placeholders are replaced from the `appearance` config key by the
+        // shiso-html plugin in vite.config.ts.
+        const defaultMode = '__SHISO_APPEARANCE_DEFAULT__';
+        const strict = '__SHISO_APPEARANCE_STRICT__' === 'true';
+        let theme = defaultMode === 'dark' ? 'dark' : 'light';
+        try {
+          const stored = strict ? null : localStorage.getItem('shiso-theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const fallback =
+            defaultMode === 'system' ? (prefersDark ? 'dark' : 'light') : defaultMode;
+          theme = stored === 'dark' || stored === 'light' ? stored : fallback;
+        } catch {
+          // Fall back to the configured default.
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <!--app-head-->
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/entry-client.tsx"></script>
+  </body>
+</html>

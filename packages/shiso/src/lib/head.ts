@@ -6,6 +6,7 @@ import {
   getLocaleByPathname,
   getPageByPathname,
   getPageTitle,
+  getScopeByPathname,
   getSeo,
   showTimestamp,
   siteConfig,
@@ -56,10 +57,10 @@ export function buildHead(pathname: string): HeadTag[] {
   const title = getPageTitle(pageTitle);
   const description = frontmatter?.description || siteConfig.description;
   const canonical = page ? toAbsoluteUrl(page.url) : undefined;
-  // `seo.indexing: "all"` opts hidden pages into the index; explicit
-  // per-page `noindex` frontmatter always wins.
-  const noindex =
-    !page || frontmatter?.noindex === true || (!!page.hidden && seo.indexing !== 'all');
+  // `seo.indexing: "all"` opts hidden pages (and hidden versions/languages)
+  // into the index; explicit per-page `noindex` frontmatter always wins.
+  const hidden = !!page && (!!page.hidden || !!getScopeByPathname(pathname).hidden);
+  const noindex = !page || frontmatter?.noindex === true || (hidden && seo.indexing !== 'all');
 
   const tags: HeadTag[] = [{ tag: 'title', children: title }];
 

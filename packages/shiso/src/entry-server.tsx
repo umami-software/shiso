@@ -2,6 +2,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import { App } from '@/App';
 import { getDocModule, getLastModified } from '@/lib/content';
+import { getScopeForPage } from '@/lib/docs-config';
 import { buildHead, renderHeadToString } from '@/lib/head';
 import { BASE_URL, toAbsoluteUrl } from '@/lib/paths';
 import {
@@ -53,7 +54,9 @@ export function getSitemapEntries(): SitemapEntry[] {
   const entries: SitemapEntry[] = [];
 
   for (const page of docsSite.pages) {
-    if (page.hidden && indexing !== 'all') {
+    // Hidden pages and pages of hidden scopes (versions/languages) stay out
+    // of the sitemap unless `seo.indexing: "all"` opts them in.
+    if ((page.hidden || getScopeForPage(docsSite, page).hidden) && indexing !== 'all') {
       continue;
     }
 

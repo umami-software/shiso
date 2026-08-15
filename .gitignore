@@ -31,3 +31,7 @@ yarn-error.log*
 .idea
 .pnpm-store
 /packages/create-shiso-app/template/
+
+# multi-scope fixture build output
+/tests/fixtures/multi-scope/dist
+/tests/fixtures/multi-scope/.shiso

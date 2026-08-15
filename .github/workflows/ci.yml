@@ -22,4 +22,5 @@ jobs:
       - run: pnpm release:check
       - run: pnpm release:check:shiso
       - run: pnpm build
+      - run: pnpm test:multi-scope
       - run: pnpm test:create-app

@@ -17,6 +17,7 @@
     "release:check": "node scripts/prepare-release.mjs",
     "release:check:shiso": "node scripts/prepare-release.mjs --package shiso",
     "test:create-app": "node scripts/smoke-create-shiso-app.mjs",
+    "test:multi-scope": "node scripts/smoke-multi-scope.mjs",
     "preview": "shiso preview --outDir dist/client",
     "test": "vitest run",
     "test:watch": "vitest",
