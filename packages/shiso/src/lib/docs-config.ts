@@ -34,13 +34,6 @@ function normalizeLinkTarget(href: string, target?: LinkTarget): LinkTarget {
   return target || (/^(?:#|\/|\.\.?\/)/.test(href) ? '_self' : '_blank');
 }
 
-/**
- * Recognized config keys that Shiso does not implement.
- * Policy: warn once and skip. Never fail a build over an unimplemented feature —
- * the same rule the schema validator applies to top-level keys.
- */
-const RESERVED_PAGE_KEYS = ['openapi', 'api', 'asyncapi', 'graphql', 'menu', 'product'];
-
 const warned = new Set<string>();
 
 function warnOnce(message: string) {
@@ -141,18 +134,84 @@ interface NavContainer {
 }
 
 /**
+ * The mutually exclusive primary navigation modes a container may declare.
+ * `groups` and `pages` combine into one simple-navigation mode.
+ */
+function getNavigationModes(container: NavContainer): string[] {
+  const modes: string[] = [];
+
+  if (container.tabs !== undefined) {
+    modes.push('tabs');
+  }
+
+  if (container.dropdowns !== undefined) {
+    modes.push('dropdowns');
+  }
+
+  if (container.versions !== undefined) {
+    modes.push('versions');
+  }
+
+  if (container.languages !== undefined) {
+    modes.push('languages');
+  }
+
+  if (container.groups !== undefined || container.pages !== undefined) {
+    modes.push('groups/pages');
+  }
+
+  return modes;
+}
+
+/** Rejects arrays where more than one entry claims to be the default. */
+function assertSingleDefault<T extends { default?: boolean }>(
+  items: T[],
+  kind: string,
+  getLabel: (item: T) => string | undefined,
+) {
+  const defaults = items.filter(item => item.default === true);
+
+  if (defaults.length > 1) {
+    const labels = defaults.map(getLabel).filter(Boolean);
+
+    throw new Error(
+      `Invalid docs config: multiple ${kind} are marked "default": ${labels.join(', ')}. ` +
+        `Only one ${kind.replace(/s$/, '')} may be the default.`,
+    );
+  }
+}
+
+/**
  * Resolves a navigation container down to a flat list of tabs.
  *
  * Versions and languages collapse to their default entry for now. That is a
  * real limitation, so the skipped entries are reported rather than silently
- * dropped; Phases 6 and 7 replace this by normalizing once per version/locale.
+ * dropped; the multi-scope phases replace this by normalizing once per
+ * version/locale.
  */
 function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabItem[] {
-  if (Array.isArray(container.tabs) && container.tabs.length) {
+  const modes = getNavigationModes(container);
+
+  if (modes.length > 1) {
+    throw new Error(
+      'Invalid docs config: navigation must define exactly one of tabs, dropdowns, ' +
+        `versions, languages, or groups/pages — found ${modes.join(' and ')}.`,
+    );
+  }
+
+  if (Array.isArray(container.tabs)) {
+    if (!container.tabs.length) {
+      throw new Error('Invalid docs config: "tabs" must contain at least one tab.');
+    }
+
     return container.tabs;
   }
 
-  if (Array.isArray(container.dropdowns) && container.dropdowns.length) {
+  if (Array.isArray(container.dropdowns)) {
+    if (!container.dropdowns.length) {
+      throw new Error('Invalid docs config: "dropdowns" must contain at least one dropdown.');
+    }
+
     return dropdownsToTabs(container.dropdowns);
   }
 
@@ -166,7 +225,13 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabI
     ];
   }
 
-  if (Array.isArray(container.versions) && container.versions.length) {
+  if (Array.isArray(container.versions)) {
+    if (!container.versions.length) {
+      throw new Error('Invalid docs config: "versions" must contain at least one version.');
+    }
+
+    assertSingleDefault(container.versions, 'versions', (item: VersionItem) => item.version);
+
     const version = pickDefaultItem(container.versions);
     const skipped = container.versions.filter(item => item !== version).map(item => item.version);
 
@@ -180,7 +245,13 @@ function getTabsFromContainer(container: NavContainer, fallbackLabel = ''): TabI
     return getTabsFromContainer(version, version.version?.trim() || fallbackLabel);
   }
 
-  if (Array.isArray(container.languages) && container.languages.length) {
+  if (Array.isArray(container.languages)) {
+    if (!container.languages.length) {
+      throw new Error('Invalid docs config: "languages" must contain at least one language.');
+    }
+
+    assertSingleDefault(container.languages, 'languages', (item: LanguageItem) => item.language);
+
     const language = pickDefaultItem(container.languages);
     const skipped = container.languages
       .filter(item => item !== language)
@@ -377,16 +448,6 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
       return;
     }
 
-    const reservedKey = Object.keys(item).find(key => RESERVED_PAGE_KEYS.includes(key));
-
-    if (reservedKey) {
-      warnOnce(
-        `Navigation item with "${reservedKey}" is recognized but is not ` +
-          'implemented yet — it will be skipped.',
-      );
-      return;
-    }
-
     throw new Error(
       `Invalid docs config: unrecognized page item with keys [${Object.keys(item).join(', ')}]. ` +
         'Supported items are strings, { page }, { href }, or { group, pages } blocks.',
@@ -401,16 +462,25 @@ function collectAnchors(anchors: AnchorItem[] | undefined): NavLinkNode[] {
     return [];
   }
 
-  return anchors
-    .filter(anchor => isRecord(anchor) && typeof anchor.href === 'string' && anchor.href)
-    .map(anchor => ({
+  return anchors.map((anchor, index) => {
+    const label = isRecord(anchor) && typeof anchor.anchor === 'string' ? anchor.anchor.trim() : '';
+    const href = isRecord(anchor) && typeof anchor.href === 'string' ? anchor.href : '';
+
+    if (!label || !href) {
+      throw new Error(
+        `Invalid docs config: anchor at index ${index} must define both "anchor" and "href".`,
+      );
+    }
+
+    return {
       kind: 'link' as const,
-      label: anchor.anchor?.trim() || (anchor.href as string),
-      href: anchor.href as string,
+      label,
+      href,
       icon: anchor.icon,
       hidden: anchor.hidden || undefined,
-      target: normalizeLinkTarget(anchor.href as string, anchor.target),
-    }));
+      target: normalizeLinkTarget(href, anchor.target),
+    };
+  });
 }
 
 /* ---------------------------------------------------------------------------

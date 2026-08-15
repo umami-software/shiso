@@ -549,3 +549,125 @@ describe('supported keys stay strictly validated', () => {
     );
   });
 });
+
+describe('navigation mode exclusivity', () => {
+  it('rejects navigation mixing primary modes', () => {
+    expect(
+      validateConfig(
+        { navigation: { tabs: [{ tab: 'Docs', pages: ['index'] }], pages: ['index'] } },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            dropdowns: [{ dropdown: 'Docs', pages: ['index'] }],
+            versions: [{ version: 'v1', pages: ['index'] }],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            versions: [{ version: 'v1', pages: ['index'] }],
+            languages: [{ language: 'en', pages: ['index'] }],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('accepts groups and pages together as one simple mode', () => {
+    expect(
+      validateConfig(
+        { navigation: { groups: [{ group: 'Start', pages: ['index'] }], pages: ['extra'] } },
+        schema,
+      ),
+    ).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts anchors beside a primary mode', () => {
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            anchors: [{ anchor: 'Status', href: 'https://status.example.com' }],
+            pages: ['index'],
+          },
+        },
+        schema,
+      ),
+    ).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts a single versions or languages mode', () => {
+    expect(
+      validateConfig(
+        { navigation: { versions: [{ version: 'v2', default: true, pages: ['index'] }] } },
+        schema,
+      ),
+    ).toMatchObject({ valid: true, errors: [] });
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            languages: [{ language: 'en', versions: [{ version: 'v1', pages: ['index'] }] }],
+          },
+        },
+        schema,
+      ),
+    ).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects empty versions and languages arrays', () => {
+    expect(validateConfig({ navigation: { versions: [] } }, schema).valid).toBe(false);
+    expect(validateConfig({ navigation: { languages: [] } }, schema).valid).toBe(false);
+  });
+
+  it('applies exclusivity inside versions and languages', () => {
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            versions: [
+              { version: 'v1', tabs: [{ tab: 'Docs', pages: ['index'] }], pages: ['extra'] },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            languages: [
+              { language: 'en', versions: [{ version: 'v1', pages: ['index'] }], pages: ['extra'] },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('requires anchors to define both anchor and href', () => {
+    expect(
+      validateConfig(
+        { navigation: { pages: ['index'], anchors: [{ anchor: 'Community' }] } },
+        schema,
+      ).valid,
+    ).toBe(false);
+    expect(
+      validateConfig(
+        { navigation: { pages: ['index'], anchors: [{ href: 'https://example.com' }] } },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+});

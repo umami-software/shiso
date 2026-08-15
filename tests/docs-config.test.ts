@@ -169,17 +169,15 @@ describe('nesting', () => {
   });
 });
 
-describe('unimplemented standard keys', () => {
-  it('warns and skips instead of throwing', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+describe('unsupported page items', () => {
+  it('rejects reserved platform keys instead of skipping them', () => {
     // Cast: these shapes are deliberately outside the supported PageItem union.
-    const config = normalize({ pages: ['index', { openapi: 'GET /users' } as never] });
-
-    expect(config.pages.map(page => page.slug)).toEqual(['index']);
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('openapi'));
+    expect(() => normalize({ pages: ['index', { openapi: 'GET /users' } as never] })).toThrow(
+      /unrecognized page item/,
+    );
   });
 
-  it('still throws on a genuinely unrecognized item', () => {
+  it('throws on a genuinely unrecognized item', () => {
     expect(() => normalize({ pages: ['index', { nonsense: true } as never] })).toThrow(
       /unrecognized page item/,
     );
@@ -217,6 +215,34 @@ describe('validation that must keep failing', () => {
       normalizeDocsConfig({ navigation: { pages: ['ghost'] } } as DocsConfig, () => undefined),
     ).toThrow(/Missing docs page file/);
   });
+
+  it('rejects navigation mixing multiple primary modes', () => {
+    expect(() =>
+      normalize({ tabs: [{ tab: 'Docs', pages: ['index'] }], pages: ['index'] }),
+    ).toThrow(/exactly one of/);
+    expect(() =>
+      normalize({
+        versions: [{ version: 'v1', pages: ['index'] }],
+        dropdowns: [{ dropdown: 'Docs', pages: ['index'] }],
+      }),
+    ).toThrow(/exactly one of/);
+  });
+
+  it('allows groups and pages together as one simple mode', () => {
+    const config = normalize({
+      groups: [{ group: 'Start', pages: ['index'] }],
+      pages: ['extra'],
+    });
+
+    expect(config.pages.map(page => page.slug)).toEqual(['index', 'extra']);
+  });
+
+  it('rejects empty mode arrays', () => {
+    expect(() => normalize({ tabs: [] })).toThrow(/at least one tab/);
+    expect(() => normalize({ dropdowns: [] })).toThrow(/at least one dropdown/);
+    expect(() => normalize({ versions: [] })).toThrow(/at least one version/);
+    expect(() => normalize({ languages: [] })).toThrow(/at least one language/);
+  });
 });
 
 describe('versions and languages', () => {
@@ -232,6 +258,44 @@ describe('versions and languages', () => {
 
     expect(config.pages.map(page => page.fileSlug)).toEqual(['v2/index']);
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('v1'));
+  });
+
+  it('rejects multiple versions marked default', () => {
+    expect(() =>
+      normalize({
+        versions: [
+          { version: 'v1', default: true, pages: ['v1/index'] },
+          { version: 'v2', default: true, pages: ['v2/index'] },
+        ],
+      }),
+    ).toThrow(/multiple versions are marked "default": v1, v2/);
+  });
+
+  it('rejects multiple languages marked default', () => {
+    expect(() =>
+      normalize({
+        languages: [
+          { language: 'en', default: true, pages: ['index'] },
+          { language: 'es', default: true, pages: ['es/index'] },
+        ],
+      }),
+    ).toThrow(/multiple languages are marked "default": en, es/);
+  });
+
+  it('rejects a version mixing primary modes', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    expect(() =>
+      normalize({
+        versions: [
+          {
+            version: 'v1',
+            tabs: [{ tab: 'Docs', pages: ['v1/index'] }],
+            pages: ['v1/extra'],
+          },
+        ],
+      }),
+    ).toThrow(/exactly one of/);
   });
 });
 
@@ -252,5 +316,17 @@ describe('anchors', () => {
         target: '_blank',
       },
     ]);
+  });
+
+  it('rejects an anchor without an href', () => {
+    expect(() =>
+      normalize({ pages: ['index'], anchors: [{ anchor: 'Community' } as never] }),
+    ).toThrow(/must define both "anchor" and "href"/);
+  });
+
+  it('rejects an anchor without a label', () => {
+    expect(() =>
+      normalize({ pages: ['index'], anchors: [{ href: 'https://example.com' } as never] }),
+    ).toThrow(/must define both "anchor" and "href"/);
   });
 });

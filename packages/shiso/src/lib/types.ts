@@ -54,7 +54,7 @@ export interface TabItem {
 
 export interface AnchorItem {
   anchor: string;
-  href?: string;
+  href: string;
   icon?: string;
   hidden?: boolean;
   target?: LinkTarget;

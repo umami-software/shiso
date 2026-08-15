@@ -34,6 +34,12 @@ Use one tab with one group:
   renders
 - `navigation.languages`: translated docs — same current limitation as versions
 
+These modes are mutually exclusive: define exactly one of `tabs`, `dropdowns`,
+`versions`, `languages`, or top-level `groups`/`pages` (which combine into one
+simple mode). The same rule applies inside each version and language entry.
+At most one version or language may set `default: true`; without an explicit
+default, the first entry is used.
+
 ## Page entries
 
 Inside `pages`, you can mix:
@@ -102,7 +108,8 @@ what clicking a group header does:
 
 ## Anchors
 
-Anchors render as prominent links above the sidebar:
+Anchors render as prominent links above the sidebar. Each anchor requires both
+`anchor` (the label) and `href`:
 
 ```json
 {
@@ -191,6 +198,9 @@ prerendered and reachable by URL, but they:
 You will see a config error when:
 
 - `navigation` is missing
+- more than one navigation mode is defined at the same level
+- `versions` or `languages` is empty, or more than one entry is `default: true`
+- an anchor is missing `anchor` or `href`
 - no pages are discovered
 - duplicate page file slugs exist
 - duplicate route slugs exist

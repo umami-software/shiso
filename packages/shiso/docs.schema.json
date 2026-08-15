@@ -104,6 +104,24 @@
     "navigation": {
       "type": "object",
       "description": "Site navigation. Define exactly one of: tabs, dropdowns, versions, languages, or top-level groups/pages.",
+      "not": {
+        "anyOf": [
+          { "required": ["tabs", "dropdowns"] },
+          { "required": ["tabs", "versions"] },
+          { "required": ["tabs", "languages"] },
+          { "required": ["tabs", "groups"] },
+          { "required": ["tabs", "pages"] },
+          { "required": ["dropdowns", "versions"] },
+          { "required": ["dropdowns", "languages"] },
+          { "required": ["dropdowns", "groups"] },
+          { "required": ["dropdowns", "pages"] },
+          { "required": ["versions", "languages"] },
+          { "required": ["versions", "groups"] },
+          { "required": ["versions", "pages"] },
+          { "required": ["languages", "groups"] },
+          { "required": ["languages", "pages"] }
+        ]
+      },
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
@@ -635,13 +653,13 @@
     },
     "versionList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/version" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/version" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
     "languageList": {
       "anyOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/language" } },
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/language" } },
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
@@ -723,7 +741,7 @@
     },
     "anchor": {
       "type": "object",
-      "anyOf": [{ "required": ["$ref"] }, { "required": ["anchor"] }],
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["anchor", "href"] }],
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
@@ -794,6 +812,15 @@
     "version": {
       "type": "object",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["version"] }],
+      "not": {
+        "anyOf": [
+          { "required": ["tabs", "dropdowns"] },
+          { "required": ["tabs", "groups"] },
+          { "required": ["tabs", "pages"] },
+          { "required": ["dropdowns", "groups"] },
+          { "required": ["dropdowns", "pages"] }
+        ]
+      },
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
@@ -812,6 +839,19 @@
     "language": {
       "type": "object",
       "anyOf": [{ "required": ["$ref"] }, { "required": ["language"] }],
+      "not": {
+        "anyOf": [
+          { "required": ["tabs", "dropdowns"] },
+          { "required": ["tabs", "versions"] },
+          { "required": ["tabs", "groups"] },
+          { "required": ["tabs", "pages"] },
+          { "required": ["dropdowns", "versions"] },
+          { "required": ["dropdowns", "groups"] },
+          { "required": ["dropdowns", "pages"] },
+          { "required": ["versions", "groups"] },
+          { "required": ["versions", "pages"] }
+        ]
+      },
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
