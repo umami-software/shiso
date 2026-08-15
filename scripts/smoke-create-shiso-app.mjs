@@ -107,6 +107,7 @@ try {
   );
 
   console.log('\nBuilding the generated site...\n');
+  run('pnpm', ['exec', 'shiso', 'check'], project);
   run('pnpm', ['exec', 'tsc', '--noEmit'], project);
   run('pnpm', ['build'], project);
 
@@ -117,6 +118,47 @@ try {
     assertFile(path.join(project, 'dist/client/docs/getting-started/index.html')),
     assertFile(path.join(project, 'dist/client/docs/getting-started.md')),
   ]);
+
+  // Upgrade simulation: installing a newer packed framework must only touch
+  // node_modules and the dependency specifier — user-owned content,
+  // configuration, styles, and assets survive untouched.
+  console.log('\nSimulating a framework upgrade...\n');
+
+  const userFiles = [
+    'docs.json',
+    'index.html',
+    'entry-client.tsx',
+    'styles.css',
+    'content/docs/index.mdx',
+    'content/docs/getting-started.mdx',
+    'public/logo.svg',
+  ];
+  const userFileContents = new Map();
+
+  for (const file of userFiles) {
+    userFileContents.set(file, await fs.readFile(path.join(project, file), 'utf8'));
+  }
+
+  const upgradeArchive = path.join(temporaryRoot, 'shiso-upgrade.tgz');
+  run('pnpm', ['pack', '--out', upgradeArchive], FRAMEWORK_ROOT);
+  run('pnpm', ['add', `${FRAMEWORK_PACKAGE.name}@file:${upgradeArchive}`], project);
+  run('pnpm', ['build'], project);
+
+  for (const file of userFiles) {
+    const contents = await fs.readFile(path.join(project, file), 'utf8');
+
+    if (contents !== userFileContents.get(file)) {
+      throw new Error(`User-owned file "${file}" changed during the framework upgrade.`);
+    }
+  }
+
+  const upgradedPackage = JSON.parse(await fs.readFile(path.join(project, 'package.json'), 'utf8'));
+
+  if (upgradedPackage.dependencies[FRAMEWORK_PACKAGE.name] !== `file:${upgradeArchive}`) {
+    throw new Error('Upgrade did not update the framework dependency specifier.');
+  }
+
+  await assertFile(path.join(project, 'dist/client/docs/index.html'));
 
   console.log('\ncreate-shiso-app smoke test passed.\n');
 } finally {

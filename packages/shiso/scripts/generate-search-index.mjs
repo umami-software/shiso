@@ -21,8 +21,8 @@ import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
-import { headingText } from '../src/lib/mdast.ts';
-import { createSlugger, slugifyId } from '../src/lib/slug.ts';
+import { headingText } from './lib/mdast.mjs';
+import { createSlugger, slugifyId } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_ROOT = process.cwd();

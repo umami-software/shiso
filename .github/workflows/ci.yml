@@ -24,3 +24,23 @@ jobs:
       - run: pnpm build
       - run: pnpm test:multi-scope
       - run: pnpm test:create-app
+
+  # The generator smoke build must pass on every supported Node version
+  # (engines: ^20.19.0 || >=22.12.0).
+  node-support:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20.19', '22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm test:multi-scope
+      - run: pnpm test:create-app
