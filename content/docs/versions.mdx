@@ -1,0 +1,66 @@
+---
+title: Versions
+description: Build and organize documentation for multiple product versions.
+---
+
+Use `navigation.versions` to give every product version its own documentation
+tree and add a version selector to the header. Every configured version builds,
+and selecting a version opens its first visible page.
+
+## Configure versions
+
+Each version defines one navigation mode: tabs, dropdowns, or groups and pages.
+
+```json
+{
+  "navigation": {
+    "versions": [
+      {
+        "version": "v2",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Docs",
+            "pages": ["index", "installation"]
+          }
+        ]
+      },
+      {
+        "version": "v1",
+        "pages": ["v1/index", "v1/installation"]
+      }
+    ]
+  }
+}
+```
+
+Set `default: true` on the version that should open by default. If you do not
+set a default, Shiso uses the first visible version. Only one version may be the
+default.
+
+## Content and URLs
+
+URLs come from page references, never from version labels. In the example,
+`"v1/index"` is served at `/docs/v1` because its file lives in the `v1/`
+directory; the `version` label does not add a URL prefix.
+
+Keep each version's files in its own directory. The same content file cannot
+appear in two versions.
+
+## Hide a version
+
+Set `hidden: true` to keep an unreleased or archived version out of the header
+selector, sitemap, and search. Its pages still build and remain directly
+reachable by URL.
+
+Setting [`seo.indexing`](/docs/seo#indexing) to `"all"` includes pages from
+hidden versions in the sitemap, just like other hidden pages.
+
+## Combine versions and languages
+
+For a site that is both versioned and translated, nest `versions` inside each
+language. See [Versions inside languages](/docs/languages#versions-inside-languages)
+for a complete example.
+
+Built-in search stays inside the active version and language, so results from
+different documentation scopes are not mixed.

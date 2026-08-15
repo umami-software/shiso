@@ -56,6 +56,8 @@
               { "page": "customization", "title": "Appearance" },
               { "page": "navbar-and-footer", "title": "Header, footer, and banner" },
               { "page": "search-and-ai", "title": "Search and AI" },
+              "versions",
+              "languages",
               { "page": "seo", "title": "SEO, redirects, and errors" },
               { "page": "project-settings", "title": "URLs and content location" },
               { "page": "configuration-references", "title": "Split configuration with $ref" },

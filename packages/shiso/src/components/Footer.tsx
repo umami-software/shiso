@@ -44,15 +44,12 @@ export function Footer({
       {attribution || socials.length > 0 ? (
         <div className="flex items-center justify-between gap-4">
           {attribution ? (
-            <span className="text-sm">
-              Powered by{' '}
-              <a
-                href="https://shiso.umami.is?ref=docs-footer"
-                className="font-bold hover:text-foreground"
-              >
-                shiso
-              </a>
-            </span>
+            <a
+              href="https://shiso.umami.is?ref=docs-footer"
+              className="text-sm hover:text-foreground"
+            >
+              Powered by <span className="font-bold">shiso</span>
+            </a>
           ) : (
             <span />
           )}
