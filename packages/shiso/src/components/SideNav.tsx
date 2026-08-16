@@ -21,6 +21,7 @@ export interface SideNavProps {
   tabs: DocsTab[];
   navigation: Record<string, NavNode[]>;
   anchors: NavNode[];
+  activeTabId: string;
   isSticky?: boolean;
   drilldown?: boolean;
   navigationLabel: string;
@@ -307,6 +308,7 @@ export function SideNav({
   tabs,
   navigation,
   anchors,
+  activeTabId,
   isSticky,
   drilldown,
   navigationLabel,
@@ -314,11 +316,7 @@ export function SideNav({
   collapseLabel,
 }: SideNavProps) {
   const { pathname } = useLocation();
-
-  const tab = [...tabs]
-    .sort((a, b) => b.url.length - a.url.length)
-    .find(item => pathname === item.url || pathname.startsWith(`${item.url}/`));
-  const nodes = navigation[tab?.id || tabs?.[0]?.id] || [];
+  const nodes = navigation[activeTabId] || navigation[tabs[0]?.id] || [];
 
   return (
     <ScrollArea className={classNames('w-full max-w-full', { 'h-full': isSticky })}>

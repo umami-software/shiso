@@ -33,27 +33,3 @@ pnpm add @umami/shiso@latest
 The framework package owns rendering, schema validation, search generation,
 and the build pipeline. Your `content`, `docs.json`, `public` assets,
 `styles.css`, and `entry-client.tsx` remain user-owned.
-
-## Moving from a copied-source project
-
-Projects created before Shiso became an installable framework contain copied
-framework source. To migrate one:
-
-1. Add `@umami/shiso`, `react`, and `react-dom` as dependencies.
-2. Replace the project scripts with `shiso dev`, `shiso check`, `shiso build`,
-   and `shiso preview --outDir dist/client`.
-3. Point `$schema` at `./node_modules/@umami/shiso/docs.schema.json`.
-4. Replace the client entry with:
-
-   ```tsx
-   import { mount } from '@umami/shiso/client';
-
-   mount();
-   ```
-
-5. Preserve `content`, `public`, and `docs.json`.
-6. Review any changes you made under the old `src` or `scripts` folders before
-   removing those copied framework files.
-
-If you registered a custom search provider, move that registration into
-`entry-client.tsx` and import it from `@umami/shiso/search`.

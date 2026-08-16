@@ -94,6 +94,7 @@ export function Docs({ page, doc, site }: DocsProps) {
               tabs={tabs}
               navigation={navigation}
               anchors={scopeDocs.anchors}
+              activeTabId={page.tabId}
               drilldown={site.drilldown}
               navigationLabel={site.labels.documentationNavigation}
               expandLabel={site.labels.expand}
@@ -108,6 +109,7 @@ export function Docs({ page, doc, site }: DocsProps) {
             tabs={tabs}
             navigation={navigation}
             anchors={scopeDocs.anchors}
+            activeTabId={page.tabId}
             isSticky
             drilldown={site.drilldown}
             navigationLabel={site.labels.documentationNavigation}
