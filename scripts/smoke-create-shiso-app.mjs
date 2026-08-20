@@ -12,12 +12,11 @@ const FRAMEWORK_PACKAGE = JSON.parse(
   await fs.readFile(path.join(FRAMEWORK_ROOT, 'package.json'), 'utf8'),
 );
 
-function executable(command) {
-  return process.platform === 'win32' ? `${command}.cmd` : command;
-}
-
 function run(command, args, cwd, env = {}) {
-  const result = spawnSync(executable(command), args, {
+  const commandShim = process.platform === 'win32';
+  const executable = commandShim ? process.env.ComSpec || 'cmd.exe' : command;
+  const executableArgs = commandShim ? ['/d', '/s', '/c', `${command}.cmd`, ...args] : args;
+  const result = spawnSync(executable, executableArgs, {
     cwd,
     env: {
       ...process.env,

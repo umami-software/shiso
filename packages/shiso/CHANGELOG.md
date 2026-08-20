@@ -3,6 +3,75 @@
 All notable changes to `@umami/shiso` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.1.10 - 2026-08-19
+
+### Added
+
+- Add more vertical space around documentation images and open them in an
+  accessible full-size viewer when clicked.
+- Support `noZoom` on MDX images and disable zoom automatically for linked
+  images.
+
+## 1.1.9 - 2026-08-19
+
+### Fixed
+
+- Stop automatically inverting a shared logo in dark mode so PNG and other
+  full-color images render unchanged.
+
+## 1.1.8 - 2026-08-19
+
+### Changed
+
+- Replace the custom and Zinc-derived light and dark grayscale theme tokens with
+  exact values from Tailwind's Neutral palette.
+
+## 1.1.7 - 2026-08-19
+
+### Fixed
+
+- Remove the nested callout description's leading paragraph margin so the first
+  line of text and icon share the same line box.
+
+## 1.1.6 - 2026-08-19
+
+### Fixed
+
+- Apply Alert's optical SVG offset to wrapped callout icons so their visible
+  strokes align with the first line of text.
+
+## 1.1.5 - 2026-08-19
+
+### Fixed
+
+- Align callout icons with the first line of text using a fixed line-height box
+  that remains consistent in published production builds.
+- Keep header actions aligned to the right when the current navigation scope
+  does not render top-level tabs.
+
+## 1.1.3 - 2026-08-18
+
+### Fixed
+
+- Publish Shiso's browser and server runtime as bundled ESM instead of exposing
+  raw framework source to consuming Vite projects.
+- Move `hydrateRoot` into the generated app entry so React DOM is discovered as
+  a normal direct app dependency without framework-specific prebundle entries.
+
+## 1.1.2 - 2026-08-18
+
+### Fixed
+
+- Replace the CommonJS-only `classnames` dependency with ESM-capable `clsx` so
+  fresh pnpm projects can load Shiso's navigation components during development.
+
+## 1.1.1 - 2026-08-18
+
+### Fixed
+
+- Prebundle Base UI's CommonJS external-store shims so fresh pnpm projects load
+  their named exports correctly during development.
+
 ## 1.0.0 - 2026-08-15
 
 ### Added

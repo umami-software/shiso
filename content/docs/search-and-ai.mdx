@@ -41,10 +41,11 @@ with `search.provider`; `options` are passed directly to its factory:
 }
 ```
 
-Register custom providers in `entry-client.tsx` before mounting Shiso:
+Register custom providers in `entry-client.tsx` before hydrating Shiso:
 
 ```tsx
-import { mount } from '@umami/shiso/client';
+import { ShisoApp } from '@umami/shiso/client';
+import { hydrateRoot } from 'react-dom/client';
 import { registerSearchProvider } from '@umami/shiso/search';
 
 registerSearchProvider('hosted', options => ({
@@ -56,7 +57,13 @@ registerSearchProvider('hosted', options => ({
   },
 }));
 
-mount();
+const element = document.getElementById('root');
+
+if (!element) {
+  throw new Error('Shiso could not find the root element.');
+}
+
+hydrateRoot(element, <ShisoApp />);
 ```
 
 Every provider returns normalized results with `url`, `page`, `score`, and

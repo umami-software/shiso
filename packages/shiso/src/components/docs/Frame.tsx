@@ -46,7 +46,9 @@ export function Frame({ caption, hint, children }: FrameProps) {
         </div>
       ) : null}
       <figure className={styles.frame}>
-        <div className={styles.frameContent}>{enhanceAutoplayVideos(children)}</div>
+        <div data-slot="frame-content" className={styles.frameContent}>
+          {enhanceAutoplayVideos(children)}
+        </div>
         {caption ? (
           <figcaption className={styles.frameCaption}>{renderFrameText(caption)}</figcaption>
         ) : null}

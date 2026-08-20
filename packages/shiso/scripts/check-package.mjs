@@ -5,11 +5,13 @@ const root = path.resolve(import.meta.dirname, '..');
 
 for (const relativeFile of [
   'bin/shiso.mjs',
+  'dist/entry-client.js',
+  'dist/entry-server.js',
+  'dist/search.js',
   'docs.schema.json',
   'scripts/lib/mdast.mjs',
   'scripts/lib/slug.mjs',
-  'src/entry-client.tsx',
-  'src/entry-server.tsx',
+  'src/styles/global.css',
   'types/client.d.ts',
   'types/search.d.ts',
   'vite.config.ts',

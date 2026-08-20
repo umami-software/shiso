@@ -85,13 +85,12 @@ function detectPackageManager() {
   return 'pnpm';
 }
 
-function executable(command) {
-  const commandShim = ['npm', 'pnpm', 'yarn'].includes(command);
-  return process.platform === 'win32' && commandShim ? `${command}.cmd` : command;
-}
-
 function run(command, args, cwd, silent = false) {
-  return spawnSync(executable(command), args, {
+  const commandShim = process.platform === 'win32' && ['npm', 'pnpm', 'yarn'].includes(command);
+  const executable = commandShim ? process.env.ComSpec || 'cmd.exe' : command;
+  const executableArgs = commandShim ? ['/d', '/s', '/c', `${command}.cmd`, ...args] : args;
+
+  return spawnSync(executable, executableArgs, {
     cwd,
     env: process.env,
     stdio: silent ? 'ignore' : 'inherit',
@@ -199,6 +198,10 @@ function commandPath(directory) {
   return /\s/.test(directory) ? `"${directory}"` : directory;
 }
 
+function devCommand(packageManager) {
+  return packageManager === 'npm' ? 'npm run dev' : `${packageManager} dev`;
+}
+
 async function main() {
   const options = parseArguments(process.argv.slice(2));
 
@@ -239,13 +242,14 @@ async function main() {
   const changeDirectory =
     path.resolve(displayPath) === process.cwd() ? '' : `  cd ${commandPath(displayPath)}\n`;
   const install = options.skipInstall ? `  ${packageManager} install\n` : '';
+  const dev = devCommand(packageManager);
 
   console.log(`
 Created ${name} with Shiso.${initializedGit ? ' A fresh Git repository was initialized.' : ''}
 
 Next steps:
 
-${changeDirectory}${install}  ${packageManager} dev
+${changeDirectory}${install}  ${dev}
 
 Edit content/docs/index.mdx to start writing.
 `);

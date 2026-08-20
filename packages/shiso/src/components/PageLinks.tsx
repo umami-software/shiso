@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'clsx';
 import { useEffect, useState } from 'react';
 import type { TocEntry } from '@/lib/types';
 

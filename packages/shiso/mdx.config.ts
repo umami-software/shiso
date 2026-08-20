@@ -101,6 +101,43 @@ function rehypeRemoveHighlightingFragments() {
   };
 }
 
+function rehypeZoomableImages() {
+  return (tree: MdNode) => {
+    const visit = (node: MdNode, insideLink = false) => {
+      const isMdxElement = node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement';
+      const isLink = node.tagName === 'a' || (isMdxElement && node.name === 'a');
+      const linked = insideLink || isLink;
+
+      if (isMdxElement && node.name === 'img') {
+        node.name = 'ZoomableImage';
+
+        if (linked) {
+          const attributes = Array.isArray(node.attributes) ? node.attributes : [];
+          const hasNoZoom = attributes.some(
+            attribute =>
+              typeof attribute === 'object' && attribute !== null && attribute.name === 'noZoom',
+          );
+
+          if (!hasNoZoom) {
+            node.attributes = [
+              ...attributes,
+              { type: 'mdxJsxAttribute', name: 'noZoom', value: null },
+            ];
+          }
+        }
+      } else if (node.tagName === 'img' && linked) {
+        node.properties = { ...(node.properties as Record<string, unknown>), noZoom: true };
+      }
+
+      node.children?.forEach(child => {
+        visit(child, linked);
+      });
+    };
+
+    visit(tree);
+  };
+}
+
 /**
  * The MDX compilation pipeline, shared by the app build and the test runner so
  * tests exercise the same transforms the site ships with.
@@ -122,6 +159,7 @@ export function shisoMdx(): Plugin {
         rehypeWrapJsxForHighlighting,
         rehypeHighlight,
         rehypeRemoveHighlightingFragments,
+        rehypeZoomableImages,
         rehypeSlug,
         [
           // Must follow rehypeSlug: the anchor href points at the id it sets.

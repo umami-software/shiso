@@ -16,7 +16,7 @@ Shiso includes:
 ## Create a documentation site
 
 ```bash
-pnpm create shiso-app@latest my-docs
+pnpm dlx create-shiso-app@latest my-docs
 cd my-docs
 pnpm dev
 ```

@@ -11,10 +11,10 @@ export const styles = {
     'items-center px-4 py-3 text-sm font-normal text-foreground hover:no-underline',
 
   callout: 'my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6',
-  calloutIcon:
-    'mt-[calc((1.5em-1.25rem)/2)] inline-flex size-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4',
+  calloutIcon: 'flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4',
   calloutBody:
     'flex min-w-0 flex-1 flex-col gap-[0.35rem] [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:my-[0.35rem] [&>:where(p,ul,ol):first-child]:mt-0 [&>:where(p,ul,ol):last-child]:mb-0',
+  calloutDescription: 'text-sm text-inherit leading-6 [&>:first-child]:mt-0 [&>:last-child]:mb-0',
   calloutTitle: 'font-semibold leading-6',
   note: 'border-border bg-muted/50 text-foreground',
   info: 'border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-400/40 dark:bg-blue-400/10 dark:text-blue-300',
@@ -58,7 +58,7 @@ export const styles = {
     'flex h-5 shrink-0 items-center text-muted-foreground [&_svg]:size-4 [&_svg]:fill-current',
   frame: 'relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2',
   frameContent:
-    'relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:w-full [&_video]:w-full',
+    'relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full',
   frameCaption:
     'relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold',
 

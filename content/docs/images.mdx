@@ -15,6 +15,9 @@ Put image assets under `public/` and reference them with absolute site paths.
 
 Always include meaningful alt text.
 
+Images have extra vertical spacing and open at full size when clicked. The zoom
+dialog can also be opened with the keyboard and closed with Escape.
+
 ## HTML syntax
 
 Use an `<img>` tag when you need explicit dimensions or other attributes:
@@ -24,6 +27,15 @@ Use an `<img>` tag when you need explicit dimensions or other attributes:
 ```
 
 <img src="/images/sample.jpg" width="640" alt="Sample image" />
+
+Add `noZoom` when an image should not open in the full-size viewer:
+
+```mdx
+<img src="/images/sample.jpg" alt="Sample image" noZoom />
+```
+
+Images wrapped in links automatically disable zoom so clicking them follows the
+link instead.
 
 ## Where assets live
 

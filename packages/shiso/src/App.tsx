@@ -3,7 +3,7 @@ import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
 import '@fontsource/jetbrains-mono/400.css';
 import 'highlight.js/styles/github.css';
-import '@/styles/global.css';
+import '@umami/shiso/styles.css';
 
 import { MDXProvider } from '@mdx-js/react';
 import { Navigate, Route, Routes } from 'react-router';
@@ -16,6 +16,7 @@ import { DocPage } from '@/pages/DocPage';
 
 const mdxComponents = {
   ...docsComponents,
+  img: docsComponents.ZoomableImage,
   pre: CodeBlock,
 };
 

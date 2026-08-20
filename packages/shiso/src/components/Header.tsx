@@ -53,11 +53,7 @@ export function Header({ site }: { site: SiteModel }) {
                 <img src={logo.light} alt="" className="h-6 w-auto dark:hidden" />
               ) : null}
               {logo?.dark ? (
-                <img
-                  src={logo.dark}
-                  alt=""
-                  className={`hidden h-6 w-auto dark:block ${logo.light === logo.dark ? 'dark:invert' : ''}`}
-                />
+                <img src={logo.dark} alt="" className="hidden h-6 w-auto dark:block" />
               ) : null}
               {name ? <span>{name}</span> : null}
             </a>
@@ -67,7 +63,9 @@ export function Header({ site }: { site: SiteModel }) {
             <LanguageSwitcher />
           </div>
         </div>
-        {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}
+        <div className="h-full min-w-0 justify-self-center">
+          {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}
+        </div>
         <div className="flex min-w-0 items-center gap-2 justify-self-end">
           <Search config={search} labels={labels} />
           {navbar?.links.map(link => (

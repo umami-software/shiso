@@ -13,7 +13,7 @@ const VITE_BIN = path.join(
   path.dirname(fileURLToPath(import.meta.resolve('vite/package.json'))),
   'bin/vite.js',
 );
-const SSR_ENTRY = path.join(PACKAGE_ROOT, 'src/entry-server.tsx');
+const SSR_ENTRY = path.join(PACKAGE_ROOT, 'dist/entry-server.js');
 
 const HELP = `
 Usage: shiso <command> [options]

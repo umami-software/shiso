@@ -281,7 +281,6 @@ function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
   };
 }
 
-const PACKAGE_ROOT = fileURLToPath(new URL('.', import.meta.url));
 const MDX_REACT_ENTRY = fileURLToPath(import.meta.resolve('@mdx-js/react'));
 const LUCIDE_REACT_ENTRY = path.join(
   path.dirname(fileURLToPath(import.meta.resolve('lucide-react/package.json'))),
@@ -297,6 +296,11 @@ export default defineConfig(async () => {
   const getDocsConfig = configModule.getConfig as () => DocsConfig;
 
   return {
+    optimizeDeps: {
+      // The published runtime is already bundled ESM and contains project-time
+      // virtual imports that are resolved by the plugins below.
+      exclude: ['@umami/shiso'],
+    },
     plugins: [
       configModule.plugin,
       tailwindcss(),
@@ -334,7 +338,6 @@ export default defineConfig(async () => {
           find: '@/generated/last-modified',
           replacement: path.join(generatedRoot, 'last-modified.ts'),
         },
-        { find: '@', replacement: path.join(PACKAGE_ROOT, 'src') },
       ],
       dedupe: ['react', 'react-dom'],
     },

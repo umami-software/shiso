@@ -34,7 +34,7 @@ export function Callout({ title, icon, children, variant = 'note' }: CalloutProp
       </span>
       <div className={styles.calloutBody}>
         {title ? <AlertTitle className={styles.calloutTitle}>{title}</AlertTitle> : null}
-        <AlertDescription className="text-sm text-inherit leading-6">{children}</AlertDescription>
+        <AlertDescription className={styles.calloutDescription}>{children}</AlertDescription>
       </div>
     </Alert>
   );

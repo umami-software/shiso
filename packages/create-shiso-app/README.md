@@ -3,7 +3,7 @@
 Create a new Shiso documentation site without cloning the Shiso repository.
 
 ```bash
-pnpm create shiso-app@latest my-docs
+pnpm dlx create-shiso-app@latest my-docs
 ```
 
 You can also use npm, Yarn, or Bun:

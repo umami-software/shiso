@@ -2,7 +2,7 @@
 
 Shiso is an open-source documentation framework for Markdown and MDX sites.
 
-Create a project with `pnpm create shiso-app@latest`, then use the framework
+Create a project with `pnpm dlx create-shiso-app@latest`, then use the framework
 commands from that project:
 
 ```bash

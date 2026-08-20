@@ -1,3 +1,3 @@
-import type { Root } from 'react-dom/client';
+import type { ReactElement } from 'react';
 
-export function mount(element?: HTMLElement | null): Root;
+export function ShisoApp(): ReactElement;

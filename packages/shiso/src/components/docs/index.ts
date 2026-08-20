@@ -13,3 +13,4 @@ export * from './ResponseField';
 export * from './Steps';
 export * from './Tabs';
 export * from './Tooltip';
+export * from './ZoomableImage';

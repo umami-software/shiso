@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'clsx';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { ChevronRight } from '@/components/icons';
