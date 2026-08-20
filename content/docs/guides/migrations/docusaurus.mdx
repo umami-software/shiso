@@ -1,0 +1,108 @@
+---
+title: Migrating from Docusaurus
+description: Move a Docusaurus docs folder and sidebar into Shiso.
+---
+
+Docusaurus content is Markdown/MDX, so pages move over largely intact. The
+work is translating `docusaurus.config.js` and `sidebars.js` into a single
+`docs.json`, and swapping themed components for Shiso's built-ins.
+
+## What carries over
+
+- **Content**: `.md` / `.mdx` files, GFM tables, task lists, frontmatter
+  `title` and `description`
+- **Admonitions**: `:::note`, `:::tip`, `:::info`, `:::warning`, `:::danger`
+  map one-to-one to Shiso [callouts](/docs/components/callout)
+- **Static assets**: files from `static/` move to `public/` with the same URLs
+- **Versioning and i18n**: `versioned_docs` and `i18n` trees map to
+  [Versions](/docs/versions) and [Languages](/docs/languages)
+
+## Migration steps
+
+<Steps>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content and assets">
+    Move your `docs/` files into `content/docs` and everything from `static/`
+    into `public/`.
+  </Step>
+  <Step title="Rebuild the sidebar as navigation">
+    Translate `sidebars.js` into `docs.json` navigation. Categories become
+    groups, doc ids become page paths:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    }
+    ```
+
+    Shiso has no `sidebar_position` — order comes from the `pages` arrays.
+  </Step>
+  <Step title="Move branding">
+    Map `themeConfig` values into `docs.json`: `title` → `name`, `navbar.logo`
+    → `logo`, navbar items → [`navbar.links`](/docs/navbar-and-footer),
+    footer links → [`footer`](/docs/navbar-and-footer).
+  </Step>
+  <Step title="Convert components">
+    Replace themed imports with Shiso built-ins (no imports needed), then
+    validate and build:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Component mapping
+
+| Docusaurus | Shiso |
+| --- | --- |
+| `:::note` / `:::tip` / `:::info` / `:::warning` / `:::danger` | `<Note>` / `<Tip>` / `<Info>` / `<Warning>` / `<Danger>` |
+| `<Tabs>` + `<TabItem value label>` from `@theme` | [`<Tabs>` + `<Tab title>`](/docs/components/tabs), no imports |
+| `<details>` / `<summary>` | [`<Accordion title>`](/docs/components/accordion) |
+| Multi-language code tabs | [`<CodeGroup>`](/docs/components/code-group) |
+| `DocCardList` | [`<Columns>` of `<Card>`s](/docs/components/columns) |
+
+Admonition syntax (`:::note`) must be rewritten as components — Shiso uses
+MDX components rather than directive syntax:
+
+```mdx
+<Note>
+  Neutral supplemental information.
+</Note>
+```
+
+## Frontmatter differences
+
+| Docusaurus field | Shiso equivalent |
+| --- | --- |
+| `title`, `description` | Same |
+| `sidebar_label` | `title` on the page object in `docs.json` |
+| `sidebar_position` | Order in the `pages` array |
+| `slug`, `id` | File path determines the URL; use [redirects](/docs/seo#redirects) for moved pages |
+| `draft` | Remove the page from navigation, or set `noindex: true` |
+
+## Not carried over
+
+- **Plugins and swizzled components** — custom React components need a plain
+  Markdown or built-in component replacement
+- **Blog** — Shiso is docs-only
+- **Algolia DocSearch** — replaced by built-in client-side search
+  (`⌘K` / `Ctrl K`)
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — ship `dist/client`
+- [SEO and redirects](/docs/seo) — map old `slug` values to new paths
+- [Versions](/docs/versions) — recreate versioned docs if you had them

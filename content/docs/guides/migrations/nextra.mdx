@@ -1,0 +1,113 @@
+---
+title: Migrating from Nextra
+description: Move Nextra MDX content and _meta files into Shiso.
+---
+
+Nextra sites are MDX on top of Next.js. Your content files move over mostly
+as-is; the `_meta` files and theme configuration collapse into a single
+`docs.json`, and `nextra/components` imports become Shiso built-ins.
+
+## What carries over
+
+- **Content**: `.md` / `.mdx` pages, GFM, frontmatter `title` and
+  `description`
+- **Structure**: nested folders become nested routes, same as Nextra
+- **Static assets**: files from `public/` stay in `public/`
+- **Components**: callouts, tabs, steps, and cards have direct equivalents
+
+## Migration steps
+
+<Steps>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content">
+    Move your pages (from `content/` in Nextra 4, or `pages/` in Nextra 3)
+    into `content/docs`, keeping the folder structure.
+  </Step>
+  <Step title="Replace _meta files with navigation">
+    Nextra reads sidebar order and labels from `_meta.js` / `_meta.json`
+    files. Shiso declares the whole tree in `docs.json` instead:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              { "page": "index", "title": "Introduction" },
+              "installation"
+            ]
+          }
+        ]
+      }
+    }
+    ```
+
+    Delete the `_meta` files — titles set there move to page objects, and
+    `display: "hidden"` becomes `"hidden": true`.
+  </Step>
+  <Step title="Move theme configuration">
+    Map your theme setup (`theme.config` or `<Layout>` props) into
+    `docs.json`: logo → `logo`, project link → `navbar.links`, footer →
+    `footer`, banner → [`banner`](/docs/navbar-and-footer#banner).
+  </Step>
+  <Step title="Remove imports and validate">
+    Delete `import { Callout, Tabs, Steps } from 'nextra/components'` lines —
+    Shiso injects its components into every page — then:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Component mapping
+
+| Nextra | Shiso |
+| --- | --- |
+| `<Callout>` (default) | `<Note>` |
+| `<Callout type="info">` | `<Info>` |
+| `<Callout type="warning">` | `<Warning>` |
+| `<Callout type="error">` | `<Danger>` |
+| `<Tabs items={[...]}>` + `<Tabs.Tab>` | [`<Tabs>` + `<Tab title>`](/docs/components/tabs) — labels move onto each tab |
+| `<Steps>` with `###` headings | [`<Steps>` + `<Step title>`](/docs/components/steps) — headings become `title` props |
+| `<Cards>` + `<Cards.Card>` | [`<Columns>`](/docs/components/columns) + [`<Card>`](/docs/components/card) |
+| `<FileTree>` | No equivalent — use a fenced code block |
+| `<Bleed>` | No equivalent — use [`<Frame>`](/docs/components/frame) for images |
+
+For example, Nextra tabs:
+
+```mdx
+<Tabs items={['pnpm', 'npm']}>
+  <Tabs.Tab>...</Tabs.Tab>
+  <Tabs.Tab>...</Tabs.Tab>
+</Tabs>
+```
+
+become:
+
+```mdx
+<Tabs>
+  <Tab title="pnpm">...</Tab>
+  <Tab title="npm">...</Tab>
+</Tabs>
+```
+
+## Not carried over
+
+- **Next.js features** — API routes, middleware, custom App/Document, and
+  `next/image` have no equivalent; use plain Markdown images
+- **Custom React components** — anything imported from your own codebase
+  needs a built-in replacement or plain Markdown
+- **LaTeX and Mermaid** — not built in
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — ship `dist/client` to any static host
+- [SEO and redirects](/docs/seo) — add redirects for any URLs that changed
+- [Search and AI](/docs/search-and-ai) — built-in search replaces FlexSearch

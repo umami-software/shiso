@@ -1,0 +1,130 @@
+---
+title: Migrating from MkDocs
+description: Move MkDocs (and Material for MkDocs) Markdown into Shiso.
+---
+
+MkDocs content is plain Markdown, which Shiso renders directly. The migration
+is mostly mechanical: `mkdocs.yml` becomes `docs.json`, and Material
+extensions (admonitions, content tabs) become MDX components. One thing to
+watch: MDX is stricter than Python-Markdown about raw `<` and `{` characters.
+
+## What carries over
+
+- **Content**: `.md` pages, GFM tables, task lists, fenced code blocks
+- **Structure**: the `docs/` tree moves to `content/docs` with the same routes
+- **Static assets**: images and files referenced from pages move to `public/`
+
+## Migration steps
+
+<Steps>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content">
+    Move the `docs/` folder contents into `content/docs`. Move images into
+    `public/` and update paths to be site-absolute (`/images/...`).
+  </Step>
+  <Step title="Rebuild nav as navigation">
+    Translate the `nav` section of `mkdocs.yml` into `docs.json`. Nav
+    sections become groups; file paths lose their `.md` extension:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    }
+    ```
+  </Step>
+  <Step title="Move site settings">
+    Map `site_name` → `name`, `site_description` → `description`,
+    `site_url` → `$shiso.siteUrl`, `theme.logo` → `logo`, and
+    `theme.palette` colors → [`colors`](/docs/customization).
+  </Step>
+  <Step title="Convert extensions and validate">
+    Rewrite admonitions and content tabs (see mapping below), fix MDX
+    strictness issues, then:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Syntax mapping
+
+| MkDocs / Material | Shiso |
+| --- | --- |
+| `!!! note` | `<Note>` |
+| `!!! tip` | `<Tip>` |
+| `!!! warning` | `<Warning>` |
+| `!!! info` | `<Info>` |
+| `!!! danger` | `<Danger>` |
+| `??? note` (collapsible) | [`<Accordion title>`](/docs/components/accordion) |
+| `=== "Tab"` content tabs | [`<Tabs>` + `<Tab title>`](/docs/components/tabs) |
+| Tabbed code blocks | [`<CodeGroup>`](/docs/components/code-group) |
+| Grids (`.grid.cards`) | [`<Columns>` of `<Card>`s](/docs/components/columns) |
+| Footnotes, snippets, macros | No equivalent — inline the content |
+
+For example:
+
+```markdown
+!!! warning "Careful"
+    This action is destructive.
+```
+
+becomes:
+
+```mdx
+<Warning>
+  **Careful** — this action is destructive.
+</Warning>
+```
+
+## MDX strictness
+
+Python-Markdown tolerates raw HTML-ish text; MDX does not. Search your
+content for:
+
+- `<` followed by text (e.g. `<version>`) — wrap in backticks or escape as
+  `\<`
+- `{` in prose (e.g. `{placeholder}`) — wrap in backticks or escape as `\{`
+- Unclosed HTML tags like `<br>` — use `<br />` or remove
+
+Fenced code blocks and inline code are safe; only prose needs checking.
+
+## Frontmatter differences
+
+MkDocs takes the page title from the first `#` heading or `nav`. Shiso uses
+frontmatter — add it to each page and remove the duplicate `#` heading:
+
+```mdx
+---
+title: Installation
+description: Optional description shown under the title.
+---
+```
+
+## Not carried over
+
+- **MkDocs plugins** (mkdocstrings, redirects plugin, etc.) — API reference
+  generation has no equivalent; redirects move to
+  [`redirects`](/docs/seo#redirects) in `docs.json`
+- **Jinja templating / theme overrides** — see
+  [Appearance](/docs/customization) for supported customization
+- **Search plugin config** — built-in client-side search replaces it
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — publish `dist/client` instead of
+  `site/`
+- [SEO and redirects](/docs/seo) — MkDocs' directory URLs map cleanly; add
+  redirects for anything that moved

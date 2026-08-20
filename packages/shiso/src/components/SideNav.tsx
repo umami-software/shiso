@@ -15,7 +15,7 @@ const sectionLabelClass =
 const groupLabelClass =
   'flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit';
 const selectedClass =
-  'border-l-sidebar-primary font-medium text-sidebar-primary hover:text-sidebar-primary';
+  'border-l-sidebar-primary font-bold text-sidebar-primary hover:text-sidebar-primary';
 
 export interface SideNavProps {
   tabs: DocsTab[];

@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -60,20 +61,22 @@ export function ZoomableImage({
           srcSet={props.srcSet}
           sizes={props.sizes}
           alt={alt || ''}
-          className="max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] rounded-lg object-contain"
+          className="max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] object-contain"
         />
+      </DialogContent>
+      <DialogPortal>
         <DialogClose
           render={
             <button
               type="button"
-              className="fixed top-4 right-4 inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white outline-none backdrop-blur-sm hover:bg-black/80 focus-visible:ring-3 focus-visible:ring-white/60"
+              className="fixed top-4 right-4 z-[60] inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white outline-none backdrop-blur-sm hover:bg-black/80 focus-visible:ring-3 focus-visible:ring-white/60"
               aria-label="Close full-size image"
             />
           }
         >
           <XIcon className="size-5" />
         </DialogClose>
-      </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 }

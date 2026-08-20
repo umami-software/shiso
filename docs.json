@@ -31,6 +31,9 @@
       }
     ]
   },
+  "redirects": [
+    { "source": "/docs/guides/migrating", "destination": "/docs/guides/migrations/mintlify" }
+  ],
   "metadata": {
     "timestamp": true
   },
@@ -102,10 +105,19 @@
           {
             "group": "Guides",
             "collapsible": false,
+            "pages": ["guides/deployment", "guides/upgrading"]
+          },
+          {
+            "group": "Migrations",
+            "collapsible": false,
             "pages": [
-              "guides/deployment",
-              "guides/upgrading",
-              { "page": "guides/migrating", "title": "Migrating from Mintlify" }
+              { "page": "guides/migrations/mintlify", "title": "From Mintlify" },
+              { "page": "guides/migrations/docusaurus", "title": "From Docusaurus" },
+              { "page": "guides/migrations/nextra", "title": "From Nextra" },
+              { "page": "guides/migrations/fumadocs", "title": "From Fumadocs" },
+              { "page": "guides/migrations/vitepress", "title": "From VitePress" },
+              { "page": "guides/migrations/mkdocs", "title": "From MkDocs" },
+              { "page": "guides/migrations/gitbook", "title": "From GitBook" }
             ]
           }
         ]

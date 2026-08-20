@@ -1,0 +1,121 @@
+---
+title: Migrating from VitePress
+description: Move VitePress Markdown and sidebar config into Shiso.
+---
+
+VitePress and Shiso are both Vite-based static generators, so the build and
+deployment story is nearly identical. Content is plain Markdown in both; the
+main work is converting VitePress container syntax to MDX components and
+moving `.vitepress/config.ts` into `docs.json`.
+
+## What carries over
+
+- **Content**: `.md` pages, GFM tables, frontmatter `title` and `description`
+- **Structure**: nested folders become nested routes
+- **Static assets**: files from `public/` stay in `public/`
+- **Deployment**: static output on any host — same model, different output
+  directory (`dist/client`)
+
+## Migration steps
+
+<Steps>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content and assets">
+    Move your Markdown files into `content/docs` and `public/` files into
+    `public/`. Rename any page using Vue-in-Markdown to `.mdx` after
+    converting it (see below).
+  </Step>
+  <Step title="Rebuild the sidebar as navigation">
+    Translate `themeConfig.sidebar` into `docs.json` navigation. Sidebar
+    sections become groups, `link` values become page paths:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Guide",
+            "pages": ["index", "getting-started"]
+          }
+        ]
+      }
+    }
+    ```
+
+    Top navbar items (`themeConfig.nav`) become [tabs](/docs/navigation) or
+    [`navbar.links`](/docs/navbar-and-footer).
+  </Step>
+  <Step title="Move branding">
+    Map `title` → `name`, `description` → `description`,
+    `themeConfig.logo` → `logo`, `themeConfig.socialLinks` →
+    `footer.socials` or `navbar.links`.
+  </Step>
+  <Step title="Convert containers and validate">
+    Rewrite `:::` containers as components (see mapping below), then:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Syntax mapping
+
+| VitePress | Shiso |
+| --- | --- |
+| `::: tip` | `<Tip>` |
+| `::: info` | `<Info>` |
+| `::: warning` | `<Warning>` |
+| `::: danger` | `<Danger>` |
+| `::: details` | [`<Accordion title>`](/docs/components/accordion) |
+| `::: code-group` | [`<CodeGroup>`](/docs/components/code-group) |
+| `[title](link){target}` attrs | Plain Markdown links |
+| `<script setup>` / Vue components | React MDX — needs rewriting or removal |
+
+For example, a VitePress code group:
+
+````markdown
+::: code-group
+```bash [pnpm]
+pnpm add pkg
+```
+:::
+````
+
+becomes:
+
+````mdx
+<CodeGroup>
+  ```bash pnpm
+  pnpm add pkg
+  ```
+</CodeGroup>
+````
+
+## Frontmatter differences
+
+| VitePress field | Shiso equivalent |
+| --- | --- |
+| `title`, `description` | Same |
+| `layout: home`, `hero`, `features` | Write a normal MDX page with [`<Columns>` of `<Card>`s](/docs/components/columns) |
+| `outline` | Automatic — right-rail outline is built in |
+| `aside`, `navbar` | No per-page equivalent |
+
+## Not carried over
+
+- **Vue components and `<script setup>`** — Shiso renders React MDX; interactive
+  bits need one of the [built-in components](/docs/components) or plain Markdown
+- **Custom themes** — see [Appearance](/docs/customization) for colors, fonts,
+  and CSS overrides instead
+- **Local search config** — built-in client-side search works with no setup
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — same hosts, publish `dist/client`
+- [SEO and redirects](/docs/seo) — VitePress `.html` URLs can be redirected to
+  clean paths

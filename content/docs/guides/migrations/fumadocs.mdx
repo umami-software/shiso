@@ -1,0 +1,108 @@
+---
+title: Migrating from Fumadocs
+description: Move Fumadocs MDX content and meta.json files into Shiso.
+---
+
+Fumadocs and Shiso both build docs from MDX with `title` / `description`
+frontmatter, so content moves with little editing. The `meta.json` files and
+`source.config.ts` are replaced by `docs.json`, and `fumadocs-ui` components
+map to Shiso built-ins.
+
+## What carries over
+
+- **Content**: `.mdx` pages with `title`, `description`, and `icon`
+  frontmatter (`icon` moves to the page object in `docs.json`)
+- **Structure**: nested folders become nested routes
+- **Static assets**: files from `public/` stay in `public/`
+- **Components**: callouts, tabs, steps, cards, and accordions have direct
+  equivalents
+
+## Migration steps
+
+<Steps>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content">
+    Move your `content/docs` tree into Shiso's `content/docs`, keeping the
+    folder structure.
+  </Step>
+  <Step title="Replace meta.json files with navigation">
+    Fumadocs orders the sidebar with per-folder `meta.json` files. Shiso
+    declares the whole tree in `docs.json`:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "installation"]
+          }
+        ]
+      }
+    }
+    ```
+
+    Folders with `meta.json` become groups; `pages` order replaces the
+    `pages` array in each `meta.json`. Root folders (tab-like sections)
+    become [tabs](/docs/navigation).
+  </Step>
+  <Step title="Move layout configuration">
+    Map `layout.config.tsx` / app options into `docs.json`: site title →
+    `name`, logo → `logo`, links → `navbar.links`, GitHub URL → a
+    `navbar.links` icon entry. Delete `source.config.ts` and the Next.js
+    scaffolding — Shiso needs neither.
+  </Step>
+  <Step title="Remove imports and validate">
+    Delete `fumadocs-ui` component imports — Shiso injects its components
+    into every page — then:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Component mapping
+
+| Fumadocs | Shiso |
+| --- | --- |
+| `<Callout>` (default) | `<Info>` |
+| `<Callout type="warn">` | `<Warning>` |
+| `<Callout type="error">` | `<Danger>` |
+| `<Tabs items={[...]}>` + `<Tab value>` | [`<Tabs>` + `<Tab title>`](/docs/components/tabs) |
+| `<Steps>` + `<Step>` | [`<Steps>` + `<Step title>`](/docs/components/steps) — headings inside steps become `title` props |
+| `<Cards>` + `<Card>` | [`<Columns>`](/docs/components/columns) + [`<Card>`](/docs/components/card) |
+| `<Accordions>` + `<Accordion>` | [`<AccordionGroup>` + `<Accordion title>`](/docs/components/accordion) |
+| `<TypeTable>` | [`<ParamField>`](/docs/components/param-field) / [`<ResponseField>`](/docs/components/response-field) lists |
+| `<Files>` / `<File>` / `<Folder>` | No equivalent — use a fenced code block |
+| `<Banner>` | [`banner`](/docs/navbar-and-footer#banner) in `docs.json` |
+
+## Frontmatter differences
+
+| Fumadocs field | Shiso equivalent |
+| --- | --- |
+| `title`, `description` | Same |
+| `icon` | `icon` on the page object in `docs.json` (lucide names in both) |
+| `full` | No equivalent |
+| `index` | Not needed — list the page in `navigation` |
+
+## Not carried over
+
+- **Next.js runtime features** — route handlers, `loader()` /
+  `source` APIs, and OpenAPI integration have no equivalent
+- **Custom MDX components** — anything from your own codebase needs a
+  built-in replacement or plain Markdown
+- **Orama / hosted search** — replaced by built-in client-side search
+  (`⌘K` / `Ctrl K`)
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — ship `dist/client`
+- [SEO and redirects](/docs/seo) — add redirects for any changed URLs
+- [Search and AI](/docs/search-and-ai) — enable the contextual menu for
+  copy/view/AI actions

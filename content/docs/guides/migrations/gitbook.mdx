@@ -1,0 +1,120 @@
+---
+title: Migrating from GitBook
+description: Export GitBook content via Git Sync and rebuild it in Shiso.
+---
+
+GitBook stores content as Markdown with template-style blocks
+(`{% hint %}`, `{% tabs %}`). Export the raw files with Git Sync, then
+convert the blocks to Shiso components and rebuild the table of contents as
+`docs.json` navigation.
+
+## What carries over
+
+- **Content**: Markdown pages, headings, tables, images
+- **Structure**: the page tree from `SUMMARY.md` maps to groups and pages
+- **Assets**: files under `.gitbook/assets/` move to `public/`
+
+## Migration steps
+
+<Steps>
+  <Step title="Export your content">
+    Enable **Git Sync** in GitBook to push the space to a Git repository, and
+    clone it. This gives you every page as a `.md` file plus `SUMMARY.md` and
+    `.gitbook.yaml`.
+  </Step>
+  <Step title="Create a Shiso project">
+    ```bash
+    pnpm dlx create-shiso-app@latest my-docs
+    ```
+  </Step>
+  <Step title="Copy content and assets">
+    Move the exported pages into `content/docs`. Move `.gitbook/assets/` files
+    into `public/images/` and update image paths to `/images/...`.
+  </Step>
+  <Step title="Rebuild SUMMARY.md as navigation">
+    Each `SUMMARY.md` section becomes a group; each entry becomes a page path:
+
+    ```json
+    {
+      "navigation": {
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    }
+    ```
+  </Step>
+  <Step title="Convert GitBook blocks and validate">
+    Rewrite `{% ... %}` blocks as components (see mapping below) — MDX does
+    not understand the template syntax and will fail on it — then:
+
+    ```bash
+    pnpm check
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+## Block mapping
+
+| GitBook | Shiso |
+| --- | --- |
+| `{% hint style="info" %}` | `<Info>` |
+| `{% hint style="success" %}` | `<Check>` |
+| `{% hint style="warning" %}` | `<Warning>` |
+| `{% hint style="danger" %}` | `<Danger>` |
+| `{% tabs %}` + `{% tab title="..." %}` | [`<Tabs>` + `<Tab title>`](/docs/components/tabs) |
+| Expandable sections | [`<Accordion title>`](/docs/components/accordion) |
+| `{% stepper %}` | [`<Steps>` + `<Step title>`](/docs/components/steps) |
+| `{% content-ref %}` | [`<Card title href>`](/docs/components/card) |
+| `{% code title="..." %}` | Fenced code block, or [`<CodeGroup>`](/docs/components/code-group) |
+| `{% embed %}` | Plain Markdown link, or [`<Frame>`](/docs/components/frame) for images |
+
+For example:
+
+```markdown
+{% hint style="warning" %}
+This can't be undone.
+{% endhint %}
+```
+
+becomes:
+
+```mdx
+<Warning>
+  This can't be undone.
+</Warning>
+```
+
+## Frontmatter differences
+
+GitBook exports may include `description` frontmatter and take the title from
+the first `#` heading. Shiso reads `title` from frontmatter — add it and
+remove the duplicate heading:
+
+```mdx
+---
+title: Quickstart
+description: Optional description shown under the title.
+---
+```
+
+## Not carried over
+
+- **GitBook hosting features** — visitor authentication, ask-AI, insights,
+  and integrations; built-in search and the
+  [contextual AI menu](/docs/search-and-ai) cover the reader-facing parts
+- **Variants / spaces** — model these as [tabs](/docs/navigation) or
+  [versions](/docs/versions)
+- **Interactive blocks** (API playground, forms) — no equivalent; document
+  APIs with [`<ParamField>`](/docs/components/param-field) and
+  [`<ResponseField>`](/docs/components/response-field)
+
+## After the move
+
+- [Deployment](/docs/guides/deployment) — publish `dist/client` to any
+  static host
+- [SEO and redirects](/docs/seo) — map old GitBook URLs to new paths

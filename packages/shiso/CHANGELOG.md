@@ -3,6 +3,14 @@
 All notable changes to `@umami/shiso` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.1.11 - 2026-08-19
+
+### Changed
+
+- Remove rounded corners from full-screen images and anchor the close button to
+  the viewport's top-right corner.
+- Render the active sidebar page label in bold.
+
 ## 1.1.10 - 2026-08-19
 
 ### Added

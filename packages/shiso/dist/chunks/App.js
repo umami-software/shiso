@@ -20514,40 +20514,40 @@ function ZoomableImage({ noZoom = false, className, alt, src, ...props }) {
 	});
 	if (noZoom || !src) return image;
 	const label = alt ? `View “${alt}” full size` : "View image full size";
-	return /* @__PURE__ */ jsxs(Dialog$1, { children: [/* @__PURE__ */ jsx(DialogTrigger, {
-		render: /* @__PURE__ */ jsx("button", {
-			type: "button",
-			"data-slot": "zoomable-image",
-			className: "my-6 block w-fit max-w-full cursor-zoom-in rounded-lg text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-			"aria-label": label
+	return /* @__PURE__ */ jsxs(Dialog$1, { children: [
+		/* @__PURE__ */ jsx(DialogTrigger, {
+			render: /* @__PURE__ */ jsx("button", {
+				type: "button",
+				"data-slot": "zoomable-image",
+				className: "my-6 block w-fit max-w-full cursor-zoom-in rounded-lg text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+				"aria-label": label
+			}),
+			children: image
 		}),
-		children: image
-	}), /* @__PURE__ */ jsxs(DialogContent$1, {
-		showCloseButton: false,
-		overlayClassName: "bg-black/80 supports-backdrop-filter:backdrop-blur-sm",
-		className: "flex max-h-[calc(100vh-2rem)] w-auto max-w-[calc(100vw-2rem)] items-center justify-center bg-transparent p-0 ring-0 shadow-none sm:max-w-[calc(100vw-2rem)]",
-		children: [
-			/* @__PURE__ */ jsx(DialogTitle, {
+		/* @__PURE__ */ jsxs(DialogContent$1, {
+			showCloseButton: false,
+			overlayClassName: "bg-black/80 supports-backdrop-filter:backdrop-blur-sm",
+			className: "flex max-h-[calc(100vh-2rem)] w-auto max-w-[calc(100vw-2rem)] items-center justify-center bg-transparent p-0 ring-0 shadow-none sm:max-w-[calc(100vw-2rem)]",
+			children: [/* @__PURE__ */ jsx(DialogTitle, {
 				className: "sr-only",
 				children: alt || "Full-size image"
-			}),
-			/* @__PURE__ */ jsx("img", {
+			}), /* @__PURE__ */ jsx("img", {
 				src,
 				srcSet: props.srcSet,
 				sizes: props.sizes,
 				alt: alt || "",
-				className: "max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] rounded-lg object-contain"
+				className: "max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] object-contain"
+			})]
+		}),
+		/* @__PURE__ */ jsx(DialogPortal$1, { children: /* @__PURE__ */ jsx(DialogClose, {
+			render: /* @__PURE__ */ jsx("button", {
+				type: "button",
+				className: "fixed top-4 right-4 z-[60] inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white outline-none backdrop-blur-sm hover:bg-black/80 focus-visible:ring-3 focus-visible:ring-white/60",
+				"aria-label": "Close full-size image"
 			}),
-			/* @__PURE__ */ jsx(DialogClose, {
-				render: /* @__PURE__ */ jsx("button", {
-					type: "button",
-					className: "fixed top-4 right-4 inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white outline-none backdrop-blur-sm hover:bg-black/80 focus-visible:ring-3 focus-visible:ring-white/60",
-					"aria-label": "Close full-size image"
-				}),
-				children: /* @__PURE__ */ jsx(X$1, { className: "size-5" })
-			})
-		]
-	})] });
+			children: /* @__PURE__ */ jsx(X$1, { className: "size-5" })
+		}) })
+	] });
 }
 
 //#endregion
@@ -26795,7 +26795,7 @@ function PageLinks({ items = [], title, navigationLabel }) {
 //#region src/components/SideNav.tsx
 const sectionLabelClass = "flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit";
 const groupLabelClass = "flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit";
-const selectedClass = "border-l-sidebar-primary font-medium text-sidebar-primary hover:text-sidebar-primary";
+const selectedClass = "border-l-sidebar-primary font-bold text-sidebar-primary hover:text-sidebar-primary";
 /** True when the group's root or any descendant page is the current page. */
 function containsPage(node, pathname) {
 	if (node.root?.page.url === pathname) return true;
