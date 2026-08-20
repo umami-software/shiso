@@ -5,6 +5,7 @@ export {
   CircleAlert,
   Copy,
   ExternalLink,
+  FileText,
   Hand,
   Info as InfoIcon,
   Lightbulb,

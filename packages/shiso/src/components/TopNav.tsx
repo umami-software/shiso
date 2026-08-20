@@ -1,4 +1,4 @@
-import classNames from 'clsx';
+import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { ChevronRight } from '@/components/icons';
@@ -62,7 +62,7 @@ export function TopNav({ docs, label }: { docs: NormalizedDocsConfig; label: str
       .find(tab => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id ||
     tabs[0]?.id;
   const tabClass = (tab: DocsTab) =>
-    classNames(
+    cn(
       'flex h-full items-center gap-1 whitespace-nowrap border-transparent border-b-2 font-medium',
       {
         'border-b-primary text-foreground': tab.id === selected,

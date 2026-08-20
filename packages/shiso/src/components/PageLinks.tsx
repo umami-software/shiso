@@ -1,4 +1,4 @@
-import classNames from 'clsx';
+import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import type { TocEntry } from '@/lib/types';
 
@@ -55,7 +55,7 @@ export function PageLinks({ items = [], title, navigationLabel }: PageLinksProps
             <a
               key={id}
               href={`#${id}`}
-              className={classNames('block border-l px-3 py-1.5', {
+              className={cn('block border-l px-3 py-1.5', {
                 'border-l-primary font-medium text-primary': isActive,
                 'border-border text-muted-foreground hover:text-foreground': !isActive,
               })}

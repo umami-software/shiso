@@ -1,6 +1,11 @@
 ---
 title: Overview
 description: File format, frontmatter fields, MDX components, and organization.
+related:
+  - /docs/text
+  - /docs/code-blocks
+  - href: /docs/components/index
+    title: Components overview
 ---
 
 Write docs as `.mdx` (or `.md`) files under `content/docs` and list each page
@@ -27,6 +32,28 @@ Welcome to Shiso.
 | `description` | Intro text under the title and meta description |
 | `noindex` | When `true`, marks the page `noindex` and excludes it from `sitemap.xml` |
 | `timestamp` | Overrides site-wide [`metadata.timestamp`](/docs/seo#last-modified-timestamps) — `true` shows last-updated, `false` hides it |
+| `related` | Pages listed under "Related topics" at the bottom of the page |
+
+### Related topics
+
+List related pages in frontmatter to render a "Related topics" section above
+the previous/next links. Entries are page paths — titles come from the page —
+or objects with an explicit `title` (required for external URLs):
+
+```mdx
+---
+title: Navigation
+related:
+  - /docs/site-details
+  - href: /docs/components
+    title: Components overview
+  - href: https://example.com/spec
+    title: External specification
+---
+```
+
+Internal paths that don't match a page are skipped, so moved or deleted pages
+never leave dead links.
 
 ## Markdown and MDX
 
@@ -39,8 +66,8 @@ React components inline:
 </Note>
 ```
 
-See [Text](/docs/text), [Lists](/docs/lists), [Images](/docs/images), and
-[Code blocks](/docs/code-blocks) for Markdown details.
+See [Text](/docs/text), [Lists](/docs/lists), [Tables](/docs/tables),
+[Images](/docs/images), and [Code](/docs/code-blocks) for Markdown details.
 
 ## Built-in components
 

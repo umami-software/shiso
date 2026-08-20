@@ -1,0 +1,68 @@
+---
+title: Tables
+description: GitHub-flavored Markdown tables with alignment and inline formatting.
+---
+
+## Basic table
+
+Use pipes to separate columns and a divider row of dashes under the header:
+
+```markdown
+| Field | Purpose |
+| --- | --- |
+| `title` | Page heading and sidebar label |
+| `description` | Intro text under the title |
+```
+
+| Field | Purpose |
+| --- | --- |
+| `title` | Page heading and sidebar label |
+| `description` | Intro text under the title |
+
+Leading and trailing pipes are optional, and columns don't need to line up in
+the source — the divider row is what makes it a table.
+
+## Column alignment
+
+Add colons to the divider row to align columns:
+
+```markdown
+| Left | Center | Right |
+| :--- | :---: | ---: |
+| a | b | c |
+| longer value | longer value | longer value |
+```
+
+| Left | Center | Right |
+| :--- | :---: | ---: |
+| a | b | c |
+| longer value | longer value | longer value |
+
+## Inline formatting in cells
+
+Cells support inline Markdown: code, links, emphasis, and images.
+
+```markdown
+| Option | Description |
+| --- | --- |
+| `--use-pnpm` | Install with [pnpm](https://pnpm.io) |
+| `--skip-install` | **Skip** dependency installation |
+```
+
+| Option | Description |
+| --- | --- |
+| `--use-pnpm` | Install with [pnpm](https://pnpm.io) |
+| `--skip-install` | **Skip** dependency installation |
+
+Pipes inside a cell must be escaped as `\|`. Multi-line content (lists,
+paragraphs, code blocks) can't live inside a Markdown table — restructure the
+content or use headings instead.
+
+## When not to use a table
+
+- **API parameters and responses** — prefer
+  [`<ParamField>`](/docs/components/param-field) and
+  [`<ResponseField>`](/docs/components/response-field), which support types,
+  defaults, required flags, and nested fields
+- **Feature comparisons with rich content** — prefer
+  [`<Columns>` of `<Card>`s](/docs/components/columns)

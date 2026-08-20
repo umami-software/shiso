@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
@@ -281,6 +282,75 @@ function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
   };
 }
 
+/**
+ * Serves the raw markdown source for `<route>.md` URLs during development,
+ * mirroring the `.md` copies the prerenderer publishes next to every page in
+ * production builds. The contextual menu's copy/view options and AI links
+ * depend on these URLs.
+ */
+function shisoMarkdownDev(getDocsConfig: () => DocsConfig, root: string): Plugin {
+  return {
+    name: 'shiso-markdown-dev',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = (req.url || '').split('?')[0];
+
+        if ((req.method !== 'GET' && req.method !== 'HEAD') || !url.endsWith('.md')) {
+          return next();
+        }
+
+        const shiso =
+          (getDocsConfig() as { $shiso?: { docsPrefix?: string; contentDir?: string } }).$shiso ||
+          {};
+        const contentDir = (shiso.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
+        const prefixValue = (shiso.docsPrefix ?? '/docs').trim().replace(/\/+$/, '');
+        const docsPrefix =
+          !prefixValue || prefixValue === '/'
+            ? ''
+            : prefixValue.startsWith('/')
+              ? prefixValue
+              : `/${prefixValue}`;
+
+        let route = decodeURIComponent(url).slice(0, -'.md'.length);
+        const base = server.config.base.replace(/\/+$/, '');
+
+        if (base && route.startsWith(base)) {
+          route = route.slice(base.length);
+        }
+
+        if (docsPrefix && route.startsWith(docsPrefix)) {
+          route = route.slice(docsPrefix.length);
+        }
+
+        const slug = route.replace(/^\/+/, '') || 'index';
+        const contentRoot = path.resolve(root, contentDir);
+        const candidates = [`${slug}.mdx`, `${slug}.md`, `${slug}/index.mdx`, `${slug}/index.md`];
+
+        for (const candidate of candidates) {
+          const filePath = path.resolve(contentRoot, candidate);
+
+          // Never read outside the content directory.
+          if (!filePath.startsWith(contentRoot + path.sep)) {
+            break;
+          }
+
+          try {
+            const source = await readFile(filePath, 'utf8');
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            res.end(source);
+            return;
+          } catch {
+            // Try the next candidate.
+          }
+        }
+
+        next();
+      });
+    },
+  };
+}
+
 const MDX_REACT_ENTRY = fileURLToPath(import.meta.resolve('@mdx-js/react'));
 const LUCIDE_REACT_ENTRY = path.join(
   path.dirname(fileURLToPath(import.meta.resolve('lucide-react/package.json'))),
@@ -319,6 +389,7 @@ export default defineConfig(async () => {
         path.join(generatedRoot, 'search-index.generated.ts'),
       ),
       shisoHtml(getDocsConfig),
+      shisoMarkdownDev(getDocsConfig, projectRoot),
       shisoMdx(),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],

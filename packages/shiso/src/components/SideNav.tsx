@@ -1,4 +1,4 @@
-import classNames from 'clsx';
+import { cn } from '@/lib/utils';
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { resolveIcon } from '@/components/docs/utils';
@@ -11,9 +11,9 @@ import { flattenNav, isNodeHidden } from '@/lib/docs-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 
 const sectionLabelClass =
-  'flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit';
+  'flex min-w-0 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit';
 const groupLabelClass =
-  'flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit';
+  'flex min-w-0 items-center gap-[0.4rem] py-2 pl-3 pr-1 font-medium text-inherit';
 const selectedClass =
   'border-l-sidebar-primary font-bold text-sidebar-primary hover:text-sidebar-primary';
 
@@ -96,25 +96,28 @@ function CollapsibleGroup({
   const rootSelected = node.root?.page.url === pathname;
   const headerClass = isTopLevel
     ? 'flex min-w-0 items-center text-sidebar-foreground'
-    : classNames(
-        'flex items-center border-sidebar-border border-l text-muted-foreground hover:text-sidebar-accent-foreground',
+    : cn(
+        'flex items-center border-l border-l-sidebar-border text-muted-foreground hover:text-sidebar-accent-foreground',
         { 'pl-6': depth > 1 },
       );
 
   const fixedHeader = (
     <div
-      className={classNames(headerClass, {
+      className={cn(headerClass, {
         [selectedClass]: rootSelected && !isTopLevel,
         'text-sidebar-primary': rootSelected && isTopLevel,
       })}
     >
       {node.root ? (
-        <Link to={node.root.page.url} className={isTopLevel ? sectionLabelClass : groupLabelClass}>
+        <Link
+          to={node.root.page.url}
+          className={cn(isTopLevel ? sectionLabelClass : groupLabelClass, 'flex-1')}
+        >
           {resolveIcon(node.icon)}
           {node.label}
         </Link>
       ) : (
-        <span className={isTopLevel ? sectionLabelClass : groupLabelClass}>
+        <span className={cn(isTopLevel ? sectionLabelClass : groupLabelClass, 'flex-1')}>
           {resolveIcon(node.icon)}
           {node.label}
         </span>
@@ -127,7 +130,7 @@ function CollapsibleGroup({
     fixedHeader
   ) : drilldown !== false && node.root ? (
     <div
-      className={classNames(headerClass, 'group/section flex items-center', {
+      className={cn(headerClass, 'group/section flex items-center', {
         [selectedClass]: rootSelected && !isTopLevel,
         'text-sidebar-primary': rootSelected && isTopLevel,
       })}
@@ -142,10 +145,7 @@ function CollapsibleGroup({
             type="button"
             variant="ghost"
             size="icon-xs"
-            className={classNames(
-              'group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-              { 'mr-[0.35rem]': !isTopLevel },
-            )}
+            className="group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             aria-label={`${isExpanded ? collapseLabel : expandLabel} ${node.label}`}
           />
         }
@@ -159,12 +159,12 @@ function CollapsibleGroup({
         <Button
           type="button"
           variant="ghost"
-          className={classNames(
+          className={cn(
             headerClass,
-            'group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent [&>svg:last-child]:ml-auto',
+            'group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent',
             {
               'pb-2 font-bold text-sidebar-foreground': isTopLevel,
-              'border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':
+              'border-l border-l-sidebar-border px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground':
                 !isTopLevel,
             },
           )}
@@ -243,8 +243,8 @@ function NavNodes({
           href={node.href}
           target={node.target}
           rel={node.target === '_blank' ? 'noreferrer' : undefined}
-          className={classNames(
-            'flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]',
+          className={cn(
+            'flex min-w-0 items-center gap-[0.4rem] border-l border-l-sidebar-border px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]',
             { 'pl-6': depth > 1 },
           )}
         >
@@ -264,8 +264,8 @@ function NavNodes({
         <Link
           key={url}
           to={url}
-          className={classNames(
-            'flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] [overflow-wrap:anywhere]',
+          className={cn(
+            'flex min-w-0 items-center gap-[0.4rem] border-l border-l-sidebar-border px-3 py-[0.55rem] [overflow-wrap:anywhere]',
             {
               'pl-6': depth > 1,
               [selectedClass]: isSelected,
@@ -319,7 +319,7 @@ export function SideNav({
   const nodes = navigation[activeTabId] || navigation[tabs[0]?.id] || [];
 
   return (
-    <ScrollArea className={classNames('w-full max-w-full', { 'h-full': isSticky })}>
+    <ScrollArea className={cn('w-full max-w-full', { 'h-full': isSticky })}>
       <nav className="flex w-full flex-col gap-6 pr-4 text-sm" aria-label={navigationLabel}>
         {anchors.length ? (
           <NavNodes

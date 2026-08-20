@@ -146,22 +146,44 @@
     font-size: 0.875rem;
   }
 
+  /* Styled to match the PropertiesTable component: rounded outer border,
+     horizontal row separators only, and no header fill. */
   .docs-markdown table {
     width: 100%;
-    border-collapse: collapse;
     margin: 1rem 0;
+    font-size: 0.875rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
   }
 
   .docs-markdown th,
   .docs-markdown td {
-    border: 1px solid var(--border);
-    padding: 0.5rem 0.75rem;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 0.75rem;
     text-align: left;
+    vertical-align: top;
+  }
+
+  .docs-markdown th:first-child,
+  .docs-markdown td:first-child {
+    padding-left: 1.5rem;
+  }
+
+  .docs-markdown th:last-child,
+  .docs-markdown td:last-child {
+    padding-right: 1.5rem;
   }
 
   .docs-markdown th {
-    background: var(--card);
+    background: transparent;
     font-weight: 600;
+  }
+
+  .docs-markdown tbody tr:last-child td {
+    border-bottom: none;
   }
 
   .docs-markdown table code:not(pre code) {

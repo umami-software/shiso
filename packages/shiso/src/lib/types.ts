@@ -444,6 +444,7 @@ export interface ThemeLabels {
   searchUnavailable: string;
   noResults: string;
   lastUpdated: string;
+  relatedTopics: string;
   notFound: string;
   dismissBanner: string;
   toggleTheme: string;
@@ -499,12 +500,17 @@ export interface TocEntry {
   size: number;
 }
 
+/** A related-topics entry: a page path, or a link with an explicit title. */
+export type RelatedEntry = string | { href: string; title?: string };
+
 export interface DocFrontmatter {
   title?: string;
   description?: string;
   noindex?: boolean;
   /** Overrides the site-wide `metadata.timestamp` setting for this page. */
   timestamp?: boolean;
+  /** Related pages rendered above the prev/next pager. */
+  related?: RelatedEntry[];
   [key: string]: unknown;
 }
 

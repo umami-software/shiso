@@ -3290,11 +3290,11 @@ const createLucideIcon = (iconName, iconNode) => {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$17 = [["path", {
+const __iconNode$18 = [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
 }]];
-const Check$1 = createLucideIcon("check", __iconNode$17);
+const Check$1 = createLucideIcon("check", __iconNode$18);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-down.mjs
@@ -3304,11 +3304,11 @@ const Check$1 = createLucideIcon("check", __iconNode$17);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$16 = [["path", {
+const __iconNode$17 = [["path", {
 	d: "m6 9 6 6 6-6",
 	key: "qrunsl"
 }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$16);
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$17);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-right.mjs
@@ -3318,11 +3318,11 @@ const ChevronDown = createLucideIcon("chevron-down", __iconNode$16);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$15 = [["path", {
+const __iconNode$16 = [["path", {
 	d: "m9 18 6-6-6-6",
 	key: "mthhwq"
 }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$15);
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$16);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-up.mjs
@@ -3332,11 +3332,11 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$15);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$14 = [["path", {
+const __iconNode$15 = [["path", {
 	d: "m18 15-6-6-6 6",
 	key: "153udz"
 }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$14);
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$15);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/circle-alert.mjs
@@ -3346,7 +3346,7 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$14);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$13 = [
+const __iconNode$14 = [
 	["circle", {
 		cx: "12",
 		cy: "12",
@@ -3368,7 +3368,7 @@ const __iconNode$13 = [
 		key: "4dfq90"
 	}]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$13);
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$14);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/copy.mjs
@@ -3378,7 +3378,7 @@ const CircleAlert = createLucideIcon("circle-alert", __iconNode$13);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$12 = [["rect", {
+const __iconNode$13 = [["rect", {
 	width: "14",
 	height: "14",
 	x: "8",
@@ -3390,7 +3390,7 @@ const __iconNode$12 = [["rect", {
 	d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
 	key: "zix9uf"
 }]];
-const Copy = createLucideIcon("copy", __iconNode$12);
+const Copy = createLucideIcon("copy", __iconNode$13);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/external-link.mjs
@@ -3400,7 +3400,7 @@ const Copy = createLucideIcon("copy", __iconNode$12);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$11 = [
+const __iconNode$12 = [
 	["path", {
 		d: "M15 3h6v6",
 		key: "1q9fwt"
@@ -3414,7 +3414,39 @@ const __iconNode$11 = [
 		key: "a6xqqp"
 	}]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$11);
+const ExternalLink = createLucideIcon("external-link", __iconNode$12);
+
+//#endregion
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file-text.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$11 = [
+	["path", {
+		d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",
+		key: "1oefj6"
+	}],
+	["path", {
+		d: "M14 2v5a1 1 0 0 0 1 1h5",
+		key: "wfsgrz"
+	}],
+	["path", {
+		d: "M10 9H8",
+		key: "b1mrlr"
+	}],
+	["path", {
+		d: "M16 13H8",
+		key: "t4e002"
+	}],
+	["path", {
+		d: "M16 17H8",
+		key: "z1uh3a"
+	}]
+];
+const FileText = createLucideIcon("file-text", __iconNode$11);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/globe.mjs
@@ -19706,7 +19738,7 @@ DialogBackdrop.displayName = "DialogBackdrop";
 *
 * Documentation: [Base UI Dialog](https://base-ui.com/react/components/dialog)
 */
-const DialogClose$1 = /*#__PURE__*/ React$1.forwardRef(function DialogClose(componentProps, forwardedRef) {
+const DialogClose = /*#__PURE__*/ React$1.forwardRef(function DialogClose(componentProps, forwardedRef) {
 	const { render, className, style, disabled = false, nativeButton = true, ...elementProps } = componentProps;
 	const store = useDialogRootContext();
 	const open = store.useState("open");
@@ -19728,7 +19760,7 @@ const DialogClose$1 = /*#__PURE__*/ React$1.forwardRef(function DialogClose(comp
 		]
 	});
 });
-DialogClose$1.displayName = "DialogClose";
+DialogClose.displayName = "DialogClose";
 
 //#endregion
 //#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/portal/DialogPortalContext.mjs
@@ -20463,12 +20495,6 @@ function DialogPortal$1({ ...props }) {
 		...props
 	});
 }
-function DialogClose({ ...props }) {
-	return /* @__PURE__ */ jsx(DialogClose$1, {
-		"data-slot": "dialog-close",
-		...props
-	});
-}
 function DialogOverlay$1({ className, ...props }) {
 	return /* @__PURE__ */ jsx(DialogBackdrop, {
 		"data-slot": "dialog-overlay",
@@ -20481,7 +20507,7 @@ function DialogContent$1({ className, children, showCloseButton = true, overlayC
 		"data-slot": "dialog-content",
 		className: cn("fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className),
 		...props,
-		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose$1, {
+		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose, {
 			"data-slot": "dialog-close",
 			render: /* @__PURE__ */ jsx(Button, {
 				variant: "ghost",
@@ -20514,40 +20540,29 @@ function ZoomableImage({ noZoom = false, className, alt, src, ...props }) {
 	});
 	if (noZoom || !src) return image;
 	const label = alt ? `View “${alt}” full size` : "View image full size";
-	return /* @__PURE__ */ jsxs(Dialog$1, { children: [
-		/* @__PURE__ */ jsx(DialogTrigger, {
-			render: /* @__PURE__ */ jsx("button", {
-				type: "button",
-				"data-slot": "zoomable-image",
-				className: "my-6 block w-fit max-w-full cursor-zoom-in rounded-lg text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-				"aria-label": label
-			}),
-			children: image
+	return /* @__PURE__ */ jsxs(Dialog$1, { children: [/* @__PURE__ */ jsx(DialogTrigger, {
+		render: /* @__PURE__ */ jsx("button", {
+			type: "button",
+			"data-slot": "zoomable-image",
+			className: "my-6 block w-fit max-w-full cursor-zoom-in rounded-lg text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+			"aria-label": label
 		}),
-		/* @__PURE__ */ jsxs(DialogContent$1, {
-			showCloseButton: false,
-			overlayClassName: "bg-black/80 supports-backdrop-filter:backdrop-blur-sm",
-			className: "flex max-h-[calc(100vh-2rem)] w-auto max-w-[calc(100vw-2rem)] items-center justify-center bg-transparent p-0 ring-0 shadow-none sm:max-w-[calc(100vw-2rem)]",
-			children: [/* @__PURE__ */ jsx(DialogTitle, {
-				className: "sr-only",
-				children: alt || "Full-size image"
-			}), /* @__PURE__ */ jsx("img", {
-				src,
-				srcSet: props.srcSet,
-				sizes: props.sizes,
-				alt: alt || "",
-				className: "max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] object-contain"
-			})]
-		}),
-		/* @__PURE__ */ jsx(DialogPortal$1, { children: /* @__PURE__ */ jsx(DialogClose, {
-			render: /* @__PURE__ */ jsx("button", {
-				type: "button",
-				className: "fixed top-4 right-4 z-[60] inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white outline-none backdrop-blur-sm hover:bg-black/80 focus-visible:ring-3 focus-visible:ring-white/60",
-				"aria-label": "Close full-size image"
-			}),
-			children: /* @__PURE__ */ jsx(X$1, { className: "size-5" })
-		}) })
-	] });
+		children: image
+	}), /* @__PURE__ */ jsxs(DialogContent$1, {
+		showCloseButton: false,
+		overlayClassName: "bg-black/80 supports-backdrop-filter:backdrop-blur-sm",
+		className: "flex max-h-[calc(100vh-2rem)] w-auto max-w-[calc(100vw-2rem)] items-center justify-center bg-transparent p-0 ring-0 shadow-none sm:max-w-[calc(100vw-2rem)]",
+		children: [/* @__PURE__ */ jsx(DialogTitle, {
+			className: "sr-only",
+			children: alt || "Full-size image"
+		}), /* @__PURE__ */ jsx("img", {
+			src,
+			srcSet: props.srcSet,
+			sizes: props.sizes,
+			alt: alt || "",
+			className: "max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] object-contain"
+		})]
+	})] });
 }
 
 //#endregion
@@ -22903,6 +22918,7 @@ const SHISO_THEME_LABELS = {
 	searchUnavailable: "Search unavailable",
 	noResults: "No results",
 	lastUpdated: "Last updated on",
+	relatedTopics: "Related topics",
 	notFound: "Page not found",
 	dismissBanner: "Dismiss banner",
 	toggleTheme: "Toggle theme",
@@ -26167,7 +26183,7 @@ function TopNav({ docs, label }) {
 	const tabs = docs.tabs.filter((tab) => !tab.hidden);
 	if (!tabs.length) return null;
 	const selected = docs.pages.find((item) => item.url === pathname)?.tabId || [...tabs].sort((a, b) => b.url.length - a.url.length).find((tab) => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id || tabs[0]?.id;
-	const tabClass = (tab) => clsx("flex h-full items-center gap-1 whitespace-nowrap border-transparent border-b-2 font-medium", {
+	const tabClass = (tab) => cn("flex h-full items-center gap-1 whitespace-nowrap border-transparent border-b-2 font-medium", {
 		"border-b-primary text-foreground": tab.id === selected,
 		"text-muted-foreground hover:text-foreground": tab.id !== selected
 	});
@@ -26609,6 +26625,31 @@ function ContextualMenu({ options, labels }) {
 
 //#endregion
 //#region src/components/DocContent.tsx
+/**
+* Related-topics entries from frontmatter. Bare paths resolve their title from
+* the docs registry; unknown internal paths without an explicit title are
+* skipped so dead links never render.
+*/
+function resolveRelated(entries) {
+	if (!Array.isArray(entries)) return [];
+	const links = [];
+	for (const entry of entries) {
+		const href = typeof entry === "string" ? entry : entry?.href;
+		if (!href || typeof href !== "string") continue;
+		const external = !href.startsWith("/");
+		const title = (typeof entry === "object" ? entry.title : void 0) || (external ? href : getPageByPathname(href)?.label);
+		if (!title) {
+			if (import.meta.env.DEV) console.warn(`[shiso] Related topic "${href}" does not match a page and has no title — skipped.`);
+			continue;
+		}
+		links.push({
+			href,
+			title,
+			external
+		});
+	}
+	return links;
+}
 function DocContent({ page, doc, site }) {
 	const pagerPages = getScopeForPage(docsSite, page).docs.pages.filter((item) => !item.hidden);
 	const pageIndex = pagerPages.findIndex((item) => item.slug === page.slug);
@@ -26620,6 +26661,7 @@ function DocContent({ page, doc, site }) {
 	const lastModified = (typeof doc.frontmatter?.timestamp === "boolean" ? doc.frontmatter.timestamp : site.showTimestamp) ? getLastModified(page.filePath) : void 0;
 	const eyebrow = site.styling.eyebrows === "breadcrumbs" ? [.../* @__PURE__ */ new Set([page.tabLabel, page.section])].filter(Boolean).join(" / ") : page.section;
 	const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
+	const related = resolveRelated(doc.frontmatter?.related);
 	const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
 		dateStyle: "medium",
 		timeZone: "UTC"
@@ -26659,6 +26701,33 @@ function DocContent({ page, doc, site }) {
 						children: dateFormat.format(new Date(lastModified))
 					})
 				]
+			}),
+			related.length > 0 && /* @__PURE__ */ jsxs("nav", {
+				className: "mt-8",
+				"aria-label": site.labels.relatedTopics,
+				children: [/* @__PURE__ */ jsx("div", {
+					className: "text-sm text-muted-foreground",
+					children: site.labels.relatedTopics
+				}), /* @__PURE__ */ jsx("ul", {
+					className: "mt-3 flex flex-col gap-2 text-sm",
+					children: related.map(({ href, title, external }) => /* @__PURE__ */ jsxs("li", {
+						className: "flex items-center gap-2",
+						children: [/* @__PURE__ */ jsx(FileText, {
+							size: 14,
+							className: "shrink-0 text-muted-foreground"
+						}), external ? /* @__PURE__ */ jsx("a", {
+							href,
+							target: "_blank",
+							rel: "noreferrer",
+							className: "text-foreground hover:text-primary",
+							children: title
+						}) : /* @__PURE__ */ jsx(Link, {
+							to: href,
+							className: "text-foreground hover:text-primary",
+							children: title
+						})]
+					}, href))
+				})]
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				className: "mt-8 flex items-center justify-between",
@@ -26773,7 +26842,7 @@ function PageLinks({ items = [], title, navigationLabel }) {
 				const isActive = hash === id;
 				return /* @__PURE__ */ jsx("a", {
 					href: `#${id}`,
-					className: clsx("block border-l px-3 py-1.5", {
+					className: cn("block border-l px-3 py-1.5", {
 						"border-l-primary font-medium text-primary": isActive,
 						"border-border text-muted-foreground hover:text-foreground": !isActive
 					}),
@@ -26793,8 +26862,8 @@ function PageLinks({ items = [], title, navigationLabel }) {
 
 //#endregion
 //#region src/components/SideNav.tsx
-const sectionLabelClass = "flex min-w-0 flex-1 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit";
-const groupLabelClass = "flex min-w-0 flex-1 items-center gap-[0.4rem] px-3 py-2 font-medium text-inherit";
+const sectionLabelClass = "flex min-w-0 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit";
+const groupLabelClass = "flex min-w-0 items-center gap-[0.4rem] py-2 pl-3 pr-1 font-medium text-inherit";
 const selectedClass = "border-l-sidebar-primary font-bold text-sidebar-primary hover:text-sidebar-primary";
 /** True when the group's root or any descendant page is the current page. */
 function containsPage(node, pathname) {
@@ -26828,23 +26897,23 @@ function CollapsibleGroup({ node, pathname, depth, drilldown, expandLabel, colla
 	const chevron = /* @__PURE__ */ jsx(ChevronRight, { className: "size-3.5 shrink-0 origin-center text-muted-foreground transition-[color,transform] duration-150 group-hover/section:text-sidebar-accent-foreground group-aria-expanded/collapsible-trigger:rotate-90" });
 	const isTopLevel = depth === 0;
 	const rootSelected = node.root?.page.url === pathname;
-	const headerClass = isTopLevel ? "flex min-w-0 items-center text-sidebar-foreground" : clsx("flex items-center border-sidebar-border border-l text-muted-foreground hover:text-sidebar-accent-foreground", { "pl-6": depth > 1 });
+	const headerClass = isTopLevel ? "flex min-w-0 items-center text-sidebar-foreground" : cn("flex items-center border-l border-l-sidebar-border text-muted-foreground hover:text-sidebar-accent-foreground", { "pl-6": depth > 1 });
 	const fixedHeader = /* @__PURE__ */ jsx("div", {
-		className: clsx(headerClass, {
+		className: cn(headerClass, {
 			[selectedClass]: rootSelected && !isTopLevel,
 			"text-sidebar-primary": rootSelected && isTopLevel
 		}),
 		children: node.root ? /* @__PURE__ */ jsxs(Link, {
 			to: node.root.page.url,
-			className: isTopLevel ? sectionLabelClass : groupLabelClass,
+			className: cn(isTopLevel ? sectionLabelClass : groupLabelClass, "flex-1"),
 			children: [resolveIcon(node.icon), node.label]
 		}) : /* @__PURE__ */ jsxs("span", {
-			className: isTopLevel ? sectionLabelClass : groupLabelClass,
+			className: cn(isTopLevel ? sectionLabelClass : groupLabelClass, "flex-1"),
 			children: [resolveIcon(node.icon), node.label]
 		})
 	});
 	const header = !collapsible ? fixedHeader : drilldown !== false && node.root ? /* @__PURE__ */ jsxs("div", {
-		className: clsx(headerClass, "group/section flex items-center", {
+		className: cn(headerClass, "group/section flex items-center", {
 			[selectedClass]: rootSelected && !isTopLevel,
 			"text-sidebar-primary": rootSelected && isTopLevel
 		}),
@@ -26857,7 +26926,7 @@ function CollapsibleGroup({ node, pathname, depth, drilldown, expandLabel, colla
 				type: "button",
 				variant: "ghost",
 				size: "icon-xs",
-				className: clsx("group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", { "mr-[0.35rem]": !isTopLevel }),
+				className: "group/collapsible-trigger inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
 				"aria-label": `${isExpanded ? collapseLabel : expandLabel} ${node.label}`
 			}),
 			children: chevron
@@ -26866,9 +26935,9 @@ function CollapsibleGroup({ node, pathname, depth, drilldown, expandLabel, colla
 		render: /* @__PURE__ */ jsx(Button, {
 			type: "button",
 			variant: "ghost",
-			className: clsx(headerClass, "group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent [&>svg:last-child]:ml-auto", {
+			className: cn(headerClass, "group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent", {
 				"pb-2 font-bold text-sidebar-foreground": isTopLevel,
-				"border-sidebar-border border-l px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground": !isTopLevel
+				"border-l border-l-sidebar-border px-3 py-2 font-medium text-muted-foreground hover:text-sidebar-accent-foreground": !isTopLevel
 			})
 		}),
 		children: [
@@ -26917,7 +26986,7 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 				href: node.href,
 				target: node.target,
 				rel: node.target === "_blank" ? "noreferrer" : void 0,
-				className: clsx("flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]", { "pl-6": depth > 1 }),
+				className: cn("flex min-w-0 items-center gap-[0.4rem] border-l border-l-sidebar-border px-3 py-[0.55rem] text-muted-foreground hover:text-sidebar-accent-foreground [overflow-wrap:anywhere]", { "pl-6": depth > 1 }),
 				children: [
 					resolveIcon(node.icon),
 					node.label,
@@ -26934,7 +27003,7 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 			const isSelected = url === pathname;
 			rendered.push(/* @__PURE__ */ jsxs(Link, {
 				to: url,
-				className: clsx("flex min-w-0 items-center gap-[0.4rem] border-sidebar-border border-l px-3 py-[0.55rem] [overflow-wrap:anywhere]", {
+				className: cn("flex min-w-0 items-center gap-[0.4rem] border-l border-l-sidebar-border px-3 py-[0.55rem] [overflow-wrap:anywhere]", {
 					"pl-6": depth > 1,
 					[selectedClass]: isSelected,
 					"text-muted-foreground hover:text-sidebar-accent-foreground": !isSelected
@@ -26966,7 +27035,7 @@ function SideNav({ tabs, navigation, anchors, activeTabId, isSticky, drilldown, 
 	const { pathname } = useLocation();
 	const nodes = navigation[activeTabId] || navigation[tabs[0]?.id] || [];
 	return /* @__PURE__ */ jsx(ScrollArea, {
-		className: clsx("w-full max-w-full", { "h-full": isSticky }),
+		className: cn("w-full max-w-full", { "h-full": isSticky }),
 		children: /* @__PURE__ */ jsxs("nav", {
 			className: "flex w-full flex-col gap-6 pr-4 text-sm",
 			"aria-label": navigationLabel,
@@ -27022,7 +27091,7 @@ function SheetContent({ className, children, side = "right", showCloseButton = t
 		"data-side": side,
 		className: cn("fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm", className),
 		...props,
-		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose$1, {
+		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose, {
 			"data-slot": "sheet-close",
 			render: /* @__PURE__ */ jsx(Button, {
 				variant: "ghost",
