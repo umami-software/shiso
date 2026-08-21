@@ -1,0 +1,58 @@
+---
+title: Standalone pages
+description: Pages outside the docs navigation, like a home page.
+---
+
+## Standalone pages
+
+The top-level `pages` key declares routes that live outside the docs
+navigation — a landing page, an about page, anything that should not appear in
+the sidebar. Each entry maps a route path to an MDX file under
+`content/pages/`:
+
+```json
+{
+  "pages": [
+    { "path": "/", "page": "home" },
+    { "path": "/about", "page": "about", "title": "About us" }
+  ]
+}
+```
+
+- `path`: the route, starting with `/`. An entry for `/` becomes the site
+  home page, replacing the default redirect to the first docs page — the
+  header brand link then points at `/` too.
+- `page`: the file slug under `content/pages`, so `"home"` renders
+  `content/pages/home.mdx` (or `.md`).
+- `title`: optional document title for the browser tab and social previews.
+  Frontmatter `title` wins when both are set.
+
+## Layout
+
+Standalone pages render with the site chrome — banner, header, and footer —
+but no sidebar, table of contents, or previous/next links. The content spans
+the full container width, and every [component](/docs/components) works, so a
+landing page can be composed from `Card`, `Columns`, `Frame`, and friends:
+
+```mdx
+# Build docs people actually read
+
+<Columns cols={2}>
+  <Card title="Get started" icon="rocket" href="/docs/installation">
+    Install Shiso and ship your first page in minutes.
+  </Card>
+  <Card title="Components" icon="layout-grid" href="/docs/components">
+    Cards, tabs, callouts, and more — ready to compose.
+  </Card>
+</Columns>
+```
+
+## Behavior notes
+
+- Paths must not collide with docs URLs, sit inside the docs prefix, or use
+  `/404` (reserved for the error page).
+- Standalone pages are prerendered like docs pages, included in
+  `sitemap.xml`, and published with a raw markdown copy (`/about.md`). Set
+  `noindex: true` in frontmatter to keep one out of the sitemap and search
+  engines.
+- They are not included in site search.

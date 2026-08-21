@@ -7,3 +7,10 @@ declare module 'virtual:shiso-docs-config' {
   const config: DocsConfig;
   export default config;
 }
+
+declare module 'virtual:shiso-config' {
+  import type { ResolvedShisoConfig } from '@/lib/types';
+
+  const config: ResolvedShisoConfig;
+  export default config;
+}

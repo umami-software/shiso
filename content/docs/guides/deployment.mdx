@@ -9,7 +9,7 @@ and JavaScript with no server component. Any static host works.
 The output includes:
 
 - a prerendered `index.html` for every page
-- `sitemap.xml` (when [`$shiso.siteUrl`](/docs/project-settings#production-site-url) is set)
+- `sitemap.xml` (when [`siteUrl`](/docs/project-settings#production-site-url) is set)
 - redirect pages for every [`redirects`](/docs/seo#redirects) rule
 - a `.md` copy of every page for [AI tools](/docs/search-and-ai#markdown-export)
 - `404.html` for hosts that serve it on unknown paths
@@ -93,7 +93,8 @@ directories to match.
 
 ## Checklist
 
-1. Set `$shiso.siteUrl` so canonical URLs, Open Graph tags, and the sitemap
+1. Set [`siteUrl`](/docs/project-settings#production-site-url) in
+   `shiso.config.ts` so canonical URLs, Open Graph tags, and the sitemap
    are emitted.
 2. Use a full-history checkout (`fetch-depth: 0`) if
    [`metadata.timestamp`](/docs/seo#last-modified-timestamps) is enabled.

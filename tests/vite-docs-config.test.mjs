@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createDocsConfigModule,
   VIRTUAL_DOCS_CONFIG_ID,
+  VIRTUAL_SHISO_CONFIG_ID,
 } from '../packages/shiso/scripts/vite-docs-config.mjs';
 
 const temporaryDirectories = [];
@@ -102,5 +103,92 @@ describe('createDocsConfigModule', () => {
 
     expect(configModule.getConfig()).toEqual({ navigation: { pages: ['after'] } });
     expect(configModule.getSourcePaths()).toEqual([path.join(root, 'docs.json'), referencePath]);
+  });
+
+  it('serves resolved shiso defaults when no shiso.config exists', async () => {
+    const root = await temporaryProject({ navigation: { pages: ['index'] } });
+    const configModule = await createDocsConfigModule({ root });
+    const resolvedId = configModule.plugin.resolveId(VIRTUAL_SHISO_CONFIG_ID);
+    const addWatchFile = vi.fn();
+    const moduleSource = configModule.plugin.load.call({ addWatchFile }, resolvedId);
+
+    expect(configModule.getShisoConfig()).toEqual({
+      docsPrefix: '/docs',
+      contentDir: 'content/docs',
+      siteUrl: undefined,
+      locale: 'en-US',
+    });
+    expect(moduleSource).toBe(`export default ${JSON.stringify(configModule.getShisoConfig())};`);
+    // Nonexistent candidates must not be watched: Vite's dev import analysis
+    // re-resolves files added from a load hook and errors on missing paths.
+    expect(addWatchFile).not.toHaveBeenCalled();
+  });
+
+  it('serves a loaded shiso.config through its own virtual module', async () => {
+    const root = await temporaryProject({ navigation: { pages: ['index'] } });
+    await fs.writeFile(
+      path.join(root, 'shiso.config.mjs'),
+      `export default { siteUrl: 'https://example.com/' };\n`,
+    );
+    const configModule = await createDocsConfigModule({ root });
+
+    expect(configModule.getShisoConfig()).toMatchObject({ siteUrl: 'https://example.com' });
+    expect(configModule.shisoSourcePath).toBe(path.join(root, 'shiso.config.mjs'));
+    expect(configModule.getSourcePaths()).toContain(path.join(root, 'shiso.config.mjs'));
+
+    const resolvedId = configModule.plugin.resolveId(VIRTUAL_SHISO_CONFIG_ID);
+    const addWatchFile = vi.fn();
+    configModule.plugin.load.call({ addWatchFile }, resolvedId);
+
+    // Only the existing config file is watched.
+    expect(addWatchFile.mock.calls.map(([file]) => file)).toEqual([
+      path.join(root, 'shiso.config.mjs'),
+    ]);
+  });
+
+  it('reloads and invalidates the shiso virtual module on shiso.config edits', async () => {
+    const root = await temporaryProject({ navigation: { pages: ['index'] } });
+    const sourcePath = path.join(root, 'shiso.config.mjs');
+    await fs.writeFile(sourcePath, `export default { locale: 'before' };\n`);
+    const configModule = await createDocsConfigModule({ root });
+    const resolvedId = configModule.plugin.resolveId(VIRTUAL_SHISO_CONFIG_ID);
+    const virtualModule = { id: resolvedId };
+    const invalidateModule = vi.fn();
+    const send = vi.fn();
+
+    await fs.writeFile(sourcePath, `export default { locale: 'after' };\n`);
+    await configModule.plugin.handleHotUpdate({
+      file: sourcePath,
+      server: {
+        moduleGraph: {
+          getModuleById: vi.fn(id => (id === resolvedId ? virtualModule : undefined)),
+          invalidateModule,
+        },
+        ws: { send },
+      },
+    });
+
+    expect(configModule.getShisoConfig()).toMatchObject({ locale: 'after' });
+    expect(invalidateModule).toHaveBeenCalledWith(virtualModule);
+    expect(send).toHaveBeenCalledWith({ type: 'full-reload' });
+  });
+
+  it('picks up a newly created shiso.config file', async () => {
+    const root = await temporaryProject({ navigation: { pages: ['index'] } });
+    const configModule = await createDocsConfigModule({ root });
+    const sourcePath = path.join(root, 'shiso.config.ts');
+
+    expect(configModule.getShisoConfig()).toMatchObject({ locale: 'en-US' });
+
+    await fs.writeFile(sourcePath, `export default { locale: 'ja-JP' };\n`);
+    await configModule.plugin.handleHotUpdate({
+      file: sourcePath,
+      server: {
+        moduleGraph: { getModuleById: vi.fn(), invalidateModule: vi.fn() },
+        ws: { send: vi.fn() },
+      },
+    });
+
+    expect(configModule.getShisoConfig()).toMatchObject({ locale: 'ja-JP' });
   });
 });

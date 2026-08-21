@@ -101,8 +101,9 @@ export type LogoOption =
   | string
   | { light?: string; dark?: string; href?: string; target?: LinkTarget };
 
-/** Shiso-only configuration. Namespaced so docs.json stays portable. */
-export interface ShisoOptions {
+/** Project-level settings supplied by shiso.config.ts. Mirrors the public
+ * shape exported from "@umami/shiso/config". */
+export interface ShisoConfig {
   /** Where docs pages are mounted within the site. Default "/docs"; "" for root. */
   docsPrefix?: string;
   /** Content directory relative to the project root. Default "content/docs". */
@@ -111,6 +112,14 @@ export interface ShisoOptions {
   siteUrl?: string;
   /** Locale used for deterministic date formatting. */
   locale?: string;
+}
+
+/** ShisoConfig after defaults and normalization, as served by `virtual:shiso-config`. */
+export interface ResolvedShisoConfig {
+  docsPrefix: string;
+  contentDir: string;
+  siteUrl?: string;
+  locale: string;
 }
 
 export type LinkTarget = '_self' | '_blank';
@@ -164,6 +173,26 @@ export interface BannerConfig {
 export interface RedirectRule {
   source: string;
   destination: string;
+}
+
+/** A standalone page outside the docs navigation, e.g. a landing page. */
+export interface StandalonePageItem {
+  /** Route path, starting with "/". "/" replaces the root redirect to docs. */
+  path: string;
+  /** File slug under content/pages, e.g. "home" for content/pages/home.mdx. */
+  page: string;
+  /** Page title used in the document head. Frontmatter title wins. */
+  title?: string;
+}
+
+/** Normalized standalone page. */
+export interface StandalonePage {
+  /** Base-relative route, e.g. "/" or "/about". */
+  path: string;
+  /** Module key of the MDX file, e.g. "/content/pages/home.mdx". */
+  filePath: string;
+  /** Config-level head-title override. */
+  title?: string;
 }
 
 export interface SeoConfig {
@@ -271,7 +300,6 @@ export interface BackgroundConfig {
 
 export interface DocsConfig {
   $schema?: string;
-  $shiso?: ShisoOptions;
   theme?: string;
   name?: string;
   colors?: ThemeColors;
@@ -279,6 +307,8 @@ export interface DocsConfig {
   favicon?: string;
   description?: string;
   navigation: NavigationConfig;
+  /** Standalone pages outside the docs navigation, e.g. a landing page at "/". */
+  pages?: StandalonePageItem[];
   navbar?: NavbarConfig;
   footer?: FooterConfig;
   banner?: BannerConfig;

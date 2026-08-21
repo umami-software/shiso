@@ -25,7 +25,8 @@ the subset of features Shiso implements today.
 <Steps>
   <Step title="Copy config and content">
     Place your existing `docs.json` at the project root and your pages under
-    `content/docs` (or set `$shiso.contentDir` to match your old layout).
+    `content/docs` (or set [`contentDir`](/docs/project-settings#content-folder)
+    in `shiso.config.ts` to match your old layout).
   </Step>
   <Step title="Point the schema at Shiso">
     Change the `$schema` value so editor validation matches what this project
@@ -38,15 +39,15 @@ the subset of features Shiso implements today.
     ```
   </Step>
   <Step title="Set the site origin">
-    Add `$shiso.siteUrl` so canonical URLs, Open Graph tags, the sitemap, and
-    AI contextual links work:
+    Add `siteUrl` to a `shiso.config.ts` file at the project root so canonical
+    URLs, Open Graph tags, the sitemap, and AI contextual links work:
 
-    ```json
-    {
-      "$shiso": {
-        "siteUrl": "https://docs.example.com"
-      }
-    }
+    ```ts
+    import { defineConfig } from '@umami/shiso/config';
+
+    export default defineConfig({
+      siteUrl: 'https://docs.example.com',
+    });
     ```
   </Step>
   <Step title="Validate">

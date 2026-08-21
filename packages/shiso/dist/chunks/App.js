@@ -11,6 +11,7 @@ import { MDXProvider } from "@mdx-js/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import * as ReactDOM from "react-dom";
 import { ICON_REGISTRY } from "@/lib/icon-registry.generated";
+import shiso from "virtual:shiso-config";
 import rawConfig from "virtual:shiso-docs-config";
 import { LAST_MODIFIED } from "@/generated/last-modified";
 
@@ -4561,7 +4562,7 @@ function renderTag(Tag, props) {
 *
 * Documentation: [Base UI Button](https://base-ui.com/react/components/button)
 */
-const Button$1 = /*#__PURE__*/ React$1.forwardRef(function Button(componentProps, forwardedRef) {
+const Button$2 = /*#__PURE__*/ React$1.forwardRef(function Button(componentProps, forwardedRef) {
 	const { render, className, disabled = false, focusableWhenDisabled = false, nativeButton = true, style, ...elementProps } = componentProps;
 	const { getButtonProps, buttonRef } = useButton({
 		disabled,
@@ -4574,7 +4575,7 @@ const Button$1 = /*#__PURE__*/ React$1.forwardRef(function Button(componentProps
 		props: [elementProps, getButtonProps]
 	});
 });
-Button$1.displayName = "Button";
+Button$2.displayName = "Button";
 
 //#endregion
 //#region ../../node_modules/.pnpm/clsx@2.1.1/node_modules/clsx/dist/clsx.mjs
@@ -8063,8 +8064,8 @@ const buttonVariants = cva("group/button inline-flex shrink-0 items-center justi
 		size: "default"
 	}
 });
-function Button({ className, variant = "default", size = "default", ...props }) {
-	return /* @__PURE__ */ jsx(Button$1, {
+function Button$1({ className, variant = "default", size = "default", ...props }) {
+	return /* @__PURE__ */ jsx(Button$2, {
 		"data-slot": "button",
 		className: cn(buttonVariants({
 			variant,
@@ -9582,7 +9583,7 @@ function CodeBlock({ children, className }) {
 				className: `code-block p-3 pr-12 text-sm text-foreground leading-[1.6] font-mono ${className || ""}`,
 				children
 			})
-		}), /* @__PURE__ */ jsx(Button, {
+		}), /* @__PURE__ */ jsx(Button$1, {
 			type: "button",
 			variant: "ghost",
 			size: "icon-sm",
@@ -11329,6 +11330,40 @@ function Badge({ color, size = "md", shape = "rounded", icon, stroke = false, di
 			icon,
 			size: iconSizes[size]
 		}) : null, children]
+	});
+}
+
+//#endregion
+//#region src/components/docs/Button.tsx
+/**
+* MDX-facing button. Renders a link when `href` is set (internal routes go
+* through react-router), otherwise a plain button element.
+*/
+function Button({ href, variant = "default", size = "default", icon, className, children }) {
+	const resolvedIcon = resolveIcon(icon, 16);
+	const content = /* @__PURE__ */ jsxs(Fragment, { children: [resolvedIcon, children] });
+	const baseClassName = cn(resolvedIcon ? "gap-2" : "", "[&_p]:m-0", className);
+	if (!href) return /* @__PURE__ */ jsx(Button$1, {
+		variant,
+		size,
+		className: baseClassName,
+		children: content
+	});
+	const linkClassName = cn(buttonVariants({
+		variant,
+		size
+	}), "no-underline hover:no-underline active:no-underline", baseClassName);
+	if (/^https?:\/\//i.test(href)) return /* @__PURE__ */ jsx("a", {
+		href,
+		className: linkClassName,
+		target: "_blank",
+		rel: "noreferrer",
+		children: content
+	});
+	return /* @__PURE__ */ jsx(Link, {
+		to: href,
+		className: linkClassName,
+		children: content
 	});
 }
 
@@ -20509,7 +20544,7 @@ function DialogContent$1({ className, children, showCloseButton = true, overlayC
 		...props,
 		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose, {
 			"data-slot": "dialog-close",
-			render: /* @__PURE__ */ jsx(Button, {
+			render: /* @__PURE__ */ jsx(Button$1, {
 				variant: "ghost",
 				className: "absolute top-2 right-2",
 				size: "icon-sm"
@@ -20571,6 +20606,7 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 	Accordion: () => Accordion,
 	AccordionGroup: () => AccordionGroup,
 	Badge: () => Badge,
+	Button: () => Button,
 	Callout: () => Callout,
 	Card: () => Card,
 	CardGroup: () => CardGroup,
@@ -20628,7 +20664,7 @@ function Banner({ banner, dismissLabel }) {
 		children: [/* @__PURE__ */ jsx("div", {
 			className: "[&_a:hover]:opacity-[0.85] [&_a]:text-inherit [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-sm [&_code]:bg-black/20 [&_code]:px-1 [&_code]:py-[0.0625rem] [&_code]:text-[0.8125rem] [&_code]:font-mono",
 			children: renderInlineMarkdown(banner.content)
-		}), banner.dismissible && /* @__PURE__ */ jsx(Button, {
+		}), banner.dismissible && /* @__PURE__ */ jsx(Button$1, {
 			type: "button",
 			variant: "ghost",
 			size: "icon-xs",
@@ -22216,8 +22252,10 @@ function DropdownMenuItem({ className, inset, variant = "default", ...props }) {
 * DOCS_PREFIX but not BASE_URL. React Router's `basename` adds BASE_URL, so
 * only code that bypasses the router (prerender output paths, canonical URLs,
 * raw <a href>) needs `toHref`.
+*
+* Values from `virtual:shiso-config` arrive with defaults applied and already
+* normalized by scripts/load-shiso-config.mjs.
 */
-const shiso = rawConfig.$shiso || {};
 /** Strips trailing slashes; "/" and "" both normalize to "". */
 function normalizePrefix(value) {
 	const trimmed = value.trim().replace(/\/+$/, "");
@@ -22225,11 +22263,14 @@ function normalizePrefix(value) {
 	return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 const BASE_URL = normalizePrefix(import.meta.env?.BASE_URL || "/");
-const DOCS_PREFIX = normalizePrefix(shiso.docsPrefix ?? "/docs");
+const DOCS_PREFIX = shiso.docsPrefix;
 /** Content directory, relative to the project root, without leading/trailing slashes. */
-const CONTENT_DIR = (shiso.contentDir ?? "content/docs").replace(/^\/+|\/+$/g, "");
+const CONTENT_DIR = shiso.contentDir;
+/** Fixed root for standalone (non-docs) page files. Not configurable, so page
+* slugs can never collide with the docs content tree. */
+const PAGES_DIR = "content/pages";
 /** Absolute origin used for canonical and og:url tags. Undefined when unconfigured. */
-const SITE_URL = shiso.siteUrl?.replace(/\/+$/, "") || void 0;
+const SITE_URL = shiso.siteUrl;
 /** Joins path segments with exactly one slash between them. */
 function joinPath(...parts) {
 	const joined = parts.filter((part) => !!part).join("/").replace(/\/{2,}/g, "/");
@@ -22813,7 +22854,7 @@ function isNodeHidden(node) {
 * without Suspense, at the cost of bundling all pages together.
 *
 * The glob pattern must be a literal for Vite to statically analyze it, so it
-* covers all of `content/` and the configured `$shiso.contentDir` is applied at
+* covers all of `content/` and the configured shiso.config `contentDir` is applied at
 * lookup time instead. That also lets later versioned/localized content roots
 * (`content/v2`, `content/es`) work without touching this glob.
 */
@@ -22825,6 +22866,13 @@ const docModules = import.meta.glob("/content/**/*.{md,mdx}", { eager: true });
 */
 function resolveDocFile(fileSlug, contentDir = CONTENT_DIR) {
 	return [`/${contentDir}/${fileSlug}.mdx`, `/${contentDir}/${fileSlug}.md`].find((candidate) => candidate in docModules);
+}
+/**
+* Resolves a standalone page slug (docs.json `pages[].page`) to a module key
+* under the fixed content/pages root.
+*/
+function resolvePageFile(fileSlug) {
+	return resolveDocFile(fileSlug, PAGES_DIR);
 }
 function getDocModule(filePath) {
 	return docModules[filePath];
@@ -22866,7 +22914,7 @@ function isValidLocale(value) {
 }
 /**
 * Locale for a page: its scope's language code when valid, then the
-* site-wide `$shiso.locale`, then en-US.
+* site-wide shiso.config `locale`, then en-US.
 */
 function resolveLocale(language, fallback) {
 	if (isValidLocale(language)) return Intl.getCanonicalLocales(language)[0];
@@ -22975,7 +23023,7 @@ function normalizeFooter(config) {
 		attribution
 	} : null;
 }
-function resolveSiteModel(config, docs) {
+function resolveSiteModel(config, docs, shiso) {
 	const appearance = config.appearance || {};
 	const logo = config.logo ? typeof config.logo === "string" ? {
 		light: config.logo,
@@ -23008,7 +23056,7 @@ function resolveSiteModel(config, docs) {
 		},
 		showTimestamp: config.metadata?.timestamp === true,
 		drilldown: config.interaction?.drilldown,
-		locale: config.$shiso?.locale?.trim() || "en-US",
+		locale: shiso?.locale || "en-US",
 		labels: SHISO_THEME_LABELS,
 		docs
 	};
@@ -23086,6 +23134,58 @@ function resolveContextualOptions(options, page, labels = SHISO_THEME_LABELS) {
 }
 
 //#endregion
+//#region src/lib/standalone-pages.ts
+function invalid(message) {
+	return /* @__PURE__ */ new Error(`Invalid docs config: ${message}`);
+}
+/** Trims and canonicalizes a standalone route path; throws when malformed. */
+function normalizePath(rawPath) {
+	const value = typeof rawPath === "string" ? rawPath.trim() : "";
+	if (!value.startsWith("/")) throw invalid(`standalone page path "${String(rawPath)}" must start with "/".`);
+	if (/[:*]/.test(value)) throw invalid(`standalone page path "${value}" must not use wildcard patterns.`);
+	if (/\.mdx?$/i.test(value)) throw invalid(`standalone page path "${value}" must be a route, not a file — drop the extension.`);
+	return value.replace(/\/{2,}/g, "/").replace(/\/+$/, "") || "/";
+}
+/** Mirrors normalizePageReference in docs-config.ts for the `page` slug. */
+function normalizePageSlug(rawSlug) {
+	return (typeof rawSlug === "string" ? rawSlug : "").trim().replace(/\\/g, "/").replace(/^\/+/, "").replace(/^pages\//, "").replace(/\.mdx?$/, "").replace(/\/+$/, "") || "index";
+}
+function normalizeStandalonePages(config, resolvePageFile, site, options = {}) {
+	const items = config.pages || [];
+	if (!items.length) return [];
+	const docsPrefix = options.docsPrefix || "";
+	const pages = [];
+	const seen = /* @__PURE__ */ new Set();
+	for (const item of items) {
+		const path = normalizePath(item?.path);
+		if (seen.has(path)) throw invalid(`duplicate standalone page path "${path}".`);
+		seen.add(path);
+		if (path === "/404") throw invalid("standalone page path \"/404\" is reserved for the error page.");
+		const docsPage = site.pageByUrl[path];
+		if (docsPage) throw invalid(`standalone page path "${path}" collides with the docs page "${docsPage.fileSlug}". Standalone pages must live outside the docs navigation.`);
+		if (docsPrefix && (path === docsPrefix || path.startsWith(`${docsPrefix}/`))) throw invalid(`standalone page path "${path}" is inside the docs prefix "${docsPrefix}". Standalone pages must live outside the docs tree.`);
+		const fileSlug = normalizePageSlug(item?.page);
+		const filePath = resolvePageFile(fileSlug);
+		if (!filePath) throw new Error(`Missing standalone page file for "${fileSlug}": expected "content/pages/${fileSlug}.mdx" or ".md".`);
+		pages.push({
+			path,
+			filePath,
+			title: item?.title?.trim() || void 0
+		});
+	}
+	return pages;
+}
+/**
+* Exact standalone page lookup by base-relative pathname. Tolerates trailing
+* slashes and an explicit `/index` suffix, like getPageByPathname.
+*/
+function getStandalonePageByPathname(pages, pathname) {
+	const trimmed = pathname.replace(/\/+$/, "") || "/";
+	const collapsed = trimmed === "/index" ? "/" : trimmed.replace(/\/index$/, "") || "/";
+	return pages.find((page) => page.path === trimmed || page.path === collapsed) || null;
+}
+
+//#endregion
 //#region src/lib/site-config.ts
 assertDocsConfig(rawConfig, "docs.json");
 const siteConfig = rawConfig;
@@ -23095,7 +23195,14 @@ const docsSite = normalizeDocsSite(siteConfig, resolveDocFile);
 const docsConfig = getDefaultScope(docsSite).docs;
 /** Landing page of the default scope: the site-wide "docs home" URL. */
 const docsHomeUrl = getDefaultScope(docsSite).firstPageUrl;
-const siteModel = resolveSiteModel(siteConfig, docsConfig);
+const siteModel = resolveSiteModel(siteConfig, docsConfig, shiso);
+/** Standalone pages declared with the top-level `pages` key, e.g. a home page. */
+const standalonePages = normalizeStandalonePages(siteConfig, resolvePageFile, docsSite, { docsPrefix: DOCS_PREFIX });
+/** True when a standalone page owns "/", replacing the root docs redirect. */
+const hasRootStandalonePage = standalonePages.some((page) => page.path === "/");
+function getStandalonePage(pathname) {
+	return getStandalonePageByPathname(standalonePages, stripBase(pathname));
+}
 /** Scope that owns the current pathname; the default scope for unknown paths. */
 function getScopeByPathname(pathname) {
 	const page = getPageByPathname(pathname);
@@ -23168,7 +23275,7 @@ function LanguageSwitcher() {
 	const options = getLanguageScopes(docsSite);
 	if (!current.language || options.length < 2 && !current.hidden) return null;
 	return /* @__PURE__ */ jsxs(DropdownMenu, { children: [/* @__PURE__ */ jsxs(DropdownMenuTrigger, {
-		render: /* @__PURE__ */ jsx(Button, {
+		render: /* @__PURE__ */ jsx(Button$1, {
 			variant: "outline",
 			className: "h-auto gap-1.5 rounded-md bg-card px-2.5 py-1.5 text-sm font-medium text-foreground"
 		}),
@@ -26081,7 +26188,7 @@ function Search({ config, labels }) {
 		open,
 		onOpenChange: (nextOpen) => nextOpen ? openDialog() : closeDialog(),
 		children: [/* @__PURE__ */ jsxs(DialogTrigger, {
-			render: /* @__PURE__ */ jsx(Button, {
+			render: /* @__PURE__ */ jsx(Button$1, {
 				variant: "outline",
 				className: "h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground"
 			}),
@@ -26152,7 +26259,7 @@ function ThemeToggle({ label }) {
 			localStorage.setItem("shiso-theme", next);
 		} catch {}
 	};
-	return /* @__PURE__ */ jsxs(Button, {
+	return /* @__PURE__ */ jsxs(Button$1, {
 		type: "button",
 		variant: "ghost",
 		size: "icon",
@@ -26197,7 +26304,10 @@ function TopNav({ docs, label }) {
 	const navigate = useNavigate();
 	const tabs = docs.tabs.filter((tab) => !tab.hidden);
 	if (!tabs.length) return null;
-	const selected = docs.pages.find((item) => item.url === pathname)?.tabId || [...tabs].sort((a, b) => b.url.length - a.url.length).find((tab) => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id || tabs[0]?.id;
+	const page = docs.pages.find((item) => item.url === pathname);
+	const matchedTabId = [...tabs].sort((a, b) => b.url.length - a.url.length).find((tab) => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id;
+	const fallbackTabId = getStandalonePage(pathname) ? void 0 : tabs[0]?.id;
+	const selected = page?.tabId || matchedTabId || fallbackTabId;
 	const tabClass = (tab) => cn("flex h-full items-center gap-1 whitespace-nowrap border-transparent border-b-2 font-medium", {
 		"border-b-primary text-foreground": tab.id === selected,
 		"text-muted-foreground hover:text-foreground": tab.id !== selected
@@ -26255,7 +26365,7 @@ function VersionSwitcher() {
 	const options = docsSite.scopes.filter((scope) => scope.version && !scope.hidden && scope.language === current.language);
 	if (!current.version || options.length < 2 && !current.hidden) return null;
 	return /* @__PURE__ */ jsxs(DropdownMenu, { children: [/* @__PURE__ */ jsxs(DropdownMenuTrigger, {
-		render: /* @__PURE__ */ jsx(Button, {
+		render: /* @__PURE__ */ jsx(Button$1, {
 			variant: "outline",
 			className: "h-auto gap-1.5 rounded-md bg-card px-2.5 py-1.5 text-sm font-medium text-foreground"
 		}),
@@ -26277,24 +26387,54 @@ function VersionSwitcher() {
 
 //#endregion
 //#region src/components/Header.tsx
+/**
+* Header hrefs come from config, so they may point inside the site or off it.
+* In-app routes go through react-router; anything external (or explicitly
+* opened in a new tab) stays a plain anchor and triggers a document load.
+*/
+function isRoutedHref(href, target) {
+	return href.startsWith("/") && !isExternalHref(href) && target !== "_blank";
+}
 function NavbarLinkItem({ link, primary = false }) {
 	const iconOnly = !link.label;
 	const accessibleLabel = link.ariaLabel || link.icon || link.href;
-	return /* @__PURE__ */ jsxs("a", {
+	const className = primary ? `ml-1 inline-flex items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 ${iconOnly ? "size-8" : "gap-1.5 px-3.5 py-1.5"}` : `inline-flex items-center rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-foreground ${iconOnly ? "size-8 justify-center" : "gap-1.5 px-2.5 py-1.5"}`;
+	const content = /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(ConfiguredIcon, { icon: link.icon }), link.label] });
+	if (isRoutedHref(link.href, link.target)) return /* @__PURE__ */ jsx(Link, {
+		to: link.href,
+		className,
+		"aria-label": iconOnly ? accessibleLabel : void 0,
+		children: content
+	});
+	return /* @__PURE__ */ jsx("a", {
 		href: link.href,
-		className: primary ? `ml-1 inline-flex items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 ${iconOnly ? "size-8" : "gap-1.5 px-3.5 py-1.5"}` : `inline-flex items-center rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-foreground ${iconOnly ? "size-8 justify-center" : "gap-1.5 px-2.5 py-1.5"}`,
+		className,
 		target: link.target,
 		rel: link.target === "_blank" ? "noreferrer" : void 0,
 		"aria-label": iconOnly ? accessibleLabel : void 0,
-		children: [/* @__PURE__ */ jsx(ConfiguredIcon, { icon: link.icon }), link.label]
+		children: content
 	});
 }
 function Header({ site }) {
 	const { logo, navbar, name, appearance, labels, search } = site;
 	const { pathname } = useLocation();
 	const docs = getScopeByPathname(pathname).docs;
-	const brandHref = logo?.href || docsHomeUrl;
+	const brandHref = logo?.href || (hasRootStandalonePage ? "/" : docsHomeUrl);
 	const hasBrand = !!name || !!logo?.light || !!logo?.dark;
+	const brandClassName = "inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]";
+	const brandContent = /* @__PURE__ */ jsxs(Fragment, { children: [
+		logo?.light ? /* @__PURE__ */ jsx("img", {
+			src: logo.light,
+			alt: "",
+			className: "h-6 w-auto dark:hidden"
+		}) : null,
+		logo?.dark ? /* @__PURE__ */ jsx("img", {
+			src: logo.dark,
+			alt: "",
+			className: "hidden h-6 w-auto dark:block"
+		}) : null,
+		name ? /* @__PURE__ */ jsx("span", { children: name }) : null
+	] });
 	return /* @__PURE__ */ jsx("header", {
 		className: "sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-border border-b bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-md",
 		children: /* @__PURE__ */ jsxs("div", {
@@ -26302,24 +26442,16 @@ function Header({ site }) {
 			children: [
 				/* @__PURE__ */ jsxs("div", {
 					className: "flex min-w-0 items-center gap-5 justify-self-start",
-					children: [hasBrand ? /* @__PURE__ */ jsxs("a", {
+					children: [hasBrand ? isRoutedHref(brandHref, logo?.target) ? /* @__PURE__ */ jsx(Link, {
+						to: brandHref,
+						className: brandClassName,
+						children: brandContent
+					}) : /* @__PURE__ */ jsx("a", {
 						href: brandHref,
 						target: logo?.target,
 						rel: logo?.target === "_blank" ? "noreferrer" : void 0,
-						className: "inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]",
-						children: [
-							logo?.light ? /* @__PURE__ */ jsx("img", {
-								src: logo.light,
-								alt: "",
-								className: "h-6 w-auto dark:hidden"
-							}) : null,
-							logo?.dark ? /* @__PURE__ */ jsx("img", {
-								src: logo.dark,
-								alt: "",
-								className: "hidden h-6 w-auto dark:block"
-							}) : null,
-							name ? /* @__PURE__ */ jsx("span", { children: name }) : null
-						]
+						className: brandClassName,
+						children: brandContent
 					}) : null, /* @__PURE__ */ jsxs("div", {
 						className: "hidden items-center gap-2 lg:flex",
 						children: [/* @__PURE__ */ jsx(VersionSwitcher, {}), /* @__PURE__ */ jsx(LanguageSwitcher, {})]
@@ -26365,14 +26497,16 @@ function escapeJsonLd(value) {
 }
 function buildHead(pathname) {
 	const page = getPageByPathname(pathname);
-	const frontmatter = (page ? getDocModule(page.filePath) : void 0)?.frontmatter;
+	const standalone = page ? null : getStandalonePage(pathname);
+	const filePath = page?.filePath || standalone?.filePath;
+	const frontmatter = (filePath ? getDocModule(filePath) : void 0)?.frontmatter;
 	const seo = getSeo();
-	const pageTitle = frontmatter?.title || page?.label;
+	const pageTitle = frontmatter?.title || standalone?.title || page?.label;
 	const title = getPageTitle(pageTitle);
 	const description = frontmatter?.description || siteConfig.description;
-	const canonical = page ? toAbsoluteUrl(page.url) : void 0;
+	const canonical = page ? toAbsoluteUrl(page.url) : standalone ? toAbsoluteUrl(standalone.path) : void 0;
 	const hidden = !!page && (!!page.hidden || !!getScopeByPathname(pathname).hidden);
-	const noindex = !page || frontmatter?.noindex === true || hidden && seo.indexing !== "all";
+	const noindex = !page && !standalone || frontmatter?.noindex === true || hidden && seo.indexing !== "all";
 	const tags = [{
 		tag: "title",
 		children: title
@@ -26402,7 +26536,7 @@ function buildHead(pathname) {
 		tag: "meta",
 		attrs: {
 			property: "og:type",
-			content: "article"
+			content: standalone ? "website" : "article"
 		}
 	}, {
 		tag: "meta",
@@ -26452,7 +26586,7 @@ function buildHead(pathname) {
 			content: description
 		}
 	});
-	const lastModified = page && showTimestamp(frontmatter?.timestamp) ? getLastModified(page.filePath) : void 0;
+	const lastModified = filePath && showTimestamp(frontmatter?.timestamp) ? getLastModified(filePath) : void 0;
 	if (lastModified) tags.push({
 		tag: "meta",
 		attrs: {
@@ -26600,14 +26734,14 @@ function ContextualMenu({ options, labels }) {
 	const optionIcon = (option, showCopied = false) => showCopied && copied ? /* @__PURE__ */ jsx(Check$1, { className: "size-3.5" }) : /* @__PURE__ */ jsx(ConfiguredIcon, { icon: option.icon });
 	return /* @__PURE__ */ jsxs("div", {
 		className: "inline-flex shrink-0 items-stretch",
-		children: [/* @__PURE__ */ jsxs(Button, {
+		children: [/* @__PURE__ */ jsxs(Button$1, {
 			variant: "outline",
 			size: "sm",
 			className: "rounded-r-none bg-card text-foreground only:rounded-md",
 			onClick: () => runOption(primary),
 			children: [optionIcon(primary, primary.action === "copy"), primary.action === "copy" && copied ? labels.copied : primary.title]
 		}), options.length > 1 && /* @__PURE__ */ jsxs(DropdownMenu, { children: [/* @__PURE__ */ jsx(DropdownMenuTrigger, {
-			render: /* @__PURE__ */ jsx(Button, {
+			render: /* @__PURE__ */ jsx(Button$1, {
 				variant: "outline",
 				size: "icon-sm",
 				className: "rounded-l-none border-l-0 bg-card",
@@ -26948,7 +27082,7 @@ function CollapsibleGroup({ node, pathname, depth, drilldown, expandLabel, colla
 			className: isTopLevel ? sectionLabelClass : groupLabelClass,
 			children: [resolveIcon(node.icon), node.label]
 		}), /* @__PURE__ */ jsx(CollapsibleTrigger, {
-			render: /* @__PURE__ */ jsx(Button, {
+			render: /* @__PURE__ */ jsx(Button$1, {
 				type: "button",
 				variant: "ghost",
 				size: "icon-xs",
@@ -26958,7 +27092,7 @@ function CollapsibleGroup({ node, pathname, depth, drilldown, expandLabel, colla
 			children: chevron
 		})]
 	}) : /* @__PURE__ */ jsxs(CollapsibleTrigger, {
-		render: /* @__PURE__ */ jsx(Button, {
+		render: /* @__PURE__ */ jsx(Button$1, {
 			type: "button",
 			variant: "ghost",
 			className: cn(headerClass, "group/section group/collapsible-trigger flex h-auto w-full items-center justify-start gap-[0.4rem] whitespace-normal rounded-none px-0 py-0 text-left hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent", {
@@ -27119,7 +27253,7 @@ function SheetContent({ className, children, side = "right", showCloseButton = t
 		...props,
 		children: [children, showCloseButton && /* @__PURE__ */ jsxs(DialogClose, {
 			"data-slot": "sheet-close",
-			render: /* @__PURE__ */ jsx(Button, {
+			render: /* @__PURE__ */ jsx(Button$1, {
 				variant: "ghost",
 				className: "absolute top-3 right-3",
 				size: "icon-sm"
@@ -27185,7 +27319,7 @@ function Docs({ page, doc, site }) {
 			children: [/* @__PURE__ */ jsx("div", {
 				className: "flex justify-end lg:hidden",
 				children: /* @__PURE__ */ jsxs(SheetTrigger, {
-					render: /* @__PURE__ */ jsx(Button, {
+					render: /* @__PURE__ */ jsx(Button$1, {
 						variant: "outline",
 						className: "bg-card"
 					}),
@@ -27278,6 +27412,40 @@ function DocPage({ site }) {
 }
 
 //#endregion
+//#region src/pages/StandalonePage.tsx
+/**
+* A standalone (non-docs) page: site chrome from Layout (banner, header),
+* the MDX content at full container width — no sidebar, TOC, or pager — and
+* the footer. MDX components come from the app-level MDXProvider.
+*/
+function StandalonePageView({ page, site }) {
+	const { pathname } = useLocation();
+	const doc = getDocModule(page.filePath);
+	useEffect(() => {
+		if (!window.location.hash) window.scrollTo({
+			top: 0,
+			left: 0
+		});
+	}, [pathname]);
+	if (!doc) return /* @__PURE__ */ jsx(Docs, {
+		page: null,
+		doc: null,
+		site
+	});
+	const Content = doc.default;
+	return /* @__PURE__ */ jsxs("div", {
+		className: "flex min-h-full flex-col",
+		children: [/* @__PURE__ */ jsx("article", {
+			className: "grow py-8",
+			children: /* @__PURE__ */ jsx("div", {
+				className: "docs-markdown",
+				children: /* @__PURE__ */ jsx(Content, {})
+			})
+		}), /* @__PURE__ */ jsx(Footer, { footer: site.footer })]
+	});
+}
+
+//#endregion
 //#region src/App.tsx
 const mdxComponents = {
 	...docs_exports,
@@ -27289,19 +27457,29 @@ function App() {
 		components: mdxComponents,
 		children: /* @__PURE__ */ jsx(Layout, {
 			site: siteModel,
-			children: /* @__PURE__ */ jsxs(Routes, { children: [docsHomeUrl !== "/" ? /* @__PURE__ */ jsx(Route, {
-				path: "/",
-				element: /* @__PURE__ */ jsx(Navigate, {
-					to: docsHomeUrl,
-					replace: true
+			children: /* @__PURE__ */ jsxs(Routes, { children: [
+				standalonePages.map((page) => /* @__PURE__ */ jsx(Route, {
+					path: page.path,
+					element: /* @__PURE__ */ jsx(StandalonePageView, {
+						page,
+						site: siteModel
+					})
+				}, page.path)),
+				docsHomeUrl !== "/" && !hasRootStandalonePage ? /* @__PURE__ */ jsx(Route, {
+					path: "/",
+					element: /* @__PURE__ */ jsx(Navigate, {
+						to: docsHomeUrl,
+						replace: true
+					})
+				}) : null,
+				/* @__PURE__ */ jsx(Route, {
+					path: "*",
+					element: /* @__PURE__ */ jsx(DocPage, { site: siteModel })
 				})
-			}) : null, /* @__PURE__ */ jsx(Route, {
-				path: "*",
-				element: /* @__PURE__ */ jsx(DocPage, { site: siteModel })
-			})] })
+			] })
 		})
 	}) });
 }
 
 //#endregion
-export { createPath as _, docsSite as a, getSeo as c, getLastModified as d, getScopeForPage as f, Router as g, BrowserRouter as h, docsHomeUrl as i, siteName as l, toAbsoluteUrl as m, buildHead as n, getLocaleByPathname as o, BASE_URL as p, renderHeadToString as r, getRedirects as s, App as t, getDocModule as u, parsePath as v, ABSOLUTE_URL_REGEX as y };
+export { Router as _, docsSite as a, ABSOLUTE_URL_REGEX as b, getSeo as c, getDocModule as d, getLastModified as f, BrowserRouter as g, toAbsoluteUrl as h, docsHomeUrl as i, siteName as l, BASE_URL as m, buildHead as n, getLocaleByPathname as o, getScopeForPage as p, renderHeadToString as r, getRedirects as s, App as t, standalonePages as u, createPath as v, parsePath as y };

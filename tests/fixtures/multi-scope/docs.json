@@ -2,9 +2,6 @@
   "$schema": "../../../packages/shiso/docs.schema.json",
   "name": "Multi Scope Fixture",
   "description": "Private fixture exercising versions, languages, and nested versions.",
-  "$shiso": {
-    "siteUrl": "https://fixture.example.com"
-  },
   "redirects": [{ "source": "/docs/old", "destination": "/docs/guide" }],
   "navigation": {
     "anchors": [{ "anchor": "Community", "href": "https://example.com/community" }],

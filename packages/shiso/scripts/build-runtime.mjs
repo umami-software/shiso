@@ -12,6 +12,7 @@ const projectModules = new Set([
   '@/lib/icon-registry.generated',
   '@/lib/search-index.generated',
   'virtual:shiso-docs-config',
+  'virtual:shiso-config',
 ]);
 
 const peerModules = new Set(['react', 'react-dom']);

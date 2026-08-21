@@ -14,32 +14,6 @@
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path or URL to this schema, for editor autocomplete."
     },
-    "$shiso": {
-      "type": "object",
-      "description": "Shiso-only options. Namespaced so the rest of the file stays portable.",
-      "additionalProperties": false,
-      "properties": {
-        "$ref": { "$ref": "#/definitions/configRef" },
-        "docsPrefix": {
-          "allOf": [{ "$ref": "#/definitions/stringValue" }],
-          "description": "Route prefix for docs pages. Defaults to \"/docs\"; use \"\" to serve docs at the site root.",
-          "default": "/docs"
-        },
-        "contentDir": {
-          "allOf": [{ "$ref": "#/definitions/stringValue" }],
-          "description": "Content directory relative to the project root.",
-          "default": "content/docs"
-        },
-        "siteUrl": {
-          "allOf": [{ "$ref": "#/definitions/stringValue" }],
-          "description": "Absolute site origin (e.g. \"https://docs.example.com\"). Required for canonical, og:url, and structured data."
-        },
-        "locale": {
-          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
-          "description": "Locale used for dates and theme-provided interface copy. Defaults to en-US."
-        }
-      }
-    },
     "name": {
       "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
       "description": "Site name, shown in the header and the page title."
@@ -100,6 +74,35 @@
     "favicon": {
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path to the favicon, relative to the public directory."
+    },
+    "pages": {
+      "type": ["array", "object"],
+      "if": { "type": "object" },
+      "then": { "$ref": "#/definitions/configRefValue" },
+      "description": "Standalone pages outside the docs navigation, such as a landing page. Each entry maps a route path to a file under content/pages.",
+      "items": {
+        "type": "object",
+        "anyOf": [{ "required": ["$ref"] }, { "required": ["path", "page"] }],
+        "additionalProperties": false,
+        "properties": {
+          "$ref": { "$ref": "#/definitions/configRef" },
+          "path": {
+            "anyOf": [
+              { "type": "string", "pattern": "^/[^*:]*$" },
+              { "$ref": "#/definitions/configRefValue" }
+            ],
+            "description": "Route path starting with \"/\". Use \"/\" for the site home page."
+          },
+          "page": {
+            "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+            "description": "File slug under content/pages, e.g. \"home\" for content/pages/home.mdx."
+          },
+          "title": {
+            "allOf": [{ "$ref": "#/definitions/stringValue" }],
+            "description": "Page title used in the document head. Frontmatter title wins."
+          }
+        }
+      }
     },
     "navigation": {
       "type": "object",

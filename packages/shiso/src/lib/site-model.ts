@@ -12,6 +12,7 @@ import type {
   NormalizedLink,
   NormalizedNavbar,
   ResolvedContextualOption,
+  ResolvedShisoConfig,
   SiteModel,
   ThemeLabels,
 } from '@/lib/types';
@@ -90,7 +91,11 @@ function normalizeFooter(config: DocsConfig['footer']): NormalizedFooter | null 
   return socials.length || links.length || attribution ? { socials, links, attribution } : null;
 }
 
-export function resolveSiteModel(config: DocsConfig, docs: NormalizedDocsConfig): SiteModel {
+export function resolveSiteModel(
+  config: DocsConfig,
+  docs: NormalizedDocsConfig,
+  shiso?: ResolvedShisoConfig,
+): SiteModel {
   const appearance = config.appearance || {};
   const logo = config.logo
     ? typeof config.logo === 'string'
@@ -128,7 +133,7 @@ export function resolveSiteModel(config: DocsConfig, docs: NormalizedDocsConfig)
     error404: { ...config.errors?.['404'], redirect: config.errors?.['404']?.redirect !== false },
     showTimestamp: config.metadata?.timestamp === true,
     drilldown: config.interaction?.drilldown,
-    locale: config.$shiso?.locale?.trim() || 'en-US',
+    locale: shiso?.locale || 'en-US',
     labels: SHISO_THEME_LABELS,
     docs,
   };

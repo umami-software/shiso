@@ -52,25 +52,38 @@ export function suggestKey(unknownKey, knownKeys) {
   return bestDistance <= threshold ? best : null;
 }
 
+const SHISO_KEY_MIGRATION =
+  '(root) "$shiso" is no longer supported in docs.json — move docsPrefix, contentDir, ' +
+  'siteUrl, and locale to shiso.config.ts. See https://shiso.umami.is/docs/project-settings.';
+
 export function validateConfig(config, schema) {
   const ajv = new Ajv({ allErrors: true, allowUnionTypes: true });
 
   const validate = ajv.compile(schema);
   const knownKeys = getSchemaKeys(schema);
+  // Checked directly, not just via Ajv's additionalProperties error, so the
+  // migration message appears even when other errors change Ajv's output.
+  const hasLegacyShisoKey = !!config && typeof config === 'object' && '$shiso' in config;
 
-  if (!validate(config)) {
-    const errors = (validate.errors ?? []).map(error => {
-      const location = error.instancePath || '(root)';
-      const extra = error.params?.additionalProperty;
+  if (!validate(config) || hasLegacyShisoKey) {
+    const errors = (validate.errors ?? [])
+      .filter(error => !(error.params?.additionalProperty === '$shiso' && !error.instancePath))
+      .map(error => {
+        const location = error.instancePath || '(root)';
+        const extra = error.params?.additionalProperty;
 
-      if (extra) {
-        const suggestion = !error.instancePath && suggestKey(extra, knownKeys);
+        if (extra) {
+          const suggestion = !error.instancePath && suggestKey(extra, knownKeys);
 
-        return `${location} has unknown key "${extra}"${suggestion ? ` — did you mean "${suggestion}"?` : ''}`;
-      }
+          return `${location} has unknown key "${extra}"${suggestion ? ` — did you mean "${suggestion}"?` : ''}`;
+        }
 
-      return `${location} ${error.message}`;
-    });
+        return `${location} ${error.message}`;
+      });
+
+    if (hasLegacyShisoKey) {
+      errors.unshift(SHISO_KEY_MIGRATION);
+    }
 
     return { valid: false, errors };
   }

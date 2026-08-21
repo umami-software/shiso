@@ -1,34 +1,40 @@
 ---
-title: URLs and content location
-description: Choose where documentation files live and which URLs your site uses.
+title: Project settings
+description: Use shiso.config.ts to set the docs URL prefix, content folder, site URL, and locale.
 ---
 
-Most sites can use Shiso's default folder and URL structure. Add `$shiso` to
-`docs.json` when you need to change where content lives, serve docs at a
-different path, or provide the site's public URL.
+Most sites can use Shiso's default folder and URL structure. Create a
+`shiso.config.ts` file at the project root when you need to change where
+content lives, serve docs at a different path, or provide the site's public
+URL.
 
-```json
-{
-  "$shiso": {
-    "docsPrefix": "/docs",
-    "contentDir": "content/docs",
-    "siteUrl": "https://docs.example.com",
-    "locale": "en-US"
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  docsPrefix: '/docs',
+  contentDir: 'content/docs',
+  siteUrl: 'https://docs.example.com',
+  locale: 'en-US',
+});
 ```
+
+The file is optional: when it does not exist, the defaults shown above apply.
+`shiso.config.mjs` and `shiso.config.js` also work if you prefer plain
+JavaScript; a bare `export default { ... }` object is fully supported without
+the `defineConfig` helper.
 
 ## Documentation URL
 
 `docsPrefix` is the path that appears before every documentation page. It
 defaults to `"/docs"`.
 
-```json
-{
-  "$shiso": {
-    "docsPrefix": "/help"
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  docsPrefix: '/help',
+});
 ```
 
 With this setting, the documentation home is `/help` and a page named
@@ -37,12 +43,12 @@ With this setting, the documentation home is `/help` and a page named
 Set `docsPrefix` to an empty string to serve documentation from the root of
 the site:
 
-```json
-{
-  "$shiso": {
-    "docsPrefix": ""
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  docsPrefix: '',
+});
 ```
 
 ## Content folder
@@ -50,12 +56,12 @@ the site:
 `contentDir` tells Shiso where to find your Markdown and MDX files, relative
 to the project root. It defaults to `"content/docs"`.
 
-```json
-{
-  "$shiso": {
-    "contentDir": "docs"
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  contentDir: 'content/docs',
+});
 ```
 
 After changing this setting, move or create your pages in the matching folder
@@ -66,12 +72,12 @@ and keep navigation page entries relative to that folder.
 `siteUrl` is the public origin of your deployed site. Do not include a trailing
 slash or the documentation prefix.
 
-```json
-{
-  "$shiso": {
-    "siteUrl": "https://docs.example.com"
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  siteUrl: 'https://docs.example.com',
+});
 ```
 
 Set it before deploying so Shiso can generate canonical URLs, Open Graph URLs,
@@ -83,12 +89,12 @@ structured data, `sitemap.xml`, and absolute links for AI actions.
 search, and table-of-contents labels is supplied by the active theme rather
 than configured as documentation content:
 
-```json
-{
-  "$shiso": {
-    "locale": "fr-FR"
-  }
-}
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  locale: 'fr-FR',
+});
 ```
 
 ## How page names become URLs
@@ -106,6 +112,22 @@ folder. With the default `contentDir` and `docsPrefix`:
 The same mapping applies when you customize either setting; only the content
 folder and URL prefix change.
 
+## Migrating from `$shiso`
+
+Earlier Shiso versions read these settings from a `$shiso` key in `docs.json`.
+That key is no longer supported: move its fields into `shiso.config.ts` and
+delete it from `docs.json`. `shiso check` reports any docs.json that still
+contains `$shiso`.
+
+```ts
+// shiso.config.ts, replacing "$shiso": { "siteUrl": "..." } in docs.json
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  siteUrl: 'https://docs.example.com',
+});
+```
+
 ## Editor help and validation
 
 Keep the schema reference at the top of `docs.json` to get autocomplete, field
@@ -117,8 +139,8 @@ descriptions, and inline validation in supported editors:
 }
 ```
 
-Shiso checks the file when it builds your site. To check it without running a
-full build, use:
+Shiso checks `docs.json` and loads `shiso.config.ts` when it builds your site.
+To check both without running a full build, use:
 
 ```bash
 pnpm check
@@ -130,6 +152,7 @@ pnpm check
 - The file exists, but it is not included in navigation.
 - A nested page name does not match its folder structure.
 - `siteUrl` includes `/docs`, another path, or a trailing slash.
+- `$shiso` is still present in `docs.json` after upgrading.
 
 See [Troubleshooting](/docs/troubleshooting) for help with build and navigation
 errors.

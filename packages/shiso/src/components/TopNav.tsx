@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { ChevronRight } from '@/components/icons';
@@ -8,7 +7,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getStandalonePage } from '@/lib/site-config';
 import type { DocsTab, LinkTarget, NavNode, NormalizedDocsConfig } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 interface MenuLink {
   label: string;
@@ -55,12 +56,13 @@ export function TopNav({ docs, label }: { docs: NormalizedDocsConfig; label: str
   }
 
   const page = docs.pages.find(item => item.url === pathname);
-  const selected =
-    page?.tabId ||
-    [...tabs]
-      .sort((a, b) => b.url.length - a.url.length)
-      .find(tab => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id ||
-    tabs[0]?.id;
+  const matchedTabId = [...tabs]
+    .sort((a, b) => b.url.length - a.url.length)
+    .find(tab => pathname === tab.url || pathname.startsWith(`${tab.url}/`))?.id;
+  // Standalone pages live outside the docs tree, so no tab owns them. Only
+  // unmatched *docs* routes fall back to highlighting the first tab.
+  const fallbackTabId = getStandalonePage(pathname) ? undefined : tabs[0]?.id;
+  const selected = page?.tabId || matchedTabId || fallbackTabId;
   const tabClass = (tab: DocsTab) =>
     cn(
       'flex h-full items-center gap-1 whitespace-nowrap border-transparent border-b-2 font-medium',

@@ -3,6 +3,14 @@
 All notable changes to `create-shiso-app` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 0.5.0 - 2026-08-21
+
+### Changed
+
+- New projects include a starter `shiso.config.ts`; project settings
+  (`docsPrefix`, `contentDir`, `siteUrl`, `locale`) no longer live under
+  `$shiso` in `docs.json`.
+
 ## 0.3.0 - 2026-08-15
 
 ### Changed

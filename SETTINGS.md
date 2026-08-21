@@ -447,6 +447,24 @@ This section contains the full reference for the `docs.json` file.
   </Expandable>
 </ResponseField>
 
+<ResponseField name="pages" type="array of object">
+  Standalone pages outside the docs navigation, such as a landing page. Rendered with the site header and footer but no sidebar.
+
+  <Expandable title="Pages">
+    <ResponseField name="path" type="string" required>
+      Route path starting with `/`. Use `/` for the site home page, replacing the default redirect to the docs.
+    </ResponseField>
+
+    <ResponseField name="page" type="string" required>
+      File slug under `content/pages`, e.g. `home` for `content/pages/home.mdx`.
+    </ResponseField>
+
+    <ResponseField name="title" type="string">
+      Page title used in the document head. Frontmatter title wins.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
 <ResponseField name="navigation" type="object" required>
   The navigation structure of your content.
 

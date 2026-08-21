@@ -12,6 +12,7 @@ import {
   getRedirects,
   getSeo,
   siteName,
+  standalonePages,
 } from '@/lib/site-config';
 
 export interface RenderResult {
@@ -28,7 +29,7 @@ export interface SitemapEntry {
 
 /** Base-relative routes for every scope. The prerenderer prepends the deploy base itself. */
 export function getRoutes(): string[] {
-  return docsSite.pages.map(page => page.url);
+  return [...docsSite.pages.map(page => page.url), ...standalonePages.map(page => page.path)];
 }
 
 /** Redirect rules with exact-match sources, for static redirect pages. */
@@ -41,12 +42,15 @@ export { getRedirects };
  * "/content/docs/index.mdx", resolved against the project root.
  */
 export function getMarkdownPages(): { route: string; filePath: string }[] {
-  return docsSite.pages.map(page => ({ route: page.url, filePath: page.filePath }));
+  return [
+    ...docsSite.pages.map(page => ({ route: page.url, filePath: page.filePath })),
+    ...standalonePages.map(page => ({ route: page.path, filePath: page.filePath })),
+  ];
 }
 
 /**
  * Absolute URLs for the sitemap, honoring `seo.indexing` and per-page
- * noindex. Empty when `$shiso.siteUrl` is not configured, since a sitemap
+ * noindex. Empty when the shiso.config `siteUrl` is not configured, since a sitemap
  * of relative URLs is invalid.
  */
 export function getSitemapEntries(): SitemapEntry[] {
@@ -65,6 +69,19 @@ export function getSitemapEntries(): SitemapEntry[] {
     }
 
     const url = toAbsoluteUrl(page.url);
+
+    if (url) {
+      entries.push({ url, lastmod: getLastModified(page.filePath) });
+    }
+  }
+
+  // Standalone pages are always navigable; only frontmatter noindex opts out.
+  for (const page of standalonePages) {
+    if (getDocModule(page.filePath)?.frontmatter?.noindex === true) {
+      continue;
+    }
+
+    const url = toAbsoluteUrl(page.path);
 
     if (url) {
       entries.push({ url, lastmod: getLastModified(page.filePath) });

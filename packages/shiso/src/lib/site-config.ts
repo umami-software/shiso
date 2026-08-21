@@ -1,5 +1,6 @@
+import shisoConfig from 'virtual:shiso-config';
 import rawConfig from 'virtual:shiso-docs-config';
-import { resolveDocFile } from '@/lib/content';
+import { resolveDocFile, resolvePageFile } from '@/lib/content';
 import {
   assertDocsConfig,
   getDefaultScope,
@@ -8,8 +9,9 @@ import {
   normalizeDocsSite,
 } from '@/lib/docs-config';
 import { getTextDirection, resolveLocale } from '@/lib/locale';
-import { stripBase } from '@/lib/paths';
+import { DOCS_PREFIX, stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
+import { getStandalonePageByPathname, normalizeStandalonePages } from '@/lib/standalone-pages';
 import type {
   DocsConfig,
   DocsScope,
@@ -18,6 +20,7 @@ import type {
   NormalizedDocsSite,
   RedirectRule,
   SeoConfig,
+  StandalonePage,
 } from '@/lib/types';
 
 assertDocsConfig(rawConfig, 'docs.json');
@@ -33,7 +36,22 @@ export const docsConfig: NormalizedDocsConfig = getDefaultScope(docsSite).docs;
 /** Landing page of the default scope: the site-wide "docs home" URL. */
 export const docsHomeUrl = getDefaultScope(docsSite).firstPageUrl;
 
-export const siteModel = resolveSiteModel(siteConfig, docsConfig);
+export const siteModel = resolveSiteModel(siteConfig, docsConfig, shisoConfig);
+
+/** Standalone pages declared with the top-level `pages` key, e.g. a home page. */
+export const standalonePages: StandalonePage[] = normalizeStandalonePages(
+  siteConfig,
+  resolvePageFile,
+  docsSite,
+  { docsPrefix: DOCS_PREFIX },
+);
+
+/** True when a standalone page owns "/", replacing the root docs redirect. */
+export const hasRootStandalonePage = standalonePages.some(page => page.path === '/');
+
+export function getStandalonePage(pathname: string): StandalonePage | null {
+  return getStandalonePageByPathname(standalonePages, stripBase(pathname));
+}
 
 /** Scope that owns the current pathname; the default scope for unknown paths. */
 export function getScopeByPathname(pathname: string): DocsScope {

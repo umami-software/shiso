@@ -86,7 +86,9 @@ for (const route of routes) {
 // Root entry. When the default scope's landing page is not the root itself the
 // root is a redirect; a meta refresh alone is slow and SEO-hostile, so pair it
 // with a canonical link and an immediate history-replacing navigation.
-if (docsHomeUrl && docsHomeUrl !== '/') {
+// When a standalone page owns "/", the routes loop above already rendered the
+// real home page into dist/client/index.html — do not overwrite it.
+if (docsHomeUrl && docsHomeUrl !== '/' && !routes.includes('/')) {
   const target = withBase(`${docsHomeUrl}/`);
 
   await writePage(
@@ -144,7 +146,7 @@ for (const { source, destination } of redirects) {
   );
 }
 
-// Sitemap, only when $shiso.siteUrl provides an absolute origin.
+// Sitemap, only when shiso.config siteUrl provides an absolute origin.
 const sitemapEntries = getSitemapEntries();
 
 if (sitemapEntries.length) {

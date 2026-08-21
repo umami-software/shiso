@@ -18,7 +18,7 @@ export function isValidLocale(value: string | undefined): value is string {
 
 /**
  * Locale for a page: its scope's language code when valid, then the
- * site-wide `$shiso.locale`, then en-US.
+ * site-wide shiso.config `locale`, then en-US.
  */
 export function resolveLocale(language: string | undefined, fallback: string | undefined): string {
   if (isValidLocale(language)) {

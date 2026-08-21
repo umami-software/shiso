@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@umami/shiso/docs.schema.json",
-  "$shiso": {
-    "siteUrl": "https://shiso.umami.is"
-  },
   "search": {
     "provider": "pagefind"
   },
@@ -65,8 +62,8 @@
               "versions",
               "languages",
               { "page": "seo", "title": "SEO, redirects, and errors" },
-              { "page": "project-settings", "title": "URLs and content location" },
               { "page": "configuration-references", "title": "Split configuration with $ref" },
+              { "page": "project-settings", "title": "Project settings" },
               "troubleshooting"
             ]
           },

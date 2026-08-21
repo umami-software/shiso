@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { loadShisoConfig } from '../scripts/load-shiso-config.mjs';
 import { validateProject } from '../scripts/validate-config.mjs';
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -22,7 +23,7 @@ Commands:
   dev       Start the development server
   build     Validate and build the static site
   preview   Preview the production build
-  check     Validate docs.json
+  check     Validate docs.json and shiso.config
 
 Options after dev, build, or preview are passed to Vite.
 `;
@@ -55,6 +56,13 @@ async function check(projectRoot) {
   }
 
   console.log('docs.json is valid.');
+
+  // Fails fast on a broken shiso.config.* before any Vite build starts.
+  const shiso = await loadShisoConfig({ root: projectRoot });
+
+  if (shiso.sourcePath) {
+    console.log(`${path.basename(shiso.sourcePath)} loaded.`);
+  }
 }
 
 async function main() {

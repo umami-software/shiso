@@ -44,6 +44,13 @@ describe('create-shiso-app template', () => {
       );
       const config = JSON.parse(await readFile(path.join(templateRoot, 'docs.json'), 'utf8'));
       expect(validateConfig(config, schema)).toMatchObject({ valid: true, errors: [] });
+      expect(config).not.toHaveProperty('$shiso');
+
+      const shisoConfig = await readFile(path.join(templateRoot, 'shiso.config.ts'), 'utf8');
+      expect(shisoConfig).toContain("from '@umami/shiso/config'");
+
+      const tsconfig = JSON.parse(await readFile(path.join(templateRoot, 'tsconfig.json'), 'utf8'));
+      expect(tsconfig.include).toContain('shiso.config.ts');
     } finally {
       await rm(temporaryRoot, { recursive: true, force: true });
     }

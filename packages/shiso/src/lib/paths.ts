@@ -1,5 +1,4 @@
-import rawConfig from 'virtual:shiso-docs-config';
-import type { ShisoOptions } from '@/lib/types';
+import shiso from 'virtual:shiso-config';
 
 /**
  * All URL construction goes through this module.
@@ -14,9 +13,10 @@ import type { ShisoOptions } from '@/lib/types';
  * DOCS_PREFIX but not BASE_URL. React Router's `basename` adds BASE_URL, so
  * only code that bypasses the router (prerender output paths, canonical URLs,
  * raw <a href>) needs `toHref`.
+ *
+ * Values from `virtual:shiso-config` arrive with defaults applied and already
+ * normalized by scripts/load-shiso-config.mjs.
  */
-
-const shiso = ((rawConfig as { $shiso?: ShisoOptions }).$shiso || {}) as ShisoOptions;
 
 /** Strips trailing slashes; "/" and "" both normalize to "". */
 function normalizePrefix(value: string): string {
@@ -31,13 +31,17 @@ function normalizePrefix(value: string): string {
 
 export const BASE_URL = normalizePrefix(import.meta.env?.BASE_URL || '/');
 
-export const DOCS_PREFIX = normalizePrefix(shiso.docsPrefix ?? '/docs');
+export const DOCS_PREFIX = shiso.docsPrefix;
 
 /** Content directory, relative to the project root, without leading/trailing slashes. */
-export const CONTENT_DIR = (shiso.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
+export const CONTENT_DIR = shiso.contentDir;
+
+/** Fixed root for standalone (non-docs) page files. Not configurable, so page
+ * slugs can never collide with the docs content tree. */
+export const PAGES_DIR = 'content/pages';
 
 /** Absolute origin used for canonical and og:url tags. Undefined when unconfigured. */
-export const SITE_URL = shiso.siteUrl?.replace(/\/+$/, '') || undefined;
+export const SITE_URL = shiso.siteUrl;
 
 /** Joins path segments with exactly one slash between them. */
 export function joinPath(...parts: (string | undefined)[]): string {

@@ -21,7 +21,6 @@ const IMPLEMENTATION = {
   $ref: { file: 'packages/shiso/scripts/load-docs-config.mjs', pattern: /\$ref/ },
   // Editor-only metadata: points editors at this schema and is otherwise inert.
   $schema: { passthrough: 'editor metadata' },
-  $shiso: { file: 'packages/shiso/src/lib/paths.ts', pattern: /\.\$shiso/ },
   appearance: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.appearance/ },
   background: { file: 'packages/shiso/vite.config.ts', pattern: /background/ },
   banner: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.banner/ },
@@ -38,6 +37,7 @@ const IMPLEMENTATION = {
   name: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.name/ },
   navbar: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.navbar/ },
   navigation: { file: 'packages/shiso/src/lib/docs-config.ts', pattern: /\.navigation/ },
+  pages: { file: 'packages/shiso/src/lib/standalone-pages.ts', pattern: /config\.pages/ },
   redirects: { file: 'packages/shiso/src/lib/site-config.ts', pattern: /siteConfig\.redirects/ },
   search: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.search/ },
   seo: { file: 'packages/shiso/src/lib/site-config.ts', pattern: /siteConfig\.seo/ },

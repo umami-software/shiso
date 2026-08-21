@@ -5,7 +5,9 @@ description: Organize docs.json across reusable JSON files.
 
 Use `$ref` to move part or all of `docs.json` into another JSON file. Shiso
 resolves references before it validates or builds the site, so the resolved
-configuration behaves like one `docs.json` file.
+configuration behaves like one `docs.json` file. References apply to
+`docs.json` only; [`shiso.config.ts`](/docs/project-settings) is a regular
+TypeScript module and can use `import` instead.
 
 ## Reference the whole configuration
 

@@ -8,6 +8,7 @@ import {
   getPageTitle,
   getScopeByPathname,
   getSeo,
+  getStandalonePage,
   showTimestamp,
   siteConfig,
   siteModel,
@@ -49,18 +50,25 @@ function escapeJsonLd(value: string): string {
 
 export function buildHead(pathname: string): HeadTag[] {
   const page = getPageByPathname(pathname);
-  const doc = page ? getDocModule(page.filePath) : undefined;
+  const standalone = page ? null : getStandalonePage(pathname);
+  const filePath = page?.filePath || standalone?.filePath;
+  const doc = filePath ? getDocModule(filePath) : undefined;
   const frontmatter = doc?.frontmatter;
 
   const seo = getSeo();
-  const pageTitle = frontmatter?.title || page?.label;
+  const pageTitle = frontmatter?.title || standalone?.title || page?.label;
   const title = getPageTitle(pageTitle);
   const description = frontmatter?.description || siteConfig.description;
-  const canonical = page ? toAbsoluteUrl(page.url) : undefined;
+  const canonical = page
+    ? toAbsoluteUrl(page.url)
+    : standalone
+      ? toAbsoluteUrl(standalone.path)
+      : undefined;
   // `seo.indexing: "all"` opts hidden pages (and hidden versions/languages)
   // into the index; explicit per-page `noindex` frontmatter always wins.
   const hidden = !!page && (!!page.hidden || !!getScopeByPathname(pathname).hidden);
-  const noindex = !page || frontmatter?.noindex === true || (hidden && seo.indexing !== 'all');
+  const noindex =
+    (!page && !standalone) || frontmatter?.noindex === true || (hidden && seo.indexing !== 'all');
 
   const tags: HeadTag[] = [{ tag: 'title', children: title }];
 
@@ -76,9 +84,9 @@ export function buildHead(pathname: string): HeadTag[] {
     tags.push({ tag: 'meta', attrs: { name: 'robots', content: 'noindex' } });
   }
 
-  // Open Graph
+  // Open Graph. Standalone pages (home, landing) are websites, not articles.
   tags.push(
-    { tag: 'meta', attrs: { property: 'og:type', content: 'article' } },
+    { tag: 'meta', attrs: { property: 'og:type', content: standalone ? 'website' : 'article' } },
     { tag: 'meta', attrs: { property: 'og:title', content: title } },
   );
 
@@ -106,7 +114,7 @@ export function buildHead(pathname: string): HeadTag[] {
 
   // Last-modified time, when the timestamp feature is on for this page.
   const lastModified =
-    page && showTimestamp(frontmatter?.timestamp) ? getLastModified(page.filePath) : undefined;
+    filePath && showTimestamp(frontmatter?.timestamp) ? getLastModified(filePath) : undefined;
 
   if (lastModified) {
     tags.push({ tag: 'meta', attrs: { property: 'article:modified_time', content: lastModified } });

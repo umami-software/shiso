@@ -20,7 +20,6 @@ const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter);
 const FIELD_DOCUMENTATION = {
   $ref: 'configuration-references.mdx',
   $schema: 'project-settings.mdx',
-  $shiso: 'project-settings.mdx',
   appearance: 'customization.mdx',
   background: 'customization.mdx',
   banner: 'navbar-and-footer.mdx',
@@ -37,6 +36,7 @@ const FIELD_DOCUMENTATION = {
   name: 'site-details.mdx',
   navbar: 'navbar-and-footer.mdx',
   navigation: 'navigation.mdx',
+  pages: 'pages.mdx',
   redirects: 'seo.mdx',
   search: 'search-and-ai.mdx',
   seo: 'seo.mdx',
@@ -47,7 +47,7 @@ const FIELD_DOCUMENTATION = {
 const CONFIG_EXAMPLE_FILES = new Set([
   ...Object.values(FIELD_DOCUMENTATION),
   'configuration.mdx',
-  'guides/migrating.mdx',
+  'guides/migrations/mintlify.mdx',
 ]);
 
 async function documentationFiles(directory = contentRoot) {
@@ -105,7 +105,13 @@ function validateExample(value) {
       'navigation' in value || '$ref' in value
         ? value
         : { ...value, navigation: { pages: ['index'] } };
-    return validateConfig(config, schema).valid;
+
+    if (validateConfig(config, schema).valid) {
+      return true;
+    }
+    // Fall through: "pages" is both a top-level key (standalone pages) and a
+    // navigation/group key, so an example that fails as a full config may
+    // still be a valid fragment.
   }
 
   for (const definition of ['pageObject', 'linkItem', 'group']) {

@@ -9,7 +9,7 @@ import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
 import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 import { createDocsConfigModule } from './scripts/vite-docs-config.mjs';
-import type { DocsConfig } from './src/lib/types.ts';
+import type { DocsConfig, ResolvedShisoConfig } from './src/lib/types.ts';
 
 /**
  * Keeps src/lib/icon-registry.generated.ts in sync with the `icon="name"` values
@@ -37,15 +37,25 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig, root: string, output
  * Keeps src/lib/search-index.generated.ts in sync with content, so the search
  * dialog can query page text without a server.
  */
-function shisoSearchIndex(getDocsConfig: () => DocsConfig, root: string, output: string): Plugin {
+function shisoSearchIndex(
+  getDocsConfig: () => DocsConfig,
+  getShisoConfig: () => ResolvedShisoConfig,
+  root: string,
+  output: string,
+): Plugin {
   return {
     name: 'shiso-search-index',
     async buildStart() {
-      await generateSearchIndex({ config: getDocsConfig(), root, output });
+      await generateSearchIndex({ config: getDocsConfig(), shiso: getShisoConfig(), root, output });
     },
     async handleHotUpdate({ file }) {
-      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json')) {
-        await generateSearchIndex({ config: getDocsConfig(), root, output });
+      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json') || /shiso\.config\.\w+$/.test(file)) {
+        await generateSearchIndex({
+          config: getDocsConfig(),
+          shiso: getShisoConfig(),
+          root,
+          output,
+        });
       }
     },
   };
@@ -288,7 +298,11 @@ function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
  * production builds. The contextual menu's copy/view options and AI links
  * depend on these URLs.
  */
-function shisoMarkdownDev(getDocsConfig: () => DocsConfig, root: string): Plugin {
+function shisoMarkdownDev(
+  getDocsConfig: () => DocsConfig,
+  getShisoConfig: () => ResolvedShisoConfig,
+  root: string,
+): Plugin {
   return {
     name: 'shiso-markdown-dev',
     apply: 'serve',
@@ -300,23 +314,47 @@ function shisoMarkdownDev(getDocsConfig: () => DocsConfig, root: string): Plugin
           return next();
         }
 
-        const shiso =
-          (getDocsConfig() as { $shiso?: { docsPrefix?: string; contentDir?: string } }).$shiso ||
-          {};
-        const contentDir = (shiso.contentDir ?? 'content/docs').replace(/^\/+|\/+$/g, '');
-        const prefixValue = (shiso.docsPrefix ?? '/docs').trim().replace(/\/+$/, '');
-        const docsPrefix =
-          !prefixValue || prefixValue === '/'
-            ? ''
-            : prefixValue.startsWith('/')
-              ? prefixValue
-              : `/${prefixValue}`;
+        // Values arrive with defaults applied and already normalized.
+        const { contentDir, docsPrefix } = getShisoConfig();
 
         let route = decodeURIComponent(url).slice(0, -'.md'.length);
         const base = server.config.base.replace(/\/+$/, '');
 
         if (base && route.startsWith(base)) {
           route = route.slice(base.length);
+        }
+
+        // Standalone pages (top-level `pages` key) live under content/pages,
+        // outside the docs prefix. "/index.md" maps to the "/" entry.
+        const routeKey = (route.replace(/\/+$/, '') || '/').replace(/^\/index$/, '/');
+        const standalone = (getDocsConfig().pages || []).find(
+          item => (item?.path?.trim().replace(/\/+$/, '') || '/') === routeKey,
+        );
+
+        if (standalone?.page) {
+          const pagesRoot = path.resolve(root, 'content/pages');
+          const pageSlug = standalone.page
+            .trim()
+            .replace(/^\/+/, '')
+            .replace(/\.mdx?$/, '');
+
+          for (const candidate of [`${pageSlug}.mdx`, `${pageSlug}.md`]) {
+            const filePath = path.resolve(pagesRoot, candidate);
+
+            // Never read outside the pages directory.
+            if (!filePath.startsWith(pagesRoot + path.sep)) {
+              break;
+            }
+
+            try {
+              const source = await readFile(filePath, 'utf8');
+              res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+              res.end(source);
+              return;
+            } catch {
+              // Try the next candidate.
+            }
+          }
         }
 
         if (docsPrefix && route.startsWith(docsPrefix)) {
@@ -364,6 +402,7 @@ export default defineConfig(async () => {
     root: projectRoot,
   });
   const getDocsConfig = configModule.getConfig as () => DocsConfig;
+  const getShisoConfig = configModule.getShisoConfig as () => ResolvedShisoConfig;
 
   return {
     optimizeDeps: {
@@ -385,11 +424,12 @@ export default defineConfig(async () => {
       }),
       shisoSearchIndex(
         getDocsConfig,
+        getShisoConfig,
         projectRoot,
         path.join(generatedRoot, 'search-index.generated.ts'),
       ),
       shisoHtml(getDocsConfig),
-      shisoMarkdownDev(getDocsConfig, projectRoot),
+      shisoMarkdownDev(getDocsConfig, getShisoConfig, projectRoot),
       shisoMdx(),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],

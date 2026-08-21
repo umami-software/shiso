@@ -22,7 +22,6 @@ describe('schema coverage', () => {
     expect(getSchemaKeys(schema).sort()).toEqual([
       '$ref',
       '$schema',
-      '$shiso',
       'appearance',
       'background',
       'banner',
@@ -39,6 +38,7 @@ describe('schema coverage', () => {
       'name',
       'navbar',
       'navigation',
+      'pages',
       'redirects',
       'search',
       'seo',
@@ -314,6 +314,27 @@ describe('search, interaction, and contextual', () => {
     expect(
       validateConfig({ ...minimal, contextual: { options: [{ title: 'X' }] } }, schema).valid,
     ).toBe(false);
+  });
+});
+
+describe('legacy $shiso key', () => {
+  it('rejects it with a migration message', () => {
+    const result = validateConfig(
+      { ...minimal, $shiso: { siteUrl: 'https://example.com' } },
+      schema,
+    );
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.join('\n')).toContain('move docsPrefix, contentDir');
+    expect(result.errors.join('\n')).toContain('shiso.config.ts');
+  });
+
+  it('shows the migration message alongside other errors', () => {
+    const result = validateConfig({ ...minimal, $shiso: {}, totallyMadeUp: true }, schema);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.join('\n')).toContain('shiso.config.ts');
+    expect(result.errors.join('\n')).toContain('totallyMadeUp');
   });
 });
 

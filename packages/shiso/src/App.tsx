@@ -11,8 +11,9 @@ import { CodeBlock } from '@/components/CodeBlock';
 import * as docsComponents from '@/components/docs/index';
 import { Layout } from '@/components/Layout';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { docsHomeUrl, siteModel } from '@/lib/site-config';
+import { docsHomeUrl, hasRootStandalonePage, siteModel, standalonePages } from '@/lib/site-config';
 import { DocPage } from '@/pages/DocPage';
+import { StandalonePageView } from '@/pages/StandalonePage';
 
 const mdxComponents = {
   ...docsComponents,
@@ -26,8 +27,16 @@ export function App() {
       <MDXProvider components={mdxComponents}>
         <Layout site={siteModel}>
           <Routes>
-            {/* When the default scope's landing page is the root there is nothing to redirect. */}
-            {docsHomeUrl !== '/' ? (
+            {standalonePages.map(page => (
+              <Route
+                key={page.path}
+                path={page.path}
+                element={<StandalonePageView page={page} site={siteModel} />}
+              />
+            ))}
+            {/* When the default scope's landing page is the root, or a
+                standalone page owns "/", there is nothing to redirect. */}
+            {docsHomeUrl !== '/' && !hasRootStandalonePage ? (
               <Route path="/" element={<Navigate to={docsHomeUrl} replace />} />
             ) : null}
             <Route path="*" element={<DocPage site={siteModel} />} />

@@ -1,4 +1,4 @@
-import { _ as createPath, a as docsSite, c as getSeo, d as getLastModified, f as getScopeForPage, g as Router, i as docsHomeUrl, l as siteName, m as toAbsoluteUrl, n as buildHead, o as getLocaleByPathname, p as BASE_URL, r as renderHeadToString, s as getRedirects, t as App, u as getDocModule, v as parsePath, y as ABSOLUTE_URL_REGEX } from "./chunks/App.js";
+import { _ as Router, a as docsSite, b as ABSOLUTE_URL_REGEX, c as getSeo, d as getDocModule, f as getLastModified, h as toAbsoluteUrl, i as docsHomeUrl, l as siteName, m as BASE_URL, n as buildHead, o as getLocaleByPathname, p as getScopeForPage, r as renderHeadToString, s as getRedirects, t as App, u as standalonePages, v as createPath, y as parsePath } from "./chunks/App.js";
 import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
@@ -88,7 +88,7 @@ function encodeLocation(to) {
 //#region src/entry-server.tsx
 /** Base-relative routes for every scope. The prerenderer prepends the deploy base itself. */
 function getRoutes() {
-	return docsSite.pages.map((page) => page.url);
+	return [...docsSite.pages.map((page) => page.url), ...standalonePages.map((page) => page.path)];
 }
 /**
 * Source file for every routed page, so the prerenderer can publish raw
@@ -97,14 +97,17 @@ function getRoutes() {
 * "/content/docs/index.mdx", resolved against the project root.
 */
 function getMarkdownPages() {
-	return docsSite.pages.map((page) => ({
+	return [...docsSite.pages.map((page) => ({
 		route: page.url,
 		filePath: page.filePath
-	}));
+	})), ...standalonePages.map((page) => ({
+		route: page.path,
+		filePath: page.filePath
+	}))];
 }
 /**
 * Absolute URLs for the sitemap, honoring `seo.indexing` and per-page
-* noindex. Empty when `$shiso.siteUrl` is not configured, since a sitemap
+* noindex. Empty when the shiso.config `siteUrl` is not configured, since a sitemap
 * of relative URLs is invalid.
 */
 function getSitemapEntries() {
@@ -114,6 +117,14 @@ function getSitemapEntries() {
 		if ((page.hidden || getScopeForPage(docsSite, page).hidden) && indexing !== "all") continue;
 		if (getDocModule(page.filePath)?.frontmatter?.noindex === true) continue;
 		const url = toAbsoluteUrl(page.url);
+		if (url) entries.push({
+			url,
+			lastmod: getLastModified(page.filePath)
+		});
+	}
+	for (const page of standalonePages) {
+		if (getDocModule(page.filePath)?.frontmatter?.noindex === true) continue;
+		const url = toAbsoluteUrl(page.path);
 		if (url) entries.push({
 			url,
 			lastmod: getLastModified(page.filePath)

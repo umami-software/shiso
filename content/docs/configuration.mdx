@@ -5,6 +5,8 @@ description: Find the settings you need to configure your Shiso site.
 
 Use `docs.json` to configure your site-wide settings. It controls your site's
 name and branding, navigation, appearance, search, SEO, and other features.
+Project-level engine settings — URLs, content location, and locale — live in an
+optional [`shiso.config.ts`](/docs/project-settings) file instead.
 
 The resolved configuration only requires `navigation`. Start with a small
 configuration and add other sections when you need them:
@@ -52,8 +54,8 @@ The pages below cover every `docs.json` setting that changes your Shiso site.
   <Card title="SEO, redirects, and errors" icon="globe" href="/docs/seo">
     Control indexing and metadata, redirect old URLs, customize the 404 page, and show update dates.
   </Card>
-  <Card title="URLs and content location" icon="folder-cog" href="/docs/project-settings">
-    Change the docs URL prefix or content folder, and set your production site URL.
+  <Card title="Project settings" icon="folder-cog" href="/docs/project-settings">
+    Use shiso.config.ts to change the docs URL prefix or content folder, and set your production site URL.
   </Card>
   <Card title="Split configuration" icon="files" href="/docs/configuration-references">
     Organize docs.json across reusable JSON files with $ref.

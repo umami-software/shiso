@@ -3,6 +3,23 @@
 All notable changes to `@umami/shiso` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## 2.0.0 - 2026-08-21
+
+### Breaking
+
+- Move project settings (`docsPrefix`, `contentDir`, `siteUrl`, `locale`) from
+  the `$shiso` key in docs.json to a new optional `shiso.config.ts` file at the
+  project root. `shiso check` now rejects docs.json files that still contain
+  `$shiso` with a migration message.
+
+### Added
+
+- New `@umami/shiso/config` export providing `defineConfig` and the
+  `ShisoConfig` type for shiso.config.ts.
+- `shiso.config.ts`, `shiso.config.mjs`, and `shiso.config.js` are supported;
+  the file is optional and defaults apply when absent. Config edits (and
+  creating the file) hot-reload during development.
+
 ## 1.1.11 - 2026-08-19
 
 ### Changed

@@ -1,5 +1,5 @@
 import { LAST_MODIFIED } from '@/generated/last-modified';
-import { CONTENT_DIR } from '@/lib/paths';
+import { CONTENT_DIR, PAGES_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
 
 /**
@@ -12,7 +12,7 @@ import type { DocModule } from '@/lib/types';
  * without Suspense, at the cost of bundling all pages together.
  *
  * The glob pattern must be a literal for Vite to statically analyze it, so it
- * covers all of `content/` and the configured `$shiso.contentDir` is applied at
+ * covers all of `content/` and the configured shiso.config `contentDir` is applied at
  * lookup time instead. That also lets later versioned/localized content roots
  * (`content/v2`, `content/es`) work without touching this glob.
  */
@@ -28,6 +28,14 @@ export const docModules = import.meta.glob('/content/**/*.{md,mdx}', {
 export function resolveDocFile(fileSlug: string, contentDir = CONTENT_DIR): string | undefined {
   const candidates = [`/${contentDir}/${fileSlug}.mdx`, `/${contentDir}/${fileSlug}.md`];
   return candidates.find(candidate => candidate in docModules);
+}
+
+/**
+ * Resolves a standalone page slug (docs.json `pages[].page`) to a module key
+ * under the fixed content/pages root.
+ */
+export function resolvePageFile(fileSlug: string): string | undefined {
+  return resolveDocFile(fileSlug, PAGES_DIR);
 }
 
 export function getDocModule(filePath: string): DocModule | undefined {

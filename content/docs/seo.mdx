@@ -5,8 +5,8 @@ description: Meta tags, sitemaps, redirects, the 404 page, and last-modified dat
 
 Shiso generates SEO metadata for every page automatically: titles, meta
 descriptions, canonical URLs, Open Graph and Twitter tags, and structured data.
-Set [`$shiso.siteUrl`](/docs/project-settings#production-site-url) so tags that
-need an absolute origin can be emitted.
+Set [`siteUrl`](/docs/project-settings#production-site-url) in
+`shiso.config.ts` so tags that need an absolute origin can be emitted.
 
 These `docs.json` keys tune the rest.
 
@@ -48,7 +48,7 @@ noindex: true
 
 ## Sitemap
 
-When [`$shiso.siteUrl`](/docs/project-settings#production-site-url) is set,
+When [`siteUrl`](/docs/project-settings#production-site-url) is set,
 `pnpm build` writes a `sitemap.xml` covering every indexable page, with
 last-modified dates taken from git history.
 

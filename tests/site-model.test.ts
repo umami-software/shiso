@@ -29,14 +29,12 @@ describe('site model', () => {
     expect(site.footer).toBeNull();
   });
 
-  it('applies docs.json locale while keeping interface labels theme-owned', () => {
-    const site = resolveSiteModel(
-      {
-        $shiso: { locale: 'fr-FR' },
-        navigation: { pages: ['index'] },
-      },
-      docs,
-    );
+  it('applies the shiso.config locale while keeping interface labels theme-owned', () => {
+    const site = resolveSiteModel({ navigation: { pages: ['index'] } }, docs, {
+      docsPrefix: '/docs',
+      contentDir: 'content/docs',
+      locale: 'fr-FR',
+    });
 
     expect(site.locale).toBe('fr-FR');
     expect(site.labels.tableOfContents).toBe('On this page');
