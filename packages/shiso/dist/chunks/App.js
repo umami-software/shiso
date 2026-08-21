@@ -25967,7 +25967,7 @@ function CommandGroup({ className, ...props }) {
 function CommandItem({ className, children, ...props }) {
 	return /* @__PURE__ */ jsxs(_e.Item, {
 		"data-slot": "command-item",
-		className: cn("group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-foreground", className),
+		className: cn("group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-muted data-[selected=true]:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[selected=true]:*:[svg]:text-foreground", className),
 		...props,
 		children: [children, /* @__PURE__ */ jsx(Check$1, { className: "ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" })]
 	});
@@ -25975,6 +25975,21 @@ function CommandItem({ className, children, ...props }) {
 
 //#endregion
 //#region src/components/Search.tsx
+/** Enough results to make the list scroll; the dialog caps its own height. */
+const RESULT_LIMIT = 30;
+/**
+* Renders a snippet, turning provider-supplied `<mark>` tags into highlight
+* elements. Snippets are parsed — never injected as HTML — so any other
+* markup in the text renders literally.
+*/
+function renderSnippet(snippet) {
+	const parts = snippet.split(/<mark>(.*?)<\/mark>/g);
+	if (parts.length === 1) return snippet;
+	return parts.map((part, index) => index % 2 ? /* @__PURE__ */ jsx("mark", {
+		className: "rounded-xs bg-primary/15 px-px text-primary",
+		children: part
+	}, index) : part);
+}
 /**
 * Provider-neutral search dialog. The selected provider and its index or
 * client are loaded on demand, so search stays out of the initial bundle.
@@ -26011,7 +26026,7 @@ function Search({ config, labels }) {
 		try {
 			const activeProvider = await loadProvider();
 			const scope = getScopeByPathname(pathname);
-			const nextResults = await activeProvider.search(value, void 0, {
+			const nextResults = await activeProvider.search(value, RESULT_LIMIT, {
 				scopeId: scope.id,
 				language: scope.language,
 				version: scope.version
@@ -26113,7 +26128,7 @@ function Search({ config, labels }) {
 								children: [result.page, result.heading ? ` › ${result.heading}` : ""]
 							}), result.snippet && /* @__PURE__ */ jsx("div", {
 								className: "mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground",
-								children: result.snippet
+								children: renderSnippet(result.snippet)
 							})]
 						}, result.url))
 					}) : null]
@@ -26651,7 +26666,8 @@ function resolveRelated(entries) {
 	return links;
 }
 function DocContent({ page, doc, site }) {
-	const pagerPages = getScopeForPage(docsSite, page).docs.pages.filter((item) => !item.hidden);
+	const scope = getScopeForPage(docsSite, page);
+	const pagerPages = scope.docs.pages.filter((item) => !item.hidden);
 	const pageIndex = pagerPages.findIndex((item) => item.slug === page.slug);
 	const prev = pageIndex > 0 ? pagerPages[pageIndex - 1] : void 0;
 	const next = pageIndex >= 0 ? pagerPages[pageIndex + 1] : void 0;
@@ -26666,8 +26682,16 @@ function DocContent({ page, doc, site }) {
 		dateStyle: "medium",
 		timeZone: "UTC"
 	});
+	const pagefindAttrs = page.hidden || scope.hidden ? {} : {
+		"data-pagefind-body": "",
+		...page.scopeId !== "default" ? {
+			"data-pagefind-filter": "scope[data-scope]",
+			"data-scope": page.scopeId
+		} : {}
+	};
 	return /* @__PURE__ */ jsxs("article", {
 		className: "min-w-0 grow",
+		...pagefindAttrs,
 		children: [
 			eyebrow && /* @__PURE__ */ jsx("div", {
 				className: "text-sm font-bold text-primary",
@@ -26705,6 +26729,7 @@ function DocContent({ page, doc, site }) {
 			related.length > 0 && /* @__PURE__ */ jsxs("nav", {
 				className: "mt-8",
 				"aria-label": site.labels.relatedTopics,
+				"data-pagefind-ignore": true,
 				children: [/* @__PURE__ */ jsx("div", {
 					className: "text-sm text-muted-foreground",
 					children: site.labels.relatedTopics
@@ -26731,6 +26756,7 @@ function DocContent({ page, doc, site }) {
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				className: "mt-8 flex items-center justify-between",
+				"data-pagefind-ignore": true,
 				children: [/* @__PURE__ */ jsx(NavigationButton, {
 					...prev,
 					isPrev: true

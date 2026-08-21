@@ -274,7 +274,7 @@
             },
             "provider": {
               "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
-              "description": "Registered search provider id. Defaults to local."
+              "description": "Search provider id: \"local\" (default), \"pagefind\", or a provider registered at runtime."
             },
             "options": {
               "type": "object",

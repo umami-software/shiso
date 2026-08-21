@@ -28,8 +28,10 @@ disable only the shortcut, or set `search` to `false` to remove search:
 
 ### Search providers
 
-The built-in `local` provider is used by default. Select a registered provider
-with `search.provider`; `options` are passed directly to its factory:
+The built-in `local` provider is used by default. Shiso also ships a built-in
+[Pagefind](https://pagefind.app) provider, and you can register your own.
+Select a provider with `search.provider`; `options` are passed directly to its
+factory:
 
 ```json
 {
@@ -40,6 +42,45 @@ with `search.provider`; `options` are passed directly to its factory:
   }
 }
 ```
+
+### Pagefind
+
+[Pagefind](https://pagefind.app) indexes the prerendered HTML during
+`shiso build`, giving better relevance ranking, stemming, and multi-language
+support than the local index — still fully static, with no service required.
+
+Install the `pagefind` package (an optional dependency of `@umami/shiso`) and
+select the provider:
+
+```shell
+pnpm add -D pagefind
+```
+
+```json
+{
+  "search": {
+    "provider": "pagefind"
+  }
+}
+```
+
+`shiso build` then writes the search bundle to `dist/client/pagefind/`. In
+`shiso dev` there is no prerendered HTML to index, so search transparently
+falls back to the local provider until you build.
+
+Supported `options`:
+
+- `ranking`: passed to Pagefind's runtime
+  [ranking options](https://pagefind.app/docs/ranking/), e.g.
+  `{ "termFrequency": 0.8 }`
+- `excludeSelectors`: CSS selectors to exclude from indexing, e.g.
+  `[".changelog-date"]` (heading permalink anchors are always excluded)
+
+Hidden pages and scopes are excluded from the index, and on multi-version or
+multi-language sites results stay inside the version and language being
+browsed, matching the local provider's behavior.
+
+### Custom providers
 
 Register custom providers in `entry-client.tsx` before hydrating Shiso:
 
@@ -67,7 +108,9 @@ hydrateRoot(element, <ShisoApp />);
 ```
 
 Every provider returns normalized results with `url`, `page`, `score`, and
-optional `heading` and `snippet` fields. Provider options are included in the
+optional `heading` and `snippet` fields. Snippets may wrap matched terms in
+`<mark>` tags, which the search dialog renders as highlights (snippets are
+parsed, never injected as HTML). Provider options are included in the
 browser bundle, so do not put private API keys in them. An unknown provider id
 logs a warning and falls back to `local`.
 

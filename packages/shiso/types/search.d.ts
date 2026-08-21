@@ -3,6 +3,10 @@ export interface SearchResult {
   page: string;
   score: number;
   heading?: string;
+  /**
+   * Matched terms may be wrapped in `<mark>` tags; the search dialog renders
+   * them as highlights (never as raw HTML).
+   */
   snippet?: string;
 }
 
@@ -24,4 +28,9 @@ export type SearchProviderFactory = (
   options: Record<string, unknown>,
 ) => SearchProvider | Promise<SearchProvider>;
 
+/**
+ * Registers a runtime search provider. Call this before rendering the app.
+ * The ids "local" and "pagefind" are reserved for the built-in providers.
+ * The returned cleanup function only removes this exact registration.
+ */
 export function registerSearchProvider(id: string, factory: SearchProviderFactory): () => void;

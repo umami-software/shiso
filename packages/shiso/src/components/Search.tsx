@@ -17,6 +17,33 @@ import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provide
 import { getScopeByPathname } from '@/lib/site-config';
 import type { ThemeLabels } from '@/lib/types';
 
+/** Enough results to make the list scroll; the dialog caps its own height. */
+const RESULT_LIMIT = 30;
+
+/**
+ * Renders a snippet, turning provider-supplied `<mark>` tags into highlight
+ * elements. Snippets are parsed — never injected as HTML — so any other
+ * markup in the text renders literally.
+ */
+function renderSnippet(snippet: string) {
+  const parts = snippet.split(/<mark>(.*?)<\/mark>/g);
+
+  if (parts.length === 1) {
+    return snippet;
+  }
+
+  return parts.map((part, index) =>
+    index % 2 ? (
+      // biome-ignore lint/suspicious/noArrayIndexKey: parts are positional and never reorder.
+      <mark key={index} className="rounded-xs bg-primary/15 px-px text-primary">
+        {part}
+      </mark>
+    ) : (
+      part
+    ),
+  );
+}
+
 /**
  * Provider-neutral search dialog. The selected provider and its index or
  * client are loaded on demand, so search stays out of the initial bundle.
@@ -71,7 +98,7 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
         // Search stays inside the version/language scope being browsed.
         // Providers that predate the context argument simply ignore it.
         const scope = getScopeByPathname(pathname);
-        const nextResults = await activeProvider.search(value, undefined, {
+        const nextResults = await activeProvider.search(value, RESULT_LIMIT, {
           scopeId: scope.id,
           language: scope.language,
           version: scope.version,
@@ -202,7 +229,7 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
                     </div>
                     {result.snippet && (
                       <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground">
-                        {result.snippet}
+                        {renderSnippet(result.snippet)}
                       </div>
                     )}
                   </CommandItem>

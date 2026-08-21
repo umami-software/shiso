@@ -42,10 +42,18 @@ describe('searchIndex', () => {
     expect(searchIndex(records, 'google zebra')).toHaveLength(0);
   });
 
-  it('builds a snippet around body matches', () => {
+  it('builds a snippet around body matches with the match highlighted', () => {
     const results = searchIndex(records, 'moved');
 
-    expect(results[0].snippet).toContain('moved pages');
+    expect(results[0].snippet).toContain('<mark>moved</mark> pages');
+  });
+
+  it('highlights every matching term in the snippet', () => {
+    const results = searchIndex(records, 'google automatically');
+
+    expect(results[0].snippet).toBe(
+      '<mark>Google</mark> Fonts families load <mark>automatically</mark>.',
+    );
   });
 
   it('respects the limit', () => {

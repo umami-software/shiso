@@ -219,7 +219,7 @@ export interface FontsConfig extends FontSpec {
 export interface SearchConfig {
   /** Placeholder text for the search input. */
   prompt?: string;
-  /** Registered provider id. Defaults to the built-in local provider. */
+  /** Provider id: "local" (default), "pagefind", or a runtime-registered id. */
   provider?: string;
   /** Provider-specific configuration. */
   options?: Record<string, unknown>;

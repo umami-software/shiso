@@ -1086,6 +1086,14 @@ This section contains the full reference for the `docs.json` file.
     <ResponseField name="prompt" type="string">
       Placeholder text to display in the search bar.
     </ResponseField>
+
+    <ResponseField name="provider" type="string">
+      Search provider id: `local` (default), `pagefind`, or a provider registered at runtime with `registerSearchProvider`.
+    </ResponseField>
+
+    <ResponseField name="options" type="object">
+      Provider-specific configuration, passed directly to the provider. For `pagefind`: `ranking` (runtime ranking weights) and `excludeSelectors` (CSS selectors excluded from indexing).
+    </ResponseField>
   </Expandable>
 </ResponseField>
 

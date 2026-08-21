@@ -10,6 +10,7 @@ for (const relativeFile of [
   'dist/search.js',
   'docs.schema.json',
   'scripts/lib/mdast.mjs',
+  'scripts/pagefind-index.mjs',
   'scripts/lib/slug.mjs',
   'src/styles/global.css',
   'types/client.d.ts',

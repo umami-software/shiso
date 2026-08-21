@@ -21,6 +21,8 @@ export interface ResolvedSearchProvider {
 
 const factories = new Map<string, SearchProviderFactory>();
 
+const BUILTIN_PROVIDERS = new Set(['local', 'pagefind']);
+
 function normalizeProviderId(id: string): string {
   return id.trim().toLowerCase();
 }
@@ -32,9 +34,9 @@ function normalizeProviderId(id: string): string {
 export function registerSearchProvider(id: string, factory: SearchProviderFactory): () => void {
   const providerId = normalizeProviderId(id);
 
-  if (!providerId || providerId === 'local') {
+  if (!providerId || BUILTIN_PROVIDERS.has(providerId)) {
     throw new Error(
-      'Search provider ids must be non-empty and cannot replace the built-in "local" provider.',
+      'Search provider ids must be non-empty and cannot replace the built-in providers ("local", "pagefind").',
     );
   }
 
@@ -63,6 +65,15 @@ export async function resolveSearchProvider(
     return {
       provider: await createLocalProvider(options),
       providerId: 'local',
+      fellBack: false,
+    };
+  }
+
+  if (requestedId === 'pagefind') {
+    const { createPagefindSearchProvider } = await import('@/lib/search/providers/pagefind');
+    return {
+      provider: createPagefindSearchProvider(options),
+      providerId: 'pagefind',
       fellBack: false,
     };
   }

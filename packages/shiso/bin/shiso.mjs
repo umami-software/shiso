@@ -116,6 +116,7 @@ async function main() {
       projectRoot,
     );
     run(process.execPath, [path.join(PACKAGE_ROOT, 'scripts/prerender.mjs')], projectRoot);
+    run(process.execPath, [path.join(PACKAGE_ROOT, 'scripts/pagefind-index.mjs')], projectRoot);
     return;
   }
 

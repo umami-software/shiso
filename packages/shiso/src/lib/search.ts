@@ -55,7 +55,11 @@ export interface SearchResult {
   page: string;
   /** Section heading, absent for the page intro. */
   heading?: string;
-  /** Snippet of section text around the first match, when the text matched. */
+  /**
+   * Snippet of section text around the first match, when the text matched.
+   * Matched terms may be wrapped in `<mark>` tags; the search dialog renders
+   * them as highlights (never as raw HTML).
+   */
   snippet?: string;
   /** Provider-specific relevance score. Use 0 when a provider does not expose one. */
   score: number;
@@ -63,11 +67,34 @@ export interface SearchResult {
 
 const SNIPPET_RADIUS = 60;
 
-function makeSnippet(text: string, index: number, length: number): string {
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Wraps every term occurrence in `<mark>` so the dialog can highlight it. */
+export function highlightTerms(snippet: string, terms: string[]): string {
+  if (!terms.length) {
+    return snippet;
+  }
+
+  // Longer terms first, so overlapping terms highlight the longest match.
+  const pattern = new RegExp(
+    [...terms]
+      .sort((a, b) => b.length - a.length)
+      .map(escapeRegExp)
+      .join('|'),
+    'gi',
+  );
+
+  return snippet.replace(pattern, '<mark>$&</mark>');
+}
+
+function makeSnippet(text: string, index: number, length: number, terms: string[]): string {
   const start = Math.max(0, index - SNIPPET_RADIUS);
   const end = Math.min(text.length, index + length + SNIPPET_RADIUS);
+  const excerpt = `${start > 0 ? '…' : ''}${text.slice(start, end).trim()}${end < text.length ? '…' : ''}`;
 
-  return `${start > 0 ? '…' : ''}${text.slice(start, end).trim()}${end < text.length ? '…' : ''}`;
+  return highlightTerms(excerpt, terms);
 }
 
 export function searchIndex(records: SearchRecord[], query: string, limit = 10): SearchResult[] {
@@ -119,7 +146,8 @@ export function searchIndex(records: SearchRecord[], query: string, limit = 10):
       url: record.id ? `${record.url}#${record.id}` : record.url,
       page: record.page,
       heading: record.heading,
-      snippet: snippetAt >= 0 ? makeSnippet(record.text, snippetAt, snippetLength) : undefined,
+      snippet:
+        snippetAt >= 0 ? makeSnippet(record.text, snippetAt, snippetLength, terms) : undefined,
       score,
     });
   }

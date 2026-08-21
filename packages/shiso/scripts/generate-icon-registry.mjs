@@ -18,8 +18,18 @@ const DEFAULT_ROOT = process.cwd();
 const SCAN_DIRS = ['content', 'src'];
 const SCAN_EXTENSIONS = new Set(['.md', '.mdx', '.tsx']);
 
-// Icons used by the docs component library itself, so pages always have a baseline set.
-const ALWAYS_INCLUDE = ['rocket', 'code', 'book-open', 'circle-check', 'circle-alert'];
+// Icons used by the docs component library itself, so pages always have a baseline
+// set. `copy` and `external-link` back the built-in contextual menu options, whose
+// names are assigned in site-model.ts rather than as `icon="..."` attributes.
+const ALWAYS_INCLUDE = [
+  'rocket',
+  'code',
+  'book-open',
+  'circle-check',
+  'circle-alert',
+  'copy',
+  'external-link',
+];
 
 const ICON_ATTRIBUTE = /\bicon\s*=\s*["']([^"'{}\n]+)["']/g;
 

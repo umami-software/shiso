@@ -8,10 +8,19 @@ function filterRecordsByScope(records, context) {
 	return records.filter((record) => !record.scopeId || record.scopeId === context.scopeId);
 }
 const SNIPPET_RADIUS = 60;
-function makeSnippet(text, index, length) {
+function escapeRegExp(value) {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+/** Wraps every term occurrence in `<mark>` so the dialog can highlight it. */
+function highlightTerms(snippet, terms) {
+	if (!terms.length) return snippet;
+	const pattern = new RegExp([...terms].sort((a, b) => b.length - a.length).map(escapeRegExp).join("|"), "gi");
+	return snippet.replace(pattern, "<mark>$&</mark>");
+}
+function makeSnippet(text, index, length, terms) {
 	const start = Math.max(0, index - SNIPPET_RADIUS);
 	const end = Math.min(text.length, index + length + SNIPPET_RADIUS);
-	return `${start > 0 ? "…" : ""}${text.slice(start, end).trim()}${end < text.length ? "…" : ""}`;
+	return highlightTerms(`${start > 0 ? "…" : ""}${text.slice(start, end).trim()}${end < text.length ? "…" : ""}`, terms);
 }
 function searchIndex(records, query, limit = 10) {
 	const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -44,7 +53,7 @@ function searchIndex(records, query, limit = 10) {
 			url: record.id ? `${record.url}#${record.id}` : record.url,
 			page: record.page,
 			heading: record.heading,
-			snippet: snippetAt >= 0 ? makeSnippet(record.text, snippetAt, snippetLength) : void 0,
+			snippet: snippetAt >= 0 ? makeSnippet(record.text, snippetAt, snippetLength, terms) : void 0,
 			score
 		});
 	}

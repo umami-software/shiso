@@ -59,8 +59,9 @@ export interface DocContentProps {
 }
 
 export function DocContent({ page, doc, site }: DocContentProps) {
+  const scope = getScopeForPage(docsSite, page);
   // Prev/next paging never crosses a version or language boundary.
-  const pagerPages = getScopeForPage(docsSite, page).docs.pages.filter(item => !item.hidden);
+  const pagerPages = scope.docs.pages.filter(item => !item.hidden);
   const pageIndex = pagerPages.findIndex(item => item.slug === page.slug);
   const prev = pageIndex > 0 ? pagerPages[pageIndex - 1] : undefined;
   const next = pageIndex >= 0 ? pagerPages[pageIndex + 1] : undefined;
@@ -85,8 +86,21 @@ export function DocContent({ page, doc, site }: DocContentProps) {
     timeZone: 'UTC',
   });
 
+  // Pagefind indexing markers on the prerendered HTML. Inert unless the site
+  // uses the pagefind provider. Hidden pages/scopes mirror the local index's
+  // search visibility rules; the scope filter matches the id Search.tsx sends.
+  const pagefindAttrs =
+    page.hidden || scope.hidden
+      ? {}
+      : {
+          'data-pagefind-body': '',
+          ...(page.scopeId !== 'default'
+            ? { 'data-pagefind-filter': 'scope[data-scope]', 'data-scope': page.scopeId }
+            : {}),
+        };
+
   return (
-    <article className="min-w-0 grow">
+    <article className="min-w-0 grow" {...pagefindAttrs}>
       {eyebrow && <div className="text-sm font-bold text-primary">{eyebrow}</div>}
       <div className="flex items-start justify-between gap-4">
         {title && (
@@ -107,7 +121,7 @@ export function DocContent({ page, doc, site }: DocContentProps) {
         </div>
       )}
       {related.length > 0 && (
-        <nav className="mt-8" aria-label={site.labels.relatedTopics}>
+        <nav className="mt-8" aria-label={site.labels.relatedTopics} data-pagefind-ignore>
           <div className="text-sm text-muted-foreground">{site.labels.relatedTopics}</div>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             {related.map(({ href, title, external }) => (
@@ -132,7 +146,7 @@ export function DocContent({ page, doc, site }: DocContentProps) {
           </ul>
         </nav>
       )}
-      <div className="mt-8 flex items-center justify-between">
+      <div className="mt-8 flex items-center justify-between" data-pagefind-ignore>
         <NavigationButton {...prev} isPrev />
         <NavigationButton {...next} />
       </div>

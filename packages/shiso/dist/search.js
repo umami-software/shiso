@@ -1,5 +1,6 @@
 //#region src/lib/search/provider.ts
 const factories = /* @__PURE__ */ new Map();
+const BUILTIN_PROVIDERS = /* @__PURE__ */ new Set(["local", "pagefind"]);
 function normalizeProviderId(id) {
 	return id.trim().toLowerCase();
 }
@@ -9,7 +10,7 @@ function normalizeProviderId(id) {
 */
 function registerSearchProvider(id, factory) {
 	const providerId = normalizeProviderId(id);
-	if (!providerId || providerId === "local") throw new Error("Search provider ids must be non-empty and cannot replace the built-in \"local\" provider.");
+	if (!providerId || BUILTIN_PROVIDERS.has(providerId)) throw new Error("Search provider ids must be non-empty and cannot replace the built-in providers (\"local\", \"pagefind\").");
 	factories.set(providerId, factory);
 	return () => {
 		if (factories.get(providerId) === factory) factories.delete(providerId);
@@ -27,6 +28,14 @@ async function resolveSearchProvider(id, options = {}) {
 		providerId: "local",
 		fellBack: false
 	};
+	if (requestedId === "pagefind") {
+		const { createPagefindSearchProvider } = await import("./chunks/pagefind.js");
+		return {
+			provider: createPagefindSearchProvider(options),
+			providerId: "pagefind",
+			fellBack: false
+		};
+	}
 	const factory = factories.get(requestedId);
 	if (factory) return {
 		provider: await factory(options),

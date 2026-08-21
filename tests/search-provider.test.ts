@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { resolveSearchConfig } from '@/lib/search/config';
 import {
   registerSearchProvider,
@@ -78,9 +78,33 @@ describe('search providers', () => {
     expect(resolved).toMatchObject({ providerId: 'local', fellBack: true });
   });
 
-  it('does not allow replacing the built-in provider', () => {
+  it('does not allow replacing the built-in providers', () => {
     expect(() => registerSearchProvider('local', () => ({ search: async () => [] }))).toThrow(
       'cannot replace',
     );
+    expect(() => registerSearchProvider('pagefind', () => ({ search: async () => [] }))).toThrow(
+      'cannot replace',
+    );
+  });
+
+  it('resolves the built-in pagefind provider', async () => {
+    const resolved = await resolveSearchProvider('Pagefind');
+
+    expect(resolved).toMatchObject({ providerId: 'pagefind', fellBack: false });
+  });
+
+  it('pagefind falls back to local search when the bundle cannot load', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    try {
+      const resolved = await resolveSearchProvider('pagefind');
+
+      // In this environment the pagefind bundle import rejects, so the
+      // provider must delegate to local (stub index -> empty results).
+      expect(await resolved.provider.search('anything')).toEqual([]);
+      expect(warn).toHaveBeenCalledOnce();
+    } finally {
+      warn.mockRestore();
+    }
   });
 });
