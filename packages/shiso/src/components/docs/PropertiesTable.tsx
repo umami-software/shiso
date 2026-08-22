@@ -24,7 +24,7 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
 
   return (
     <div className="my-4 overflow-x-auto rounded-lg border border-border px-6 py-2">
-      <table className="m-0 min-w-[40rem] table-fixed border-collapse">
+      <table className="m-0 min-w-[40rem] table-fixed border-collapse border-0">
         <thead>
           <tr>
             <th className="w-1/3 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground">

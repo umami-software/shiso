@@ -1,3 +1,4 @@
+import { n as highlightTerms } from "./search.js";
 import { resolveSearchProvider } from "../search.js";
 import * as React$1 from "react";
 import { Children, cloneElement, createContext, createElement, forwardRef, isValidElement, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, useSyncExternalStore as useSyncExternalStore$1 } from "react";
@@ -12892,7 +12893,7 @@ function PropertiesTable({ children }) {
 	return /* @__PURE__ */ jsx("div", {
 		className: "my-4 overflow-x-auto rounded-lg border border-border px-6 py-2",
 		children: /* @__PURE__ */ jsxs("table", {
-			className: "m-0 min-w-[40rem] table-fixed border-collapse",
+			className: "m-0 min-w-[40rem] table-fixed border-collapse border-0",
 			children: [/* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
 				/* @__PURE__ */ jsx("th", {
 					className: "w-1/3 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
@@ -26097,6 +26098,11 @@ function renderSnippet(snippet) {
 		children: part
 	}, index) : part);
 }
+function renderWithQueryHighlight(text, query) {
+	const terms = query.trim().split(/\s+/).filter(Boolean);
+	if (!terms.length) return text;
+	return renderSnippet(highlightTerms(text, terms));
+}
 /**
 * Provider-neutral search dialog. The selected provider and its index or
 * client are loaded on demand, so search stays out of the initial bundle.
@@ -26232,7 +26238,7 @@ function Search({ config, labels }) {
 							onSelect: () => select(result),
 							children: [/* @__PURE__ */ jsxs("div", {
 								className: "text-[0.9rem] font-semibold text-foreground",
-								children: [result.page, result.heading ? ` › ${result.heading}` : ""]
+								children: [renderWithQueryHighlight(result.page, query), result.heading ? /* @__PURE__ */ jsxs(Fragment, { children: [" › ", renderWithQueryHighlight(result.heading, query)] }) : null]
 							}), result.snippet && /* @__PURE__ */ jsx("div", {
 								className: "mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground",
 								children: renderSnippet(result.snippet)
