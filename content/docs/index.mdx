@@ -27,6 +27,31 @@ in one place.
 - **Docs components**: callouts, tabs, steps, cards, code groups, and more,
   available in every page without imports
 
+## Project structure
+
+A typical Shiso project looks like this:
+
+```text
+my-docs/
+├── content/
+│   ├── docs/            # Documentation pages (.md and .mdx)
+│   │   ├── index.mdx    # First page of the docs
+│   │   └── ...
+│   └── pages/           # Standalone pages, such as a landing page
+├── public/              # Static assets served as-is (logo, favicon, images)
+│   └── logo.svg
+├── docs.json            # Site configuration: navigation, branding, SEO
+├── shiso.config.ts      # Project settings: site URL, content directory
+├── styles.css           # Optional CSS overrides for the site
+├── index.html           # HTML shell used by the build
+├── entry-client.tsx     # Client entry point that mounts the app
+└── package.json
+```
+
+The two files you edit most are `docs.json`, which describes the site and its
+navigation, and the files under `content/docs`, which hold the pages
+themselves. Everything else is wiring that rarely changes after setup.
+
 ## Get started
 
 1. [Installation](/docs/installation) — create a standalone Shiso project
