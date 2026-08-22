@@ -79,7 +79,7 @@
 
   .docs-markdown :where(h2, h3, h4, h5, h6) {
     font-family: var(--font-heading);
-    font-weight: var(--font-heading-weight, 700);
+    font-weight: var(--font-heading-weight, 600);
     letter-spacing: -0.02em;
     line-height: 1.25;
     color: var(--foreground);
@@ -138,6 +138,7 @@
 
   .docs-markdown :where(strong, b) {
     color: var(--foreground);
+    font-weight: 600;
   }
 
   .docs-markdown a {

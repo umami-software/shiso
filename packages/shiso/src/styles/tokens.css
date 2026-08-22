@@ -40,7 +40,7 @@
 }
 
 :root {
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --font-heading: var(--font-sans);
   --header-height: 3rem;
