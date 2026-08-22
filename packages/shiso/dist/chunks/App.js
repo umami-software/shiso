@@ -26834,13 +26834,13 @@ function DocContent({ page, doc, site }) {
 		...pagefindAttrs,
 		children: [
 			eyebrow && /* @__PURE__ */ jsx("div", {
-				className: "text-sm font-bold text-primary",
+				className: "text-sm font-medium text-primary",
 				children: eyebrow
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				className: "flex items-start justify-between gap-4",
 				children: [title && /* @__PURE__ */ jsx("h1", {
-					className: "mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]",
+					className: "mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,700)]",
 					children: title
 				}), /* @__PURE__ */ jsx(ContextualMenu, {
 					options: contextualOptions,
@@ -26848,7 +26848,7 @@ function DocContent({ page, doc, site }) {
 				})]
 			}),
 			description && /* @__PURE__ */ jsx("p", {
-				className: "mt-1 mb-6 text-base text-muted-foreground",
+				className: "mt-3 mb-8 text-lg text-muted-foreground leading-relaxed",
 				children: description
 			}),
 			/* @__PURE__ */ jsx("div", {

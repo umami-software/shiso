@@ -101,16 +101,18 @@ export function DocContent({ page, doc, site }: DocContentProps) {
 
   return (
     <article className="min-w-0 grow" {...pagefindAttrs}>
-      {eyebrow && <div className="text-sm font-bold text-primary">{eyebrow}</div>}
+      {eyebrow && <div className="text-sm font-medium text-primary">{eyebrow}</div>}
       <div className="flex items-start justify-between gap-4">
         {title && (
-          <h1 className="mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,800)]">
+          <h1 className="mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,700)]">
             {title}
           </h1>
         )}
         <ContextualMenu options={contextualOptions} labels={site.labels} />
       </div>
-      {description && <p className="mt-1 mb-6 text-base text-muted-foreground">{description}</p>}
+      {description && (
+        <p className="mt-3 mb-8 text-lg text-muted-foreground leading-relaxed">{description}</p>
+      )}
       <div className="docs-markdown">
         <Content />
       </div>

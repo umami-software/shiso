@@ -60,10 +60,17 @@
 /* Markdown content */
 
 @layer components {
+  /* Body copy is muted; headings, bold text, links, and inline code stay at
+     full foreground brightness so they stand out against the running text. */
   .docs-markdown {
     margin-bottom: 2.5rem;
     font-size: 16px;
     line-height: 1.75;
+    color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  }
+
+  [data-theme="dark"] .docs-markdown {
+    color: color-mix(in srgb, var(--foreground) 25%, var(--muted-foreground));
   }
 
   .docs-markdown > * + * {
@@ -129,7 +136,12 @@
     margin: 0.35rem 0;
   }
 
+  .docs-markdown :where(strong, b) {
+    color: var(--foreground);
+  }
+
   .docs-markdown a {
+    color: var(--foreground);
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
     text-underline-offset: 0.2em;
@@ -140,6 +152,7 @@
   }
 
   .docs-markdown code:not(pre code) {
+    color: var(--foreground);
     border-radius: var(--radius-sm);
     background: color-mix(in srgb, currentColor 4%, transparent);
     padding: 0.1rem 0.3rem;
@@ -156,6 +169,10 @@
     border-spacing: 0;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
+  }
+
+  .docs-markdown th {
+    color: var(--foreground);
   }
 
   .docs-markdown th,
