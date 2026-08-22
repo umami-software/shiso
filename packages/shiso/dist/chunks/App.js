@@ -12896,15 +12896,15 @@ function PropertiesTable({ children }) {
 			className: "m-0 min-w-[40rem] table-fixed border-collapse border-0",
 			children: [/* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/3 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
+					className: "w-1/5 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
 					children: "Name"
 				}),
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/3 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
+					className: "w-1/4 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
 					children: "Type"
 				}),
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/3 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 text-left text-sm font-semibold text-foreground",
+					className: "border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 text-left text-sm font-semibold text-foreground",
 					children: "Description"
 				})
 			] }) }), /* @__PURE__ */ jsx("tbody", { children: rows.map((row, index) => {
