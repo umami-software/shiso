@@ -8,6 +8,12 @@
   "description": "Open-source docs site generator built with Vite, React, and MDX.",
   "logo": "/logo.svg",
   "favicon": "/logo.svg",
+  "pages": [
+    {
+      "path": "/",
+      "page": "home"
+    }
+  ],
   "navbar": {
     "links": [
       {

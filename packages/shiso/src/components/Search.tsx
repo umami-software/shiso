@@ -11,7 +11,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import type { SearchResult } from '@/lib/search';
+import { highlightTerms, type SearchResult } from '@/lib/search';
 import type { ResolvedSearchConfig } from '@/lib/search/config';
 import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provider';
 import { getScopeByPathname } from '@/lib/site-config';
@@ -42,6 +42,12 @@ function renderSnippet(snippet: string) {
       part
     ),
   );
+}
+
+function renderWithQueryHighlight(text: string, query: string) {
+  const terms = query.trim().split(/\s+/).filter(Boolean);
+  if (!terms.length) return text;
+  return renderSnippet(highlightTerms(text, terms));
 }
 
 /**
@@ -224,8 +230,13 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
                     onSelect={() => select(result)}
                   >
                     <div className="text-[0.9rem] font-semibold text-foreground">
-                      {result.page}
-                      {result.heading ? ` › ${result.heading}` : ''}
+                      {renderWithQueryHighlight(result.page, query)}
+                      {result.heading ? (
+                        <>
+                          {' › '}
+                          {renderWithQueryHighlight(result.heading, query)}
+                        </>
+                      ) : null}
                     </div>
                     {result.snippet && (
                       <div className="mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground">
