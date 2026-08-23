@@ -5,6 +5,32 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* tw-animate-css defines these keyframes against Radix-style height variables
+   (--radix-accordion-content-height etc.). Base UI exposes the panel height as
+   --accordion-panel-height instead, so the originals resolve to `auto` and the
+   open/close animation jumps. Redefining them inside @theme replaces the
+   originals in Tailwind's emitted output (a plain top-level @keyframes rule
+   would lose: Tailwind emits theme keyframes at the end of the stylesheet). */
+@theme inline {
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--accordion-panel-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--accordion-panel-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
 @layer base {
   *,
   *::before,

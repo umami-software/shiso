@@ -28,12 +28,12 @@ export interface CardProps {
 export type CardType = 'note' | 'info' | 'warning' | 'tip' | 'check' | 'danger';
 
 const CARD_TYPE_ICONS: Record<CardType, ReactNode> = {
-  note: <InfoIcon size={16} />,
-  info: <InfoIcon size={16} />,
-  warning: <TriangleAlert size={16} />,
-  tip: <Lightbulb size={16} />,
-  check: <CheckIcon size={16} />,
-  danger: <CircleAlert size={16} />,
+  note: <InfoIcon size={24} />,
+  info: <InfoIcon size={24} />,
+  warning: <TriangleAlert size={24} />,
+  tip: <Lightbulb size={24} />,
+  check: <CheckIcon size={24} />,
+  danger: <CircleAlert size={24} />,
 };
 
 const CARD_TYPE_HOVER: Record<CardType, string> = {
@@ -55,14 +55,14 @@ function DocsCardContent({
   type,
   children,
 }: Omit<CardProps, 'href'>) {
-  const resolvedIcon = resolveIcon(icon, 16) || (type ? CARD_TYPE_ICONS[type] : null);
+  const resolvedIcon = resolveIcon(icon, 24) || (type ? CARD_TYPE_ICONS[type] : null);
 
   return (
     <CardContent className="p-0">
       {img ? <img src={img} alt="" className={styles.cardImage} /> : null}
       <div className={styles.cardInner} data-slot="card-inner">
         <div className={styles.cardMain} data-slot="card-main">
-          <div className={styles.cardHeader}>
+          <div className={styles.cardHeader} data-slot="card-header">
             {resolvedIcon ? (
               <span
                 className={`${styles.cardIcon} ${type ? 'text-inherit' : 'text-primary'}`}

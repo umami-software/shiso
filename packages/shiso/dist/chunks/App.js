@@ -10969,7 +10969,7 @@ function AccordionItem({ className, ...props }) {
 }
 function AccordionTrigger({ className, children, ...props }) {
 	return /* @__PURE__ */ jsx(AccordionHeader, {
-		className: "m-0 flex",
+		className: "flex",
 		children: /* @__PURE__ */ jsxs(AccordionTrigger$1, {
 			"data-slot": "accordion-trigger",
 			className: cn("group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground", className),
@@ -11004,11 +11004,11 @@ function AccordionContent({ className, children, ...props }) {
 //#region src/components/docs/styles.ts
 /** Shared Tailwind utility groups for the built-in MDX components. */
 const styles = {
-	accordion: "my-3",
-	accordionGroup: "my-4 overflow-hidden rounded-lg border border-border [&_[data-slot=accordion-item]]:rounded-none [&_[data-slot=accordion-item]]:border-0 [&_[data-slot=accordion-item]+[data-slot=accordion-item]]:border-t [&_[data-slot=accordion-trigger]]:rounded-none",
-	accordionItem: "rounded-lg border border-border bg-transparent",
-	accordionTrigger: "items-center px-4 py-3 text-base font-semibold text-foreground hover:no-underline",
-	accordionContent: "px-4 pb-4 text-base leading-7",
+	accordion: "my-3 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
+	accordionGroup: "my-4 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
+	accordionItem: "",
+	accordionTrigger: "text-foreground",
+	accordionContent: "text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0",
 	expandableTrigger: "items-center px-4 py-3 text-sm font-normal text-foreground hover:no-underline",
 	callout: "my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6",
 	calloutIcon: "flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4",
@@ -11021,15 +11021,15 @@ const styles = {
 	tip: "border-green-300 bg-green-50 text-green-900 dark:border-green-400/40 dark:bg-green-400/10 dark:text-green-300",
 	check: "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300",
 	danger: "border-destructive/40 bg-destructive/10 text-destructive",
-	card: "block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-input",
-	cardHorizontal: "[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0",
+	card: "block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-primary",
+	cardHorizontal: "[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2",
 	cardTyped: "[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit",
 	cardImageLayout: "p-0 [&_[data-slot=card-inner]]:p-6",
 	cardImage: "block aspect-video w-full border-border border-b object-cover",
 	cardInner: "flex items-start justify-between gap-3",
 	cardMain: "flex min-w-0 flex-col gap-2",
-	cardHeader: "flex items-center gap-2",
-	cardIcon: "inline-flex shrink-0 items-center justify-center [&_img]:size-4 [&_svg]:size-4",
+	cardHeader: "flex flex-col items-start gap-3",
+	cardIcon: "inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6",
 	cardTitle: "text-base font-semibold text-foreground",
 	cardBody: "text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0",
 	cardCta: "flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground",
@@ -11493,12 +11493,12 @@ function CardContent({ className, ...props }) {
 //#endregion
 //#region src/components/docs/Card.tsx
 const CARD_TYPE_ICONS = {
-	note: /* @__PURE__ */ jsx(Info$1, { size: 16 }),
-	info: /* @__PURE__ */ jsx(Info$1, { size: 16 }),
-	warning: /* @__PURE__ */ jsx(TriangleAlert, { size: 16 }),
-	tip: /* @__PURE__ */ jsx(Lightbulb, { size: 16 }),
-	check: /* @__PURE__ */ jsx(Check$1, { size: 16 }),
-	danger: /* @__PURE__ */ jsx(CircleAlert, { size: 16 })
+	note: /* @__PURE__ */ jsx(Info$1, { size: 24 }),
+	info: /* @__PURE__ */ jsx(Info$1, { size: 24 }),
+	warning: /* @__PURE__ */ jsx(TriangleAlert, { size: 24 }),
+	tip: /* @__PURE__ */ jsx(Lightbulb, { size: 24 }),
+	check: /* @__PURE__ */ jsx(Check$1, { size: 24 }),
+	danger: /* @__PURE__ */ jsx(CircleAlert, { size: 24 })
 };
 const CARD_TYPE_HOVER = {
 	note: "hover:border-border",
@@ -11509,7 +11509,7 @@ const CARD_TYPE_HOVER = {
 	danger: "hover:border-destructive/40"
 };
 function DocsCardContent({ title, icon, color, img, cta, arrow, type, children }) {
-	const resolvedIcon = resolveIcon(icon, 16) || (type ? CARD_TYPE_ICONS[type] : null);
+	const resolvedIcon = resolveIcon(icon, 24) || (type ? CARD_TYPE_ICONS[type] : null);
 	return /* @__PURE__ */ jsxs(CardContent, {
 		className: "p-0",
 		children: [img ? /* @__PURE__ */ jsx("img", {
@@ -11524,6 +11524,7 @@ function DocsCardContent({ title, icon, color, img, cta, arrow, type, children }
 				"data-slot": "card-main",
 				children: [/* @__PURE__ */ jsxs("div", {
 					className: styles.cardHeader,
+					"data-slot": "card-header",
 					children: [resolvedIcon ? /* @__PURE__ */ jsx("span", {
 						className: `${styles.cardIcon} ${type ? "text-inherit" : "text-primary"}`,
 						style: color ? { color } : void 0,

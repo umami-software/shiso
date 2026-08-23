@@ -1,12 +1,14 @@
 /** Shared Tailwind utility groups for the built-in MDX components. */
 export const styles = {
-  accordion: 'my-3',
-  accordionGroup:
-    'my-4 overflow-hidden rounded-lg border border-border [&_[data-slot=accordion-item]]:rounded-none [&_[data-slot=accordion-item]]:border-0 [&_[data-slot=accordion-item]+[data-slot=accordion-item]]:border-t [&_[data-slot=accordion-trigger]]:rounded-none',
-  accordionItem: 'rounded-lg border border-border bg-transparent',
-  accordionTrigger:
-    'items-center px-4 py-3 text-base font-semibold text-foreground hover:no-underline',
-  accordionContent: 'px-4 pb-4 text-base leading-7',
+  /* Accordions keep the native shadcn look: no outer box, hairline separators,
+     small medium-weight triggers with hover underline. Only margins are added.
+     The trigger header is an <h3> and panel text renders as <p>, so the
+     .docs-markdown typography margins must be cancelled for those elements. */
+  accordion: 'my-3 [&_h3:has(>[data-slot=accordion-trigger])]:m-0',
+  accordionGroup: 'my-4 [&_h3:has(>[data-slot=accordion-trigger])]:m-0',
+  accordionItem: '',
+  accordionTrigger: 'text-foreground',
+  accordionContent: 'text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0',
   expandableTrigger:
     'items-center px-4 py-3 text-sm font-normal text-foreground hover:no-underline',
 
@@ -25,17 +27,17 @@ export const styles = {
     'border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300',
   danger: 'border-destructive/40 bg-destructive/10 text-destructive',
 
-  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-input',
+  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-primary',
   cardHorizontal:
-    '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0',
+    '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2',
   cardTyped:
     '[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit',
   cardImageLayout: 'p-0 [&_[data-slot=card-inner]]:p-6',
   cardImage: 'block aspect-video w-full border-border border-b object-cover',
   cardInner: 'flex items-start justify-between gap-3',
   cardMain: 'flex min-w-0 flex-col gap-2',
-  cardHeader: 'flex items-center gap-2',
-  cardIcon: 'inline-flex shrink-0 items-center justify-center [&_img]:size-4 [&_svg]:size-4',
+  cardHeader: 'flex flex-col items-start gap-3',
+  cardIcon: 'inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6',
   cardTitle: 'text-base font-semibold text-foreground',
   cardBody: 'text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0',
   cardCta:
