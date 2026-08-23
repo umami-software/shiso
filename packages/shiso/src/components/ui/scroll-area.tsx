@@ -22,7 +22,17 @@ function ScrollArea({ className, children, scrollbars = 'vertical', ...props }: 
     >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
-        className="box-border h-full w-full max-w-full rounded-[inherit] overscroll-contain outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+        className={cn(
+          'box-border h-full w-full max-w-full rounded-[inherit] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1',
+          // Contain overscroll only on the managed axis; containing both axes
+          // would swallow vertical wheel events over horizontal-only scroll
+          // areas (e.g. code blocks) and block page scrolling.
+          scrollbars === 'both'
+            ? 'overscroll-contain'
+            : hasHorizontalScrollbar
+              ? 'overscroll-x-contain'
+              : 'overscroll-y-contain',
+        )}
       >
         <ScrollAreaPrimitive.Content
           data-slot="scroll-area-content"

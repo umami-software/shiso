@@ -9532,7 +9532,7 @@ function ScrollArea({ className, children, scrollbars = "vertical", ...props }) 
 		children: [
 			/* @__PURE__ */ jsx(ScrollAreaViewport, {
 				"data-slot": "scroll-area-viewport",
-				className: "box-border h-full w-full max-w-full rounded-[inherit] overscroll-contain outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1",
+				className: cn("box-border h-full w-full max-w-full rounded-[inherit] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1", scrollbars === "both" ? "overscroll-contain" : hasHorizontalScrollbar ? "overscroll-x-contain" : "overscroll-y-contain"),
 				children: /* @__PURE__ */ jsx(ScrollAreaContent, {
 					"data-slot": "scroll-area-content",
 					className: cn("box-border min-w-0", hasHorizontalScrollbar ? "w-max min-w-full max-w-none" : "w-full max-w-full"),
