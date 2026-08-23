@@ -46,6 +46,8 @@ export interface TabItem {
   groups?: GroupItem[];
   pages?: PageItem[];
   dropdowns?: DropdownItem[];
+  /** Link tab: navigates to this URL instead of owning docs pages. */
+  href?: string;
   icon?: string;
   hidden?: boolean;
   /** Internal normalized presentation; not a docs.json field. */
@@ -345,6 +347,8 @@ export interface DocsTab {
   icon?: string;
   presentation: 'tab' | 'dropdown';
   hidden?: boolean;
+  /** True for link tabs configured with `href` instead of docs pages. */
+  link?: boolean;
 }
 
 export interface NormalizedDocsPage {

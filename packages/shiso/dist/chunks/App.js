@@ -22651,7 +22651,9 @@ function normalizeScope(name, source, anchors, resolveDocFile, docsPrefix) {
 			});
 		});
 		if (Array.isArray(tab.pages) && tab.pages.length) nodes.push(...collectPages(tab.pages, context, state));
-		if (state.pages.length === pagesBefore) throw new Error(`Invalid docs config: tab "${tabLabel}" does not contain any supported page entries.`);
+		const isLinkTab = typeof tab.href === "string" && !!tab.href;
+		if (isLinkTab && state.pages.length !== pagesBefore) throw new Error(`Invalid docs config: tab "${tabLabel}" cannot define both "href" and page entries.`);
+		if (!isLinkTab && state.pages.length === pagesBefore) throw new Error(`Invalid docs config: tab "${tabLabel}" does not contain any supported page entries.`);
 		treeByTab.set(tabId, nodes);
 	});
 	const pending = state.pages;
@@ -22724,13 +22726,15 @@ function normalizeScope(name, source, anchors, resolveDocFile, docsPrefix) {
 		tabs: tabs.map((tab, index) => {
 			const tabId = tabIds[index];
 			const firstPage = firstVisiblePageByTab.get(tabId);
+			const href = typeof tab.href === "string" && tab.href ? tab.href : void 0;
 			return {
 				id: tabId,
 				label: tab.tab?.trim() || "",
-				url: firstPage?.url || pageToUrl("index", docsPrefix),
+				url: href || firstPage?.url || pageToUrl("index", docsPrefix),
 				icon: tab.icon,
 				presentation: tab.presentation || "tab",
-				hidden: tab.hidden || void 0
+				hidden: tab.hidden || void 0,
+				link: href ? true : void 0
 			};
 		}),
 		showTabs,
@@ -26346,6 +26350,13 @@ function TopNav({ docs, label }) {
 					}, item.href))
 				})] }, tab.id);
 			}
+			if (tab.link && isExternalHref(tab.url)) return /* @__PURE__ */ jsxs("a", {
+				href: tab.url,
+				className: tabClass(tab),
+				target: "_blank",
+				rel: "noreferrer",
+				children: [/* @__PURE__ */ jsx(ConfiguredIcon, { icon: tab.icon }), tab.label]
+			}, tab.id);
 			return /* @__PURE__ */ jsxs(Link, {
 				to: tab.url,
 				className: tabClass(tab),

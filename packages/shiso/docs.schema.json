@@ -818,7 +818,8 @@
       "type": "object",
       "allOf": [
         { "anyOf": [{ "required": ["$ref"] }, { "required": ["tab"] }] },
-        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["dropdowns"] }] }
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["dropdowns"] }, { "required": ["href"] }] },
+        { "not": { "anyOf": [{ "required": ["href", "groups"] }, { "required": ["href", "pages"] }, { "required": ["href", "dropdowns"] }] } }
       ],
       "additionalProperties": false,
       "properties": {
@@ -827,6 +828,7 @@
         "groups": { "$ref": "#/definitions/groupList" },
         "pages": { "$ref": "#/definitions/pageItemList" },
         "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "href": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Link tab: navigates to this URL (a standalone page or external site) instead of owning docs pages. Cannot be combined with groups, pages, or dropdowns." },
         "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the tab label." },
         "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the tab from the top navigation." }
       }

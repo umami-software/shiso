@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { isExternalHref } from '@/lib/paths';
 import { getStandalonePage } from '@/lib/site-config';
 import type { DocsTab, LinkTarget, NavNode, NormalizedDocsConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -109,6 +110,23 @@ export function TopNav({ docs, label }: { docs: NormalizedDocsConfig; label: str
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+          );
+        }
+
+        // Link tabs may point outside the app; render external URLs as plain
+        // anchors so the browser handles them.
+        if (tab.link && isExternalHref(tab.url)) {
+          return (
+            <a
+              key={tab.id}
+              href={tab.url}
+              className={tabClass(tab)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ConfiguredIcon icon={tab.icon} />
+              {tab.label}
+            </a>
           );
         }
 

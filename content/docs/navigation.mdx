@@ -25,6 +25,26 @@ Use one tab with one group:
 }
 ```
 
+## Link tabs
+
+A tab can link to a URL instead of owning docs pages. Use this to surface a
+[standalone page](/docs/pages) (or an external site) in the top navigation:
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      { "tab": "Docs", "groups": [{ "group": "Start", "pages": ["index"] }] },
+      { "tab": "Playground", "icon": "layout-dashboard", "href": "/playground" }
+    ]
+  }
+}
+```
+
+Internal hrefs navigate client-side and highlight the tab when active; external
+URLs open in a new browser tab. A link tab cannot also define `groups`,
+`pages`, or `dropdowns`.
+
 ## When to use each pattern
 
 - `navigation.tabs`: best default for most docs sites

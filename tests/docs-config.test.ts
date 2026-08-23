@@ -224,6 +224,24 @@ describe('validation that must keep failing', () => {
     );
   });
 
+  it('normalizes a link tab to its href', () => {
+    const config = normalize({
+      tabs: [
+        { tab: 'Docs', pages: ['index'] },
+        { tab: 'Playground', href: '/playground' },
+      ],
+    });
+
+    expect(config.tabs[1]).toMatchObject({ label: 'Playground', url: '/playground', link: true });
+    expect(config.navigation[config.tabs[1].id]).toEqual([]);
+  });
+
+  it('rejects a link tab that also defines pages', () => {
+    expect(() =>
+      normalize({ tabs: [{ tab: 'Playground', href: '/playground', pages: ['index'] }] }),
+    ).toThrow(/cannot define both/);
+  });
+
   it('reports a missing content file', () => {
     expect(() =>
       normalizeDocsConfig({ navigation: { pages: ['ghost'] } } as DocsConfig, () => undefined),

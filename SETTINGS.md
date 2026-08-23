@@ -529,6 +529,12 @@ This section contains the full reference for the `docs.json` file.
               Minimum length: 1
             </ResponseField>
 
+            <ResponseField name="href" type="string">
+              Link tab: navigates to this URL (a standalone page or external
+              site) instead of owning docs pages. Cannot be combined with
+              `groups`, `pages`, or `dropdowns`.
+            </ResponseField>
+
             <ResponseField name="icon" type="string">
               The icon to display.
 

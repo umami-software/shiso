@@ -3,6 +3,15 @@
 All notable changes to `@umami/shiso` are documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- Link tabs: a navigation tab may define `href` instead of `groups`/`pages`/
+  `dropdowns` to link to a standalone page or external URL from the top
+  navigation. Internal hrefs route client-side and highlight when active;
+  external URLs open in a new browser tab.
+
 ## 2.0.0 - 2026-08-21
 
 ### Breaking
