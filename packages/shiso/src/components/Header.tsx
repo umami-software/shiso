@@ -69,8 +69,18 @@ export function Header({ site }: { site: SiteModel }) {
     'inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]';
   const brandContent = (
     <>
-      {logo?.light ? <img src={logo.light} alt="" className="h-6 w-auto dark:hidden" /> : null}
-      {logo?.dark ? <img src={logo.dark} alt="" className="hidden h-6 w-auto dark:block" /> : null}
+      {/* With `invert`, one logo serves both modes: a CSS filter forces it to
+          white in dark mode instead of swapping to a dark variant. */}
+      {logo?.invert && logo.light ? (
+        <img src={logo.light} alt="" className="h-6 w-auto dark:brightness-0 dark:invert" />
+      ) : (
+        <>
+          {logo?.light ? <img src={logo.light} alt="" className="h-6 w-auto dark:hidden" /> : null}
+          {logo?.dark ? (
+            <img src={logo.dark} alt="" className="hidden h-6 w-auto dark:block" />
+          ) : null}
+        </>
+      )}
       {name ? <span>{name}</span> : null}
     </>
   );

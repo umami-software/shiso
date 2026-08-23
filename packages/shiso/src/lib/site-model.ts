@@ -107,6 +107,7 @@ export function resolveSiteModel(
           target: config.logo.href
             ? resolveLinkTarget(config.logo.href, config.logo.target)
             : undefined,
+          invert: config.logo.invert === true,
         }
     : null;
 

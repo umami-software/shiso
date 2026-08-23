@@ -66,6 +66,10 @@
             "target": {
               "allOf": [{ "$ref": "#/definitions/targetValue" }],
               "description": "Browsing context for the logo link. Defaults from href."
+            },
+            "invert": {
+              "allOf": [{ "$ref": "#/definitions/booleanValue" }],
+              "description": "Render one logo and force it to white in dark mode with a CSS filter, instead of swapping to a dark variant. Best for monochrome logos."
             }
           }
         }

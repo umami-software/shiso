@@ -99,7 +99,15 @@ export interface ThemeColors {
 
 export type LogoOption =
   | string
-  | { light?: string; dark?: string; href?: string; target?: LinkTarget };
+  | {
+      light?: string;
+      dark?: string;
+      href?: string;
+      target?: LinkTarget;
+      /** Force the logo to white in dark mode with a CSS filter instead of
+       * swapping to a dark variant. Best for monochrome logos. */
+      invert?: boolean;
+    };
 
 /** Project-level settings supplied by shiso.config.ts. Mirrors the public
  * shape exported from "@umami/shiso/config". */
@@ -494,7 +502,13 @@ export interface ThemeLabels {
 
 export interface SiteModel {
   name?: string;
-  logo: { light?: string; dark?: string; href?: string; target?: LinkTarget } | null;
+  logo: {
+    light?: string;
+    dark?: string;
+    href?: string;
+    target?: LinkTarget;
+    invert?: boolean;
+  } | null;
   navbar: NormalizedNavbar | null;
   footer: NormalizedFooter | null;
   banner: BannerConfig | null;

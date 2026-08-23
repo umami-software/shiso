@@ -56,6 +56,23 @@ and `target` to override whether it opens in the current or a new tab. Without
 }
 ```
 
+If your logo is monochrome, you can skip the second image: set `invert` to
+`true` to reuse one logo and force it to white in dark mode with a CSS filter.
+
+```json
+{
+  "logo": {
+    "light": "/logo.svg",
+    "invert": true
+  }
+}
+```
+
+<Callout type="info">
+  The filter turns the entire image white, so `invert` only suits single-color
+  logos. Colored logos should provide separate `light` and `dark` images.
+</Callout>
+
 ## Favicon
 
 `favicon` sets the small icon shown in browser tabs and bookmarks. Use a path

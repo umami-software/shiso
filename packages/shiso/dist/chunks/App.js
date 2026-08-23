@@ -23031,7 +23031,8 @@ function resolveSiteModel(config, docs, shiso) {
 		light: config.logo.light || config.logo.dark,
 		dark: config.logo.dark || config.logo.light,
 		href: config.logo.href,
-		target: config.logo.href ? resolveLinkTarget(config.logo.href, config.logo.target) : void 0
+		target: config.logo.href ? resolveLinkTarget(config.logo.href, config.logo.target) : void 0,
+		invert: config.logo.invert === true
 	} : null;
 	return {
 		name: config.name?.trim() || void 0,
@@ -26426,19 +26427,19 @@ function Header({ site }) {
 	const brandHref = logo?.href || (hasRootStandalonePage ? "/" : docsHomeUrl);
 	const hasBrand = !!name || !!logo?.light || !!logo?.dark;
 	const brandClassName = "inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]";
-	const brandContent = /* @__PURE__ */ jsxs(Fragment, { children: [
-		logo?.light ? /* @__PURE__ */ jsx("img", {
-			src: logo.light,
-			alt: "",
-			className: "h-6 w-auto dark:hidden"
-		}) : null,
-		logo?.dark ? /* @__PURE__ */ jsx("img", {
-			src: logo.dark,
-			alt: "",
-			className: "hidden h-6 w-auto dark:block"
-		}) : null,
-		name ? /* @__PURE__ */ jsx("span", { children: name }) : null
-	] });
+	const brandContent = /* @__PURE__ */ jsxs(Fragment, { children: [logo?.invert && logo.light ? /* @__PURE__ */ jsx("img", {
+		src: logo.light,
+		alt: "",
+		className: "h-6 w-auto dark:brightness-0 dark:invert"
+	}) : /* @__PURE__ */ jsxs(Fragment, { children: [logo?.light ? /* @__PURE__ */ jsx("img", {
+		src: logo.light,
+		alt: "",
+		className: "h-6 w-auto dark:hidden"
+	}) : null, logo?.dark ? /* @__PURE__ */ jsx("img", {
+		src: logo.dark,
+		alt: "",
+		className: "hidden h-6 w-auto dark:block"
+	}) : null] }), name ? /* @__PURE__ */ jsx("span", { children: name }) : null] });
 	return /* @__PURE__ */ jsx("header", {
 		className: "sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-border border-b bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-md",
 		children: /* @__PURE__ */ jsxs("div", {
