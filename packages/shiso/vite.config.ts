@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, type Plugin, searchForWorkspaceRoot } from 'vite';
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
@@ -49,7 +49,11 @@ function shisoSearchIndex(
       await generateSearchIndex({ config: getDocsConfig(), shiso: getShisoConfig(), root, output });
     },
     async handleHotUpdate({ file }) {
-      if (/\.(md|mdx)$/.test(file) || file.endsWith('docs.json') || /shiso\.config\.\w+$/.test(file)) {
+      if (
+        /\.(md|mdx)$/.test(file) ||
+        file.endsWith('docs.json') ||
+        /shiso\.config\.\w+$/.test(file)
+      ) {
         await generateSearchIndex({
           config: getDocsConfig(),
           shiso: getShisoConfig(),
@@ -294,9 +298,9 @@ function shisoHtml(getDocsConfig: () => DocsConfig): Plugin {
 
 /**
  * Serves the raw markdown source for `<route>.md` URLs during development,
- * mirroring the `.md` copies the prerenderer publishes next to every page in
- * production builds. The contextual menu's copy/view options and AI links
- * depend on these URLs.
+ * mirroring the `.md` copies the prerenderer publishes next to Markdown and
+ * MDX pages in production builds. TSX standalone pages return 404 because
+ * their source is not a Markdown representation.
  */
 function shisoMarkdownDev(
   getDocsConfig: () => DocsConfig,
@@ -336,7 +340,7 @@ function shisoMarkdownDev(
           const pageSlug = standalone.page
             .trim()
             .replace(/^\/+/, '')
-            .replace(/\.mdx?$/, '');
+            .replace(/\.(?:mdx?|tsx)$/, '');
 
           for (const candidate of [`${pageSlug}.mdx`, `${pageSlug}.md`]) {
             const filePath = path.resolve(pagesRoot, candidate);
@@ -355,6 +359,11 @@ function shisoMarkdownDev(
               // Try the next candidate.
             }
           }
+
+          // Component pages intentionally have no raw Markdown representation.
+          res.statusCode = 404;
+          res.end('Not found');
+          return;
         }
 
         if (docsPrefix && route.startsWith(docsPrefix)) {
@@ -404,7 +413,22 @@ export default defineConfig(async () => {
   const getDocsConfig = configModule.getConfig as () => DocsConfig;
   const getShisoConfig = configModule.getShisoConfig as () => ResolvedShisoConfig;
 
+  // Shiso may be installed via link:/file: from a directory outside the
+  // project's workspace root. Allow the framework's real location (and the
+  // repository root above it, which holds its dependency store) so raw assets
+  // like fonts remain servable in dev instead of returning 403.
+  const shisoRoot = path.dirname(fileURLToPath(import.meta.url));
+
   return {
+    server: {
+      fs: {
+        allow: [
+          searchForWorkspaceRoot(process.cwd()),
+          shisoRoot,
+          path.resolve(shisoRoot, '..', '..'),
+        ],
+      },
+    },
     optimizeDeps: {
       // The published runtime is already bundled ESM and contains project-time
       // virtual imports that are resolved by the plugins below.

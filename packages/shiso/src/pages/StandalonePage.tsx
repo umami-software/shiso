@@ -7,8 +7,8 @@ import type { SiteModel, StandalonePage } from '@/lib/types';
 
 /**
  * A standalone (non-docs) page: site chrome from Layout (banner, header),
- * the MDX content at full container width — no sidebar, TOC, or pager — and
- * the footer. MDX components come from the app-level MDXProvider.
+ * content at full container width — no sidebar, TOC, or pager — and the
+ * footer. Markdown/MDX gets docs typography; TSX owns its presentation.
  */
 export function StandalonePageView({ page, site }: { page: StandalonePage; site: SiteModel }) {
   const { pathname } = useLocation();
@@ -28,14 +28,21 @@ export function StandalonePageView({ page, site }: { page: StandalonePage; site:
   }
 
   const Content = doc.default;
+  const isComponentPage = page.filePath.endsWith('.tsx');
 
   return (
     <div className="flex min-h-full flex-col">
-      <article className="grow py-8">
-        <div className="docs-markdown">
+      {isComponentPage ? (
+        <div className="grow">
           <Content />
         </div>
-      </article>
+      ) : (
+        <article className="grow py-8">
+          <div className="docs-markdown">
+            <Content />
+          </div>
+        </article>
+      )}
       <Footer footer={site.footer} />
     </div>
   );

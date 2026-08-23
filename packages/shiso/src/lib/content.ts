@@ -3,10 +3,9 @@ import { CONTENT_DIR, PAGES_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
 
 /**
- * Eagerly imports every content file at build time. Each module exports:
- * - default: the compiled MDX component
- * - frontmatter: parsed YAML frontmatter
- * - toc: heading anchors injected by the remark-toc plugin
+ * Eagerly imports every content file at build time. Markdown/MDX modules
+ * export a compiled component plus generated frontmatter and TOC values. TSX
+ * standalone pages export their component and may export frontmatter directly.
  *
  * Eager loading keeps server prerendering and client hydration in sync
  * without Suspense, at the cost of bundling all pages together.
@@ -16,7 +15,7 @@ import type { DocModule } from '@/lib/types';
  * lookup time instead. That also lets later versioned/localized content roots
  * (`content/v2`, `content/es`) work without touching this glob.
  */
-export const docModules = import.meta.glob('/content/**/*.{md,mdx}', {
+export const docModules = import.meta.glob('/content/**/*.{md,mdx,tsx}', {
   eager: true,
 }) as Record<string, DocModule>;
 
@@ -35,7 +34,12 @@ export function resolveDocFile(fileSlug: string, contentDir = CONTENT_DIR): stri
  * under the fixed content/pages root.
  */
 export function resolvePageFile(fileSlug: string): string | undefined {
-  return resolveDocFile(fileSlug, PAGES_DIR);
+  const candidates = [
+    `/${PAGES_DIR}/${fileSlug}.tsx`,
+    `/${PAGES_DIR}/${fileSlug}.mdx`,
+    `/${PAGES_DIR}/${fileSlug}.md`,
+  ];
+  return candidates.find(candidate => candidate in docModules);
 }
 
 export function getDocModule(filePath: string): DocModule | undefined {

@@ -28,7 +28,7 @@ function normalizePath(rawPath: unknown): string {
     throw invalid(`standalone page path "${value}" must not use wildcard patterns.`);
   }
 
-  if (/\.mdx?$/i.test(value)) {
+  if (/\.(?:mdx?|tsx)$/i.test(value)) {
     throw invalid(
       `standalone page path "${value}" must be a route, not a file — drop the extension.`,
     );
@@ -48,7 +48,7 @@ function normalizePageSlug(rawSlug: unknown): string {
       .replace(/\\/g, '/')
       .replace(/^\/+/, '')
       .replace(/^pages\//, '')
-      .replace(/\.mdx?$/, '')
+      .replace(/\.(?:mdx?|tsx)$/, '')
       .replace(/\/+$/, '') || 'index'
   );
 }
@@ -104,7 +104,7 @@ export function normalizeStandalonePages(
     if (!filePath) {
       throw new Error(
         `Missing standalone page file for "${fileSlug}": expected ` +
-          `"content/pages/${fileSlug}.mdx" or ".md".`,
+          `"content/pages/${fileSlug}.tsx", ".mdx", or ".md".`,
       );
     }
 

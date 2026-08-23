@@ -189,7 +189,7 @@ export interface RedirectRule {
 export interface StandalonePageItem {
   /** Route path, starting with "/". "/" replaces the root redirect to docs. */
   path: string;
-  /** File slug under content/pages, e.g. "home" for content/pages/home.mdx. */
+  /** File slug under content/pages, e.g. "home" for content/pages/home.tsx. */
   page: string;
   /** Page title used in the document head. Frontmatter title wins. */
   title?: string;
@@ -199,7 +199,7 @@ export interface StandalonePageItem {
 export interface StandalonePage {
   /** Base-relative route, e.g. "/" or "/about". */
   path: string;
-  /** Module key of the MDX file, e.g. "/content/pages/home.mdx". */
+  /** Module key of the TSX, MDX, or Markdown file. */
   filePath: string;
   /** Config-level head-title override. */
   title?: string;
@@ -555,6 +555,8 @@ export interface DocFrontmatter {
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** Hide the header search control and disable its shortcut on this page. */
+  search?: false;
   /** Overrides the site-wide `metadata.timestamp` setting for this page. */
   timestamp?: boolean;
   /** Related pages rendered above the prev/next pager. */

@@ -1,6 +1,6 @@
 import shisoConfig from 'virtual:shiso-config';
 import rawConfig from 'virtual:shiso-docs-config';
-import { resolveDocFile, resolvePageFile } from '@/lib/content';
+import { getDocModule, resolveDocFile, resolvePageFile } from '@/lib/content';
 import {
   assertDocsConfig,
   getDefaultScope,
@@ -124,6 +124,12 @@ export function showTimestamp(frontmatterValue: unknown): boolean {
 
 export function getPageByPathname(pathname: string): NormalizedDocsPage | null {
   return getSitePageByPathname(docsSite, stripBase(pathname));
+}
+
+/** Frontmatter for the docs or standalone page that owns a pathname. */
+export function getPageFrontmatter(pathname: string) {
+  const page = getStandalonePage(pathname) || getPageByPathname(pathname);
+  return page ? getDocModule(page.filePath)?.frontmatter : undefined;
 }
 
 export function getPageTitle(pageTitle?: string): string {

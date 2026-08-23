@@ -99,11 +99,11 @@
     color: color-mix(in srgb, var(--foreground) 25%, var(--muted-foreground));
   }
 
-  .docs-markdown > * + * {
+  .docs-markdown > * + *:not(:where(.not-prose, .not-prose *)) {
     margin-top: 1rem;
   }
 
-  .docs-markdown :where(h1, h2, h3, h4, h5, h6) {
+  .docs-markdown :where(h1, h2, h3, h4, h5, h6):not(:where(.not-prose, .not-prose *)) {
     font-family: var(--font-heading);
     font-weight: var(--font-heading-weight, 600);
     letter-spacing: -0.02em;
@@ -128,57 +128,57 @@
     opacity: 1;
   }
 
-  .docs-markdown h2 {
+  .docs-markdown h2:not(:where(.not-prose, .not-prose *)) {
     margin-top: 2.25rem;
     margin-bottom: 1rem;
     font-size: 1.5rem;
   }
 
-  .docs-markdown h3 {
+  .docs-markdown h3:not(:where(.not-prose, .not-prose *)) {
     margin-top: 1.75rem;
     margin-bottom: 0.75rem;
     font-size: 1.2rem;
   }
 
-  .docs-markdown p {
+  .docs-markdown p:not(:where(.not-prose, .not-prose *)) {
     margin: 0.75rem 0;
   }
 
-  .docs-markdown ul,
-  .docs-markdown ol {
+  .docs-markdown ul:not(:where(.not-prose, .not-prose *)),
+  .docs-markdown ol:not(:where(.not-prose, .not-prose *)) {
     margin: 0.75rem 0;
     padding-left: 1.25rem;
   }
 
-  .docs-markdown ul {
+  .docs-markdown ul:not(:where(.not-prose, .not-prose *)) {
     list-style: disc;
   }
 
-  .docs-markdown ol {
+  .docs-markdown ol:not(:where(.not-prose, .not-prose *)) {
     list-style: decimal;
   }
 
-  .docs-markdown li {
+  .docs-markdown li:not(:where(.not-prose, .not-prose *)) {
     margin: 0.35rem 0;
   }
 
-  .docs-markdown :where(strong, b) {
+  .docs-markdown :where(strong, b):not(:where(.not-prose, .not-prose *)) {
     color: var(--foreground);
     font-weight: 600;
   }
 
-  .docs-markdown a {
+  .docs-markdown a:not(:where(.not-prose, .not-prose *)) {
     color: var(--foreground);
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
     text-underline-offset: 0.2em;
   }
 
-  .docs-markdown a:hover {
+  .docs-markdown a:hover:not(:where(.not-prose, .not-prose *)) {
     text-decoration-color: currentColor;
   }
 
-  .docs-markdown code:not(pre code) {
+  .docs-markdown code:not(pre code):not(:where(.not-prose, .not-prose *)) {
     color: var(--foreground);
     border-radius: var(--radius-sm);
     background: color-mix(in srgb, currentColor 4%, transparent);
@@ -188,7 +188,7 @@
 
   /* Styled to match the PropertiesTable component: rounded outer border,
      horizontal row separators only, and no header fill. */
-  .docs-markdown table {
+  .docs-markdown table:not(:where(.not-prose, .not-prose *)) {
     width: 100%;
     margin: 1rem 0;
     font-size: 0.875rem;
@@ -198,12 +198,12 @@
     border-radius: var(--radius-lg);
   }
 
-  .docs-markdown th {
+  .docs-markdown th:not(:where(.not-prose, .not-prose *)) {
     color: var(--foreground);
   }
 
-  .docs-markdown th,
-  .docs-markdown td {
+  .docs-markdown th:not(:where(.not-prose, .not-prose *)),
+  .docs-markdown td:not(:where(.not-prose, .not-prose *)) {
     border: none;
     border-bottom: 1px solid var(--border);
     padding: 0.6rem 0.75rem;
@@ -211,36 +211,36 @@
     vertical-align: top;
   }
 
-  .docs-markdown th:first-child,
-  .docs-markdown td:first-child {
+  .docs-markdown th:first-child:not(:where(.not-prose, .not-prose *)),
+  .docs-markdown td:first-child:not(:where(.not-prose, .not-prose *)) {
     padding-left: 1.5rem;
   }
 
-  .docs-markdown th:last-child,
-  .docs-markdown td:last-child {
+  .docs-markdown th:last-child:not(:where(.not-prose, .not-prose *)),
+  .docs-markdown td:last-child:not(:where(.not-prose, .not-prose *)) {
     padding-right: 1.5rem;
   }
 
-  .docs-markdown th {
+  .docs-markdown th:not(:where(.not-prose, .not-prose *)) {
     background: transparent;
     font-weight: 600;
   }
 
-  .docs-markdown tbody tr:last-child td {
+  .docs-markdown tbody tr:last-child td:not(:where(.not-prose, .not-prose *)) {
     border-bottom: none;
   }
 
-  .docs-markdown table code:not(pre code) {
+  .docs-markdown table code:not(pre code):not(:where(.not-prose, .not-prose *)) {
     font-size: 0.75rem;
   }
 
-  .docs-markdown blockquote {
+  .docs-markdown blockquote:not(:where(.not-prose, .not-prose *)) {
     border-left: 3px solid var(--input);
     padding-left: 1rem;
     color: var(--muted-foreground);
   }
 
-  .docs-markdown hr {
+  .docs-markdown hr:not(:where(.not-prose, .not-prose *)) {
     border: none;
     border-top: 1px solid var(--border);
     margin: 2rem 0;

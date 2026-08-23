@@ -18,7 +18,7 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 
 const DEFAULT_ROOT = process.cwd();
-const CONTENT_EXTENSIONS = new Set(['.md', '.mdx']);
+const CONTENT_EXTENSIONS = new Set(['.md', '.mdx', '.tsx']);
 
 async function collectContentFiles(dir, files = []) {
   let entries;
@@ -115,7 +115,7 @@ export function shisoLastModified(options = {}) {
       await generateLastModified(options);
     },
     async handleHotUpdate({ file }) {
-      if (/\.(md|mdx)$/.test(file)) {
+      if (/\.(md|mdx|tsx)$/.test(file)) {
         await generateLastModified(options);
       }
     },

@@ -1,4 +1,5 @@
-import { _ as Router, a as docsSite, b as ABSOLUTE_URL_REGEX, c as getSeo, d as getDocModule, f as getLastModified, h as toAbsoluteUrl, i as docsHomeUrl, l as siteName, m as BASE_URL, n as buildHead, o as getLocaleByPathname, p as getScopeForPage, r as renderHeadToString, s as getRedirects, t as App, u as standalonePages, v as createPath, y as parsePath } from "./chunks/App.js";
+import { cr as Router, fr as createPath, mr as ABSOLUTE_URL_REGEX, pr as parsePath } from "./chunks/docs.js";
+import { a as docsSite, c as getSeo, d as getDocModule, f as getLastModified, h as toAbsoluteUrl, i as docsHomeUrl, l as siteName, m as BASE_URL, n as buildHead, o as getLocaleByPathname, p as getScopeForPage, r as renderHeadToString, s as getRedirects, t as App, u as standalonePages } from "./chunks/App.js";
 import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
@@ -91,16 +92,17 @@ function getRoutes() {
 	return [...docsSite.pages.map((page) => page.url), ...standalonePages.map((page) => page.path)];
 }
 /**
-* Source file for every routed page, so the prerenderer can publish raw
+* Source file for every Markdown/MDX page, so the prerenderer can publish raw
 * markdown next to each HTML page (used by the contextual menu's copy/view
-* options and by AI tools). `filePath` is a module key like
-* "/content/docs/index.mdx", resolved against the project root.
+* options and by AI tools). TSX standalone pages have no raw Markdown copy.
+* `filePath` is a module key like "/content/docs/index.mdx", resolved against
+* the project root.
 */
 function getMarkdownPages() {
 	return [...docsSite.pages.map((page) => ({
 		route: page.url,
 		filePath: page.filePath
-	})), ...standalonePages.map((page) => ({
+	})), ...standalonePages.filter((page) => !page.filePath.endsWith(".tsx")).map((page) => ({
 		route: page.path,
 		filePath: page.filePath
 	}))];

@@ -36,15 +36,18 @@ export function getRoutes(): string[] {
 export { getRedirects };
 
 /**
- * Source file for every routed page, so the prerenderer can publish raw
+ * Source file for every Markdown/MDX page, so the prerenderer can publish raw
  * markdown next to each HTML page (used by the contextual menu's copy/view
- * options and by AI tools). `filePath` is a module key like
- * "/content/docs/index.mdx", resolved against the project root.
+ * options and by AI tools). TSX standalone pages have no raw Markdown copy.
+ * `filePath` is a module key like "/content/docs/index.mdx", resolved against
+ * the project root.
  */
 export function getMarkdownPages(): { route: string; filePath: string }[] {
   return [
     ...docsSite.pages.map(page => ({ route: page.url, filePath: page.filePath })),
-    ...standalonePages.map(page => ({ route: page.path, filePath: page.filePath })),
+    ...standalonePages
+      .filter(page => !page.filePath.endsWith('.tsx'))
+      .map(page => ({ route: page.path, filePath: page.filePath })),
   ];
 }
 

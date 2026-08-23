@@ -66,6 +66,7 @@ const bundle = await rolldown({
   input: {
     'entry-client': path.join(sourceRoot, 'entry-client.tsx'),
     'entry-server': path.join(sourceRoot, 'entry-server.tsx'),
+    components: path.join(sourceRoot, 'components/docs/index.ts'),
     search: path.join(sourceRoot, 'lib/search/provider.ts'),
   },
   external: isExternal,

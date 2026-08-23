@@ -5,8 +5,28 @@ All notable changes to `@umami/shiso` are documented here. This project follows
 
 ## Unreleased
 
+### Fixed
+
+- Dev server: allow serving raw assets (fonts, images) from Shiso's real
+  install location when the framework is linked from outside the project's
+  workspace root (`link:`/`file:` installs previously returned 403 for
+  bundled font files).
+
 ### Added
 
+- Public `@umami/shiso/components` entry point for importing Shiso's built-in
+  content components from TSX standalone pages and other React modules.
+- TSX standalone pages under `content/pages`. Component pages retain Shiso's
+  site chrome, metadata, sitemap, and prerendering behavior while owning their
+  layout without the `.docs-markdown` typography wrapper. Raw `.md` copies are
+  only generated for Markdown and MDX pages.
+- `not-prose` escape hatch: elements with the `not-prose` class (and their
+  descendants) are excluded from `.docs-markdown` typography styles — headings,
+  lists, tables, links, and spacing rules — so embedded UI components render
+  with their own styles. Guards use `:not(:where(…))` and add no specificity.
+
+- Per-page `search: false` frontmatter to hide the header search control and
+  disable its keyboard shortcut on selected docs or standalone pages.
 - Link tabs: a navigation tab may define `href` instead of `groups`/`pages`/
   `dropdowns` to link to a standalone page or external URL from the top
   navigation. Internal hrefs route client-side and highlight when active;

@@ -99,7 +99,7 @@
           },
           "page": {
             "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
-            "description": "File slug under content/pages, e.g. \"home\" for content/pages/home.mdx."
+            "description": "File slug under content/pages, e.g. \"home\" for content/pages/home.tsx, home.mdx, or home.md."
           },
           "title": {
             "allOf": [{ "$ref": "#/definitions/stringValue" }],

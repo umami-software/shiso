@@ -76,7 +76,7 @@ async function writeTypescriptConfig(templateRoot) {
       jsx: 'react-jsx',
       target: 'es2022',
     },
-    include: ['declarations.d.ts', 'entry-client.tsx', 'shiso.config.ts'],
+    include: ['declarations.d.ts', 'entry-client.tsx', 'shiso.config.ts', 'content/pages/**/*.tsx'],
   };
 
   await fs.writeFile(

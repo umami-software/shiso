@@ -1,6 +1,6 @@
 {
   "name": "@umami/shiso",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Open-source documentation framework for Markdown and MDX sites.",
   "type": "module",
   "bin": {
@@ -14,6 +14,10 @@
     "./client": {
       "types": "./types/client.d.ts",
       "default": "./dist/entry-client.js"
+    },
+    "./components": {
+      "types": "./types/components.d.ts",
+      "default": "./dist/components.js"
     },
     "./search": {
       "types": "./types/search.d.ts",

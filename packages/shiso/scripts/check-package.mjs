@@ -7,6 +7,7 @@ for (const relativeFile of [
   'bin/shiso.mjs',
   'dist/entry-client.js',
   'dist/entry-server.js',
+  'dist/components.js',
   'dist/search.js',
   'docs.schema.json',
   'scripts/lib/mdast.mjs',
@@ -14,6 +15,7 @@ for (const relativeFile of [
   'scripts/lib/slug.mjs',
   'src/styles/global.css',
   'types/client.d.ts',
+  'types/components.d.ts',
   'types/search.d.ts',
   'vite.config.ts',
 ]) {
