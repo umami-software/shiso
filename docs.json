@@ -38,7 +38,8 @@
     ]
   },
   "redirects": [
-    { "source": "/docs/guides/migrating", "destination": "/docs/guides/migrations/mintlify" }
+    { "source": "/docs/guides/migrating", "destination": "/docs/guides/migrations/mintlify" },
+    { "source": "/docs/guides/upgrading", "destination": "/docs/installation" }
   ],
   "metadata": {
     "timestamp": true
@@ -112,7 +113,7 @@
           {
             "group": "Guides",
             "collapsible": false,
-            "pages": ["guides/deployment", "guides/upgrading"]
+            "pages": ["guides/deployment"]
           },
           {
             "group": "Migrations",

@@ -93,6 +93,11 @@ through your package manager:
   ```
 </CodeGroup>
 
+This installs the newest version allowed by the range in `package.json`. When
+the range does not allow the newest release, update the dependency explicitly
+(e.g. `pnpm add @umami/shiso@latest`), then run `pnpm check` and `pnpm build`
+to verify the upgrade.
+
 Your content, `docs.json`, `styles.css`, and files under `public` remain in your
 project; rendering and build internals update with the dependency.
 
