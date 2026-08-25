@@ -5,15 +5,12 @@ All notable changes to `@umami/shiso` are documented here. This project follows
 
 ## Unreleased
 
-### Fixed
-
-- Dev server: allow serving raw assets (fonts, images) from Shiso's real
-  install location when the framework is linked from outside the project's
-  workspace root (`link:`/`file:` installs previously returned 403 for
-  bundled font files).
-
 ### Added
 
+- `Link` export from `@umami/shiso/components`: a client-side navigation link
+  bound to Shiso's router, for TSX standalone pages and other app code.
+  Importing `react-router` directly from app code creates a second router
+  instance without Shiso's context, so use this instead.
 - Public `@umami/shiso/components` entry point for importing Shiso's built-in
   content components from TSX standalone pages and other React modules.
 - TSX standalone pages under `content/pages`. Component pages retain Shiso's
@@ -24,13 +21,25 @@ All notable changes to `@umami/shiso` are documented here. This project follows
   descendants) are excluded from `.docs-markdown` typography styles — headings,
   lists, tables, links, and spacing rules — so embedded UI components render
   with their own styles. Guards use `:not(:where(…))` and add no specificity.
-
 - Per-page `search: false` frontmatter to hide the header search control and
   disable its keyboard shortcut on selected docs or standalone pages.
 - Link tabs: a navigation tab may define `href` instead of `groups`/`pages`/
   `dropdowns` to link to a standalone page or external URL from the top
   navigation. Internal hrefs route client-side and highlight when active;
   external URLs open in a new browser tab.
+
+### Fixed
+
+- Let standalone page content expand through the layout's flex chain so short
+  pages keep the footer at the bottom of the viewport.
+- Bundle `@umami/shiso` entry points into the SSR build (`ssr.noExternal`) so
+  TSX standalone pages that import `@umami/shiso/components` prerender
+  correctly; previously Node hit the unresolved project-time virtual import
+  `@/lib/icon-registry.generated` inside the published chunks.
+- Dev server: allow serving raw assets (fonts, images) from Shiso's real
+  install location when the framework is linked from outside the project's
+  workspace root (`link:`/`file:` installs previously returned 403 for
+  bundled font files).
 
 ## 2.0.0 - 2026-08-21
 

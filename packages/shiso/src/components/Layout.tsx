@@ -17,7 +17,7 @@ export function Layout({ children, site }: { children: ReactNode; site: SiteMode
       <Banner banner={site.banner} dismissLabel={site.labels.dismissBanner} />
       <Header site={site} />
       <div className="mx-auto flex min-h-0 w-full max-w-[1600px] grow flex-col px-5">
-        <main className="min-h-0 grow">{children}</main>
+        <main className="flex min-h-0 grow flex-col">{children}</main>
       </div>
     </div>
   );

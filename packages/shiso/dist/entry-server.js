@@ -1,4 +1,4 @@
-import { cr as Router, fr as createPath, mr as ABSOLUTE_URL_REGEX, pr as parsePath } from "./chunks/docs.js";
+import { hr as ABSOLUTE_URL_REGEX, lr as Router, mr as parsePath, pr as createPath } from "./chunks/docs.js";
 import { a as docsSite, c as getSeo, d as getDocModule, f as getLastModified, h as toAbsoluteUrl, i as docsHomeUrl, l as siteName, m as BASE_URL, n as buildHead, o as getLocaleByPathname, p as getScopeForPage, r as renderHeadToString, s as getRedirects, t as App, u as standalonePages } from "./chunks/App.js";
 import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";

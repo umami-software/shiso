@@ -34,6 +34,11 @@
         "icon": "x",
         "ariaLabel": "X",
         "href": "https://x.com/umami_software"
+      },
+      {
+        "icon": "discord",
+        "ariaLabel": "Umami on Discord",
+        "href": "https://umami.is/discord"
       }
     ]
   },

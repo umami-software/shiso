@@ -2503,7 +2503,7 @@ HistoryRouter.displayName = "unstable_HistoryRouter";
 * @param {LinkProps.defaultShouldRevalidate} props.defaultShouldRevalidate n/a
 * @param {LinkProps.mask} props.mask [modes: framework, data] n/a
 */
-const Link = React$1.forwardRef(function LinkWithRef({ onClick, discover = "render", prefetch = "none", relative, reloadDocument, replace, mask, state, target, to, preventScrollReset, viewTransition, defaultShouldRevalidate, ...rest }, forwardedRef) {
+const Link$1 = React$1.forwardRef(function LinkWithRef({ onClick, discover = "render", prefetch = "none", relative, reloadDocument, replace, mask, state, target, to, preventScrollReset, viewTransition, defaultShouldRevalidate, ...rest }, forwardedRef) {
 	let { basename, navigator, useTransitions } = React$1.useContext(NavigationContext);
 	let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX.test(to);
 	let parsed = parseToInfo(to, basename);
@@ -2544,7 +2544,7 @@ const Link = React$1.forwardRef(function LinkWithRef({ onClick, discover = "rend
 	});
 	return shouldPrefetch && !isAbsolute ? /* @__PURE__ */ React$1.createElement(React$1.Fragment, null, link, /* @__PURE__ */ React$1.createElement(PrefetchPageLinks, { page: href })) : link;
 });
-Link.displayName = "Link";
+Link$1.displayName = "Link";
 /**
 * Wraps {@link Link | `<Link>`} with additional props for styling active and
 * pending states.
@@ -2621,7 +2621,7 @@ const NavLink = React$1.forwardRef(function NavLinkWithRef({ "aria-current": ari
 		isTransitioning ? "transitioning" : null
 	].filter(Boolean).join(" ");
 	let style = typeof styleProp === "function" ? styleProp(renderProps) : styleProp;
-	return /* @__PURE__ */ React$1.createElement(Link, {
+	return /* @__PURE__ */ React$1.createElement(Link$1, {
 		...rest,
 		"aria-current": ariaCurrent,
 		className,
@@ -10182,7 +10182,7 @@ function Button({ href, variant = "default", size = "default", icon, className, 
 		rel: "noreferrer",
 		children: content
 	});
-	return /* @__PURE__ */ jsx(Link, {
+	return /* @__PURE__ */ jsx(Link$1, {
 		to: href,
 		className: linkClassName,
 		children: content
@@ -10400,7 +10400,7 @@ function Card({ title, href, icon, color, img, cta, horizontal, arrow, type, chi
 		rel: "noreferrer",
 		children: content
 	});
-	return /* @__PURE__ */ jsx(Link, {
+	return /* @__PURE__ */ jsx(Link$1, {
 		to: href,
 		className: linkClassName,
 		children: content
@@ -11664,6 +11664,18 @@ function Icon({ icon, src, color, size = 16, className }) {
 		color,
 		className: classes
 	});
+}
+
+//#endregion
+//#region src/components/docs/Link.tsx
+/**
+* Client-side navigation link bound to Shiso's router. Exposed from
+* `@umami/shiso/components` so TSX standalone pages and other app code can
+* navigate without reloading (importing `react-router` directly would create a
+* second router instance without Shiso's context).
+*/
+function Link(props) {
+	return /* @__PURE__ */ jsx(Link$1, { ...props });
 }
 
 //#endregion
@@ -18901,6 +18913,7 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 	Frame: () => Frame,
 	Icon: () => Icon,
 	Info: () => Info,
+	Link: () => Link,
 	Note: () => Note,
 	Param: () => Param,
 	ParamField: () => ParamField,
@@ -18918,4 +18931,4 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-export { POPUP_COLLISION_AVOIDANCE as $, isLastTraversableNode as $n, listNavigation as $t, popupStoreSelectors as A, jsdom as An, Info as At, useSyncedFloatingRootContext as B, EMPTY_OBJECT as Bn, resolveIcon as Bt, pressableTriggerOpenStateMapping as C, activeElement as Cn, inertValue as Ct, useFocus as D, ARROW_LEFT$1 as Dn, Callout as Dt, useHoverFloatingInteraction as E, ARROW_DOWN$1 as En, CardGroup as Et, setPopupOpenState as F, useTimeout as Fn, Button as Ft, FloatingNode as G, useCompositeRootContext as Gn, useCompositeListItem as Gt, useDismiss as H, useButton as Hn, useOpenChangeComplete as Ht, useImplicitActiveTrigger as I, Button$1 as In, Badge as It, useFloatingParentNodeId as J, useStableCallback as Jn, cancelOpen as Jt, FloatingTree as K, mergeProps as Kn, useAnimationFrame as Kt, useOpenStateTransitions as L, cn as Ln, Badge$1 as Lt, FOCUSABLE_POPUP_PROPS as M, mac as Mn, Tip as Mt, PopupHandleAttachment as N, useBaseUiId as Nn, Warning as Nt, usePopupHandleStore as O, ARROW_RIGHT$1 as On, Check as Ot, attachPreventUnmountOnClose as P, useId as Pn, WarningBanner as Pt, DROPDOWN_COLLISION_AVOIDANCE as Q, isHTMLElement as Qn, itemPress as Qt, usePopupInteractionProps as R, useRenderElement as Rn, Accordion as Rt, popupTransitionStateMapping as S, isTypeableCombobox as Sn, COMPOSITE_KEYS as St, useHoverReferenceInteraction as T, getTarget as Tn, Card as Tt, useClick as U, dispatchClickWithModifiers as Un, useAnimationsFinished as Ut, ReactStore as V, useMergedRefs as Vn, getIcon as Vt, FloatingFocusManager as W, ownerDocument as Wn, useValueAsRef as Wt, FloatingTreeStore as X, getParentNode as Xn, focusOut as Xt, useFloatingTree as Y, useRefWithInit as Yn, escapeKey as Yt, FloatingPortal as Z, getWindow as Zn, imperativeAction as Zt, Tooltip as _, isListIndexDisabled as _n, CollapsibleContent as _t, DialogTitle as a, CompositeList as an, Link as ar, Tabs as at, getDisabledMountTransitionStyles as b, stopEvent as bn, Columns as bt, useOpenInteractionType as c, getNextTabbable as cn, Router as cr, ResponseField as ct, useScrollLock as d, isOutsideEvent as dn, useNavigate as dr, ParamField as dt, outsidePress as en, X as er, enqueueFocus as et, DialogPortal$1 as f, findNonDisabledListIndex as fn, createPath as fr, Icon as ft, DialogBackdrop as g, isIndexOutOfListBounds as gn, Collapsible as gt, DialogClose as h, isElementVisible as hn, Expandable as ht, DialogContent as i, triggerPress as in, BrowserRouter as ir, Tab as it, PopupTriggerMap as j, webkit as jn, Note as jt, createInitialPopupStoreState as k, ARROW_UP$1 as kn, Danger as kt, DialogTitle$1 as l, getTabbableAfterElement as ln, Routes as lr, PropertiesTable as lt, DialogPopup as m, getMinListIndex as mn, ABSOLUTE_URL_REGEX as mr, renderInlineMarkdown as mt, ZoomableImage as n, triggerFocus as nn, Check$1 as nr, fastComponent as nt, DialogTrigger as o, addEventListener as on, Navigate as or, Step as ot, InternalBackdrop as p, getMaxListIndex as pn, parsePath as pr, Frame as pt, useFloatingNodeId as q, useIsoLayoutEffect as qn, createChangeEventDetails as qt, Dialog as r, triggerHover as rn, createLucideIcon as rr, fastComponentRef as rt, DialogTrigger$1 as s, useDirection as sn, Route as sr, Steps as st, docs_exports as t, siblingOpen as tn, ChevronRight as tr, FocusGuard as tt, DialogRoot as u, getTabbableBeforeElement as un, useLocation as ur, Param as ut, TooltipProvider as v, isVirtualClick as vn, CollapsibleTrigger as vt, safePolygon as w, contains as wn, useCompositeItem as wt, useAnchorPositioning as x, getFloatingFocusElement as xn, CodeGroup as xt, usePositioner as y, isVirtualPointerEvent as yn, Column as yt, useTriggerDataForwarding as z, EMPTY_ARRAY$1 as zn, AccordionGroup as zt };
+export { POPUP_COLLISION_AVOIDANCE as $, isHTMLElement as $n, itemPress as $t, popupStoreSelectors as A, ARROW_UP$1 as An, Danger as At, useSyncedFloatingRootContext as B, EMPTY_ARRAY$1 as Bn, AccordionGroup as Bt, pressableTriggerOpenStateMapping as C, isTypeableCombobox as Cn, COMPOSITE_KEYS as Ct, useFocus as D, ARROW_DOWN$1 as Dn, CardGroup as Dt, useHoverFloatingInteraction as E, getTarget as En, Card as Et, setPopupOpenState as F, useId as Fn, WarningBanner as Ft, FloatingNode as G, ownerDocument as Gn, useValueAsRef as Gt, useDismiss as H, useMergedRefs as Hn, getIcon as Ht, useImplicitActiveTrigger as I, useTimeout as In, Button as It, useFloatingParentNodeId as J, useIsoLayoutEffect as Jn, createChangeEventDetails as Jt, FloatingTree as K, useCompositeRootContext as Kn, useCompositeListItem as Kt, useOpenStateTransitions as L, Button$1 as Ln, Badge as Lt, FOCUSABLE_POPUP_PROPS as M, webkit as Mn, Note as Mt, PopupHandleAttachment as N, mac as Nn, Tip as Nt, usePopupHandleStore as O, ARROW_LEFT$1 as On, Callout as Ot, attachPreventUnmountOnClose as P, useBaseUiId as Pn, Warning as Pt, DROPDOWN_COLLISION_AVOIDANCE as Q, getWindow as Qn, imperativeAction as Qt, usePopupInteractionProps as R, cn as Rn, Badge$1 as Rt, popupTransitionStateMapping as S, getFloatingFocusElement as Sn, CodeGroup as St, useHoverReferenceInteraction as T, contains as Tn, useCompositeItem as Tt, useClick as U, useButton as Un, useOpenChangeComplete as Ut, ReactStore as V, EMPTY_OBJECT as Vn, resolveIcon as Vt, FloatingFocusManager as W, dispatchClickWithModifiers as Wn, useAnimationsFinished as Wt, FloatingTreeStore as X, useRefWithInit as Xn, escapeKey as Xt, useFloatingTree as Y, useStableCallback as Yn, cancelOpen as Yt, FloatingPortal as Z, getParentNode as Zn, focusOut as Zt, Tooltip as _, isIndexOutOfListBounds as _n, Collapsible as _t, DialogTitle as a, triggerPress as an, BrowserRouter as ar, Tabs as at, getDisabledMountTransitionStyles as b, isVirtualPointerEvent as bn, Column as bt, useOpenInteractionType as c, useDirection as cn, Route as cr, ResponseField as ct, useScrollLock as d, getTabbableBeforeElement as dn, useLocation as dr, ParamField as dt, listNavigation as en, isLastTraversableNode as er, enqueueFocus as et, DialogPortal$1 as f, isOutsideEvent as fn, useNavigate as fr, Link as ft, DialogBackdrop as g, isElementVisible as gn, Expandable as gt, DialogClose as h, getMinListIndex as hn, ABSOLUTE_URL_REGEX as hr, renderInlineMarkdown as ht, DialogContent as i, triggerHover as in, createLucideIcon as ir, Tab as it, PopupTriggerMap as j, jsdom as jn, Info as jt, createInitialPopupStoreState as k, ARROW_RIGHT$1 as kn, Check as kt, DialogTitle$1 as l, getNextTabbable as ln, Router as lr, PropertiesTable as lt, DialogPopup as m, getMaxListIndex as mn, parsePath as mr, Frame as mt, ZoomableImage as n, siblingOpen as nn, ChevronRight as nr, fastComponent as nt, DialogTrigger as o, CompositeList as on, Link$1 as or, Step as ot, InternalBackdrop as p, findNonDisabledListIndex as pn, createPath as pr, Icon as pt, useFloatingNodeId as q, mergeProps as qn, useAnimationFrame as qt, Dialog as r, triggerFocus as rn, Check$1 as rr, fastComponentRef as rt, DialogTrigger$1 as s, addEventListener as sn, Navigate as sr, Steps as st, docs_exports as t, outsidePress as tn, X as tr, FocusGuard as tt, DialogRoot as u, getTabbableAfterElement as un, Routes as ur, Param as ut, TooltipProvider as v, isListIndexDisabled as vn, CollapsibleContent as vt, safePolygon as w, activeElement as wn, inertValue as wt, useAnchorPositioning as x, stopEvent as xn, Columns as xt, usePositioner as y, isVirtualClick as yn, CollapsibleTrigger as yt, useTriggerDataForwarding as z, useRenderElement as zn, Accordion as zt };

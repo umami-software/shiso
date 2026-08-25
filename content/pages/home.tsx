@@ -8,14 +8,13 @@ export const frontmatter = {
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-3xl py-16 text-center">
+    <div className="mx-auto max-w-3xl pt-32 text-center">
       <h1 className="text-5xl font-bold tracking-tight text-balance sm:text-6xl md:text-7xl">
         Documentation made easy
       </h1>
 
       <p className="my-12 text-lg text-muted-foreground text-balance sm:text-xl">
-        Shiso makes documentation easy to write and maintain — fully static output, built-in search
-        and MDX support.
+        Write in Markdown or MDX, configure everything in one file, and publish a fast, searchable documentation site anywhere.
       </p>
 
       <div className="flex justify-center">

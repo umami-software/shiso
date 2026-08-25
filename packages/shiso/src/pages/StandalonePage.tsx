@@ -31,7 +31,7 @@ export function StandalonePageView({ page, site }: { page: StandalonePage; site:
   const isComponentPage = page.filePath.endsWith('.tsx');
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex grow flex-col">
       {isComponentPage ? (
         <div className="grow">
           <Content />

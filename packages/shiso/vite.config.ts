@@ -434,6 +434,13 @@ export default defineConfig(async () => {
       // virtual imports that are resolved by the plugins below.
       exclude: ['@umami/shiso'],
     },
+    ssr: {
+      // App code may import framework entry points directly (e.g.
+      // "@umami/shiso/components" from TSX standalone pages). Bundle them in
+      // the SSR build so project-time virtual imports resolve through the
+      // aliases below instead of failing in Node during prerender.
+      noExternal: ['@umami/shiso'],
+    },
     plugins: [
       configModule.plugin,
       tailwindcss(),

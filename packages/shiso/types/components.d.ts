@@ -1,4 +1,5 @@
-import type { ImgHTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { ComponentProps, ImgHTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { Link as RouterLink } from 'react-router';
 
 export interface AccordionProps {
   title?: ReactNode;
@@ -215,3 +216,7 @@ export interface ZoomableImageProps extends ImgHTMLAttributes<HTMLImageElement> 
 }
 
 export declare function ZoomableImage(props: ZoomableImageProps): ReactElement;
+
+/** Client-side navigation link bound to Shiso's router. */
+export type LinkProps = ComponentProps<typeof RouterLink>;
+export declare function Link(props: LinkProps): ReactElement;
