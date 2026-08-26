@@ -14,8 +14,9 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import { highlightTerms, type SearchResult } from '@/lib/search';
 import type { ResolvedSearchConfig } from '@/lib/search/config';
 import { resolveSearchProvider, type SearchProvider } from '@/lib/search/provider';
-import { getScopeByPathname } from '@/lib/site-config';
-import type { ThemeLabels } from '@/lib/types';
+import { getPageFrontmatter, getScopeByPathname } from '@/lib/site-config';
+import type { SearchPosition, SiteModel, ThemeLabels } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 /** Enough results to make the list scroll; the dialog caps its own height. */
 const RESULT_LIMIT = 30;
@@ -54,7 +55,16 @@ function renderWithQueryHighlight(text: string, query: string) {
  * Provider-neutral search dialog. The selected provider and its index or
  * client are loaded on demand, so search stays out of the initial bundle.
  */
-export function Search({ config, labels }: { config: ResolvedSearchConfig; labels: ThemeLabels }) {
+export function Search({
+  config,
+  labels,
+  className,
+}: {
+  config: ResolvedSearchConfig;
+  labels: ThemeLabels;
+  /** Extra classes for the trigger button (e.g. to stretch it in a column). */
+  className?: string;
+}) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
@@ -179,12 +189,15 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
         render={
           <Button
             variant="outline"
-            className="h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground"
+            className={cn(
+              'h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground',
+              className,
+            )}
           />
         }
       >
         <SearchIcon className="size-3.5" />
-        <span className="min-w-24 text-left">{config.prompt}</span>
+        <span className="min-w-24 grow text-left">{config.prompt}</span>
         {config.shortcut ? (
           <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
             {config.shortcutLabel}
@@ -252,4 +265,31 @@ export function Search({ config, labels }: { config: ResolvedSearchConfig; label
       </DialogContent>
     </Dialog>
   );
+}
+
+/**
+ * Renders the search control only when `search.position` targets this slot.
+ * Layout components drop one of these into each position they support; the
+ * per-page `search: false` frontmatter flag is honored here as well.
+ */
+export function SearchSlot({
+  site,
+  position,
+  className,
+}: {
+  site: SiteModel;
+  position: SearchPosition;
+  className?: string;
+}) {
+  const { pathname } = useLocation();
+
+  if (!site.search.enabled || site.search.position !== position) {
+    return null;
+  }
+
+  if (getPageFrontmatter(pathname)?.search === false) {
+    return null;
+  }
+
+  return <Search config={site.search} labels={site.labels} className={className} />;
 }

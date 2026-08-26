@@ -11,11 +11,25 @@ describe('search configuration', () => {
     expect(resolveSearchConfig(undefined)).toEqual({
       enabled: true,
       prompt: 'Search...',
+      position: 'header',
       provider: 'local',
       options: {},
       shortcut: 'k',
       shortcutLabel: 'Ctrl K',
     });
+  });
+
+  it('resolves supported search positions and falls back to the header', () => {
+    expect(resolveSearchConfig({ position: 'sidebar' }).position).toBe('sidebar');
+
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(resolveSearchConfig({ position: 'footer' as unknown as 'header' }).position).toBe(
+      'header',
+    );
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
+
+    expect(resolveSearchConfig(false).position).toBe('header');
   });
 
   it('normalizes configured values', () => {
@@ -25,6 +39,7 @@ describe('search configuration', () => {
       {
         enabled: true,
         prompt: 'Search docs',
+        position: 'header',
         provider: 'hosted',
         options,
         shortcut: 'k',

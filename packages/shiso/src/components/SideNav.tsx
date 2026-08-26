@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { resolveIcon } from '@/components/docs/utils';
@@ -9,9 +8,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
-const sectionLabelClass =
-  'flex min-w-0 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit';
+const sectionLabelClass = 'flex min-w-0 items-center gap-[0.4rem] pb-2 pr-1 font-bold text-inherit';
 const groupLabelClass =
   'flex min-w-0 items-center gap-[0.4rem] py-2 pl-3 pr-1 font-medium text-inherit';
 const selectedClass =
@@ -319,7 +318,7 @@ export function SideNav({
   const nodes = navigation[activeTabId] || navigation[tabs[0]?.id] || [];
 
   return (
-    <ScrollArea className={cn('w-full max-w-full', { 'h-full': isSticky })}>
+    <ScrollArea className={cn('w-full max-w-full', { 'min-h-0 grow': isSticky })}>
       <nav className="flex w-full flex-col gap-6 pr-4 text-sm" aria-label={navigationLabel}>
         {anchors.length ? (
           <NavNodes

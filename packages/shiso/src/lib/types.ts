@@ -255,9 +255,20 @@ export interface FontsConfig extends FontSpec {
   body?: FontSpec;
 }
 
+/**
+ * Named slots a theme can place the search control in. Every theme must
+ * support "header"; unsupported positions fall back to it.
+ */
+export type SearchPosition = 'header' | 'sidebar';
+
 export interface SearchConfig {
   /** Placeholder text for the search input. */
   prompt?: string;
+  /**
+   * Where the search control renders: "header" (default, right side of the
+   * header) or "sidebar" (top of the navigation column).
+   */
+  position?: SearchPosition;
   /** Provider id: "local" (default), "pagefind", or a runtime-registered id. */
   provider?: string;
   /** Provider-specific configuration. */
@@ -555,7 +566,7 @@ export interface DocFrontmatter {
   title?: string;
   description?: string;
   noindex?: boolean;
-  /** Hide the header search control and disable its shortcut on this page. */
+  /** Hide the search control and disable its shortcut on this page. */
   search?: false;
   /** Overrides the site-wide `metadata.timestamp` setting for this page. */
   timestamp?: boolean;

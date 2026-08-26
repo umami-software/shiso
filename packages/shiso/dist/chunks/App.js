@@ -4026,11 +4026,24 @@ const DEFAULT_SEARCH_PROMPT = "Search...";
 const DEFAULT_SEARCH_PROVIDER = "local";
 const DEFAULT_SEARCH_SHORTCUT = "k";
 const DEFAULT_SEARCH_SHORTCUT_LABEL = "Ctrl K";
+const DEFAULT_SEARCH_POSITION = "header";
+/** Positions the built-in theme knows how to render. */
+const SEARCH_POSITIONS = ["header", "sidebar"];
+/**
+* Themes must always support "header", so anything unrecognized (or not
+* implemented by the active theme) lands there instead of vanishing.
+*/
+function resolveSearchPosition(position, supported = SEARCH_POSITIONS) {
+	if (typeof position === "string" && supported.includes(position)) return position;
+	if (position !== void 0 && position !== "header") console.warn(`[shiso] Unsupported search.position "${String(position)}" — using "${DEFAULT_SEARCH_POSITION}".`);
+	return DEFAULT_SEARCH_POSITION;
+}
 /** Normalizes docs.json search settings for both the UI and provider loader. */
 function resolveSearchConfig(config) {
 	if (config === false) return {
 		enabled: false,
 		prompt: DEFAULT_SEARCH_PROMPT,
+		position: DEFAULT_SEARCH_POSITION,
 		provider: DEFAULT_SEARCH_PROVIDER,
 		options: {},
 		shortcut: false,
@@ -4039,6 +4052,7 @@ function resolveSearchConfig(config) {
 	return {
 		enabled: true,
 		prompt: config?.prompt?.trim() || "Search...",
+		position: resolveSearchPosition(config?.position),
 		provider: config?.provider?.trim().toLowerCase() || "local",
 		options: config?.options || {},
 		shortcut: config?.shortcut === false ? false : config?.shortcut?.trim().toLowerCase() || "k",
@@ -7205,7 +7219,7 @@ function renderWithQueryHighlight(text, query) {
 * Provider-neutral search dialog. The selected provider and its index or
 * client are loaded on demand, so search stays out of the initial bundle.
 */
-function Search({ config, labels }) {
+function Search({ config, labels, className }) {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const [open, setOpen] = useState(false);
@@ -7294,12 +7308,12 @@ function Search({ config, labels }) {
 		children: [/* @__PURE__ */ jsxs(DialogTrigger, {
 			render: /* @__PURE__ */ jsx(Button, {
 				variant: "outline",
-				className: "h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground"
+				className: cn("h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground", className)
 			}),
 			children: [
 				/* @__PURE__ */ jsx(Search$1, { className: "size-3.5" }),
 				/* @__PURE__ */ jsx("span", {
-					className: "min-w-24 text-left",
+					className: "min-w-24 grow text-left",
 					children: config.prompt
 				}),
 				config.shortcut ? /* @__PURE__ */ jsx("kbd", {
@@ -7346,6 +7360,21 @@ function Search({ config, labels }) {
 				})]
 			})]
 		})]
+	});
+}
+/**
+* Renders the search control only when `search.position` targets this slot.
+* Layout components drop one of these into each position they support; the
+* per-page `search: false` frontmatter flag is honored here as well.
+*/
+function SearchSlot({ site, position, className }) {
+	const { pathname } = useLocation();
+	if (!site.search.enabled || site.search.position !== position) return null;
+	if (getPageFrontmatter(pathname)?.search === false) return null;
+	return /* @__PURE__ */ jsx(Search, {
+		config: site.search,
+		labels: site.labels,
+		className
 	});
 }
 
@@ -7527,10 +7556,9 @@ function NavbarLinkItem({ link, primary = false }) {
 	});
 }
 function Header({ site }) {
-	const { logo, navbar, name, appearance, labels, search } = site;
+	const { logo, navbar, name, appearance, labels } = site;
 	const { pathname } = useLocation();
 	const docs = getScopeByPathname(pathname).docs;
-	const showSearch = getPageFrontmatter(pathname)?.search !== false;
 	const brandHref = logo?.href || (hasRootStandalonePage ? "/" : docsHomeUrl);
 	const hasBrand = !!name || !!logo?.light || !!logo?.dark;
 	const brandClassName = "inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]";
@@ -7579,10 +7607,15 @@ function Header({ site }) {
 				/* @__PURE__ */ jsxs("div", {
 					className: "flex min-w-0 items-center gap-2 justify-self-end",
 					children: [
-						showSearch ? /* @__PURE__ */ jsx(Search, {
-							config: search,
-							labels
-						}) : null,
+						/* @__PURE__ */ jsx(SearchSlot, {
+							site,
+							position: "header"
+						}),
+						/* @__PURE__ */ jsx(SearchSlot, {
+							site,
+							position: "sidebar",
+							className: "lg:hidden"
+						}),
 						navbar?.links.map((link) => /* @__PURE__ */ jsx(NavbarLinkItem, { link }, link.href)),
 						!appearance.strict && /* @__PURE__ */ jsx(ThemeToggle, { label: labels.toggleTheme }),
 						navbar?.primary ? /* @__PURE__ */ jsx(NavbarLinkItem, {
@@ -8307,7 +8340,7 @@ function SideNav({ tabs, navigation, anchors, activeTabId, isSticky, drilldown, 
 	const { pathname } = useLocation();
 	const nodes = navigation[activeTabId] || navigation[tabs[0]?.id] || [];
 	return /* @__PURE__ */ jsx(ScrollArea, {
-		className: cn("w-full max-w-full", { "h-full": isSticky }),
+		className: cn("w-full max-w-full", { "min-h-0 grow": isSticky }),
 		children: /* @__PURE__ */ jsxs("nav", {
 			className: "flex w-full flex-col gap-6 pr-4 text-sm",
 			"aria-label": navigationLabel,
@@ -8462,9 +8495,13 @@ function Docs({ page, doc, site }) {
 			})]
 		}), /* @__PURE__ */ jsxs("div", {
 			className: "flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6",
-			children: [/* @__PURE__ */ jsx("div", {
-				className: "hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0",
-				children: /* @__PURE__ */ jsx(SideNav, {
+			children: [/* @__PURE__ */ jsxs("div", {
+				className: "hidden min-w-0 max-w-60 basis-60 flex-col gap-4 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:flex lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0",
+				children: [/* @__PURE__ */ jsx(SearchSlot, {
+					site,
+					position: "sidebar",
+					className: "w-full"
+				}), /* @__PURE__ */ jsx(SideNav, {
 					tabs,
 					navigation,
 					anchors: scopeDocs.anchors,
@@ -8474,7 +8511,7 @@ function Docs({ page, doc, site }) {
 					navigationLabel: site.labels.documentationNavigation,
 					expandLabel: site.labels.expand,
 					collapseLabel: site.labels.collapse
-				})
+				})]
 			}), /* @__PURE__ */ jsxs("div", {
 				className: "flex min-w-0 grow self-stretch flex-col",
 				children: [/* @__PURE__ */ jsxs("div", {

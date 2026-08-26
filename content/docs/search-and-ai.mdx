@@ -26,6 +26,27 @@ disable only the shortcut, or set `search` to `false` to remove search:
 }
 ```
 
+### Search position
+
+By default the search control sits on the right side of the header. Move it
+with `search.position`:
+
+- `header` (default) — right side of the header.
+- `sidebar` — top of the navigation column. On small screens, where the
+  sidebar collapses into a menu, it stays in the header.
+
+```json
+{
+  "search": {
+    "position": "sidebar"
+  }
+}
+```
+
+Positions are named slots rather than layout coordinates, so themes decide
+how each one looks. Every theme supports `header`; if a theme doesn't
+implement the position you asked for, search falls back to the header.
+
 To hide the search control and disable its shortcut on one page, set
 `search: false` in that page's frontmatter:
 

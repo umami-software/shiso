@@ -1,17 +1,12 @@
 import { Link, useLocation } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { Search } from '@/components/Search';
+import { SearchSlot } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { isExternalHref } from '@/lib/paths';
-import {
-  docsHomeUrl,
-  getPageFrontmatter,
-  getScopeByPathname,
-  hasRootStandalonePage,
-} from '@/lib/site-config';
+import { docsHomeUrl, getScopeByPathname, hasRootStandalonePage } from '@/lib/site-config';
 import type { NormalizedLink, SiteModel } from '@/lib/types';
 
 /**
@@ -63,11 +58,10 @@ function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; prima
 }
 
 export function Header({ site }: { site: SiteModel }) {
-  const { logo, navbar, name, appearance, labels, search } = site;
+  const { logo, navbar, name, appearance, labels } = site;
   const { pathname } = useLocation();
   // The header renders the navigation of whichever scope owns the current page.
   const docs = getScopeByPathname(pathname).docs;
-  const showSearch = getPageFrontmatter(pathname)?.search !== false;
   // The brand links to the standalone home page when one owns "/".
   const brandHref = logo?.href || (hasRootStandalonePage ? '/' : docsHomeUrl);
   const hasBrand = !!name || !!logo?.light || !!logo?.dark;
@@ -120,7 +114,10 @@ export function Header({ site }: { site: SiteModel }) {
           {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}
         </div>
         <div className="flex min-w-0 items-center gap-2 justify-self-end">
-          {showSearch ? <Search config={search} labels={labels} /> : null}
+          <SearchSlot site={site} position="header" />
+          {/* The sidebar collapses into a sheet on small screens, so its
+              search control moves up here until the column is visible. */}
+          <SearchSlot site={site} position="sidebar" className="lg:hidden" />
           {navbar?.links.map(link => (
             <NavbarLinkItem key={link.href} link={link} />
           ))}

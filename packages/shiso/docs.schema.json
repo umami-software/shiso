@@ -279,6 +279,14 @@
               "allOf": [{ "$ref": "#/definitions/stringValue" }],
               "description": "Placeholder text for the search input."
             },
+            "position": {
+              "anyOf": [
+                { "type": "string", "enum": ["header", "sidebar"] },
+                { "$ref": "#/definitions/configRefValue" }
+              ],
+              "default": "header",
+              "description": "Where the search control renders: \"header\" (right side of the header) or \"sidebar\" (top of the navigation column; stays in the header on small screens). Themes that do not support a position fall back to \"header\"."
+            },
             "provider": {
               "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
               "description": "Search provider id: \"local\" (default), \"pagefind\", or a provider registered at runtime."

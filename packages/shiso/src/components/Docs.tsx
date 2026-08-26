@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Menu } from '@/components/icons';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { PageLinks } from '@/components/PageLinks';
+import { SearchSlot } from '@/components/Search';
 import { SideNav } from '@/components/SideNav';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -104,7 +105,8 @@ export function Docs({ page, doc, site }: DocsProps) {
         </SheetContent>
       </Sheet>
       <div className="flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6">
-        <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
+        <div className="hidden min-w-0 max-w-60 basis-60 flex-col gap-4 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:flex lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
+          <SearchSlot site={site} position="sidebar" className="w-full" />
           <SideNav
             tabs={tabs}
             navigation={navigation}
