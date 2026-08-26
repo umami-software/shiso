@@ -14,6 +14,40 @@ import shiso from "virtual:shiso-config";
 import rawConfig from "virtual:shiso-docs-config";
 import { LAST_MODIFIED } from "@/generated/last-modified";
 
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/arrow-left.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$10 = [["path", {
+	d: "m12 19-7-7 7-7",
+	key: "1l729n"
+}], ["path", {
+	d: "M19 12H5",
+	key: "x3x0zl"
+}]];
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$10);
+
+//#endregion
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/arrow-right.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$9 = [["path", {
+	d: "M5 12h14",
+	key: "1ays0h"
+}], ["path", {
+	d: "m12 5 7 7-7 7",
+	key: "xquz4c"
+}]];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$9);
+
+//#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/copy.mjs
 /**
 * @license lucide-react v1.28.0 - ISC
@@ -4074,6 +4108,8 @@ const SHISO_THEME_LABELS = {
 	noResults: "No results",
 	lastUpdated: "Last updated on",
 	relatedTopics: "Related topics",
+	previousPage: "Previous",
+	nextPage: "Next",
 	notFound: "Page not found",
 	dismissBanner: "Dismiss banner",
 	toggleTheme: "Toggle theme",
@@ -8034,30 +8070,44 @@ function DocContent({ page, doc, site }) {
 				})]
 			}),
 			/* @__PURE__ */ jsxs("div", {
-				className: "mt-8 flex items-center justify-between",
+				className: "mt-8 flex items-end justify-between",
 				"data-pagefind-ignore": true,
 				children: [/* @__PURE__ */ jsx(NavigationButton, {
 					...prev,
+					eyebrow: site.labels.previousPage,
 					isPrev: true
-				}), /* @__PURE__ */ jsx(NavigationButton, { ...next })]
+				}), /* @__PURE__ */ jsx(NavigationButton, {
+					...next,
+					eyebrow: site.labels.nextPage
+				})]
 			})
 		]
 	});
 }
-const NavigationButton = ({ label, url, isPrev }) => {
+const NavigationButton = ({ label, url, eyebrow, isPrev }) => {
 	if (!url || !label) return /* @__PURE__ */ jsx("div", {});
 	return /* @__PURE__ */ jsxs(Link, {
 		to: url,
-		className: "group my-3 inline-flex items-center gap-3 text-base font-bold text-foreground",
+		className: cn("group my-3 inline-flex items-end gap-3 text-base text-foreground", { "text-right": !isPrev }),
+		rel: isPrev ? "prev" : "next",
 		children: [
-			isPrev && /* @__PURE__ */ jsx(ChevronRight, {
+			isPrev && /* @__PURE__ */ jsx(ArrowLeft, {
 				size: 14,
-				className: "rotate-180 text-muted-foreground transition-colors group-hover:text-foreground"
+				className: "mb-[0.3rem] text-muted-foreground transition-colors group-hover:text-foreground"
 			}),
-			label,
-			!isPrev && /* @__PURE__ */ jsx(ChevronRight, {
+			/* @__PURE__ */ jsxs("span", {
+				className: "flex flex-col",
+				children: [/* @__PURE__ */ jsx("span", {
+					className: "text-xs font-bold text-muted-foreground",
+					children: eyebrow
+				}), /* @__PURE__ */ jsx("span", {
+					className: "font-medium transition-colors group-hover:text-primary",
+					children: label
+				})]
+			}),
+			!isPrev && /* @__PURE__ */ jsx(ArrowRight, {
 				size: 14,
-				className: "text-muted-foreground transition-colors group-hover:text-foreground"
+				className: "mb-[0.3rem] text-muted-foreground transition-colors group-hover:text-foreground"
 			})
 		]
 	});

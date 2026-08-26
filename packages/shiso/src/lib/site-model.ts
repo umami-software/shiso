@@ -29,6 +29,8 @@ const SHISO_THEME_LABELS: ThemeLabels = {
   noResults: 'No results',
   lastUpdated: 'Last updated on',
   relatedTopics: 'Related topics',
+  previousPage: 'Previous',
+  nextPage: 'Next',
   notFound: 'Page not found',
   dismissBanner: 'Dismiss banner',
   toggleTheme: 'Toggle theme',

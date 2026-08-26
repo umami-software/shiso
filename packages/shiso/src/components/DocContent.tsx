@@ -1,12 +1,13 @@
 import { Link } from 'react-router';
 import { ContextualMenu } from '@/components/ContextualMenu';
-import { ChevronRight, FileText } from '@/components/icons';
+import { ArrowLeft, ArrowRight, FileText } from '@/components/icons';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
 import { resolveLocale } from '@/lib/locale';
 import { docsSite, getPageByPathname } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
 import type { DocModule, NormalizedDocsPage, RelatedEntry, SiteModel } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 interface RelatedLink {
   href: string;
@@ -148,9 +149,9 @@ export function DocContent({ page, doc, site }: DocContentProps) {
           </ul>
         </nav>
       )}
-      <div className="mt-8 flex items-center justify-between" data-pagefind-ignore>
-        <NavigationButton {...prev} isPrev />
-        <NavigationButton {...next} />
+      <div className="mt-8 flex items-end justify-between" data-pagefind-ignore>
+        <NavigationButton {...prev} eyebrow={site.labels.previousPage} isPrev />
+        <NavigationButton {...next} eyebrow={site.labels.nextPage} />
       </div>
     </article>
   );
@@ -159,10 +160,13 @@ export function DocContent({ page, doc, site }: DocContentProps) {
 const NavigationButton = ({
   label,
   url,
+  eyebrow,
   isPrev,
 }: {
   label?: string;
   url?: string;
+  /** Direction caption ("Previous" / "Next") shown above the page title. */
+  eyebrow: string;
   isPrev?: boolean;
 }) => {
   if (!url || !label) {
@@ -172,19 +176,25 @@ const NavigationButton = ({
   return (
     <Link
       to={url}
-      className="group my-3 inline-flex items-center gap-3 text-base font-bold text-foreground"
+      className={cn('group my-3 inline-flex items-end gap-3 text-base text-foreground', {
+        'text-right': !isPrev,
+      })}
+      rel={isPrev ? 'prev' : 'next'}
     >
       {isPrev && (
-        <ChevronRight
+        <ArrowLeft
           size={14}
-          className="rotate-180 text-muted-foreground transition-colors group-hover:text-foreground"
+          className="mb-[0.3rem] text-muted-foreground transition-colors group-hover:text-foreground"
         />
       )}
-      {label}
+      <span className="flex flex-col">
+        <span className="text-xs font-bold text-muted-foreground">{eyebrow}</span>
+        <span className="font-medium transition-colors group-hover:text-primary">{label}</span>
+      </span>
       {!isPrev && (
-        <ChevronRight
+        <ArrowRight
           size={14}
-          className="text-muted-foreground transition-colors group-hover:text-foreground"
+          className="mb-[0.3rem] text-muted-foreground transition-colors group-hover:text-foreground"
         />
       )}
     </Link>

@@ -498,6 +498,8 @@ export interface ThemeLabels {
   noResults: string;
   lastUpdated: string;
   relatedTopics: string;
+  previousPage: string;
+  nextPage: string;
   notFound: string;
   dismissBanner: string;
   toggleTheme: string;

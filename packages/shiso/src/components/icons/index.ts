@@ -1,4 +1,6 @@
 export {
+  ArrowLeft,
+  ArrowRight,
   Check,
   Check as CheckIcon,
   ChevronRight,
