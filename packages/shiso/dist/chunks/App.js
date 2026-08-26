@@ -8085,10 +8085,10 @@ function DocContent({ page, doc, site }) {
 	});
 }
 const NavigationButton = ({ label, url, eyebrow, isPrev }) => {
-	if (!url || !label) return /* @__PURE__ */ jsx("div", {});
+	if (!url || !label) return /* @__PURE__ */ jsx("div", { className: "flex-1" });
 	return /* @__PURE__ */ jsxs(Link, {
 		to: url,
-		className: cn("group my-3 inline-flex items-end gap-3 text-base text-foreground", { "text-right": !isPrev }),
+		className: cn("group flex flex-1 items-end gap-3 py-3 text-base text-foreground", { "justify-end text-right": !isPrev }),
 		rel: isPrev ? "prev" : "next",
 		children: [
 			isPrev && /* @__PURE__ */ jsx(ArrowLeft, {

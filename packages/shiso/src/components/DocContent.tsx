@@ -170,14 +170,17 @@ const NavigationButton = ({
   isPrev?: boolean;
 }) => {
   if (!url || !label) {
-    return <div />;
+    return <div className="flex-1" />;
   }
 
   return (
     <Link
       to={url}
-      className={cn('group my-3 inline-flex items-end gap-3 text-base text-foreground', {
-        'text-right': !isPrev,
+      // The link stretches across its half of the row so the whole box is
+      // clickable, not just the text. Vertical margin became padding for the
+      // same reason.
+      className={cn('group flex flex-1 items-end gap-3 py-3 text-base text-foreground', {
+        'justify-end text-right': !isPrev,
       })}
       rel={isPrev ? 'prev' : 'next'}
     >
