@@ -1193,7 +1193,7 @@ function CodeBlock({ children, className }) {
 	};
 	return /* @__PURE__ */ jsxs("div", {
 		"data-slot": "code-block",
-		className: "relative my-5 overflow-hidden rounded-lg bg-muted/50",
+		className: "relative my-5 overflow-hidden rounded-lg bg-card",
 		children: [/* @__PURE__ */ jsx(ScrollArea, {
 			scrollbars: "horizontal",
 			className: "w-full",

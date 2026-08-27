@@ -20,7 +20,7 @@ export function Expandable({ title, children, defaultOpen = false }: ExpandableP
           {title}
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <div className={styles.accordionContent}>{children}</div>
+          <div className={`${styles.accordionContent} ${styles.expandableContent}`}>{children}</div>
         </CollapsibleContent>
       </div>
     </Collapsible>

@@ -22,7 +22,7 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
   };
 
   return (
-    <div data-slot="code-block" className="relative my-5 overflow-hidden rounded-lg bg-muted/50">
+    <div data-slot="code-block" className="relative my-5 overflow-hidden rounded-lg bg-card">
       <ScrollArea scrollbars="horizontal" className="w-full">
         <pre
           ref={textInput}

@@ -9832,7 +9832,8 @@ const styles = {
 	accordionItem: "",
 	accordionTrigger: "text-foreground",
 	accordionContent: "text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0",
-	expandableTrigger: "items-center px-4 py-3 text-sm font-normal text-foreground hover:no-underline",
+	expandableTrigger: "items-center py-3 text-sm font-normal text-foreground hover:no-underline",
+	expandableContent: "pl-6",
 	callout: "my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6",
 	calloutIcon: "flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4",
 	calloutBody: "flex min-w-0 flex-1 flex-col gap-[0.35rem] [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:my-[0.35rem] [&>:where(p,ul,ol):first-child]:mt-0 [&>:where(p,ul,ol):last-child]:mb-0",
@@ -11305,7 +11306,7 @@ function CodeGroup({ children }) {
 	return /* @__PURE__ */ jsxs(Tabs$1, {
 		value: selected,
 		onValueChange: setSelectedKey,
-		className: "my-4 gap-0 overflow-hidden rounded-lg bg-muted/50 [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent",
+		className: "my-4 gap-0 overflow-hidden rounded-lg bg-card [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent",
 		children: [/* @__PURE__ */ jsx(TabsList, {
 			variant: "line",
 			className: "h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none px-3 py-0 shadow-[inset_0_-1px_0_var(--border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
@@ -11542,7 +11543,7 @@ function Expandable({ title, children, defaultOpen = false }) {
 				className: `${styles.expandableTrigger} group/collapsible-trigger flex w-full justify-start gap-2 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50`,
 				children: [/* @__PURE__ */ jsx(ChevronRight, { className: "size-4 shrink-0 text-muted-foreground transition-transform group-aria-expanded/collapsible-trigger:rotate-90" }), title]
 			}), /* @__PURE__ */ jsx(CollapsibleContent, { children: /* @__PURE__ */ jsx("div", {
-				className: styles.accordionContent,
+				className: `${styles.accordionContent} ${styles.expandableContent}`,
 				children
 			}) })]
 		})
@@ -11726,53 +11727,43 @@ function PropertiesTable({ children }) {
 	const rows = toElementArray(children);
 	if (!rows.length) return null;
 	return /* @__PURE__ */ jsx("div", {
-		className: "my-4 overflow-x-auto rounded-lg border border-border px-6 py-2",
+		className: "my-4 overflow-x-auto",
 		children: /* @__PURE__ */ jsxs("table", {
-			className: "m-0 min-w-[40rem] table-fixed border-collapse border-0",
+			className: "m-0 min-w-[40rem] table-fixed",
 			children: [/* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/5 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
+					className: "w-1/5",
 					children: "Name"
 				}),
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/4 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground",
+					className: "w-1/4",
 					children: "Type"
 				}),
-				/* @__PURE__ */ jsx("th", {
-					className: "border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 text-left text-sm font-semibold text-foreground",
-					children: "Description"
-				})
-			] }) }), /* @__PURE__ */ jsx("tbody", { children: rows.map((row, index) => {
+				/* @__PURE__ */ jsx("th", { children: "Description" })
+			] }) }), /* @__PURE__ */ jsx("tbody", { children: rows.map((row) => {
 				const { name, type, required, deprecated, children: description } = row.props;
 				const defaultValue = displayValue(row.props.default);
-				const borderClass = index === rows.length - 1 ? "border-b-0" : "border-b";
 				return /* @__PURE__ */ jsxs("tr", { children: [
-					/* @__PURE__ */ jsx("td", {
-						className: `${borderClass} border-x-0 border-t-0 border-border px-0 py-2 pr-6 align-top text-sm text-foreground`,
-						children: /* @__PURE__ */ jsxs("span", {
-							className: "inline-flex flex-wrap items-center gap-2",
-							children: [
-								name,
-								required ? /* @__PURE__ */ jsx(Badge, {
-									size: "xs",
-									tone: "primary",
-									children: "required"
-								}) : null,
-								deprecated ? /* @__PURE__ */ jsx(Badge, {
-									size: "xs",
-									children: "deprecated"
-								}) : null
-							]
-						})
-					}),
-					/* @__PURE__ */ jsx("td", {
-						className: `${borderClass} border-x-0 border-t-0 border-border px-0 py-2 pr-6 align-top text-sm text-foreground`,
-						children: displayValue(type)
-					}),
+					/* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsxs("span", {
+						className: "inline-flex flex-wrap items-center gap-2",
+						children: [
+							name,
+							required ? /* @__PURE__ */ jsx(Badge, {
+								size: "xs",
+								tone: "primary",
+								children: "required"
+							}) : null,
+							deprecated ? /* @__PURE__ */ jsx(Badge, {
+								size: "xs",
+								children: "deprecated"
+							}) : null
+						]
+					}) }),
+					/* @__PURE__ */ jsx("td", { children: displayValue(type) }),
 					/* @__PURE__ */ jsxs("td", {
-						className: `${borderClass} border-x-0 border-t-0 border-border px-0 py-2 align-top text-sm leading-6 text-foreground [&_p]:m-0`,
+						className: "[&_p]:m-0",
 						children: [description, defaultValue ? /* @__PURE__ */ jsxs("span", {
-							className: "mt-1 block text-sm text-muted-foreground",
+							className: "mt-1 block text-muted-foreground",
 							children: ["Default: ", defaultValue]
 						}) : null]
 					})

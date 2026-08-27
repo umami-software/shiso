@@ -9,8 +9,9 @@ export const styles = {
   accordionItem: '',
   accordionTrigger: 'text-foreground',
   accordionContent: 'text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0',
-  expandableTrigger:
-    'items-center px-4 py-3 text-sm font-normal text-foreground hover:no-underline',
+  expandableTrigger: 'items-center py-3 text-sm font-normal text-foreground hover:no-underline',
+  /* Indent by chevron width + gap so body text lines up with the title. */
+  expandableContent: 'pl-6',
 
   callout: 'my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6',
   calloutIcon: 'flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4',

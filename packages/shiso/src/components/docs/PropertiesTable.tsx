@@ -22,33 +22,26 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
     return null;
   }
 
+  // Rendered as a plain table so the .docs-markdown table rules in global.css
+  // style it exactly like a GFM table; only column widths are set here.
   return (
-    <div className="my-4 overflow-x-auto rounded-lg border border-border px-6 py-2">
-      <table className="m-0 min-w-[40rem] table-fixed border-collapse border-0">
+    <div className="my-4 overflow-x-auto">
+      <table className="m-0 min-w-[40rem] table-fixed">
         <thead>
           <tr>
-            <th className="w-1/5 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground">
-              Name
-            </th>
-            <th className="w-1/4 border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 pr-6 text-left text-sm font-semibold text-foreground">
-              Type
-            </th>
-            <th className="border-x-0 border-t-0 border-b border-border bg-transparent px-0 py-2 text-left text-sm font-semibold text-foreground">
-              Description
-            </th>
+            <th className="w-1/5">Name</th>
+            <th className="w-1/4">Type</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => {
+          {rows.map(row => {
             const { name, type, required, deprecated, children: description } = row.props;
             const defaultValue = displayValue(row.props.default);
-            const borderClass = index === rows.length - 1 ? 'border-b-0' : 'border-b';
 
             return (
               <tr key={row.key ?? name}>
-                <td
-                  className={`${borderClass} border-x-0 border-t-0 border-border px-0 py-2 pr-6 align-top text-sm text-foreground`}
-                >
+                <td>
                   <span className="inline-flex flex-wrap items-center gap-2">
                     {name}
                     {required ? (
@@ -59,17 +52,11 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
                     {deprecated ? <Badge size="xs">deprecated</Badge> : null}
                   </span>
                 </td>
-                <td
-                  className={`${borderClass} border-x-0 border-t-0 border-border px-0 py-2 pr-6 align-top text-sm text-foreground`}
-                >
-                  {displayValue(type)}
-                </td>
-                <td
-                  className={`${borderClass} border-x-0 border-t-0 border-border px-0 py-2 align-top text-sm leading-6 text-foreground [&_p]:m-0`}
-                >
+                <td>{displayValue(type)}</td>
+                <td className="[&_p]:m-0">
                   {description}
                   {defaultValue ? (
-                    <span className="mt-1 block text-sm text-muted-foreground">
+                    <span className="mt-1 block text-muted-foreground">
                       Default: {defaultValue}
                     </span>
                   ) : null}

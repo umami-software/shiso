@@ -186,8 +186,8 @@
     font-size: 0.875rem;
   }
 
-  /* Styled to match the PropertiesTable component: rounded outer border,
-     horizontal row separators only, and no header fill. */
+  /* Shared by GFM tables and the PropertiesTable component: rounded outer border,
+     horizontal row separators only, and a card-colored header fill. */
   .docs-markdown table:not(:where(.not-prose, .not-prose *)) {
     width: 100%;
     margin: 1rem 0;
@@ -222,8 +222,17 @@
   }
 
   .docs-markdown th:not(:where(.not-prose, .not-prose *)) {
-    background: transparent;
+    background: var(--card);
     font-weight: 600;
+  }
+
+  /* The header fill must follow the table's rounded top corners. */
+  .docs-markdown th:first-child:not(:where(.not-prose, .not-prose *)) {
+    border-top-left-radius: calc(var(--radius-lg) - 1px);
+  }
+
+  .docs-markdown th:last-child:not(:where(.not-prose, .not-prose *)) {
+    border-top-right-radius: calc(var(--radius-lg) - 1px);
   }
 
   .docs-markdown tbody tr:last-child td:not(:where(.not-prose, .not-prose *)) {
