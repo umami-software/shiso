@@ -9844,7 +9844,8 @@ const styles = {
 	tip: "border-green-300 bg-green-50 text-green-900 dark:border-green-400/40 dark:bg-green-400/10 dark:text-green-300",
 	check: "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300",
 	danger: "border-destructive/40 bg-destructive/10 text-destructive",
-	card: "block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-primary",
+	card: "block h-full gap-0 rounded-lg border border-border p-4 text-sm ring-0 hover:border-primary",
+	cardPlain: "bg-card",
 	cardHorizontal: "[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2",
 	cardTyped: "[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit",
 	cardImageLayout: "p-0 [&_[data-slot=card-inner]]:p-6",
@@ -9853,7 +9854,7 @@ const styles = {
 	cardMain: "flex min-w-0 flex-col gap-2",
 	cardHeader: "flex flex-col items-start gap-3",
 	cardIcon: "inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6",
-	cardTitle: "text-base font-semibold text-foreground",
+	cardTitle: "text-sm font-semibold text-foreground",
 	cardBody: "text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0",
 	cardCta: "flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground",
 	cardArrow: "shrink-0 text-muted-foreground",
@@ -10377,7 +10378,7 @@ function DocsCardContent({ title, icon, color, img, cta, arrow, type, children }
 function Card({ title, href, icon, color, img, cta, horizontal, arrow, type, children }) {
 	const external = typeof href === "string" && /^https?:\/\//i.test(href);
 	const showArrow = arrow ?? external;
-	const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : ""} ${horizontal ? styles.cardHorizontal : ""} ${img ? styles.cardImageLayout : ""}`;
+	const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : styles.cardPlain} ${horizontal ? styles.cardHorizontal : ""} ${img ? styles.cardImageLayout : ""}`;
 	const content = /* @__PURE__ */ jsx(Card$1, {
 		className,
 		children: /* @__PURE__ */ jsx(DocsCardContent, {

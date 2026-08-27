@@ -27,7 +27,9 @@ export const styles = {
     'border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300',
   danger: 'border-destructive/40 bg-destructive/10 text-destructive',
 
-  card: 'block h-full gap-0 rounded-lg border border-border bg-transparent p-4 text-base ring-0 hover:border-primary',
+  card: 'block h-full gap-0 rounded-lg border border-border p-4 text-sm ring-0 hover:border-primary',
+  /* Typed cards bring their own tinted background; plain cards get the surface tint. */
+  cardPlain: 'bg-card',
   cardHorizontal:
     '[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2',
   cardTyped:
@@ -38,7 +40,7 @@ export const styles = {
   cardMain: 'flex min-w-0 flex-col gap-2',
   cardHeader: 'flex flex-col items-start gap-3',
   cardIcon: 'inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6',
-  cardTitle: 'text-base font-semibold text-foreground',
+  cardTitle: 'text-sm font-semibold text-foreground',
   cardBody: 'text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0',
   cardCta:
     'flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground',

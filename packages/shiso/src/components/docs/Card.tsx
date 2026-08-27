@@ -110,7 +110,7 @@ export function Card({
 }: CardProps) {
   const external = typeof href === 'string' && /^https?:\/\//i.test(href);
   const showArrow = arrow ?? external;
-  const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : ''} ${horizontal ? styles.cardHorizontal : ''} ${img ? styles.cardImageLayout : ''}`;
+  const className = `${styles.card} ${type ? `${styles.cardTyped} ${styles[type]} ${CARD_TYPE_HOVER[type]}` : styles.cardPlain} ${horizontal ? styles.cardHorizontal : ''} ${img ? styles.cardImageLayout : ''}`;
   const content = (
     <CardPrimitive className={className}>
       <DocsCardContent
