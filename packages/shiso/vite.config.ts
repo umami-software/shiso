@@ -221,8 +221,11 @@ function buildThemeCss(config: DocsConfig): string {
   }
 
   return [
-    root.length ? `:root{${root.join('')}}` : '',
-    dark.length ? `[data-theme="dark"]{${dark.join('')}}` : '',
+    // App styles are loaded by the client entry after this head style in dev.
+    // Use a more specific selector than the default token declarations so
+    // configured theme values win regardless of stylesheet load order.
+    root.length ? `html:root{${root.join('')}}` : '',
+    dark.length ? `html[data-theme="dark"]{${dark.join('')}}` : '',
     ...extra,
   ]
     .filter(Boolean)
