@@ -1,5 +1,5 @@
 import { hr as ABSOLUTE_URL_REGEX, lr as Router, mr as parsePath, pr as createPath } from "./chunks/docs.js";
-import { a as docsSite, c as getSeo, d as getDocModule, f as getLastModified, h as toAbsoluteUrl, i as docsHomeUrl, l as siteName, m as BASE_URL, n as buildHead, o as getLocaleByPathname, p as getScopeForPage, r as renderHeadToString, s as getRedirects, t as App, u as standalonePages } from "./chunks/App.js";
+import { a as docsSite, c as getSeo, d as standalonePages, f as getDocModule, g as toAbsoluteUrl, h as BASE_URL, i as docsHomeUrl, l as siteConfig, m as getScopeForPage, n as buildHead, o as getLocaleByPathname, p as getLastModified, r as renderHeadToString, s as getRedirects, t as App, u as siteName } from "./chunks/App.js";
 import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
@@ -107,6 +107,33 @@ function getMarkdownPages() {
 		filePath: page.filePath
 	}))];
 }
+/** Navigable Markdown pages used to generate llms.txt and llms-full.txt. */
+function getLlmsPages() {
+	const { indexing } = getSeo();
+	const pages = [];
+	for (const page of docsSite.pages) {
+		const doc = getDocModule(page.filePath);
+		if (doc?.frontmatter?.noindex === true || (page.hidden || getScopeForPage(docsSite, page).hidden) && indexing !== "all") continue;
+		pages.push({
+			route: page.url,
+			filePath: page.filePath,
+			title: doc?.frontmatter?.title || page.label,
+			description: doc?.frontmatter?.description
+		});
+	}
+	for (const page of standalonePages) {
+		if (page.filePath.endsWith(".tsx")) continue;
+		const doc = getDocModule(page.filePath);
+		if (doc?.frontmatter?.noindex === true) continue;
+		pages.push({
+			route: page.path,
+			filePath: page.filePath,
+			title: doc?.frontmatter?.title || page.title || page.path,
+			description: doc?.frontmatter?.description
+		});
+	}
+	return pages;
+}
 /**
 * Absolute URLs for the sitemap, honoring `seo.indexing` and per-page
 * noindex. Empty when the shiso.config `siteUrl` is not configured, since a sitemap
@@ -145,6 +172,7 @@ function render(url) {
 		htmlAttrs: getLocaleByPathname(url)
 	};
 }
+const siteDescription = siteConfig.description;
 
 //#endregion
-export { docsHomeUrl, getMarkdownPages, getRedirects, getRoutes, getSitemapEntries, render, siteName };
+export { docsHomeUrl, getLlmsPages, getMarkdownPages, getRedirects, getRoutes, getSitemapEntries, render, siteDescription, siteName };

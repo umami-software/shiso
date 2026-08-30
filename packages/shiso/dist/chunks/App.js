@@ -8685,4 +8685,4 @@ function App() {
 }
 
 //#endregion
-export { docsSite as a, getSeo as c, getDocModule as d, getLastModified as f, toAbsoluteUrl as h, docsHomeUrl as i, siteName as l, BASE_URL as m, buildHead as n, getLocaleByPathname as o, getScopeForPage as p, renderHeadToString as r, getRedirects as s, App as t, standalonePages as u };
+export { docsSite as a, getSeo as c, standalonePages as d, getDocModule as f, toAbsoluteUrl as g, BASE_URL as h, docsHomeUrl as i, siteConfig as l, getScopeForPage as m, buildHead as n, getLocaleByPathname as o, getLastModified as p, renderHeadToString as r, getRedirects as s, App as t, siteName as u };

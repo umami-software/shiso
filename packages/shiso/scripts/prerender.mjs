@@ -31,8 +31,17 @@ if (!template.includes('<!--app-html-->')) {
   );
 }
 
-const { render, getRoutes, getRedirects, getSitemapEntries, getMarkdownPages, docsHomeUrl } =
-  await import(pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href);
+const {
+  render,
+  getRoutes,
+  getRedirects,
+  getSitemapEntries,
+  getMarkdownPages,
+  getLlmsPages,
+  docsHomeUrl,
+  siteName,
+  siteDescription,
+} = await import(pathToFileURL(path.join(root, 'dist', 'server', 'entry-server.js')).href);
 
 /** Vite's `base`, normalized to "" or "/prefix". */
 function readBase() {
@@ -114,6 +123,49 @@ for (const { route, filePath } of markdownPages) {
   await writePage(path.join(clientDir, `${relative}.md`), source);
 }
 
+// AI discovery files. llms.txt is the concise, ordered map; llms-full.txt is
+// the same public corpus concatenated for tools that prefer one fetch.
+const llmsPages = getLlmsPages();
+
+function markdownHref(route) {
+  const relative = withBase(route).replace(/^\//, '') || 'index';
+  return `/${relative}.md`;
+}
+
+const llmsHeader = [
+  `# ${siteName || 'Documentation'}`,
+  siteDescription ? `> ${siteDescription}` : null,
+]
+  .filter(Boolean)
+  .join('\n\n');
+const llmsLinks = llmsPages
+  .map(
+    page =>
+      `- [${page.title}](${markdownHref(page.route)})${page.description ? `: ${page.description}` : ''}`,
+  )
+  .join('\n');
+
+await writePage(
+  path.join(clientDir, 'llms.txt'),
+  `${llmsHeader}\n\n## Documentation\n\n${llmsLinks}\n`,
+);
+
+const llmsFullSections = [];
+for (const page of llmsPages) {
+  const source = await readFile(
+    path.join(root, ...page.filePath.split('/').filter(Boolean)),
+    'utf8',
+  );
+  llmsFullSections.push(
+    [`# ${page.title}`, `Source: ${markdownHref(page.route)}`, source.trim()].join('\n\n'),
+  );
+}
+
+await writePage(
+  path.join(clientDir, 'llms-full.txt'),
+  `${llmsHeader}\n\n${llmsFullSections.join('\n\n---\n\n')}\n`,
+);
+
 // Redirect pages. Static hosting cannot serve real 301s, so each redirect
 // gets the same canonical + meta refresh + immediate replace treatment as
 // the root entry. Real pages always win over redirect rules.
@@ -187,6 +239,8 @@ if (stray.length) {
 const extras = [
   redirects.length ? `${redirects.length} redirects` : null,
   sitemapEntries.length ? 'sitemap.xml' : null,
+  'llms.txt',
+  'llms-full.txt',
 ]
   .filter(Boolean)
   .join(', ');

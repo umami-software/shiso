@@ -11,6 +11,7 @@ import {
   getLocaleByPathname,
   getRedirects,
   getSeo,
+  siteConfig,
   siteName,
   standalonePages,
 } from '@/lib/site-config';
@@ -25,6 +26,13 @@ export interface RenderResult {
 export interface SitemapEntry {
   url: string;
   lastmod?: string;
+}
+
+export interface LlmsPage {
+  route: string;
+  filePath: string;
+  title: string;
+  description?: string;
 }
 
 /** Base-relative routes for every scope. The prerenderer prepends the deploy base itself. */
@@ -49,6 +57,46 @@ export function getMarkdownPages(): { route: string; filePath: string }[] {
       .filter(page => !page.filePath.endsWith('.tsx'))
       .map(page => ({ route: page.path, filePath: page.filePath })),
   ];
+}
+
+/** Navigable Markdown pages used to generate llms.txt and llms-full.txt. */
+export function getLlmsPages(): LlmsPage[] {
+  const { indexing } = getSeo();
+  const pages: LlmsPage[] = [];
+
+  for (const page of docsSite.pages) {
+    const doc = getDocModule(page.filePath);
+
+    if (
+      doc?.frontmatter?.noindex === true ||
+      ((page.hidden || getScopeForPage(docsSite, page).hidden) && indexing !== 'all')
+    ) {
+      continue;
+    }
+
+    pages.push({
+      route: page.url,
+      filePath: page.filePath,
+      title: doc?.frontmatter?.title || page.label,
+      description: doc?.frontmatter?.description,
+    });
+  }
+
+  for (const page of standalonePages) {
+    if (page.filePath.endsWith('.tsx')) continue;
+
+    const doc = getDocModule(page.filePath);
+    if (doc?.frontmatter?.noindex === true) continue;
+
+    pages.push({
+      route: page.path,
+      filePath: page.filePath,
+      title: doc?.frontmatter?.title || page.title || page.path,
+      description: doc?.frontmatter?.description,
+    });
+  }
+
+  return pages;
 }
 
 /**
@@ -105,5 +153,7 @@ export function render(url: string): RenderResult {
 
   return { html, head: renderHeadToString(buildHead(url)), htmlAttrs: getLocaleByPathname(url) };
 }
+
+export const siteDescription = siteConfig.description;
 
 export { docsHomeUrl, siteName };

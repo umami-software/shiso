@@ -157,6 +157,18 @@ The production build publishes the raw markdown of every page next to its HTML:
 This powers the contextual menu below and gives AI tools a clean,
 token-efficient version of every page.
 
+### AI discovery files
+
+Every production build also writes two site-level discovery files:
+
+- `/llms.txt` lists navigable pages in documentation order with their titles,
+  descriptions, and Markdown URLs.
+- `/llms-full.txt` combines that public Markdown corpus into one file.
+
+Pages marked `noindex`, and hidden pages or scopes under the default
+`navigable` indexing policy, are omitted. Set `seo.indexing` to `all` to include
+hidden documentation pages.
+
 ## Contextual menu
 
 The `contextual` key adds a menu beside the page title for AI-optimized
