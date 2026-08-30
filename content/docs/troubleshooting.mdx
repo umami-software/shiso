@@ -43,6 +43,11 @@ Common causes:
 - Invalid object structure in navigation
 - A malformed value under a supported key (e.g. a `navbar` link without `href`)
 
+Run `pnpm check:config` before building to validate both configuration and
+content. In addition to the schema, it checks page files, route collisions,
+internal links and heading anchors, local assets, redirect destinations, and
+orphaned content. Markdown and MDX diagnostics include the source line.
+
 ## A redirect is not working
 
 - Sources are matched exactly against the full route, including the docs

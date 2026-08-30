@@ -67,6 +67,7 @@
             "pages": [
               { "page": "configuration", "title": "Overview" },
               "site-details",
+              "pages",
               "navigation",
               { "page": "customization", "title": "Appearance" },
               { "page": "navbar-and-footer", "title": "Header, footer, and banner" },
