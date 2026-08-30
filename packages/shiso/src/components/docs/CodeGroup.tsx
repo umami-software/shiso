@@ -39,14 +39,18 @@ export function CodeGroup({ children }: CodeGroupProps) {
   }
 
   if (blocks.length === 1) {
-    return <div className={styles.tabs}>{blocks[0].content}</div>;
+    return (
+      <div className={`${styles.tabs} [&_[data-slot=code-block-header]]:hidden`}>
+        {blocks[0].content}
+      </div>
+    );
   }
 
   return (
     <TabsPrimitive
       value={selected}
       onValueChange={setSelectedKey}
-      className="my-4 gap-0 overflow-hidden rounded-lg bg-card [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent"
+      className="my-4 gap-0 overflow-hidden rounded-lg bg-card [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent [&_[data-slot=code-block-header]]:hidden"
     >
       <TabsList
         variant="line"

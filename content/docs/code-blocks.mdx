@@ -1,6 +1,6 @@
 ---
 title: Code
-description: Inline code, fenced blocks, syntax highlighting, and tabbed snippets.
+description: Inline code, fenced blocks, titles, line highlighting, line numbers, diffs, and tabbed snippets.
 ---
 
 ## Inline code
@@ -33,14 +33,138 @@ function hello(name) {
 ```
 
 Common language tags: `bash`, `json`, `javascript`, `typescript`, `tsx`,
-`python`, `yaml`, `md`, `mdx`, `text`.
+`python`, `yaml`, `md`, `mdx`, `diff`, `text`. Any
+[Shiki language](https://shiki.style/languages) works; unknown tags render as
+plain text.
+
+## Titles
+
+Add `title="..."` after the language tag to show a filename bar above the
+block. A bare word works as shorthand.
+
+````markdown
+```ts title="src/app.ts"
+export const app = createApp();
+```
+````
+
+```ts title="src/app.ts"
+export const app = createApp();
+```
+
+## Line highlighting
+
+List line numbers or ranges in braces to emphasize them:
+
+````markdown
+```ts {2,4-5}
+const a = 1;
+const b = 2;
+const c = 3;
+const d = 4;
+const e = 5;
+```
+````
+
+```ts {2,4-5}
+const a = 1;
+const b = 2;
+const c = 3;
+const d = 4;
+const e = 5;
+```
+
+You can also mark lines inline with a `[!code highlight]` comment, which is
+removed from the output. Append `:N` to cover the next N lines.
+
+````markdown
+```ts
+const config = {
+  name: 'Acme Docs', // [!code highlight]
+  theme: 'dark',
+};
+```
+````
+
+```ts
+const config = {
+  name: 'Acme Docs', // [!code highlight]
+  theme: 'dark',
+};
+```
+
+## Line numbers
+
+Add `showLineNumbers` to number the lines, or `showLineNumbers=N` to start at
+line N. Numbers are decorative: they are excluded from copying and search.
+
+````markdown
+```ts showLineNumbers=10
+function add(a: number, b: number) {
+  return a + b;
+}
+```
+````
+
+```ts showLineNumbers=10
+function add(a: number, b: number) {
+  return a + b;
+}
+```
+
+To number every block by default, set
+[`styling.codeBlocks.lineNumbers`](/docs/customization#code-blocks) in
+`docs.json` and use `hideLineNumbers` on blocks that should opt out.
+
+## Diffs
+
+Use the `diff` language for a unified diff, where lines starting with `+` and
+`-` are colored:
+
+````markdown
+```diff
+ const config = {
+-  name: 'Old name',
++  name: 'Acme Docs',
+ };
+```
+````
+
+```diff
+ const config = {
+-  name: 'Old name',
++  name: 'Acme Docs',
+ };
+```
+
+To keep full syntax highlighting, annotate lines in any language with
+`[!code ++]` and `[!code --]` comments instead. Removed lines are skipped by
+the copy button so readers get the finished code.
+
+````markdown
+```ts
+const config = {
+  name: 'Old name', // [!code --]
+  name: 'Acme Docs', // [!code ++]
+};
+```
+````
+
+```ts
+const config = {
+  name: 'Old name', // [!code --]
+  name: 'Acme Docs', // [!code ++]
+};
+```
 
 ## How highlighting works
 
-- `rehype-highlight` tokenizes fenced blocks at build time
-- Highlight.js's GitHub theme ships with the Shiso framework
+- [Shiki](https://shiki.style) tokenizes fenced blocks at build time, so no
+  highlighting runs in the browser
+- both light and dark colors are embedded once and switched with CSS; choose the
+  theme pair with [`styling.codeBlocks.theme`](/docs/customization#code-blocks)
 - fenced `<pre>` elements are rendered by Shiso's `CodeBlock` component, which
-  adds the copy control
+  adds the title bar, line numbers, and copy control
 
 ## Code groups
 

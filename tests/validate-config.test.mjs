@@ -534,7 +534,13 @@ describe('supported keys stay strictly validated', () => {
       {
         ...minimal,
         appearance: { default: 'dark', strict: true },
-        styling: { eyebrows: 'breadcrumbs' },
+        styling: {
+          eyebrows: 'breadcrumbs',
+          codeBlocks: {
+            lineNumbers: true,
+            theme: { light: 'github-light', dark: 'github-dark' },
+          },
+        },
         fonts: {
           family: 'Open Sans',
           weight: 550,
@@ -557,6 +563,12 @@ describe('supported keys stay strictly validated', () => {
     expect(validateConfig({ ...minimal, styling: { codeblocks: 'dark' } }, schema).valid).toBe(
       false,
     );
+    expect(
+      validateConfig({ ...minimal, styling: { codeBlocks: { theme: 'dark' } } }, schema).valid,
+    ).toBe(false);
+    expect(
+      validateConfig({ ...minimal, styling: { codeBlocks: { numbers: true } } }, schema).valid,
+    ).toBe(false);
     expect(
       validateConfig({ ...minimal, background: { decoration: 'gradient' } }, schema).valid,
     ).toBe(false);

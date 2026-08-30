@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config';
 import { shisoMdx } from './packages/shiso/mdx.config.ts';
 import { shisoLastModified } from './packages/shiso/scripts/generate-last-modified.mjs';
 import { createDocsConfigModule } from './packages/shiso/scripts/vite-docs-config.mjs';
+import { resolveCodeBlockConfig } from './packages/shiso/src/lib/code-blocks.ts';
 
 export default defineConfig(async () => {
   const configModule = await createDocsConfigModule({
@@ -19,7 +20,7 @@ export default defineConfig(async () => {
         root: fileURLToPath(new URL('.', import.meta.url)),
         output: fileURLToPath(new URL('./.shiso/last-modified.ts', import.meta.url)),
       }),
-      shisoMdx(),
+      shisoMdx({ codeBlocks: resolveCodeBlockConfig(configModule.getConfig().styling) }),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],
     resolve: {

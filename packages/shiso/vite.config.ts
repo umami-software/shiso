@@ -9,6 +9,7 @@ import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
 import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 import { createDocsConfigModule } from './scripts/vite-docs-config.mjs';
+import { resolveCodeBlockConfig } from './src/lib/code-blocks.ts';
 import type { DocsConfig, ResolvedShisoConfig } from './src/lib/types.ts';
 
 /**
@@ -464,7 +465,10 @@ export default defineConfig(async () => {
       ),
       shisoHtml(getDocsConfig),
       shisoMarkdownDev(getDocsConfig, getShisoConfig, projectRoot),
-      shisoMdx(getShisoConfig().mdx),
+      shisoMdx({
+        ...getShisoConfig().mdx,
+        codeBlocks: resolveCodeBlockConfig(getDocsConfig().styling),
+      }),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],
     resolve: {

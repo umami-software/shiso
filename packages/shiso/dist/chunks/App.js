@@ -5,7 +5,6 @@ import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "@fontsource-variable/inter/index.css";
 import "@fontsource/jetbrains-mono/400.css";
-import "highlight.js/styles/github.css";
 import "@umami/shiso/styles.css";
 import { MDXProvider } from "@mdx-js/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
@@ -1181,12 +1180,27 @@ function ScrollBar({ className, orientation = "vertical", ...props }) {
 
 //#endregion
 //#region src/components/CodeBlock.tsx
-function CodeBlock({ children, className }) {
+/**
+* Joins the text of each rendered line. Lines marked as removed by
+* `// [!code --]` are skipped so the clipboard holds the "after" state; in a
+* `diff` block the +/- lines are content and are copied verbatim.
+*/
+function copyText(pre, language) {
+	if (!pre) return "";
+	const lines = [...pre.querySelectorAll(".line")];
+	if (!lines.length) return pre.textContent || "";
+	return lines.filter((line) => language === "diff" || line.dataset.diff !== "remove").map((line) => line.textContent || "").join("\n");
+}
+function CodeBlock({ children, className, style, ...rest }) {
+	const { "data-title": title, "data-language": language, "data-line-start": lineStart, "data-line-count": lineCount, ...preProps } = rest;
 	const textInput = useRef(null);
 	const [copied, setCopied] = useState(false);
+	const start = Number(lineStart) || 1;
+	const lastLine = start + Math.max(Number(lineCount) || 1, 1) - 1;
+	const gutter = `${String(lastLine).length}ch`;
 	const handleCopy = () => {
 		setCopied(true);
-		navigator?.clipboard?.writeText(textInput.current?.textContent || "");
+		navigator?.clipboard?.writeText(copyText(textInput.current, language));
 		setTimeout(() => {
 			setCopied(false);
 		}, 1e3);
@@ -1194,23 +1208,38 @@ function CodeBlock({ children, className }) {
 	return /* @__PURE__ */ jsxs("div", {
 		"data-slot": "code-block",
 		className: "relative my-5 overflow-hidden rounded-lg bg-card",
-		children: [/* @__PURE__ */ jsx(ScrollArea, {
-			scrollbars: "horizontal",
-			className: "w-full",
-			children: /* @__PURE__ */ jsx("pre", {
-				ref: textInput,
-				className: `code-block p-3 pr-12 text-sm text-foreground leading-[1.6] font-mono ${className || ""}`,
-				children
+		children: [
+			title ? /* @__PURE__ */ jsx("div", {
+				"data-slot": "code-block-header",
+				className: "flex h-9 items-center border-border border-b px-3 pr-12 font-mono text-muted-foreground text-xs",
+				children: title
+			}) : null,
+			/* @__PURE__ */ jsx(ScrollArea, {
+				scrollbars: "horizontal",
+				className: "w-full",
+				children: /* @__PURE__ */ jsx("pre", {
+					ref: textInput,
+					...preProps,
+					"data-language": language,
+					style: {
+						...style,
+						counterReset: `line ${start - 1}`,
+						"--code-gutter": gutter
+					},
+					className: cn("code-block w-max min-w-full py-3 font-mono text-foreground text-sm leading-[1.6]", className),
+					children
+				})
+			}),
+			/* @__PURE__ */ jsx(Button, {
+				type: "button",
+				variant: "ghost",
+				size: "icon-sm",
+				className: cn("absolute right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground", title ? "top-1" : "top-2.5"),
+				onClick: handleCopy,
+				"aria-label": "Copy code",
+				children: copied ? /* @__PURE__ */ jsx(Check, { className: "size-3.5 text-primary" }) : /* @__PURE__ */ jsx(Copy, { className: "size-3.5" })
 			})
-		}), /* @__PURE__ */ jsx(Button, {
-			type: "button",
-			variant: "ghost",
-			size: "icon-sm",
-			className: "absolute top-2.5 right-3 inline-flex size-7 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-			onClick: handleCopy,
-			"aria-label": "Copy code",
-			children: copied ? /* @__PURE__ */ jsx(Check, { className: "size-3.5 text-primary" }) : /* @__PURE__ */ jsx(Copy, { className: "size-3.5" })
-		})]
+		]
 	});
 }
 
@@ -4055,6 +4084,24 @@ function getTextDirection(locale) {
 }
 
 //#endregion
+//#region src/lib/code-blocks.ts
+const DEFAULT_CODE_THEME = {
+	light: "github-light",
+	dark: "github-dark"
+};
+/** Applies defaults to `styling.codeBlocks` from docs.json. */
+function resolveCodeBlockConfig(styling) {
+	const codeBlocks = styling?.codeBlocks;
+	return {
+		lineNumbers: codeBlocks?.lineNumbers === true,
+		theme: {
+			light: codeBlocks?.theme?.light || DEFAULT_CODE_THEME.light,
+			dark: codeBlocks?.theme?.dark || DEFAULT_CODE_THEME.dark
+		}
+	};
+}
+
+//#endregion
 //#region src/lib/search/config.ts
 const DEFAULT_SEARCH_PROMPT = "Search...";
 const DEFAULT_SEARCH_PROVIDER = "local";
@@ -4191,7 +4238,10 @@ function resolveSiteModel(config, docs, shiso) {
 			default: appearance.default === "light" || appearance.default === "dark" ? appearance.default : "system",
 			strict: appearance.strict === true
 		},
-		styling: { eyebrows: config.styling?.eyebrows === "breadcrumbs" ? "breadcrumbs" : "section" },
+		styling: {
+			eyebrows: config.styling?.eyebrows === "breadcrumbs" ? "breadcrumbs" : "section",
+			codeBlocks: resolveCodeBlockConfig(config.styling)
+		},
 		search: resolveSearchConfig(config.search),
 		contextualOptions: config.contextual?.options || [],
 		error404: {

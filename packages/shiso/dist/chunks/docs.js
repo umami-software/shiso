@@ -11300,13 +11300,13 @@ function CodeGroup({ children }) {
 	const selected = blocks.some((block) => block.id === selectedKey) ? selectedKey : blocks[0]?.id;
 	if (!blocks.length) return null;
 	if (blocks.length === 1) return /* @__PURE__ */ jsx("div", {
-		className: styles.tabs,
+		className: `${styles.tabs} [&_[data-slot=code-block-header]]:hidden`,
 		children: blocks[0].content
 	});
 	return /* @__PURE__ */ jsxs(Tabs$1, {
 		value: selected,
 		onValueChange: setSelectedKey,
-		className: "my-4 gap-0 overflow-hidden rounded-lg bg-card [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent",
+		className: "my-4 gap-0 overflow-hidden rounded-lg bg-card [&_[data-slot=code-block]]:my-0 [&_[data-slot=code-block]]:rounded-none [&_[data-slot=code-block]]:border-0 [&_[data-slot=code-block]]:bg-transparent [&_[data-slot=code-block-header]]:hidden",
 		children: [/* @__PURE__ */ jsx(TabsList, {
 			variant: "line",
 			className: "h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none px-3 py-0 shadow-[inset_0_-1px_0_var(--border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",

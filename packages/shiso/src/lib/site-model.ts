@@ -1,3 +1,4 @@
+import { resolveCodeBlockConfig } from '@/lib/code-blocks';
 import { toAbsoluteUrl, toHref } from '@/lib/paths';
 import { resolveSearchConfig } from '@/lib/search/config';
 import type {
@@ -130,6 +131,7 @@ export function resolveSiteModel(
     },
     styling: {
       eyebrows: config.styling?.eyebrows === 'breadcrumbs' ? 'breadcrumbs' : 'section',
+      codeBlocks: resolveCodeBlockConfig(config.styling),
     },
     search: resolveSearchConfig(config.search),
     contextualOptions: config.contextual?.options || [],

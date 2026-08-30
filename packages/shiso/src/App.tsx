@@ -1,6 +1,5 @@
 import '@fontsource-variable/inter/index.css';
 import '@fontsource/jetbrains-mono/400.css';
-import 'highlight.js/styles/github.css';
 import '@umami/shiso/styles.css';
 
 import { MDXProvider } from '@mdx-js/react';

@@ -252,9 +252,26 @@ export interface AppearanceConfig {
   strict?: boolean;
 }
 
+export interface CodeBlockConfig {
+  /** Show line numbers on every block. Override per block with `showLineNumbers` or `hideLineNumbers`. */
+  lineNumbers?: boolean;
+  /** Bundled Shiki theme names for each color mode. */
+  theme?: {
+    light?: string;
+    dark?: string;
+  };
+}
+
 export interface StylingConfig {
   /** Page eyebrow style: the section name (default) or the full breadcrumb path. */
   eyebrows?: 'section' | 'breadcrumbs';
+  /** Fenced code block defaults. */
+  codeBlocks?: CodeBlockConfig;
+}
+
+export interface ResolvedCodeBlockConfig {
+  lineNumbers: boolean;
+  theme: { light: string; dark: string };
 }
 
 export interface FontSpec {
@@ -546,7 +563,10 @@ export interface SiteModel {
   footer: NormalizedFooter | null;
   banner: BannerConfig | null;
   appearance: Required<AppearanceConfig>;
-  styling: Required<Pick<StylingConfig, 'eyebrows'>>;
+  styling: {
+    eyebrows: 'section' | 'breadcrumbs';
+    codeBlocks: ResolvedCodeBlockConfig;
+  };
   search: import('@/lib/search/config').ResolvedSearchConfig;
   contextualOptions: ContextualOption[];
   error404: Required<Pick<Error404Config, 'redirect'>> & Error404Config;

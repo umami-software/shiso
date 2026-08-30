@@ -172,6 +172,37 @@
           ],
           "description": "Page eyebrow style: the section name (default) or the full navigation path.",
           "default": "section"
+        },
+        "codeBlocks": {
+          "type": "object",
+          "description": "Fenced code block defaults: line numbers and the Shiki light/dark themes.",
+          "additionalProperties": false,
+          "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
+            "lineNumbers": {
+              "allOf": [{ "$ref": "#/definitions/booleanValue" }],
+              "description": "Show line numbers on every block. Override per block with showLineNumbers or hideLineNumbers in the fence meta.",
+              "default": false
+            },
+            "theme": {
+              "type": "object",
+              "description": "Bundled Shiki theme names for each color mode (https://shiki.style/themes).",
+              "additionalProperties": false,
+              "properties": {
+                "$ref": { "$ref": "#/definitions/configRef" },
+                "light": {
+                  "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+                  "description": "Theme used in light mode.",
+                  "default": "github-light"
+                },
+                "dark": {
+                  "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+                  "description": "Theme used in dark mode.",
+                  "default": "github-dark"
+                }
+              }
+            }
+          }
         }
       }
     },

@@ -13,6 +13,26 @@ const docs: NormalizedDocsConfig = {
 };
 
 describe('site model', () => {
+  it('applies code block defaults and merges partial overrides', () => {
+    const site = resolveSiteModel({ navigation: { pages: ['index'] } }, docs);
+    expect(site.styling.codeBlocks).toEqual({
+      lineNumbers: false,
+      theme: { light: 'github-light', dark: 'github-dark' },
+    });
+
+    const custom = resolveSiteModel(
+      {
+        navigation: { pages: ['index'] },
+        styling: { codeBlocks: { lineNumbers: true, theme: { dark: 'vitesse-dark' } } },
+      },
+      docs,
+    );
+    expect(custom.styling.codeBlocks).toEqual({
+      lineNumbers: true,
+      theme: { light: 'github-light', dark: 'vitesse-dark' },
+    });
+  });
+
   it('defaults footer attribution to true without inventing a site name', () => {
     const site = resolveSiteModel({ navigation: { pages: ['index'] } }, docs);
 

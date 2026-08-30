@@ -30,9 +30,11 @@ Use `CodeGroup` to show multiple related fenced blocks behind tabs.
 ````
 
 Each child can set a label with a token after the language fence
-(`` ```bash pnpm ``) or a `title` prop when the child is an element. If no label
-is found, Shiso infers one from the language class and suffixes duplicates
-(`bash`, `bash 2`, …).
+(`` ```bash pnpm ``), a `title="..."` fence option, or a `title` prop when the
+child is an element. Outside a group the same label renders as the block's
+[title bar](/docs/code-blocks#titles); inside a group it becomes the tab name.
+If no label is found, Shiso infers one from the language class and suffixes
+duplicates (`bash`, `bash 2`, …).
 
 A single child renders as plain content with no tab chrome. For non-code
 alternate content, use [Tabs](/docs/components/tabs).

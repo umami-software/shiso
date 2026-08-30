@@ -1,6 +1,6 @@
 ---
 title: Appearance
-description: Theme mode, fonts, colors, backgrounds, and page title breadcrumbs.
+description: Theme mode, fonts, colors, code blocks, backgrounds, and page title breadcrumbs.
 ---
 
 These `docs.json` keys control how your site looks. All of them are optional.
@@ -67,6 +67,27 @@ The `styling.eyebrows` key controls the label above page titles: `"section"`
   "styling": { "eyebrows": "breadcrumbs" }
 }
 ```
+
+## Code blocks
+
+The `styling.codeBlocks` key sets defaults for fenced code blocks. `theme`
+takes any bundled [Shiki theme](https://shiki.style/themes) name per color mode,
+and `lineNumbers` turns on line numbers everywhere (individual blocks can opt
+out with `hideLineNumbers`).
+
+```json
+{
+  "styling": {
+    "codeBlocks": {
+      "lineNumbers": true,
+      "theme": { "light": "github-light", "dark": "github-dark" }
+    }
+  }
+}
+```
+
+Restart the dev server after changing the theme so already-compiled pages pick
+it up. See [Code](/docs/code-blocks) for the per-block syntax.
 
 ## Background
 

@@ -256,88 +256,78 @@
   }
 }
 
-/* These rules are unlayered so they can override Highlight.js's unlayered theme. */
+@layer components {
+  /* Shiki output: one inline-block per line so highlight and diff bands span the
+     full scroll width. Line numbers and diff markers are pseudo-elements, which
+     keeps them out of the copy button, text selection, and the search index. */
+  .code-block .line {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: 100%;
+    min-height: 1lh;
+    padding-inline: 0.75rem 3rem;
+  }
 
-code.hljs {
-  background: transparent;
-}
+  .code-block .line span {
+    color: var(--shiki-light);
+    font-style: var(--shiki-light-font-style, inherit);
+    font-weight: var(--shiki-light-font-weight, inherit);
+    text-decoration: var(--shiki-light-text-decoration, inherit);
+  }
 
-/* The scroll area owns code-block overflow and padding. */
-pre.code-block code.hljs {
-  overflow: visible;
-  padding: 0;
-}
+  [data-theme="dark"] .code-block .line span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style, inherit);
+    font-weight: var(--shiki-dark-font-weight, inherit);
+    text-decoration: var(--shiki-dark-text-decoration, inherit);
+  }
 
-/* GitHub Dark syntax colors, scoped so the default GitHub theme stays light. */
-[data-theme="dark"] .hljs {
-  color: #c9d1d9;
-}
+  .code-block .line[data-highlighted] {
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    box-shadow: inset 2px 0 var(--primary);
+  }
 
-[data-theme="dark"]
-  :is(
-    .hljs-doctag,
-    .hljs-keyword,
-    .hljs-meta .hljs-keyword,
-    .hljs-template-tag,
-    .hljs-template-variable,
-    .hljs-type,
-    .hljs-variable.language_
-  ) {
-  color: #ff7b72;
-}
+  .code-block .line[data-diff="add"] {
+    background: color-mix(in srgb, #3fb950 14%, transparent);
+  }
 
-[data-theme="dark"]
-  :is(.hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_) {
-  color: #d2a8ff;
-}
+  .code-block .line[data-diff="remove"] {
+    background: color-mix(in srgb, #f85149 14%, transparent);
+  }
 
-[data-theme="dark"]
-  :is(
-    .hljs-attr,
-    .hljs-attribute,
-    .hljs-literal,
-    .hljs-meta,
-    .hljs-number,
-    .hljs-operator,
-    .hljs-variable,
-    .hljs-selector-attr,
-    .hljs-selector-class,
-    .hljs-selector-id,
-    .hljs-section
-  ) {
-  color: #79c0ff;
-}
+  .code-block[data-diff-markers] .line {
+    padding-inline-start: 1.5rem;
+  }
 
-[data-theme="dark"] :is(.hljs-regexp, .hljs-string, .hljs-meta .hljs-string) {
-  color: #a5d6ff;
-}
+  .code-block[data-diff-markers] .line[data-diff]::after {
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+    color: var(--muted-foreground);
+    user-select: none;
+  }
 
-[data-theme="dark"] :is(.hljs-built_in, .hljs-symbol) {
-  color: #ffa657;
-}
+  .code-block[data-diff-markers] .line[data-diff="add"]::after {
+    content: "+";
+  }
 
-[data-theme="dark"] :is(.hljs-comment, .hljs-code, .hljs-formula) {
-  color: #8b949e;
-}
+  .code-block[data-diff-markers] .line[data-diff="remove"]::after {
+    content: "-";
+  }
 
-[data-theme="dark"] :is(.hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo) {
-  color: #7ee787;
-}
+  /* `counter-reset` is set inline by CodeBlock so blocks can start at any line. */
+  .code-block[data-line-numbers] .line {
+    counter-increment: line;
+  }
 
-[data-theme="dark"] :is(.hljs-subst, .hljs-emphasis, .hljs-strong) {
-  color: #c9d1d9;
-}
-
-[data-theme="dark"] .hljs-bullet {
-  color: #f2cc60;
-}
-
-[data-theme="dark"] .hljs-addition {
-  color: #aff5b4;
-  background-color: #033a16;
-}
-
-[data-theme="dark"] .hljs-deletion {
-  color: #ffdcd7;
-  background-color: #67060c;
+  .code-block[data-line-numbers] .line::before {
+    content: counter(line);
+    display: inline-block;
+    width: var(--code-gutter, 2ch);
+    margin-inline-end: 1rem;
+    color: var(--muted-foreground);
+    text-align: right;
+    user-select: none;
+  }
 }
