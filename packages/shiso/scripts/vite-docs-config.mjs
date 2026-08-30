@@ -80,17 +80,29 @@ export async function createDocsConfigModule({
         const changedPath = path.resolve(context.file);
         const isDocsSource = loaded.sourcePaths.includes(changedPath);
         const isShisoSource = shisoCandidatePaths.includes(changedPath);
+        const contentRoot = path.resolve(root, loadedShiso.config.contentDir);
+        const relativeContentPath = path.relative(contentRoot, changedPath);
+        const isGlobContent =
+          loaded.hasGlobs &&
+          /\.(?:md|mdx)$/.test(changedPath) &&
+          relativeContentPath !== '..' &&
+          !relativeContentPath.startsWith(`..${path.sep}`) &&
+          !path.isAbsolute(relativeContentPath);
 
-        if (!isDocsSource && !isShisoSource) {
+        if (!isDocsSource && !isShisoSource && !isGlobContent) {
           return;
         }
 
-        const resolvedId = isDocsSource ? RESOLVED_DOCS_CONFIG_ID : RESOLVED_SHISO_CONFIG_ID;
+        const resolvedId =
+          isDocsSource || isGlobContent ? RESOLVED_DOCS_CONFIG_ID : RESOLVED_SHISO_CONFIG_ID;
 
-        if (isDocsSource) {
+        if (isDocsSource || isGlobContent) {
           loaded = await loadDocsConfig(options);
         } else {
           loadedShiso = await loadShisoConfig({ root });
+          // contentDir may have changed, so glob expansion must use the new
+          // location before the full reload.
+          loaded = await loadDocsConfig(options);
         }
 
         const configModule = context.server.moduleGraph.getModuleById(resolvedId);

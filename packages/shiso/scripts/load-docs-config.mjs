@@ -1,5 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { expandNavigationGlobs, hasNavigationGlobs } from './expand-navigation-globs.mjs';
+import { loadShisoConfig } from './load-shiso-config.mjs';
 
 /** Error raised while locating, reading, or parsing a Shiso configuration file. */
 export class DocsConfigLoadError extends Error {
@@ -220,16 +222,28 @@ async function resolveConfigReferences(entryPath, projectRoot) {
  * stable place from which to resolve relative references without changing
  * every build-time consumer again.
  */
-export async function loadDocsConfig({ root = process.cwd(), configFile = 'docs.json' } = {}) {
+export async function loadDocsConfig({
+  root = process.cwd(),
+  configFile = 'docs.json',
+  expandGlobs = true,
+} = {}) {
   const requestedRoot = path.resolve(root);
   const requestedSourcePath = path.resolve(requestedRoot, configFile);
-  const { config, projectRoot, sourcePaths } = await resolveConfigReferences(
-    requestedSourcePath,
-    requestedRoot,
-  );
+  const {
+    config: sourceConfig,
+    projectRoot,
+    sourcePaths,
+  } = await resolveConfigReferences(requestedSourcePath, requestedRoot);
   const sourcePath = sourcePaths[0] || requestedSourcePath;
+  const hasGlobs = hasNavigationGlobs(sourceConfig.navigation);
+  const config = expandGlobs
+    ? await expandNavigationGlobs(sourceConfig, {
+        root: projectRoot,
+        contentDir: (await loadShisoConfig({ root: projectRoot })).config.contentDir,
+      })
+    : sourceConfig;
 
-  return { config, projectRoot, sourcePath, sourcePaths };
+  return { config, projectRoot, sourcePath, sourcePaths, hasGlobs };
 }
 
 export async function loadDocsSchema({

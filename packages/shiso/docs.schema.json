@@ -712,6 +712,7 @@
           "description": "Page reference relative to the content directory, without extension (e.g. \"components/tabs\")."
         },
         { "$ref": "#/definitions/pageObject" },
+        { "$ref": "#/definitions/globItem" },
         { "$ref": "#/definitions/linkItem" },
         { "$ref": "#/definitions/group" }
       ]
@@ -739,6 +740,27 @@
         "hidden": {
           "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Hide from the sidebar and search. The page is still built and reachable by URL."
+        }
+      }
+    },
+    "globItem": {
+      "type": "object",
+      "required": ["glob"],
+      "additionalProperties": false,
+      "properties": {
+        "glob": {
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Glob relative to contentDir. Matching Markdown and MDX files are expanded into page entries."
+        },
+        "exclude": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/nonEmptyStringValue" }
+            },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "Optional glob patterns to omit from the matches."
         }
       }
     },

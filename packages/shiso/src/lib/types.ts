@@ -23,7 +23,12 @@ export interface LinkItem {
   target?: LinkTarget;
 }
 
-export type PageItem = string | GroupItem | PageObjectItem | LinkItem;
+export interface GlobItem {
+  glob: string;
+  exclude?: string[];
+}
+
+export type PageItem = string | GroupItem | PageObjectItem | LinkItem | GlobItem;
 
 export interface GroupItem {
   group: string;

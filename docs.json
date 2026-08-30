@@ -95,20 +95,7 @@
             "group": "Components",
             "pages": [
               { "page": "components/index", "title": "Overview" },
-              "components/accordion",
-              "components/badge",
-              "components/callout",
-              "components/card",
-              "components/code-group",
-              "components/columns",
-              "components/expandable",
-              "components/frame",
-              "components/icon",
-              "components/param-field",
-              "components/response-field",
-              "components/steps",
-              "components/tabs",
-              "components/tooltip"
+              { "glob": "components/**", "exclude": ["components/index"] }
             ]
           }
         ]

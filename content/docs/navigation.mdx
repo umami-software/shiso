@@ -84,6 +84,37 @@ Inside `pages`, you can mix:
 - `hidden`: keep the page out of the sidebar and search — it is still built
   and reachable by URL
 
+**Glob entries** — include matching Markdown and MDX files automatically:
+
+```json
+{
+  "pages": [
+    "index",
+    { "glob": "guides/**", "exclude": ["guides/drafts/**"] }
+  ]
+}
+```
+
+Patterns are relative to `contentDir`. `*` matches within one folder, `**`
+matches across folders, and `.md` or `.mdx` extensions are optional. Matches
+are sorted by `order` frontmatter and then by file path. Configure an
+automatically discovered page in its frontmatter:
+
+```mdx
+---
+title: Deploy the application
+sidebarTitle: Deployment
+order: 20
+hidden: false
+---
+```
+
+`sidebarTitle` overrides the navigation label, while `title` remains the page
+and browser title. If `sidebarTitle` is absent, the page title is used.
+`hidden: true` keeps the generated entry out of visible navigation and search.
+Adding, removing, or editing a matching content file refreshes the generated
+navigation during development.
+
 **External links**:
 
 ```json
@@ -182,6 +213,7 @@ You will see a config error when:
 - `versions` or `languages` is empty, or more than one entry is `default: true`
 - an anchor is missing `anchor` or `href`
 - no pages are discovered
+- a navigation glob matches no files or leaves the content directory
 - duplicate page file slugs exist
 - duplicate route slugs exist
 - referenced docs files do not exist in `content/docs`

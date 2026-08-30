@@ -239,6 +239,9 @@ importers:
       vite:
         specifier: ^8.2.0
         version: 8.2.0(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
     devDependencies:
       rolldown:
         specifier: ^1.2.2
