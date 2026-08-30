@@ -464,7 +464,7 @@ export default defineConfig(async () => {
       ),
       shisoHtml(getDocsConfig),
       shisoMarkdownDev(getDocsConfig, getShisoConfig, projectRoot),
-      shisoMdx(),
+      shisoMdx(getShisoConfig().mdx),
       react({ include: /\.(mdx|md|tsx|ts|jsx|js)$/ }),
     ],
     resolve: {

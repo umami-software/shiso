@@ -15,7 +15,9 @@ import { createJiti } from 'jiti';
 /** Candidate filenames in precedence order. Exactly one may exist. */
 export const SHISO_CONFIG_FILES = ['shiso.config.ts', 'shiso.config.mjs', 'shiso.config.js'];
 
-const KNOWN_KEYS = ['docsPrefix', 'contentDir', 'siteUrl', 'locale'];
+const STRING_KEYS = ['docsPrefix', 'contentDir', 'siteUrl', 'locale'];
+const KNOWN_KEYS = [...STRING_KEYS, 'mdx'];
+const MDX_KEYS = ['remarkPlugins', 'rehypePlugins'];
 
 let importGeneration = 0;
 
@@ -53,12 +55,45 @@ function assertStringOption(raw, key, sourcePath) {
   }
 }
 
+function resolveMdxConfig(value, sourcePath) {
+  if (value === undefined) return undefined;
+
+  if (!isPlainObject(value)) {
+    throw new ShisoConfigLoadError('Shiso config option "mdx" must be a plain object.', {
+      code: 'INVALID_OPTION',
+      sourcePath,
+    });
+  }
+
+  const unknownKeys = Object.keys(value).filter(key => !MDX_KEYS.includes(key));
+  if (unknownKeys.length) {
+    throw new ShisoConfigLoadError(
+      `Shiso config option "mdx" has unknown ${unknownKeys.length === 1 ? 'key' : 'keys'} ${unknownKeys.map(key => `"${key}"`).join(', ')}. Supported keys: ${MDX_KEYS.join(', ')}.`,
+      { code: 'UNKNOWN_OPTION', sourcePath },
+    );
+  }
+
+  for (const key of MDX_KEYS) {
+    if (value[key] !== undefined && !Array.isArray(value[key])) {
+      throw new ShisoConfigLoadError(`Shiso config option "mdx.${key}" must be an array.`, {
+        code: 'INVALID_OPTION',
+        sourcePath,
+      });
+    }
+  }
+
+  return {
+    remarkPlugins: value.remarkPlugins || [],
+    rehypePlugins: value.rehypePlugins || [],
+  };
+}
+
 /**
  * Applies defaults and normalization. Single source of truth for resolved
  * values, so runtime and build-time consumers never re-implement defaulting.
  */
 export function resolveShisoConfig(raw = {}, sourcePath = null) {
-  for (const key of KNOWN_KEYS) {
+  for (const key of STRING_KEYS) {
     assertStringOption(raw, key, sourcePath);
   }
 
@@ -67,6 +102,7 @@ export function resolveShisoConfig(raw = {}, sourcePath = null) {
     contentDir: (raw.contentDir ?? 'content/docs').trim().replace(/^\/+|\/+$/g, ''),
     siteUrl: raw.siteUrl?.trim().replace(/\/+$/, '') || undefined,
     locale: raw.locale?.trim() || 'en-US',
+    mdx: resolveMdxConfig(raw.mdx, sourcePath),
   };
 }
 
@@ -108,7 +144,13 @@ export async function loadShisoConfig({ root = process.cwd() } = {}) {
   }
 
   if (found.length === 0) {
-    return { config: resolveShisoConfig(), raw: {}, projectRoot, sourcePath: null, sourcePaths: [] };
+    return {
+      config: resolveShisoConfig(),
+      raw: {},
+      projectRoot,
+      sourcePath: null,
+      sourcePaths: [],
+    };
   }
 
   const sourcePath = found[0];

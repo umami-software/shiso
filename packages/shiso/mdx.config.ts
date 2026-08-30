@@ -8,6 +8,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import type { Plugin } from 'vite';
 import { type MdNode, toText, walkTree } from './src/lib/mdast.ts';
 import { remarkToc } from './src/lib/remark-toc.ts';
+import type { MdxConfig } from './src/lib/types.ts';
 
 const SYNTHETIC_FRAGMENT = 'data-shiso-synthetic-fragment';
 
@@ -142,7 +143,7 @@ function rehypeZoomableImages() {
  * The MDX compilation pipeline, shared by the app build and the test runner so
  * tests exercise the same transforms the site ships with.
  */
-export function shisoMdx(): Plugin {
+export function shisoMdx(options: MdxConfig = {}): Plugin {
   return {
     // Must run before vite:react-babel so MDX is compiled to JSX first.
     enforce: 'pre',
@@ -152,10 +153,12 @@ export function shisoMdx(): Plugin {
         remarkFrontmatter,
         remarkMdxFrontmatter,
         remarkGfm,
+        ...(options.remarkPlugins || []),
         remarkCodeTitles,
         remarkToc,
       ],
       rehypePlugins: [
+        ...(options.rehypePlugins || []),
         rehypeWrapJsxForHighlighting,
         rehypeHighlight,
         rehypeRemoveHighlightingFragments,

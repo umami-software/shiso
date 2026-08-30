@@ -1,3 +1,5 @@
+import type { PluggableList } from 'unified';
+
 /* ---------------------------------------------------------------------------
  * Raw docs.json shapes
  * ------------------------------------------------------------------------- */
@@ -113,6 +115,11 @@ export type LogoOption =
 
 /** Project-level settings supplied by shiso.config.ts. Mirrors the public
  * shape exported from "@umami/shiso/config". */
+export interface MdxConfig {
+  remarkPlugins?: PluggableList;
+  rehypePlugins?: PluggableList;
+}
+
 export interface ShisoConfig {
   /** Where docs pages are mounted within the site. Default "/docs"; "" for root. */
   docsPrefix?: string;
@@ -122,6 +129,8 @@ export interface ShisoConfig {
   siteUrl?: string;
   /** Locale used for deterministic date formatting. */
   locale?: string;
+  /** Build-time remark and rehype plugins. */
+  mdx?: MdxConfig;
 }
 
 /** ShisoConfig after defaults and normalization, as served by `virtual:shiso-config`. */
@@ -130,6 +139,8 @@ export interface ResolvedShisoConfig {
   contentDir: string;
   siteUrl?: string;
   locale: string;
+  /** Build-only compiler hooks. Removed from the virtual browser module. */
+  mdx?: MdxConfig;
 }
 
 export type LinkTarget = '_self' | '_blank';

@@ -1,7 +1,12 @@
-/**
- * Public types for shiso.config.ts. Kept self-contained (no imports) so the
- * config file typechecks in consuming projects without pulling in the runtime.
- */
+import type { PluggableList } from 'unified';
+
+/** Build-time Markdown and MDX compiler extensions. */
+export interface MdxConfig {
+  /** Unified remark plugins, run before Shiso's code-title and table-of-contents transforms. */
+  remarkPlugins?: PluggableList;
+  /** Unified rehype plugins, run before Shiso's highlighting, image, and heading transforms. */
+  rehypePlugins?: PluggableList;
+}
 
 /** Project-level settings supplied by shiso.config.ts. All fields are optional. */
 export interface ShisoConfig {
@@ -13,6 +18,8 @@ export interface ShisoConfig {
   siteUrl?: string;
   /** Locale used for deterministic date formatting. Default "en-US". */
   locale?: string;
+  /** Build-time remark and rehype plugins for Markdown and MDX content. */
+  mdx?: MdxConfig;
 }
 
 /** Identity helper that types a shiso.config.ts default export. */

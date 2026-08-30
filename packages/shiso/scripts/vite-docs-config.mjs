@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { loadDocsConfig } from './load-docs-config.mjs';
-import { SHISO_CONFIG_FILES, loadShisoConfig } from './load-shiso-config.mjs';
+import { loadShisoConfig, SHISO_CONFIG_FILES } from './load-shiso-config.mjs';
 
 export const VIRTUAL_DOCS_CONFIG_ID = 'virtual:shiso-docs-config';
 export const VIRTUAL_SHISO_CONFIG_ID = 'virtual:shiso-config';
@@ -9,6 +9,13 @@ const RESOLVED_SHISO_CONFIG_ID = `\0${VIRTUAL_SHISO_CONFIG_ID}`;
 
 function renderConfigModule(config) {
   return `export default ${JSON.stringify(config)};`;
+}
+
+function renderShisoConfigModule(config) {
+  // Compiler plugins are functions used by vite.config.ts and cannot be
+  // serialized into the virtual module consumed by the browser runtime.
+  const { mdx: _mdx, ...runtimeConfig } = config;
+  return renderConfigModule(runtimeConfig);
 }
 
 /**
@@ -64,7 +71,7 @@ export async function createDocsConfigModule({
           for (const sourcePath of loadedShiso.sourcePaths) {
             this.addWatchFile(sourcePath);
           }
-          return renderConfigModule(loadedShiso.config);
+          return renderShisoConfigModule(loadedShiso.config);
         }
 
         return undefined;

@@ -97,6 +97,33 @@ export default defineConfig({
 });
 ```
 
+## MDX plugins
+
+Extend the Markdown compiler with Unified remark or rehype plugins through
+`mdx`. Install plugins in your project, import them in `shiso.config.ts`, and
+add them in execution order:
+
+```ts
+import { defineConfig } from '@umami/shiso/config';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+
+export default defineConfig({
+  mdx: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
+  },
+});
+```
+
+Remark plugins run after Shiso enables frontmatter and GFM, and before its
+code-title and table-of-contents transforms. Rehype plugins run before Shiso's
+syntax highlighting, zoomable images, heading IDs, and permalinks. Plugin
+hooks execute only at build time and are not included in the browser bundle.
+
+Restart the development command after changing the plugin list so Vite can
+recreate the compiler pipeline.
+
 ## How page names become URLs
 
 Every page named in `navigation` matches a `.md` or `.mdx` file in your content
@@ -152,6 +179,7 @@ pnpm check
 - The file exists, but it is not included in navigation.
 - A nested page name does not match its folder structure.
 - `siteUrl` includes `/docs`, another path, or a trailing slash.
+- An `mdx` plugin is installed in a different workspace or cannot be imported.
 - `$shiso` is still present in `docs.json` after upgrading.
 
 See [Troubleshooting](/docs/troubleshooting) for help with build and navigation
