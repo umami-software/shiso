@@ -22,6 +22,12 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from './lib/mdast.mjs';
+import {
+  loadOpenApiSpec,
+  normalizeOperationKey,
+  normalizeOperations,
+  operationSearchSections,
+} from './lib/openapi.mjs';
 import { createSlugger, slugifyId } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
@@ -141,7 +147,13 @@ function collectVisiblePages(container, pages = [], hidden = false) {
   return pages;
 }
 
-/** Frontmatter is YAML, but search only needs the title line. */
+/** Frontmatter is YAML, but search only needs single lines from it. */
+function frontmatterOpenApi(tree) {
+  const yaml = tree.children?.find(node => node.type === 'yaml');
+  const match = yaml?.value?.match(/^openapi:\s*(.+)$/m);
+  return match ? match[1].trim() : undefined;
+}
+
 function frontmatterTitle(tree) {
   const yaml = tree.children?.find(node => node.type === 'yaml');
   const match = yaml?.value?.match(/^title:\s*(.+)$/m);
@@ -211,6 +223,16 @@ export async function generateSearchIndex({
   const seen = new Set();
   const records = [];
 
+  // Pages bound to an API operation get synthesized sections from the spec, so
+  // parameters and responses are searchable even though they render from data.
+  let operationsByKey;
+  if (docsJson.api?.spec) {
+    const { spec } = await loadOpenApiSpec({ root, specPath: docsJson.api.spec });
+    operationsByKey = new Map(
+      normalizeOperations(spec).map(operation => [operation.key, operation]),
+    );
+  }
+
   for (const scope of collectScopes(docsJson.navigation || {})) {
     // Single-scope sites omit scope fields so their index stays unchanged.
     const scopeFields =
@@ -248,6 +270,14 @@ export async function generateSearchIndex({
 
       for (const { heading, id, text } of collectSections(tree)) {
         records.push({ url, page, heading, id, text, ...scopeFields });
+      }
+
+      const operationKey = normalizeOperationKey(frontmatterOpenApi(tree));
+      const operation = operationKey ? operationsByKey?.get(operationKey) : undefined;
+      if (operation) {
+        for (const { heading, id, text } of operationSearchSections(operation)) {
+          records.push({ url, page, heading, id, text, ...scopeFields });
+        }
       }
     }
   }

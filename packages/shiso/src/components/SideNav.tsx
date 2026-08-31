@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { Badge as MethodBadge } from '@/components/docs/Badge';
 import { resolveIcon } from '@/components/docs/utils';
 import { ChevronRight, ExternalLink } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
+import { methodColor } from '@/lib/openapi';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -256,7 +258,7 @@ function NavNodes({
     }
 
     if (node.kind === 'page') {
-      const { url, label, icon, tag } = node.page;
+      const { url, label, icon, tag, method } = node.page;
       const isSelected = url === pathname;
 
       rendered.push(
@@ -274,7 +276,11 @@ function NavNodes({
         >
           {resolveIcon(icon)}
           {label}
-          {tag ? (
+          {method ? (
+            <MethodBadge color={methodColor(method)} size="xs" className="ml-auto font-mono">
+              {method === 'DELETE' ? 'DEL' : method}
+            </MethodBadge>
+          ) : tag ? (
             <Badge
               variant="secondary"
               className="ml-auto h-auto rounded-sm px-[0.35rem] py-[0.05rem] text-[0.7rem] text-muted-foreground uppercase"

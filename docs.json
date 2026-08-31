@@ -49,6 +49,9 @@
   "metadata": {
     "timestamp": true
   },
+  "api": {
+    "spec": "openapi.yaml"
+  },
   "contextual": {
     "options": ["copy", "view", "chatgpt", "claude"]
   },
@@ -72,6 +75,7 @@
               { "page": "customization", "title": "Appearance" },
               { "page": "navbar-and-footer", "title": "Header, footer, and banner" },
               { "page": "search-and-ai", "title": "Search and AI" },
+              { "page": "api-reference", "title": "API references" },
               "versions",
               "languages",
               { "page": "seo", "title": "SEO, redirects, and errors" },
@@ -107,6 +111,10 @@
             "group": "Guides",
             "collapsible": false,
             "pages": ["guides/deployment"]
+          },
+          {
+            "group": "API demo",
+            "pages": [{ "openapi": true }]
           },
           {
             "group": "Migrations",

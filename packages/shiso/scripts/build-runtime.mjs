@@ -10,6 +10,7 @@ const outputRoot = path.join(packageRoot, 'dist');
 const projectModules = new Set([
   '@/generated/last-modified',
   '@/lib/icon-registry.generated',
+  '@/lib/openapi.generated',
   '@/lib/search-index.generated',
   'virtual:shiso-docs-config',
   'virtual:shiso-config',

@@ -21,6 +21,7 @@ const IMPLEMENTATION = {
   $ref: { file: 'packages/shiso/scripts/load-docs-config.mjs', pattern: /\$ref/ },
   // Editor-only metadata: points editors at this schema and is otherwise inert.
   $schema: { passthrough: 'editor metadata' },
+  api: { file: 'packages/shiso/scripts/load-docs-config.mjs', pattern: /api?.spec/ },
   appearance: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.appearance/ },
   background: { file: 'packages/shiso/vite.config.ts', pattern: /background/ },
   banner: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.banner/ },

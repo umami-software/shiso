@@ -42,6 +42,7 @@ export async function createDocsConfigModule({
   return {
     getConfig: () => loaded.config,
     getShisoConfig: () => loadedShiso.config,
+    getSpecPath: () => loaded.specPath,
     getSourcePaths: () => [...loaded.sourcePaths, ...loadedShiso.sourcePaths],
     sourcePath: loaded.sourcePath,
     shisoSourcePath: loadedShiso.sourcePath,
@@ -78,7 +79,8 @@ export async function createDocsConfigModule({
       },
       async handleHotUpdate(context) {
         const changedPath = path.resolve(context.file);
-        const isDocsSource = loaded.sourcePaths.includes(changedPath);
+        const isDocsSource =
+          loaded.sourcePaths.includes(changedPath) || changedPath === loaded.specPath;
         const isShisoSource = shisoCandidatePaths.includes(changedPath);
         const contentRoot = path.resolve(root, loadedShiso.config.contentDir);
         const relativeContentPath = path.relative(contentRoot, changedPath);

@@ -1,0 +1,100 @@
+---
+title: API references
+description: Generate API reference pages from an OpenAPI spec.
+---
+
+Shiso turns a local OpenAPI 3.0 or 3.1 spec (JSON or YAML) into full reference
+pages: parameters, request and response schemas, status codes, and ready-to-use
+code samples in cURL, JavaScript, and Python. Everything is resolved at build
+time — no client-side spec parsing and no external service.
+
+See the [API demo](/docs/api-reference/listsites) section in this site's Guides
+tab for a live example.
+
+## Point at your spec
+
+Add the `api` key to `docs.json`:
+
+```json
+{
+  "api": {
+    "spec": "openapi.yaml",
+    "directory": "api-reference"
+  }
+}
+```
+
+- `spec`: path to the spec file, relative to the project root.
+- `directory` (optional): folder inside your content directory where endpoint
+  pages live. Defaults to `api-reference`.
+
+## Add endpoints to navigation
+
+Use an `openapi` entry anywhere a page list is accepted:
+
+```json
+{
+  "navigation": {
+    "groups": [
+      { "group": "API reference", "pages": [{ "openapi": true }] },
+      { "group": "Users API", "pages": [{ "openapi": "Users" }] }
+    ]
+  }
+}
+```
+
+- `{ "openapi": true }` expands into one group per spec tag, containing every
+  operation.
+- `{ "openapi": "<tag>" }` expands into a flat list of that tag's operations.
+
+Expanded entries show a colored method badge (GET, POST, PUT, PATCH, DELETE)
+next to the page title in the sidebar.
+
+## Endpoint pages
+
+For every operation, Shiso creates a stub page in the configured directory the
+first time the config loads:
+
+```mdx
+---
+title: "Get a user"
+openapi: GET /users/{id}
+---
+```
+
+The `openapi` frontmatter key binds the page to an operation by method and
+path. The page then renders the operation's summary badge, parameters, request
+body, responses, and code samples below any prose you write in the body.
+
+Commit the stub files: they are ordinary content pages, which keeps search,
+markdown export, and navigation working exactly like the rest of your docs.
+Existing files are never overwritten, so you can freely edit titles, add
+descriptions, or write an introduction above the generated reference.
+
+## What gets generated
+
+- **Parameters** — path, query, header, and cookie parameters rendered as
+  fields, plus an `Authorization` entry when the operation declares security.
+- **Request body** — the schema tree with nested and expandable object
+  properties, plus a highlighted example (taken from the spec, or derived from
+  the schema when the spec has none).
+- **Responses** — one entry per status code with schema and example.
+- **Code samples** — cURL, JavaScript `fetch`, and Python `requests` snippets
+  built from the operation and its server URL, highlighted with the same
+  theme as your [code blocks](/docs/customization#code-blocks).
+
+The published Markdown copy of each endpoint page (used by the contextual menu
+and `llms-full.txt`) includes a Markdown rendering of the full reference.
+
+## Notes and limitations
+
+- `$ref` references must point inside the spec document; remote or file
+  references are not resolved.
+- Recursive schemas render as their type name once a cycle is detected.
+- Swagger 2.0 specs are not supported — convert them to OpenAPI 3 first.
+- Avoid headings named "Parameters", "Request body", "Responses", or
+  "Code samples" in an endpoint page's prose; the generated sections already
+  use those anchors.
+- In `shiso dev`, editing the spec regenerates stubs for new operations and
+  reloads the site. Removing an operation leaves its stub behind — delete the
+  file and its navigation reference manually if you no longer want the page.

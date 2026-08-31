@@ -598,6 +598,24 @@
         }
       }
     },
+    "api": {
+      "type": "object",
+      "description": "API reference settings: the OpenAPI spec powering openapi frontmatter pages.",
+      "anyOf": [{ "required": ["$ref"] }, { "required": ["spec"] }],
+      "additionalProperties": false,
+      "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
+        "spec": {
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Path to a local OpenAPI 3.0 or 3.1 spec (JSON or YAML), relative to the project root."
+        },
+        "directory": {
+          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Folder inside the content directory for generated endpoint pages.",
+          "default": "api-reference"
+        }
+      }
+    },
     "errors": {
       "type": "object",
       "description": "Error handling settings.",
@@ -744,6 +762,7 @@
         },
         { "$ref": "#/definitions/pageObject" },
         { "$ref": "#/definitions/globItem" },
+        { "$ref": "#/definitions/openapiItem" },
         { "$ref": "#/definitions/linkItem" },
         { "$ref": "#/definitions/group" }
       ]
@@ -768,6 +787,13 @@
         },
         "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the label." },
         "tag": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Short label shown after the page name." },
+        "method": {
+          "anyOf": [
+            { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "HTTP method badge shown after the page name on API reference pages."
+        },
         "hidden": {
           "allOf": [{ "$ref": "#/definitions/booleanValue" }],
           "description": "Hide from the sidebar and search. The page is still built and reachable by URL."
@@ -792,6 +818,17 @@
             { "$ref": "#/definitions/configRefValue" }
           ],
           "description": "Optional glob patterns to omit from the matches."
+        }
+      }
+    },
+    "openapiItem": {
+      "type": "object",
+      "required": ["openapi"],
+      "additionalProperties": false,
+      "properties": {
+        "openapi": {
+          "anyOf": [{ "type": "boolean" }, { "$ref": "#/definitions/nonEmptyStringValue" }],
+          "description": "Expand API endpoints into pages: true for every tag (grouped), or a tag name for that tag's operations. Requires the api.spec setting."
         }
       }
     },

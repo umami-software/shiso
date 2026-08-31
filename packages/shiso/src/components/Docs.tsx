@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
+import { getOperation, operationSections } from '@/lib/openapi';
 import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
 import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
@@ -72,6 +73,10 @@ export function Docs({ page, doc, site }: DocsProps) {
     );
   }
 
+  // API reference pages append their generated section anchors to the TOC.
+  const operation = getOperation(doc.frontmatter?.openapi);
+  const toc = operation ? [...(doc.toc || []), ...operationSections(operation)] : doc.toc;
+
   return (
     <div className="flex min-h-full flex-col gap-6 lg:gap-0">
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -124,7 +129,7 @@ export function Docs({ page, doc, site }: DocsProps) {
             <DocContent page={page} doc={doc} site={site} />
             <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
               <PageLinks
-                items={doc.toc}
+                items={toc}
                 title={site.labels.tableOfContents}
                 navigationLabel={site.labels.tableOfContentsNavigation}
               />

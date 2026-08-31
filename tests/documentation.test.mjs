@@ -20,6 +20,7 @@ const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter);
 const FIELD_DOCUMENTATION = {
   $ref: 'configuration-references.mdx',
   $schema: 'project-settings.mdx',
+  api: 'api-reference.mdx',
   appearance: 'customization.mdx',
   background: 'customization.mdx',
   banner: 'navbar-and-footer.mdx',

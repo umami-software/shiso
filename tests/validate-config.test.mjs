@@ -22,6 +22,7 @@ describe('schema coverage', () => {
     expect(getSchemaKeys(schema).sort()).toEqual([
       '$ref',
       '$schema',
+      'api',
       'appearance',
       'background',
       'banner',
@@ -556,6 +557,27 @@ describe('supported keys stay strictly validated', () => {
     );
 
     expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts and rejects api settings', () => {
+    expect(
+      validateConfig({ ...minimal, api: { spec: 'openapi.yaml', directory: 'api' } }, schema).valid,
+    ).toBe(true);
+    expect(
+      validateConfig(
+        { ...minimal, api: { spec: 'openapi.yaml' }, navigation: { pages: [{ openapi: true }] } },
+        schema,
+      ).valid,
+    ).toBe(true);
+    expect(
+      validateConfig({ ...minimal, navigation: { pages: [{ openapi: 'Users' }] } }, schema).valid,
+    ).toBe(true);
+    expect(validateConfig({ ...minimal, api: {} }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, api: { spec: '' } }, schema).valid).toBe(false);
+    expect(validateConfig({ ...minimal, api: { file: 'x.yaml' } }, schema).valid).toBe(false);
+    expect(
+      validateConfig({ ...minimal, navigation: { pages: [{ openapi: '' }] } }, schema).valid,
+    ).toBe(false);
   });
 
   it('rejects unused styling and background settings', () => {

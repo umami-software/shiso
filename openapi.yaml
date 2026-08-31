@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: Shiso Demo API
+  description: A small example API used to demonstrate Shiso's OpenAPI support.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Sites
+  - name: Events
+paths:
+  /sites:
+    get:
+      operationId: listSites
+      tags: [Sites]
+      summary: List sites
+      description: Returns every site the authenticated user can access.
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: Number of results to skip.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of sites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+    post:
+      operationId: createSite
+      tags: [Sites]
+      summary: Create a site
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSite'
+      responses:
+        '201':
+          description: The created site.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+        '422':
+          description: The site could not be created.
+  /sites/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Site identifier.
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getSite
+      tags: [Sites]
+      summary: Get a site
+      responses:
+        '200':
+          description: The requested site.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+        '404':
+          description: No site with this ID exists.
+    delete:
+      operationId: deleteSite
+      tags: [Sites]
+      summary: Delete a site
+      responses:
+        '204':
+          description: The site was deleted.
+  /sites/{id}/events:
+    get:
+      operationId: listEvents
+      tags: [Events]
+      summary: List events
+      description: Returns events recorded for a site, newest first.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Site identifier.
+          schema:
+            type: string
+            format: uuid
+        - name: type
+          in: query
+          description: Filter by event type.
+          schema:
+            type: string
+            enum: [pageview, click, custom]
+      responses:
+        '200':
+          description: A list of events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Site:
+      type: object
+      required: [id, name, domain]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Display name of the site.
+        domain:
+          type: string
+          description: Primary domain, without protocol.
+          example: example.com
+        createdAt:
+          type: string
+          format: date-time
+    NewSite:
+      type: object
+      required: [name, domain]
+      properties:
+        name:
+          type: string
+          example: My website
+        domain:
+          type: string
+          example: example.com
+    Event:
+      type: object
+      required: [id, type]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [pageview, click, custom]
+        url:
+          type: string
+          description: Page URL where the event occurred.
+        timestamp:
+          type: string
+          format: date-time

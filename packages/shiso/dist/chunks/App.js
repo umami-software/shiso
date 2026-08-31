@@ -1,4 +1,4 @@
-import { $ as POPUP_COLLISION_AVOIDANCE, $n as isHTMLElement, $t as itemPress, A as popupStoreSelectors, An as ARROW_UP, B as useSyncedFloatingRootContext, Bn as EMPTY_ARRAY, C as pressableTriggerOpenStateMapping, Cn as isTypeableCombobox, Ct as COMPOSITE_KEYS, D as useFocus, Dn as ARROW_DOWN, E as useHoverFloatingInteraction, En as getTarget, F as setPopupOpenState, Fn as useId$1, G as FloatingNode, Gn as ownerDocument, Gt as useValueAsRef, H as useDismiss, Hn as useMergedRefs, Ht as getIcon, I as useImplicitActiveTrigger, In as useTimeout, J as useFloatingParentNodeId, Jn as useIsoLayoutEffect, Jt as createChangeEventDetails, K as FloatingTree, Kn as useCompositeRootContext, Kt as useCompositeListItem, L as useOpenStateTransitions, Ln as Button, M as FOCUSABLE_POPUP_PROPS, Mn as webkit, N as PopupHandleAttachment, Nn as mac, O as usePopupHandleStore, On as ARROW_LEFT, P as attachPreventUnmountOnClose, Pn as useBaseUiId, Q as DROPDOWN_COLLISION_AVOIDANCE, Qn as getWindow, Qt as imperativeAction, R as usePopupInteractionProps, Rn as cn, Rt as Badge, S as popupTransitionStateMapping, Sn as getFloatingFocusElement, T as useHoverReferenceInteraction, Tn as contains, Tt as useCompositeItem, U as useClick, Un as useButton, Ut as useOpenChangeComplete, V as ReactStore, Vn as EMPTY_OBJECT, Vt as resolveIcon, W as FloatingFocusManager, Wn as dispatchClickWithModifiers, Wt as useAnimationsFinished, X as FloatingTreeStore, Xn as useRefWithInit, Xt as escapeKey, Y as useFloatingTree, Yn as useStableCallback, Yt as cancelOpen, Z as FloatingPortal, Zn as getParentNode, Zt as focusOut, _n as isIndexOutOfListBounds, _t as Collapsible, a as DialogTitle, an as triggerPress, b as getDisabledMountTransitionStyles, bn as isVirtualPointerEvent, c as useOpenInteractionType, cn as useDirection, cr as Route, d as useScrollLock, dn as getTabbableBeforeElement, dr as useLocation, en as listNavigation, er as isLastTraversableNode, et as enqueueFocus, f as DialogPortal$1, fn as isOutsideEvent, fr as useNavigate, g as DialogBackdrop, gn as isElementVisible, h as DialogClose, hn as getMinListIndex, ht as renderInlineMarkdown, i as DialogContent$1, in as triggerHover, ir as createLucideIcon, j as PopupTriggerMap, jn as jsdom, k as createInitialPopupStoreState, kn as ARROW_RIGHT, l as DialogTitle$1, ln as getNextTabbable, m as DialogPopup, mn as getMaxListIndex, n as ZoomableImage, nn as siblingOpen, nr as ChevronRight, nt as fastComponent, o as DialogTrigger, on as CompositeList, or as Link, p as InternalBackdrop, pn as findNonDisabledListIndex, q as useFloatingNodeId, qn as mergeProps$1, qt as useAnimationFrame, r as Dialog$1, rn as triggerFocus, rr as Check, rt as fastComponentRef, s as DialogTrigger$1, sn as addEventListener, sr as Navigate, t as docs_exports, tn as outsidePress, tr as X$1, tt as FocusGuard, u as DialogRoot, un as getTabbableAfterElement, ur as Routes, v as TooltipProvider, vn as isListIndexDisabled, vt as CollapsibleContent, w as safePolygon, wn as activeElement, wt as inertValue, x as useAnchorPositioning, xn as stopEvent, y as usePositioner, yn as isVirtualClick, yt as CollapsibleTrigger, z as useTriggerDataForwarding, zn as useRenderElement } from "./docs.js";
+import { $ as POPUP_COLLISION_AVOIDANCE, $n as isHTMLElement, $t as itemPress, A as popupStoreSelectors, An as ARROW_UP, B as useSyncedFloatingRootContext, Bn as EMPTY_ARRAY, C as pressableTriggerOpenStateMapping, Cn as isTypeableCombobox, Ct as COMPOSITE_KEYS, D as useFocus, Dn as ARROW_DOWN, E as useHoverFloatingInteraction, En as getTarget, F as setPopupOpenState, Fn as useId$1, G as FloatingNode, Gn as ownerDocument, Gt as useValueAsRef, H as useDismiss, Hn as useMergedRefs, Ht as getIcon, I as useImplicitActiveTrigger, In as useTimeout, J as useFloatingParentNodeId, Jn as useIsoLayoutEffect, Jt as createChangeEventDetails, K as FloatingTree, Kn as useCompositeRootContext, Kt as useCompositeListItem, L as useOpenStateTransitions, Ln as Button, Lt as Badge, M as FOCUSABLE_POPUP_PROPS, Mn as webkit, N as PopupHandleAttachment, Nn as mac, O as usePopupHandleStore, On as ARROW_LEFT, P as attachPreventUnmountOnClose, Pn as useBaseUiId, Q as DROPDOWN_COLLISION_AVOIDANCE, Qn as getWindow, Qt as imperativeAction, R as usePopupInteractionProps, Rn as cn, Rt as Badge$1, S as popupTransitionStateMapping, Sn as getFloatingFocusElement, St as CodeGroup, T as useHoverReferenceInteraction, Tn as contains, Tt as useCompositeItem, U as useClick, Un as useButton, Ut as useOpenChangeComplete, V as ReactStore, Vn as EMPTY_OBJECT, Vt as resolveIcon, W as FloatingFocusManager, Wn as dispatchClickWithModifiers, Wt as useAnimationsFinished, X as FloatingTreeStore, Xn as useRefWithInit, Xt as escapeKey, Y as useFloatingTree, Yn as useStableCallback, Yt as cancelOpen, Z as FloatingPortal, Zn as getParentNode, Zt as focusOut, _n as isIndexOutOfListBounds, _t as Collapsible, a as DialogTitle, an as triggerPress, b as getDisabledMountTransitionStyles, bn as isVirtualPointerEvent, c as useOpenInteractionType, cn as useDirection, cr as Route, ct as ResponseField, d as useScrollLock, dn as getTabbableBeforeElement, dr as useLocation, dt as ParamField, en as listNavigation, er as isLastTraversableNode, et as enqueueFocus, f as DialogPortal$1, fn as isOutsideEvent, fr as useNavigate, g as DialogBackdrop, gn as isElementVisible, gt as Expandable, h as DialogClose, hn as getMinListIndex, ht as renderInlineMarkdown, i as DialogContent$1, in as triggerHover, ir as createLucideIcon, j as PopupTriggerMap, jn as jsdom, k as createInitialPopupStoreState, kn as ARROW_RIGHT, l as DialogTitle$1, ln as getNextTabbable, m as DialogPopup, mn as getMaxListIndex, n as ZoomableImage, nn as siblingOpen, nr as ChevronRight, nt as fastComponent, o as DialogTrigger, on as CompositeList, or as Link, p as InternalBackdrop, pn as findNonDisabledListIndex, q as useFloatingNodeId, qn as mergeProps$1, qt as useAnimationFrame, r as Dialog$1, rn as triggerFocus, rr as Check, rt as fastComponentRef, s as DialogTrigger$1, sn as addEventListener, sr as Navigate, t as docs_exports, tn as outsidePress, tr as X$1, tt as FocusGuard, u as DialogRoot, un as getTabbableAfterElement, ur as Routes, v as TooltipProvider, vn as isListIndexDisabled, vt as CollapsibleContent, w as safePolygon, wn as activeElement, wt as inertValue, x as useAnchorPositioning, xn as stopEvent, y as usePositioner, yn as isVirtualClick, yt as CollapsibleTrigger, z as useTriggerDataForwarding, zn as useRenderElement } from "./docs.js";
 import { n as highlightTerms } from "./search.js";
 import { resolveSearchProvider } from "../search.js";
 import * as React from "react";
@@ -12,6 +12,7 @@ import * as ReactDOM from "react-dom";
 import shiso from "virtual:shiso-config";
 import rawConfig from "virtual:shiso-docs-config";
 import { LAST_MODIFIED } from "@/generated/last-modified";
+import { OPENAPI_OPERATIONS } from "@/lib/openapi.generated";
 
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/arrow-left.mjs
 /**
@@ -3451,6 +3452,52 @@ const regex = /[\0-\x1F!-,\.\/:-@\[-\^`\{-\xA9\xAB-\xB4\xB6-\xB9\xBB-\xBF\xD7\xF
 //#region ../../node_modules/.pnpm/github-slugger@2.0.0/node_modules/github-slugger/index.js
 const own = Object.hasOwnProperty;
 /**
+* Slugger.
+*/
+var BananaSlug = class {
+	/**
+	* Create a new slug class.
+	*/
+	constructor() {
+		/** @type {Record<string, number>} */
+		this.occurrences;
+		this.reset();
+	}
+	/**
+	* Generate a unique slug.
+	*
+	* Tracks previously generated slugs: repeated calls with the same value
+	* will result in different slugs.
+	* Use the `slug` function to get same slugs.
+	*
+	* @param  {string} value
+	*   String of text to slugify
+	* @param  {boolean} [maintainCase=false]
+	*   Keep the current case, otherwise make all lowercase
+	* @return {string}
+	*   A unique slug string
+	*/
+	slug(value, maintainCase) {
+		const self = this;
+		let result = slug(value, maintainCase === true);
+		const originalSlug = result;
+		while (own.call(self.occurrences, result)) {
+			self.occurrences[originalSlug]++;
+			result = originalSlug + "-" + self.occurrences[originalSlug];
+		}
+		self.occurrences[result] = 0;
+		return result;
+	}
+	/**
+	* Reset - Forget all previous slugs
+	*
+	* @return void
+	*/
+	reset() {
+		this.occurrences = Object.create(null);
+	}
+};
+/**
 * Generate a slug.
 *
 * Does not track previously generated slugs: repeated calls with the same value
@@ -3472,6 +3519,22 @@ function slug(value, maintainCase) {
 
 //#endregion
 //#region src/lib/slug.ts
+/**
+* The single slug algorithm in the repo.
+*
+* Heading anchors are produced in two independent places — `remarkToc` (which
+* builds the on-page table of contents) and `rehype-slug` (which sets the `id`
+* on the rendered heading). Both must agree or every TOC link breaks, so both
+* go through github-slugger here rather than reimplementing it.
+*/
+/**
+* Creates a stateful slugger. Call `.slug(text)` once per heading in document
+* order; repeated headings get `-1`, `-2`, ... suffixes exactly as rehype-slug
+* does, because it is the same implementation.
+*/
+function createSlugger() {
+	return new BananaSlug();
+}
 /**
 * Stateless slugify for one-off ids that do not need de-duplication.
 *
@@ -3666,7 +3729,8 @@ function addPage(pageRef, context, state, extra = {}) {
 		order,
 		hidden: extra.hidden || context.hidden || void 0,
 		icon: extra.icon,
-		tag: extra.tag
+		tag: extra.tag,
+		method: extra.method
 	});
 	return order;
 }
@@ -3702,6 +3766,7 @@ function collectPages(items, context, state) {
 					label,
 					icon: typeof item.icon === "string" ? item.icon : void 0,
 					tag: typeof item.tag === "string" ? item.tag : void 0,
+					method: typeof item.method === "string" ? item.method : void 0,
 					hidden: item.hidden === true
 				})
 			});
@@ -8004,6 +8069,195 @@ function ContextualMenu({ options, labels }) {
 }
 
 //#endregion
+//#region src/lib/openapi.ts
+const METHOD_COLORS = {
+	GET: "green",
+	POST: "blue",
+	PUT: "orange",
+	PATCH: "purple",
+	DELETE: "red"
+};
+function methodColor(method) {
+	return method && METHOD_COLORS[method.toUpperCase()] || "gray";
+}
+function statusColor(status) {
+	if (status.startsWith("2")) return "green";
+	if (status.startsWith("3")) return "blue";
+	if (status.startsWith("4") || status.startsWith("5")) return "red";
+	return "gray";
+}
+/** Looks up the operation bound by an `openapi:` frontmatter value. */
+function getOperation(key) {
+	if (typeof key !== "string" || !key.trim()) return;
+	const [method, ...rest] = key.trim().split(/\s+/);
+	return OPENAPI_OPERATIONS[`${method.toUpperCase()} ${rest.join(" ")}`];
+}
+function hasParameters(operation) {
+	const { query, path, header, cookie } = operation.parameters;
+	return query.length + path.length + header.length + cookie.length > 0 || operation.security.length > 0;
+}
+/**
+* Section headings for an operation, in render order. The single source of
+* truth for section ids: the component, the table of contents, the content
+* checker, and the search indexer all derive their anchors from these labels.
+*/
+function operationSections(operation) {
+	const slugger = createSlugger();
+	return [
+		hasParameters(operation) ? "Parameters" : void 0,
+		operation.requestBody ? "Request body" : void 0,
+		operation.responses.length ? "Responses" : void 0,
+		operation.samples.length ? "Code samples" : void 0
+	].filter((name) => Boolean(name)).map((name) => ({
+		name,
+		id: slugger.slug(name),
+		size: 2
+	}));
+}
+
+//#endregion
+//#region src/components/OpenApiOperation.tsx
+const PARAM_LOCATIONS = [
+	"path",
+	"query",
+	"header",
+	"cookie"
+];
+function FieldChildren({ node }) {
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
+		node.description,
+		node.enum && node.enum.length > 0 && /* @__PURE__ */ jsxs("div", {
+			className: "mt-1",
+			children: [
+				"Options:",
+				" ",
+				node.enum.map((value, index) => /* @__PURE__ */ jsxs("span", { children: [index > 0 && ", ", /* @__PURE__ */ jsx("code", { children: value })] }, value))
+			]
+		}),
+		node.children && node.children.length > 0 && /* @__PURE__ */ jsx(Expandable, {
+			title: "properties",
+			children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type))
+		})
+	] });
+}
+function SchemaField({ node }) {
+	return /* @__PURE__ */ jsx(ResponseField, {
+		name: node.name || node.type,
+		type: node.name ? node.type : void 0,
+		required: node.required,
+		deprecated: node.deprecated,
+		default: node.default,
+		children: /* @__PURE__ */ jsx(FieldChildren, { node })
+	});
+}
+/** Renders a schema tree: a root object's properties, or the node itself. */
+function SchemaFields({ node }) {
+	if (!node.name && node.children?.length) return /* @__PURE__ */ jsx(Fragment, { children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type)) });
+	return /* @__PURE__ */ jsx(SchemaField, { node });
+}
+function HighlightedCode({ language, title, html, source, lineCount }) {
+	return /* @__PURE__ */ jsx(CodeBlock, {
+		"data-language": language,
+		"data-title": title,
+		"data-line-count": lineCount ? String(lineCount) : void 0,
+		children: html ? /* @__PURE__ */ jsx("code", {
+			className: `language-${language}`,
+			dangerouslySetInnerHTML: { __html: html }
+		}) : /* @__PURE__ */ jsx("code", {
+			className: `language-${language}`,
+			children: source
+		})
+	});
+}
+/** The generated reference for one API operation, rendered under the page body. */
+function OpenApiOperation({ operation }) {
+	const sections = new Map(operationSections(operation).map((entry) => [entry.name, entry.id]));
+	const showParameters = sections.has("Parameters");
+	return /* @__PURE__ */ jsxs("div", {
+		className: "docs-markdown",
+		children: [
+			showParameters && /* @__PURE__ */ jsxs("section", { children: [
+				/* @__PURE__ */ jsx("h2", {
+					id: sections.get("Parameters"),
+					children: "Parameters"
+				}),
+				operation.security.length > 0 && /* @__PURE__ */ jsxs(ParamField, {
+					header: "Authorization",
+					type: "string",
+					required: true,
+					children: [
+						"Authentication credentials, e.g. ",
+						/* @__PURE__ */ jsx("code", { children: "Bearer <token>" }),
+						" (",
+						operation.security.join(", "),
+						")."
+					]
+				}),
+				PARAM_LOCATIONS.map((location) => operation.parameters[location].map((parameter) => /* @__PURE__ */ jsxs(ParamField, {
+					[location]: parameter.name,
+					type: parameter.type,
+					required: parameter.required,
+					children: [/* @__PURE__ */ jsx(FieldChildren, { node: {
+						...parameter,
+						name: void 0,
+						description: void 0
+					} }), parameter.description]
+				}, `${location}-${parameter.name}`)))
+			] }),
+			operation.requestBody && /* @__PURE__ */ jsxs("section", { children: [
+				/* @__PURE__ */ jsx("h2", {
+					id: sections.get("Request body"),
+					children: "Request body"
+				}),
+				/* @__PURE__ */ jsx(SchemaFields, { node: operation.requestBody.schema }),
+				operation.requestBody.example && /* @__PURE__ */ jsx(HighlightedCode, {
+					language: "json",
+					title: "Example request",
+					html: operation.requestBody.exampleHtml,
+					source: operation.requestBody.example
+				})
+			] }),
+			operation.responses.length > 0 && /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", {
+				id: sections.get("Responses"),
+				children: "Responses"
+			}), operation.responses.map((response) => /* @__PURE__ */ jsxs("div", {
+				className: "mt-6 first:mt-0",
+				children: [
+					/* @__PURE__ */ jsxs("div", {
+						className: "flex items-center gap-2",
+						children: [/* @__PURE__ */ jsx(Badge, {
+							color: statusColor(response.status),
+							size: "sm",
+							children: response.status
+						}), response.description && /* @__PURE__ */ jsx("span", {
+							className: "text-muted-foreground text-sm",
+							children: response.description
+						})]
+					}),
+					response.schema && /* @__PURE__ */ jsx(SchemaFields, { node: response.schema }),
+					response.example && /* @__PURE__ */ jsx(HighlightedCode, {
+						language: "json",
+						title: `${response.status} example`,
+						html: response.exampleHtml,
+						source: response.example
+					})
+				]
+			}, response.status))] }),
+			operation.samples.length > 0 && /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", {
+				id: sections.get("Code samples"),
+				children: "Code samples"
+			}), /* @__PURE__ */ jsx(CodeGroup, { children: operation.samples.map((sample) => /* @__PURE__ */ jsx(HighlightedCode, {
+				language: sample.language,
+				title: sample.label,
+				html: sample.html,
+				source: sample.source,
+				lineCount: sample.lineCount
+			}, sample.language)) })] })
+		]
+	});
+}
+
+//#endregion
 //#region src/components/DocContent.tsx
 /**
 * Related-topics entries from frontmatter. Bare paths resolve their title from
@@ -8043,6 +8297,7 @@ function DocContent({ page, doc, site }) {
 	const eyebrow = site.styling.eyebrows === "breadcrumbs" ? [.../* @__PURE__ */ new Set([page.tabLabel, page.section])].filter(Boolean).join(" / ") : page.section;
 	const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
 	const related = resolveRelated(doc.frontmatter?.related);
+	const operation = getOperation(doc.frontmatter?.openapi);
 	const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
 		dateStyle: "medium",
 		timeZone: "UTC"
@@ -8072,6 +8327,27 @@ function DocContent({ page, doc, site }) {
 					labels: site.labels
 				})]
 			}),
+			operation && /* @__PURE__ */ jsxs("div", {
+				className: "mt-3 flex flex-wrap items-center gap-2",
+				children: [
+					/* @__PURE__ */ jsx(Badge, {
+						color: methodColor(operation.method),
+						size: "sm",
+						className: "font-mono",
+						children: operation.method
+					}),
+					/* @__PURE__ */ jsx("code", {
+						className: "font-mono text-muted-foreground text-sm",
+						children: operation.path
+					}),
+					operation.deprecated && /* @__PURE__ */ jsx(Badge, {
+						color: "red",
+						size: "sm",
+						stroke: true,
+						children: "deprecated"
+					})
+				]
+			}),
 			description && /* @__PURE__ */ jsx("p", {
 				className: "mt-3 mb-8 text-lg text-muted-foreground leading-relaxed",
 				children: description
@@ -8080,6 +8356,7 @@ function DocContent({ page, doc, site }) {
 				className: "docs-markdown",
 				children: /* @__PURE__ */ jsx(Content, {})
 			}),
+			operation && /* @__PURE__ */ jsx(OpenApiOperation, { operation }),
 			lastModified && /* @__PURE__ */ jsxs("div", {
 				className: "mt-8 text-sm text-muted-foreground",
 				children: [
@@ -8404,7 +8681,7 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 			return;
 		}
 		if (node.kind === "page") {
-			const { url, label, icon, tag } = node.page;
+			const { url, label, icon, tag, method } = node.page;
 			const isSelected = url === pathname;
 			rendered.push(/* @__PURE__ */ jsxs(Link, {
 				to: url,
@@ -8416,7 +8693,12 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 				children: [
 					resolveIcon(icon),
 					label,
-					tag ? /* @__PURE__ */ jsx(Badge, {
+					method ? /* @__PURE__ */ jsx(Badge, {
+						color: methodColor(method),
+						size: "xs",
+						className: "ml-auto font-mono",
+						children: method === "DELETE" ? "DEL" : method
+					}) : tag ? /* @__PURE__ */ jsx(Badge$1, {
 						variant: "secondary",
 						className: "ml-auto h-auto rounded-sm px-[0.35rem] py-[0.05rem] text-[0.7rem] text-muted-foreground uppercase",
 						children: tag
@@ -8556,6 +8838,8 @@ function Docs({ page, doc, site }) {
 			children: /* @__PURE__ */ jsx(NotFound, { site })
 		}), /* @__PURE__ */ jsx(Footer, { footer: site.footer })]
 	});
+	const operation = getOperation(doc.frontmatter?.openapi);
+	const toc = operation ? [...doc.toc || [], ...operationSections(operation)] : doc.toc;
 	return /* @__PURE__ */ jsxs("div", {
 		className: "flex min-h-full flex-col gap-6 lg:gap-0",
 		children: [/* @__PURE__ */ jsxs(Sheet, {
@@ -8623,7 +8907,7 @@ function Docs({ page, doc, site }) {
 					}), /* @__PURE__ */ jsx("div", {
 						className: "hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0",
 						children: /* @__PURE__ */ jsx(PageLinks, {
-							items: doc.toc,
+							items: toc,
 							title: site.labels.tableOfContents,
 							navigationLabel: site.labels.tableOfContentsNavigation
 						})

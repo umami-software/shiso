@@ -391,6 +391,7 @@ interface PendingPage {
   hidden?: boolean;
   icon?: string;
   tag?: string;
+  method?: string;
 }
 
 type PendingNode =
@@ -424,7 +425,7 @@ function addPage(
   pageRef: string,
   context: WalkContext,
   state: WalkState,
-  extra: { label?: string; icon?: string; tag?: string; hidden?: boolean } = {},
+  extra: { label?: string; icon?: string; tag?: string; method?: string; hidden?: boolean } = {},
 ): number {
   const { fileSlug, slug } = normalizePageReference(pageRef);
   const order = state.order.value++;
@@ -440,6 +441,7 @@ function addPage(
     hidden: extra.hidden || context.hidden || undefined,
     icon: extra.icon,
     tag: extra.tag,
+    method: extra.method,
   });
 
   return order;
@@ -497,6 +499,7 @@ function collectPages(items: PageItem[], context: WalkContext, state: WalkState)
           label,
           icon: typeof item.icon === 'string' ? item.icon : undefined,
           tag: typeof item.tag === 'string' ? item.tag : undefined,
+          method: typeof item.method === 'string' ? item.method : undefined,
           hidden: item.hidden === true,
         }),
       });

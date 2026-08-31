@@ -1,9 +1,12 @@
 import { Link } from 'react-router';
 import { ContextualMenu } from '@/components/ContextualMenu';
+import { Badge } from '@/components/docs/Badge';
 import { ArrowLeft, ArrowRight, FileText } from '@/components/icons';
+import { OpenApiOperation } from '@/components/OpenApiOperation';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
 import { resolveLocale } from '@/lib/locale';
+import { getOperation, methodColor } from '@/lib/openapi';
 import { docsSite, getPageByPathname } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
 import type { DocModule, NormalizedDocsPage, RelatedEntry, SiteModel } from '@/lib/types';
@@ -81,6 +84,7 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       : page.section;
   const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
   const related = resolveRelated(doc.frontmatter?.related);
+  const operation = getOperation(doc.frontmatter?.openapi);
   // Dates follow the page's language when it is a valid locale code.
   const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
     dateStyle: 'medium',
@@ -111,12 +115,26 @@ export function DocContent({ page, doc, site }: DocContentProps) {
         )}
         <ContextualMenu options={contextualOptions} labels={site.labels} />
       </div>
+      {operation && (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <Badge color={methodColor(operation.method)} size="sm" className="font-mono">
+            {operation.method}
+          </Badge>
+          <code className="font-mono text-muted-foreground text-sm">{operation.path}</code>
+          {operation.deprecated && (
+            <Badge color="red" size="sm" stroke>
+              deprecated
+            </Badge>
+          )}
+        </div>
+      )}
       {description && (
         <p className="mt-3 mb-8 text-lg text-muted-foreground leading-relaxed">{description}</p>
       )}
       <div className="docs-markdown">
         <Content />
       </div>
+      {operation && <OpenApiOperation operation={operation} />}
       {lastModified && (
         <div className="mt-8 text-sm text-muted-foreground">
           {site.labels.lastUpdated}{' '}

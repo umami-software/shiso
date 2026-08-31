@@ -7,6 +7,7 @@ import { defineConfig, type Plugin, searchForWorkspaceRoot } from 'vite';
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
+import { generateOpenApiModule } from './scripts/generate-openapi.mjs';
 import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 import { createDocsConfigModule } from './scripts/vite-docs-config.mjs';
 import { resolveCodeBlockConfig } from './src/lib/code-blocks.ts';
@@ -38,6 +39,34 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig, root: string, output
  * Keeps src/lib/search-index.generated.ts in sync with content, so the search
  * dialog can query page text without a server.
  */
+function shisoOpenApi(
+  getDocsConfig: () => DocsConfig,
+  getSpecPath: () => string | undefined,
+  root: string,
+  output: string,
+): Plugin {
+  const generate = () =>
+    generateOpenApiModule({
+      root,
+      config: getDocsConfig(),
+      theme: resolveCodeBlockConfig(getDocsConfig().styling).theme,
+      output,
+    });
+
+  return {
+    name: 'shiso-openapi',
+    async buildStart() {
+      await generate();
+    },
+    async handleHotUpdate({ file }) {
+      const specPath = getSpecPath();
+      if ((specPath && path.resolve(file) === specPath) || file.endsWith('docs.json')) {
+        await generate();
+      }
+    },
+  };
+}
+
 function shisoSearchIndex(
   getDocsConfig: () => DocsConfig,
   getShisoConfig: () => ResolvedShisoConfig,
@@ -463,6 +492,12 @@ export default defineConfig(async () => {
         projectRoot,
         path.join(generatedRoot, 'search-index.generated.ts'),
       ),
+      shisoOpenApi(
+        getDocsConfig,
+        () => configModule.getSpecPath?.(),
+        projectRoot,
+        path.join(generatedRoot, 'openapi.generated.ts'),
+      ),
       shisoHtml(getDocsConfig),
       shisoMarkdownDev(getDocsConfig, getShisoConfig, projectRoot),
       shisoMdx({
@@ -482,6 +517,10 @@ export default defineConfig(async () => {
         {
           find: '@/lib/search-index.generated',
           replacement: path.join(generatedRoot, 'search-index.generated.ts'),
+        },
+        {
+          find: '@/lib/openapi.generated',
+          replacement: path.join(generatedRoot, 'openapi.generated.ts'),
         },
         {
           find: '@/generated/last-modified',

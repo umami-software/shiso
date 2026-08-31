@@ -10,6 +10,8 @@ export interface PageObjectItem {
   label?: string;
   icon?: string;
   tag?: string;
+  /** HTTP method badge shown in the sidebar, set by OpenAPI navigation entries. */
+  method?: string;
   hidden?: boolean;
 }
 
@@ -378,6 +380,15 @@ export interface DocsConfig {
   search?: false | SearchConfig;
   interaction?: InteractionConfig;
   contextual?: ContextualConfig;
+  /** API reference settings: the OpenAPI spec powering `openapi:` frontmatter pages. */
+  api?: ApiConfig;
+}
+
+export interface ApiConfig {
+  /** Path to a local OpenAPI 3.x spec (JSON or YAML), relative to the project root. */
+  spec: string;
+  /** Folder inside the content directory for generated endpoint pages. Default "api-reference". */
+  directory?: string;
 }
 
 /* ---------------------------------------------------------------------------
@@ -420,6 +431,8 @@ export interface NormalizedDocsPage {
   tag?: string;
   /** Module key of the MDX file, e.g. "/content/docs/installation.mdx". */
   filePath: string;
+  /** HTTP method badge for API reference pages. */
+  method?: string;
 }
 
 /** A routed docs page in the navigation tree. */
@@ -610,6 +623,8 @@ export interface DocFrontmatter {
   timestamp?: boolean;
   /** Related pages rendered above the prev/next pager. */
   related?: RelatedEntry[];
+  /** Binds the page to an API operation, e.g. "GET /users/{id}". */
+  openapi?: string;
   [key: string]: unknown;
 }
 
@@ -617,4 +632,67 @@ export interface DocModule {
   default: (props: { components?: Record<string, unknown> }) => React.ReactElement;
   frontmatter?: DocFrontmatter;
   toc?: TocEntry[];
+}
+
+/* ---------------------------------------------------------------------------
+ * OpenAPI reference shapes (produced by scripts/lib/openapi.mjs)
+ * ------------------------------------------------------------------------- */
+
+export interface SchemaNode {
+  name?: string;
+  /** Display label such as "string", "User[]", "enum<string>", or "oneOf". */
+  type: string;
+  required?: boolean;
+  deprecated?: boolean;
+  description?: string;
+  default?: string;
+  enum?: string[];
+  children?: SchemaNode[];
+}
+
+export interface OpenApiSample {
+  language: string;
+  label: string;
+  source: string;
+  /** Shiki-highlighted markup generated at build time. */
+  html?: string;
+  lineCount?: number;
+}
+
+export interface OpenApiResponse {
+  status: string;
+  description?: string;
+  contentType?: string;
+  schema?: SchemaNode;
+  example?: string;
+  exampleHtml?: string;
+}
+
+export interface NormalizedOperation {
+  id: string;
+  /** Frontmatter lookup key, e.g. "GET /users/{id}". */
+  key: string;
+  method: string;
+  path: string;
+  summary?: string;
+  description?: string;
+  tags: string[];
+  deprecated?: boolean;
+  parameters: {
+    query: SchemaNode[];
+    path: SchemaNode[];
+    header: SchemaNode[];
+    cookie: SchemaNode[];
+  };
+  requestBody?: {
+    required?: boolean;
+    contentType: string;
+    schema: SchemaNode;
+    example?: string;
+    exampleHtml?: string;
+  };
+  responses: OpenApiResponse[];
+  security: string[];
+  serverUrl: string;
+  samples: OpenApiSample[];
 }

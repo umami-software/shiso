@@ -16,6 +16,13 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
+import {
+  loadOpenApiSpec,
+  normalizeOperationKey,
+  normalizeOperations,
+  operationToMarkdown,
+} from './lib/openapi.mjs';
+import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
 const DEFAULT_HEAD_CLOSE = '<!--/shiso-default-head-->';
@@ -113,6 +120,25 @@ if (docsHomeUrl && docsHomeUrl !== '/' && !routes.includes('/')) {
   );
 }
 
+// Pages bound to an API operation publish the generated reference as markdown
+// too, so the .md copies and llms-full.txt stay useful to AI tools.
+let openApiByKey;
+{
+  const docsConfig = (await loadDocsConfig({ root, expandGlobs: false })).config;
+  if (docsConfig.api?.spec) {
+    const { spec } = await loadOpenApiSpec({ root, specPath: docsConfig.api.spec });
+    openApiByKey = new Map(normalizeOperations(spec).map(operation => [operation.key, operation]));
+  }
+}
+
+function withOperationMarkdown(source) {
+  if (!openApiByKey) return source;
+  const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] || '';
+  const key = normalizeOperationKey(frontmatter.match(/^openapi:\s*(.+)$/m)?.[1]);
+  const operation = key ? openApiByKey.get(key) : undefined;
+  return operation ? `${source.trimEnd()}\n\n${operationToMarkdown(operation)}\n` : source;
+}
+
 // Raw markdown next to every page: "/docs/installation" -> "docs/installation.md".
 // Served for the contextual menu's copy/view options and for AI tools.
 const markdownPages = getMarkdownPages();
@@ -120,7 +146,7 @@ const markdownPages = getMarkdownPages();
 for (const { route, filePath } of markdownPages) {
   const source = await readFile(path.join(root, ...filePath.split('/').filter(Boolean)), 'utf8');
   const relative = withBase(route).replace(/^\//, '') || 'index';
-  await writePage(path.join(clientDir, `${relative}.md`), source);
+  await writePage(path.join(clientDir, `${relative}.md`), withOperationMarkdown(source));
 }
 
 // AI discovery files. llms.txt is the concise, ordered map; llms-full.txt is

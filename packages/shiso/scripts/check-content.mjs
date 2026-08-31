@@ -13,6 +13,12 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from './lib/mdast.mjs';
+import {
+  loadOpenApiSpec,
+  normalizeOperationKey,
+  normalizeOperations,
+  operationAnchors,
+} from './lib/openapi.mjs';
 import { createSlugger } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
@@ -149,6 +155,7 @@ function inspectMarkdown(source, filePath) {
     targets,
     title: /^title\s*:/m.test(frontmatter),
     description: /^description\s*:/m.test(frontmatter),
+    openapi: frontmatter.match(/^openapi:\s*(.+)$/m)?.[1]?.trim(),
   };
 }
 
@@ -245,10 +252,25 @@ export async function checkContent({ root = process.cwd(), config, shiso } = {})
     if (MARKDOWN_EXTENSIONS.has(path.extname(filePath))) pages.push({ route, filePath });
   }
 
+  // Generated OpenAPI sections render at runtime, so their anchors come from
+  // the spec rather than from markdown headings.
+  let openApiByKey;
+  if (docsConfig.api?.spec) {
+    const { spec } = await loadOpenApiSpec({ root: projectRoot, specPath: docsConfig.api.spec });
+    openApiByKey = new Map(normalizeOperations(spec).map(operation => [operation.key, operation]));
+  }
+
   const documents = new Map();
   for (const page of pages) {
     const source = await fs.readFile(page.filePath, 'utf8');
     const document = inspectMarkdown(source, page.filePath);
+    const operationKey = normalizeOperationKey(document.openapi);
+    const operation = operationKey ? openApiByKey?.get(operationKey) : undefined;
+    if (operation) {
+      for (const anchor of operationAnchors(operation)) {
+        document.anchors.add(anchor);
+      }
+    }
     documents.set(page.filePath, document);
     const relative = path.relative(projectRoot, page.filePath).replace(/\\/g, '/');
     if (!document.title) warnings.push(`${relative} has no frontmatter title.`);

@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Demo API
+  version: 1.0.0
+servers:
+  - url: https://api.demo.dev/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Users
+  - name: Orders
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      tags: [Users]
+      summary: List users
+      description: Returns a paginated list of users.
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Maximum number of results.
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      operationId: createUser
+      tags: [Users]
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: The created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Validation failed.
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: User identifier.
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getUser
+      tags: [Users]
+      summary: Get a user
+      parameters:
+        - name: X-Request-Id
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: 123e4567-e89b-12d3-a456-426614174000
+                name: Ada Lovelace
+        '404':
+          description: No user with this ID exists.
+    delete:
+      operationId: deleteUser
+      tags: [Users]
+      summary: Delete a user
+      deprecated: true
+      responses:
+        '204':
+          description: Deleted.
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [Orders]
+      summary: List orders
+      parameters:
+        - name: status
+          in: query
+          description: Filter by order status.
+          schema:
+            type: string
+            enum: [pending, shipped, delivered]
+      responses:
+        '200':
+          description: A list of orders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Display name.
+        email:
+          type: string
+          format: email
+          nullable: true
+        friends:
+          type: array
+          description: Other users this user follows.
+          items:
+            $ref: '#/components/schemas/User'
+    NewUser:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: Ada Lovelace
+        email:
+          type: string
+          format: email
+    Order:
+      type: object
+      required: [id, status, payment]
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, shipped, delivered]
+        payment:
+          oneOf:
+            - $ref: '#/components/schemas/CardPayment'
+            - $ref: '#/components/schemas/BankPayment'
+    CardPayment:
+      type: object
+      properties:
+        brand:
+          type: string
+        last4:
+          type: string
+    BankPayment:
+      type: object
+      properties:
+        iban:
+          type: string
