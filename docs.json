@@ -101,6 +101,10 @@
               { "page": "components/index", "title": "Overview" },
               { "glob": "components/**" }
             ]
+          },
+          {
+            "group": "API demo",
+            "pages": [{ "openapi": true }]
           }
         ]
       },
@@ -111,10 +115,6 @@
             "group": "Guides",
             "collapsible": false,
             "pages": ["guides/deployment"]
-          },
-          {
-            "group": "API demo",
-            "pages": [{ "openapi": true }]
           },
           {
             "group": "Migrations",

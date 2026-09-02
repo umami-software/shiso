@@ -8,15 +8,15 @@ servers:
 security:
   - bearerAuth: []
 tags:
-  - name: Sites
+  - name: User
   - name: Events
 paths:
-  /sites:
+  /users:
     get:
-      operationId: listSites
-      tags: [Sites]
-      summary: List sites
-      description: Returns every site the authenticated user can access.
+      operationId: listUsers
+      tags: [User]
+      summary: List users
+      description: Returns a paginated list of users.
       parameters:
         - name: limit
           in: query
@@ -31,72 +31,75 @@ paths:
             type: integer
       responses:
         '200':
-          description: A list of sites.
+          description: A list of users.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Site'
+                  $ref: '#/components/schemas/User'
     post:
-      operationId: createSite
-      tags: [Sites]
-      summary: Create a site
+      operationId: createUser
+      tags: [User]
+      summary: Create a user
+      description: Creates a new user account.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewSite'
+              $ref: '#/components/schemas/NewUser'
       responses:
         '201':
-          description: The created site.
+          description: The created user.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Site'
+                $ref: '#/components/schemas/User'
         '422':
-          description: The site could not be created.
-  /sites/{id}:
+          description: The user could not be created.
+  /users/{id}:
     parameters:
       - name: id
         in: path
         required: true
-        description: Site identifier.
+        description: User identifier.
         schema:
           type: string
           format: uuid
     get:
-      operationId: getSite
-      tags: [Sites]
-      summary: Get a site
+      operationId: getUser
+      tags: [User]
+      summary: Get a user
+      description: Returns a user by ID.
       responses:
         '200':
-          description: The requested site.
+          description: The requested user.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Site'
+                $ref: '#/components/schemas/User'
         '404':
-          description: No site with this ID exists.
+          description: No user with this ID exists.
     delete:
-      operationId: deleteSite
-      tags: [Sites]
-      summary: Delete a site
+      operationId: deleteUser
+      tags: [User]
+      summary: Delete a user
+      description: Deletes a user by ID.
       responses:
         '204':
-          description: The site was deleted.
-  /sites/{id}/events:
+          description: The user was deleted.
+  /users/{id}/events:
     get:
       operationId: listEvents
       tags: [Events]
       summary: List events
-      description: Returns events recorded for a site, newest first.
+      description: Returns events recorded for a user, newest first.
       parameters:
         - name: id
           in: path
           required: true
-          description: Site identifier.
+          description: User identifier.
           schema:
             type: string
             format: uuid
@@ -121,33 +124,36 @@ components:
       type: http
       scheme: bearer
   schemas:
-    Site:
+    User:
       type: object
-      required: [id, name, domain]
+      required: [id, name, email]
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-          description: Display name of the site.
-        domain:
+          description: Display name of the user.
+          example: Ada Lovelace
+        email:
           type: string
-          description: Primary domain, without protocol.
-          example: example.com
+          format: email
+          description: Email address of the user.
+          example: ada@example.com
         createdAt:
           type: string
           format: date-time
-    NewSite:
+    NewUser:
       type: object
-      required: [name, domain]
+      required: [name, email]
       properties:
         name:
           type: string
-          example: My website
-        domain:
+          example: Ada Lovelace
+        email:
           type: string
-          example: example.com
+          format: email
+          example: ada@example.com
     Event:
       type: object
       required: [id, type]
