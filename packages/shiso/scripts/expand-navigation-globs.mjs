@@ -111,12 +111,47 @@ function pageCandidate(contentRoot, filePath) {
   return { filePath, relativeFile, fileSlug };
 }
 
+function normalizePageReference(value) {
+  return String(value || '')
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/^\/+/, '')
+    .replace(/^docs\//, '')
+    .replace(/\.mdx?$/i, '')
+    .replace(/\/+$/, '');
+}
+
+/** Collects manual page references without crossing a version/language scope boundary. */
+function collectExplicitPages(value, pages = new Set()) {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (typeof item === 'string') {
+        pages.add(normalizePageReference(item));
+      } else {
+        collectExplicitPages(item, pages);
+      }
+    }
+    return pages;
+  }
+
+  if (!value || typeof value !== 'object' || isGlobItem(value)) return pages;
+
+  if (typeof value.page === 'string') pages.add(normalizePageReference(value.page));
+  if (typeof value.root === 'string') pages.add(normalizePageReference(value.root));
+
+  for (const key of ['pages', 'groups', 'tabs', 'dropdowns']) {
+    if (Array.isArray(value[key])) collectExplicitPages(value[key], pages);
+  }
+
+  return pages;
+}
+
 function matches(candidate, pattern) {
   const target = /\.mdx?$/i.test(pattern) ? candidate.relativeFile : candidate.fileSlug;
   return globRegex(pattern).test(target);
 }
 
-async function expandGlob(item, candidates, projectRoot) {
+async function expandGlob(item, candidates, projectRoot, explicitPages) {
   assertGlobItem(item);
   const pattern = globPattern(item.glob);
   const exclusions = (item.exclude || []).map(globPattern);
@@ -129,8 +164,12 @@ async function expandGlob(item, candidates, projectRoot) {
     throw new Error(`Navigation glob "${pattern}" matched no Markdown or MDX files.`);
   }
 
+  // Manual entries own their page's placement and presentation, regardless of
+  // whether they appear before or after the glob that would otherwise include it.
+  const discovered = matched.filter(candidate => !explicitPages.has(candidate.fileSlug));
+
   const entries = await Promise.all(
-    matched.map(async candidate => {
+    discovered.map(async candidate => {
       const source = await fs.readFile(candidate.filePath, 'utf8');
       const sourcePath = path.relative(projectRoot, candidate.filePath).replace(/\\/g, '/');
       const frontmatter = navigationFrontmatter(source, sourcePath);
@@ -181,8 +220,10 @@ export async function expandNavigationGlobs(config, { root, contentDir }) {
     );
   }
 
-  async function expandObject(value) {
-    if (Array.isArray(value)) return Promise.all(value.map(expandObject));
+  async function expandObject(value, explicitPages) {
+    if (Array.isArray(value)) {
+      return Promise.all(value.map(item => expandObject(item, explicitPages)));
+    }
     if (!value || typeof value !== 'object') return value;
 
     const entries = await Promise.all(
@@ -191,18 +232,46 @@ export async function expandNavigationGlobs(config, { root, contentDir }) {
           const expanded = [];
           for (const item of child) {
             if (isGlobItem(item)) {
-              expanded.push(...(await expandGlob(item, candidates, projectRoot)));
+              expanded.push(...(await expandGlob(item, candidates, projectRoot, explicitPages)));
             } else {
-              expanded.push(await expandObject(item));
+              expanded.push(await expandObject(item, explicitPages));
             }
           }
           return [key, expanded];
         }
-        return [key, await expandObject(child)];
+        return [key, await expandObject(child, explicitPages)];
       }),
     );
     return Object.fromEntries(entries);
   }
 
-  return { ...config, navigation: await expandObject(config.navigation) };
+  async function expandScope(scope) {
+    return expandObject(scope, collectExplicitPages(scope));
+  }
+
+  async function expandNavigation(navigation) {
+    if (Array.isArray(navigation.languages)) {
+      const languages = await Promise.all(
+        navigation.languages.map(async language => {
+          if (!Array.isArray(language.versions)) return expandScope(language);
+          return {
+            ...language,
+            versions: await Promise.all(language.versions.map(expandScope)),
+          };
+        }),
+      );
+      return { ...navigation, languages };
+    }
+
+    if (Array.isArray(navigation.versions)) {
+      return {
+        ...navigation,
+        versions: await Promise.all(navigation.versions.map(expandScope)),
+      };
+    }
+
+    return expandScope(navigation);
+  }
+
+  return { ...config, navigation: await expandNavigation(config.navigation) };
 }

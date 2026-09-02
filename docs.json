@@ -99,7 +99,7 @@
             "group": "Components",
             "pages": [
               { "page": "components/index", "title": "Overview" },
-              { "glob": "components/**", "exclude": ["components/index"] }
+              { "glob": "components/**" }
             ]
           }
         ]

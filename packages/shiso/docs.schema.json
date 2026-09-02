@@ -807,7 +807,7 @@
       "properties": {
         "glob": {
           "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
-          "description": "Glob relative to contentDir. Matching Markdown and MDX files are expanded into page entries."
+          "description": "Glob relative to contentDir. Matching Markdown and MDX files are expanded into page entries; explicit page references take precedence."
         },
         "exclude": {
           "anyOf": [

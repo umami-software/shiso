@@ -112,6 +112,10 @@ hidden: false
 `sidebarTitle` overrides the navigation label, while `title` remains the page
 and browser title. If `sidebarTitle` is absent, the page title is used.
 `hidden: true` keeps the generated entry out of visible navigation and search.
+Explicit page entries take precedence over glob matches, so you can customize
+a page's label, icon, tag, visibility, or exact position without adding it to
+`exclude`. Duplicate explicit entries and overlaps between two globs remain
+configuration errors.
 Adding, removing, or editing a matching content file refreshes the generated
 navigation during development.
 
