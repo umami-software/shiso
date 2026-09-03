@@ -9874,6 +9874,7 @@ const styles = {
 	frameContent: "relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full",
 	frameCaption: "relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold",
 	field: "my-3",
+	fieldGroup: "my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs",
 	paramField: "my-3",
 	fieldHeader: "flex flex-wrap items-center gap-2",
 	fieldBody: "mt-3",
@@ -11687,6 +11688,7 @@ function ParamField({ name, query, path, header, body, type, required, children 
 	const location = query ? "query" : path ? "path" : header ? "header" : body ? "body" : void 0;
 	return /* @__PURE__ */ jsxs("div", {
 		className: styles.paramField,
+		"data-slot": "field-group-item",
 		children: [/* @__PURE__ */ jsxs("div", {
 			className: styles.fieldHeader,
 			children: [
@@ -11694,18 +11696,24 @@ function ParamField({ name, query, path, header, body, type, required, children 
 					className: styles.fieldName,
 					children: label
 				}),
-				location ? /* @__PURE__ */ jsx(Badge, { children: location }) : null,
+				location ? /* @__PURE__ */ jsx(Badge, {
+					size: "sm",
+					children: location
+				}) : null,
 				type ? /* @__PURE__ */ jsx("span", {
 					className: styles.fieldType,
+					"data-slot": "field-group-type",
 					children: decodeHtmlEntities(type)
 				}) : null,
 				required ? /* @__PURE__ */ jsx(Badge, {
+					size: "sm",
 					tone: "primary",
 					children: "required"
 				}) : null
 			]
 		}), children ? /* @__PURE__ */ jsx("div", {
 			className: styles.fieldBody,
+			"data-slot": "field-group-body",
 			children
 		}) : null]
 	});
@@ -11779,6 +11787,7 @@ function ResponseField({ name, type, required, deprecated, children }) {
 	const normalizedType = typeof type === "string" ? decodeHtmlEntities(type) : type === void 0 || type === null ? void 0 : String(type);
 	return /* @__PURE__ */ jsxs("div", {
 		className: styles.field,
+		"data-slot": "field-group-item",
 		children: [/* @__PURE__ */ jsxs("div", {
 			className: styles.fieldHeader,
 			children: [
@@ -11788,16 +11797,22 @@ function ResponseField({ name, type, required, deprecated, children }) {
 				}),
 				normalizedType ? /* @__PURE__ */ jsx("span", {
 					className: styles.fieldType,
+					"data-slot": "field-group-type",
 					children: normalizedType
 				}) : null,
 				required ? /* @__PURE__ */ jsx(Badge, {
+					size: "sm",
 					tone: "primary",
 					children: "required"
 				}) : null,
-				deprecated ? /* @__PURE__ */ jsx(Badge, { children: "deprecated" }) : null
+				deprecated ? /* @__PURE__ */ jsx(Badge, {
+					size: "sm",
+					children: "deprecated"
+				}) : null
 			]
 		}), children ? /* @__PURE__ */ jsx("div", {
 			className: styles.fieldBody,
+			"data-slot": "field-group-body",
 			children
 		}) : null]
 	});
@@ -18923,4 +18938,4 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-export { POPUP_COLLISION_AVOIDANCE as $, isHTMLElement as $n, itemPress as $t, popupStoreSelectors as A, ARROW_UP$1 as An, Danger as At, useSyncedFloatingRootContext as B, EMPTY_ARRAY$1 as Bn, AccordionGroup as Bt, pressableTriggerOpenStateMapping as C, isTypeableCombobox as Cn, COMPOSITE_KEYS as Ct, useFocus as D, ARROW_DOWN$1 as Dn, CardGroup as Dt, useHoverFloatingInteraction as E, getTarget as En, Card as Et, setPopupOpenState as F, useId as Fn, WarningBanner as Ft, FloatingNode as G, ownerDocument as Gn, useValueAsRef as Gt, useDismiss as H, useMergedRefs as Hn, getIcon as Ht, useImplicitActiveTrigger as I, useTimeout as In, Button as It, useFloatingParentNodeId as J, useIsoLayoutEffect as Jn, createChangeEventDetails as Jt, FloatingTree as K, useCompositeRootContext as Kn, useCompositeListItem as Kt, useOpenStateTransitions as L, Button$1 as Ln, Badge as Lt, FOCUSABLE_POPUP_PROPS as M, webkit as Mn, Note as Mt, PopupHandleAttachment as N, mac as Nn, Tip as Nt, usePopupHandleStore as O, ARROW_LEFT$1 as On, Callout as Ot, attachPreventUnmountOnClose as P, useBaseUiId as Pn, Warning as Pt, DROPDOWN_COLLISION_AVOIDANCE as Q, getWindow as Qn, imperativeAction as Qt, usePopupInteractionProps as R, cn as Rn, Badge$1 as Rt, popupTransitionStateMapping as S, getFloatingFocusElement as Sn, CodeGroup as St, useHoverReferenceInteraction as T, contains as Tn, useCompositeItem as Tt, useClick as U, useButton as Un, useOpenChangeComplete as Ut, ReactStore as V, EMPTY_OBJECT as Vn, resolveIcon as Vt, FloatingFocusManager as W, dispatchClickWithModifiers as Wn, useAnimationsFinished as Wt, FloatingTreeStore as X, useRefWithInit as Xn, escapeKey as Xt, useFloatingTree as Y, useStableCallback as Yn, cancelOpen as Yt, FloatingPortal as Z, getParentNode as Zn, focusOut as Zt, Tooltip as _, isIndexOutOfListBounds as _n, Collapsible as _t, DialogTitle as a, triggerPress as an, BrowserRouter as ar, Tabs as at, getDisabledMountTransitionStyles as b, isVirtualPointerEvent as bn, Column as bt, useOpenInteractionType as c, useDirection as cn, Route as cr, ResponseField as ct, useScrollLock as d, getTabbableBeforeElement as dn, useLocation as dr, ParamField as dt, listNavigation as en, isLastTraversableNode as er, enqueueFocus as et, DialogPortal$1 as f, isOutsideEvent as fn, useNavigate as fr, Link as ft, DialogBackdrop as g, isElementVisible as gn, Expandable as gt, DialogClose as h, getMinListIndex as hn, ABSOLUTE_URL_REGEX as hr, renderInlineMarkdown as ht, DialogContent as i, triggerHover as in, createLucideIcon as ir, Tab as it, PopupTriggerMap as j, jsdom as jn, Info as jt, createInitialPopupStoreState as k, ARROW_RIGHT$1 as kn, Check as kt, DialogTitle$1 as l, getNextTabbable as ln, Router as lr, PropertiesTable as lt, DialogPopup as m, getMaxListIndex as mn, parsePath as mr, Frame as mt, ZoomableImage as n, siblingOpen as nn, ChevronRight as nr, fastComponent as nt, DialogTrigger as o, CompositeList as on, Link$1 as or, Step as ot, InternalBackdrop as p, findNonDisabledListIndex as pn, createPath as pr, Icon as pt, useFloatingNodeId as q, mergeProps as qn, useAnimationFrame as qt, Dialog as r, triggerFocus as rn, Check$1 as rr, fastComponentRef as rt, DialogTrigger$1 as s, addEventListener as sn, Navigate as sr, Steps as st, docs_exports as t, outsidePress as tn, X as tr, FocusGuard as tt, DialogRoot as u, getTabbableAfterElement as un, Routes as ur, Param as ut, TooltipProvider as v, isListIndexDisabled as vn, CollapsibleContent as vt, safePolygon as w, activeElement as wn, inertValue as wt, useAnchorPositioning as x, stopEvent as xn, Columns as xt, usePositioner as y, isVirtualClick as yn, CollapsibleTrigger as yt, useTriggerDataForwarding as z, useRenderElement as zn, Accordion as zt };
+export { POPUP_COLLISION_AVOIDANCE as $, getWindow as $n, imperativeAction as $t, popupStoreSelectors as A, ARROW_RIGHT$1 as An, Danger as At, useSyncedFloatingRootContext as B, useRenderElement as Bn, AccordionGroup as Bt, pressableTriggerOpenStateMapping as C, getFloatingFocusElement as Cn, COMPOSITE_KEYS as Ct, useFocus as D, getTarget as Dn, CardGroup as Dt, useHoverFloatingInteraction as E, contains as En, Card as Et, setPopupOpenState as F, useBaseUiId as Fn, WarningBanner as Ft, FloatingNode as G, dispatchClickWithModifiers as Gn, useAnimationsFinished as Gt, useDismiss as H, EMPTY_OBJECT as Hn, getIcon as Ht, useImplicitActiveTrigger as I, useId as In, Button as It, useFloatingParentNodeId as J, mergeProps as Jn, useAnimationFrame as Jt, FloatingTree as K, ownerDocument as Kn, useValueAsRef as Kt, useOpenStateTransitions as L, useTimeout as Ln, Badge as Lt, FOCUSABLE_POPUP_PROPS as M, jsdom as Mn, Note as Mt, PopupHandleAttachment as N, webkit as Nn, Tip as Nt, usePopupHandleStore as O, ARROW_DOWN$1 as On, Callout as Ot, attachPreventUnmountOnClose as P, mac as Pn, Warning as Pt, DROPDOWN_COLLISION_AVOIDANCE as Q, getParentNode as Qn, focusOut as Qt, usePopupInteractionProps as R, Button$1 as Rn, Badge$1 as Rt, popupTransitionStateMapping as S, stopEvent as Sn, CodeGroup as St, useHoverReferenceInteraction as T, activeElement as Tn, useCompositeItem as Tt, useClick as U, useMergedRefs as Un, styles as Ut, ReactStore as V, EMPTY_ARRAY$1 as Vn, resolveIcon as Vt, FloatingFocusManager as W, useButton as Wn, useOpenChangeComplete as Wt, FloatingTreeStore as X, useStableCallback as Xn, cancelOpen as Xt, useFloatingTree as Y, useIsoLayoutEffect as Yn, createChangeEventDetails as Yt, FloatingPortal as Z, useRefWithInit as Zn, escapeKey as Zt, Tooltip as _, isElementVisible as _n, Collapsible as _t, DialogTitle as a, triggerHover as an, createLucideIcon as ar, Tabs as at, getDisabledMountTransitionStyles as b, isVirtualClick as bn, Column as bt, useOpenInteractionType as c, addEventListener as cn, Navigate as cr, ResponseField as ct, useScrollLock as d, getTabbableAfterElement as dn, Routes as dr, ParamField as dt, itemPress as en, isHTMLElement as er, enqueueFocus as et, DialogPortal$1 as f, getTabbableBeforeElement as fn, useLocation as fr, Link as ft, DialogBackdrop as g, getMinListIndex as gn, ABSOLUTE_URL_REGEX as gr, Expandable as gt, DialogClose as h, getMaxListIndex as hn, parsePath as hr, renderInlineMarkdown as ht, DialogContent as i, triggerFocus as in, Check$1 as ir, Tab as it, PopupTriggerMap as j, ARROW_UP$1 as jn, Info as jt, createInitialPopupStoreState as k, ARROW_LEFT$1 as kn, Check as kt, DialogTitle$1 as l, useDirection as ln, Route as lr, PropertiesTable as lt, DialogPopup as m, findNonDisabledListIndex as mn, createPath as mr, Frame as mt, ZoomableImage as n, outsidePress as nn, X as nr, fastComponent as nt, DialogTrigger as o, triggerPress as on, BrowserRouter as or, Step as ot, InternalBackdrop as p, isOutsideEvent as pn, useNavigate as pr, Icon as pt, useFloatingNodeId as q, useCompositeRootContext as qn, useCompositeListItem as qt, Dialog as r, siblingOpen as rn, ChevronRight as rr, fastComponentRef as rt, DialogTrigger$1 as s, CompositeList as sn, Link$1 as sr, Steps as st, docs_exports as t, listNavigation as tn, isLastTraversableNode as tr, FocusGuard as tt, DialogRoot as u, getNextTabbable as un, Router as ur, Param as ut, TooltipProvider as v, isIndexOutOfListBounds as vn, CollapsibleContent as vt, safePolygon as w, isTypeableCombobox as wn, inertValue as wt, useAnchorPositioning as x, isVirtualPointerEvent as xn, Columns as xt, usePositioner as y, isListIndexDisabled as yn, CollapsibleTrigger as yt, useTriggerDataForwarding as z, cn as zn, Accordion as zt };

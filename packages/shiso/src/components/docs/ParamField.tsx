@@ -28,14 +28,26 @@ export function ParamField({
   const location = query ? 'query' : path ? 'path' : header ? 'header' : body ? 'body' : undefined;
 
   return (
-    <div className={styles.paramField}>
+    <div className={styles.paramField} data-slot="field-group-item">
       <div className={styles.fieldHeader}>
         <span className={styles.fieldName}>{label}</span>
-        {location ? <Badge>{location}</Badge> : null}
-        {type ? <span className={styles.fieldType}>{decodeHtmlEntities(type)}</span> : null}
-        {required ? <Badge tone="primary">required</Badge> : null}
+        {location ? <Badge size="sm">{location}</Badge> : null}
+        {type ? (
+          <span className={styles.fieldType} data-slot="field-group-type">
+            {decodeHtmlEntities(type)}
+          </span>
+        ) : null}
+        {required ? (
+          <Badge size="sm" tone="primary">
+            required
+          </Badge>
+        ) : null}
       </div>
-      {children ? <div className={styles.fieldBody}>{children}</div> : null}
+      {children ? (
+        <div className={styles.fieldBody} data-slot="field-group-body">
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }

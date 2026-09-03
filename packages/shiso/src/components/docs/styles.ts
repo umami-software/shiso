@@ -68,6 +68,8 @@ export const styles = {
     'relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold',
 
   field: 'my-3',
+  fieldGroup:
+    'my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs',
   paramField: 'my-3',
   fieldHeader: 'flex flex-wrap items-center gap-2',
   fieldBody: 'mt-3',

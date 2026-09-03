@@ -23,14 +23,26 @@ export function ResponseField({ name, type, required, deprecated, children }: Re
         : String(type);
 
   return (
-    <div className={styles.field}>
+    <div className={styles.field} data-slot="field-group-item">
       <div className={styles.fieldHeader}>
         <span className={styles.fieldName}>{name}</span>
-        {normalizedType ? <span className={styles.fieldType}>{normalizedType}</span> : null}
-        {required ? <Badge tone="primary">required</Badge> : null}
-        {deprecated ? <Badge>deprecated</Badge> : null}
+        {normalizedType ? (
+          <span className={styles.fieldType} data-slot="field-group-type">
+            {normalizedType}
+          </span>
+        ) : null}
+        {required ? (
+          <Badge size="sm" tone="primary">
+            required
+          </Badge>
+        ) : null}
+        {deprecated ? <Badge size="sm">deprecated</Badge> : null}
       </div>
-      {children ? <div className={styles.fieldBody}>{children}</div> : null}
+      {children ? (
+        <div className={styles.fieldBody} data-slot="field-group-body">
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }

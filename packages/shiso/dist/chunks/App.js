@@ -1,4 +1,4 @@
-import { $ as POPUP_COLLISION_AVOIDANCE, $n as isHTMLElement, $t as itemPress, A as popupStoreSelectors, An as ARROW_UP, B as useSyncedFloatingRootContext, Bn as EMPTY_ARRAY, C as pressableTriggerOpenStateMapping, Cn as isTypeableCombobox, Ct as COMPOSITE_KEYS, D as useFocus, Dn as ARROW_DOWN, E as useHoverFloatingInteraction, En as getTarget, F as setPopupOpenState, Fn as useId$1, G as FloatingNode, Gn as ownerDocument, Gt as useValueAsRef, H as useDismiss, Hn as useMergedRefs, Ht as getIcon, I as useImplicitActiveTrigger, In as useTimeout, J as useFloatingParentNodeId, Jn as useIsoLayoutEffect, Jt as createChangeEventDetails, K as FloatingTree, Kn as useCompositeRootContext, Kt as useCompositeListItem, L as useOpenStateTransitions, Ln as Button, Lt as Badge, M as FOCUSABLE_POPUP_PROPS, Mn as webkit, N as PopupHandleAttachment, Nn as mac, O as usePopupHandleStore, On as ARROW_LEFT, P as attachPreventUnmountOnClose, Pn as useBaseUiId, Q as DROPDOWN_COLLISION_AVOIDANCE, Qn as getWindow, Qt as imperativeAction, R as usePopupInteractionProps, Rn as cn, Rt as Badge$1, S as popupTransitionStateMapping, Sn as getFloatingFocusElement, St as CodeGroup, T as useHoverReferenceInteraction, Tn as contains, Tt as useCompositeItem, U as useClick, Un as useButton, Ut as useOpenChangeComplete, V as ReactStore, Vn as EMPTY_OBJECT, Vt as resolveIcon, W as FloatingFocusManager, Wn as dispatchClickWithModifiers, Wt as useAnimationsFinished, X as FloatingTreeStore, Xn as useRefWithInit, Xt as escapeKey, Y as useFloatingTree, Yn as useStableCallback, Yt as cancelOpen, Z as FloatingPortal, Zn as getParentNode, Zt as focusOut, _n as isIndexOutOfListBounds, _t as Collapsible, a as DialogTitle, an as triggerPress, b as getDisabledMountTransitionStyles, bn as isVirtualPointerEvent, c as useOpenInteractionType, cn as useDirection, cr as Route, ct as ResponseField, d as useScrollLock, dn as getTabbableBeforeElement, dr as useLocation, dt as ParamField, en as listNavigation, er as isLastTraversableNode, et as enqueueFocus, f as DialogPortal$1, fn as isOutsideEvent, fr as useNavigate, g as DialogBackdrop, gn as isElementVisible, gt as Expandable, h as DialogClose, hn as getMinListIndex, ht as renderInlineMarkdown, i as DialogContent$1, in as triggerHover, ir as createLucideIcon, j as PopupTriggerMap, jn as jsdom, k as createInitialPopupStoreState, kn as ARROW_RIGHT, l as DialogTitle$1, ln as getNextTabbable, m as DialogPopup, mn as getMaxListIndex, n as ZoomableImage, nn as siblingOpen, nr as ChevronRight, nt as fastComponent, o as DialogTrigger, on as CompositeList, or as Link, p as InternalBackdrop, pn as findNonDisabledListIndex, q as useFloatingNodeId, qn as mergeProps$1, qt as useAnimationFrame, r as Dialog$1, rn as triggerFocus, rr as Check, rt as fastComponentRef, s as DialogTrigger$1, sn as addEventListener, sr as Navigate, t as docs_exports, tn as outsidePress, tr as X$1, tt as FocusGuard, u as DialogRoot, un as getTabbableAfterElement, ur as Routes, v as TooltipProvider, vn as isListIndexDisabled, vt as CollapsibleContent, w as safePolygon, wn as activeElement, wt as inertValue, x as useAnchorPositioning, xn as stopEvent, y as usePositioner, yn as isVirtualClick, yt as CollapsibleTrigger, z as useTriggerDataForwarding, zn as useRenderElement } from "./docs.js";
+import { $ as POPUP_COLLISION_AVOIDANCE, $n as getWindow, $t as imperativeAction, A as popupStoreSelectors, An as ARROW_RIGHT, B as useSyncedFloatingRootContext, Bn as useRenderElement, C as pressableTriggerOpenStateMapping, Cn as getFloatingFocusElement, Ct as COMPOSITE_KEYS, D as useFocus, Dn as getTarget, E as useHoverFloatingInteraction, En as contains, F as setPopupOpenState, Fn as useBaseUiId, G as FloatingNode, Gn as dispatchClickWithModifiers, Gt as useAnimationsFinished, H as useDismiss, Hn as EMPTY_OBJECT, Ht as getIcon, I as useImplicitActiveTrigger, In as useId$1, J as useFloatingParentNodeId, Jn as mergeProps$1, Jt as useAnimationFrame, K as FloatingTree, Kn as ownerDocument, Kt as useValueAsRef, L as useOpenStateTransitions, Ln as useTimeout, Lt as Badge, M as FOCUSABLE_POPUP_PROPS, Mn as jsdom, N as PopupHandleAttachment, Nn as webkit, O as usePopupHandleStore, On as ARROW_DOWN, P as attachPreventUnmountOnClose, Pn as mac, Q as DROPDOWN_COLLISION_AVOIDANCE, Qn as getParentNode, Qt as focusOut, R as usePopupInteractionProps, Rn as Button, Rt as Badge$1, S as popupTransitionStateMapping, Sn as stopEvent, St as CodeGroup, T as useHoverReferenceInteraction, Tn as activeElement, Tt as useCompositeItem, U as useClick, Un as useMergedRefs, Ut as styles, V as ReactStore, Vn as EMPTY_ARRAY, Vt as resolveIcon, W as FloatingFocusManager, Wn as useButton, Wt as useOpenChangeComplete, X as FloatingTreeStore, Xn as useStableCallback, Xt as cancelOpen, Y as useFloatingTree, Yn as useIsoLayoutEffect, Yt as createChangeEventDetails, Z as FloatingPortal, Zn as useRefWithInit, Zt as escapeKey, _n as isElementVisible, _t as Collapsible, a as DialogTitle, an as triggerHover, ar as createLucideIcon, b as getDisabledMountTransitionStyles, bn as isVirtualClick, c as useOpenInteractionType, cn as addEventListener, cr as Navigate, ct as ResponseField, d as useScrollLock, dn as getTabbableAfterElement, dr as Routes, dt as ParamField, en as itemPress, er as isHTMLElement, et as enqueueFocus, f as DialogPortal$1, fn as getTabbableBeforeElement, fr as useLocation, g as DialogBackdrop, gn as getMinListIndex, gt as Expandable, h as DialogClose, hn as getMaxListIndex, ht as renderInlineMarkdown, i as DialogContent$1, in as triggerFocus, ir as Check, j as PopupTriggerMap, jn as ARROW_UP, k as createInitialPopupStoreState, kn as ARROW_LEFT, l as DialogTitle$1, ln as useDirection, lr as Route, m as DialogPopup, mn as findNonDisabledListIndex, n as ZoomableImage, nn as outsidePress, nr as X$1, nt as fastComponent, o as DialogTrigger, on as triggerPress, p as InternalBackdrop, pn as isOutsideEvent, pr as useNavigate, q as useFloatingNodeId, qn as useCompositeRootContext, qt as useCompositeListItem, r as Dialog$1, rn as siblingOpen, rr as ChevronRight, rt as fastComponentRef, s as DialogTrigger$1, sn as CompositeList, sr as Link, t as docs_exports, tn as listNavigation, tr as isLastTraversableNode, tt as FocusGuard, u as DialogRoot, un as getNextTabbable, v as TooltipProvider, vn as isIndexOutOfListBounds, vt as CollapsibleContent, w as safePolygon, wn as isTypeableCombobox, wt as inertValue, x as useAnchorPositioning, xn as isVirtualPointerEvent, y as usePositioner, yn as isListIndexDisabled, yt as CollapsibleTrigger, z as useTriggerDataForwarding, zn as cn } from "./docs.js";
 import { n as highlightTerms } from "./search.js";
 import { resolveSearchProvider } from "../search.js";
 import * as React from "react";
@@ -8141,13 +8141,14 @@ function FieldChildren({ node }) {
 	] });
 }
 function SchemaField({ node }) {
+	const hasDetails = Boolean(node.description || node.enum?.length || node.children?.length);
 	return /* @__PURE__ */ jsx(ResponseField, {
 		name: node.name || node.type,
 		type: node.name ? node.type : void 0,
 		required: node.required,
 		deprecated: node.deprecated,
 		default: node.default,
-		children: /* @__PURE__ */ jsx(FieldChildren, { node })
+		children: hasDetails ? /* @__PURE__ */ jsx(FieldChildren, { node }) : null
 	});
 }
 /** Renders a schema tree: a root object's properties, or the node itself. */
@@ -8176,24 +8177,21 @@ function OpenApiOperation({ operation }) {
 	return /* @__PURE__ */ jsxs("div", {
 		className: "docs-markdown",
 		children: [
-			showParameters && /* @__PURE__ */ jsxs("section", { children: [
-				/* @__PURE__ */ jsx("h2", {
-					id: sections.get("Parameters"),
-					children: "Parameters"
-				}),
-				operation.security.length > 0 && /* @__PURE__ */ jsxs(ParamField, {
+			showParameters && /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", {
+				id: sections.get("Parameters"),
+				children: "Parameters"
+			}), /* @__PURE__ */ jsxs("div", {
+				className: styles.fieldGroup,
+				children: [operation.security.length > 0 && /* @__PURE__ */ jsxs(ParamField, {
 					header: "Authorization",
 					type: "string",
 					required: true,
 					children: [
 						"Authentication credentials, e.g. ",
 						/* @__PURE__ */ jsx("code", { children: "Bearer <token>" }),
-						" (",
-						operation.security.join(", "),
-						")."
+						"."
 					]
-				}),
-				PARAM_LOCATIONS.map((location) => operation.parameters[location].map((parameter) => /* @__PURE__ */ jsxs(ParamField, {
+				}), PARAM_LOCATIONS.map((location) => operation.parameters[location].map((parameter) => /* @__PURE__ */ jsxs(ParamField, {
 					[location]: parameter.name,
 					type: parameter.type,
 					required: parameter.required,
@@ -8202,8 +8200,8 @@ function OpenApiOperation({ operation }) {
 						name: void 0,
 						description: void 0
 					} }), parameter.description]
-				}, `${location}-${parameter.name}`)))
-			] }),
+				}, `${location}-${parameter.name}`)))]
+			})] }),
 			operation.requestBody && /* @__PURE__ */ jsxs("section", { children: [
 				/* @__PURE__ */ jsx("h2", {
 					id: sections.get("Request body"),
@@ -8234,7 +8232,10 @@ function OpenApiOperation({ operation }) {
 							children: response.description
 						})]
 					}),
-					response.schema && /* @__PURE__ */ jsx(SchemaFields, { node: response.schema }),
+					response.schema && /* @__PURE__ */ jsx("div", {
+						className: styles.fieldGroup,
+						children: /* @__PURE__ */ jsx(SchemaFields, { node: response.schema })
+					}),
 					response.example && /* @__PURE__ */ jsx(HighlightedCode, {
 						language: "json",
 						title: `${response.status} example`,
@@ -8692,13 +8693,14 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 				}),
 				children: [
 					resolveIcon(icon),
-					label,
 					method ? /* @__PURE__ */ jsx(Badge, {
 						color: methodColor(method),
 						size: "xs",
-						className: "ml-auto font-mono",
+						className: "w-10 shrink-0 justify-center whitespace-nowrap font-mono",
 						children: method === "DELETE" ? "DEL" : method
-					}) : tag ? /* @__PURE__ */ jsx(Badge$1, {
+					}) : null,
+					label,
+					!method && tag ? /* @__PURE__ */ jsx(Badge$1, {
 						variant: "secondary",
 						className: "ml-auto h-auto rounded-sm px-[0.35rem] py-[0.05rem] text-[0.7rem] text-muted-foreground uppercase",
 						children: tag

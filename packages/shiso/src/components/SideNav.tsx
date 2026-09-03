@@ -275,12 +275,17 @@ function NavNodes({
           )}
         >
           {resolveIcon(icon)}
-          {label}
           {method ? (
-            <MethodBadge color={methodColor(method)} size="xs" className="ml-auto font-mono">
+            <MethodBadge
+              color={methodColor(method)}
+              size="xs"
+              className="w-10 shrink-0 justify-center whitespace-nowrap font-mono"
+            >
               {method === 'DELETE' ? 'DEL' : method}
             </MethodBadge>
-          ) : tag ? (
+          ) : null}
+          {label}
+          {!method && tag ? (
             <Badge
               variant="secondary"
               className="ml-auto h-auto rounded-sm px-[0.35rem] py-[0.05rem] text-[0.7rem] text-muted-foreground uppercase"

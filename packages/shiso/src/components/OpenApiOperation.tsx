@@ -4,6 +4,7 @@ import { CodeGroup } from '@/components/docs/CodeGroup';
 import { Expandable } from '@/components/docs/Expandable';
 import { ParamField } from '@/components/docs/ParamField';
 import { ResponseField } from '@/components/docs/ResponseField';
+import { styles } from '@/components/docs/styles';
 import { operationSections, statusColor } from '@/lib/openapi';
 import type { NormalizedOperation, SchemaNode } from '@/lib/types';
 
@@ -38,6 +39,8 @@ function FieldChildren({ node }: { node: SchemaNode }) {
 }
 
 function SchemaField({ node }: { node: SchemaNode }) {
+  const hasDetails = Boolean(node.description || node.enum?.length || node.children?.length);
+
   return (
     <ResponseField
       name={node.name || node.type}
@@ -46,7 +49,7 @@ function SchemaField({ node }: { node: SchemaNode }) {
       deprecated={node.deprecated}
       default={node.default}
     >
-      <FieldChildren node={node} />
+      {hasDetails ? <FieldChildren node={node} /> : null}
     </ResponseField>
   );
 }
@@ -114,25 +117,26 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
       {showParameters && (
         <section>
           <h2 id={sections.get('Parameters')}>Parameters</h2>
-          {operation.security.length > 0 && (
-            <ParamField header="Authorization" type="string" required>
-              Authentication credentials, e.g. <code>Bearer &lt;token&gt;</code> (
-              {operation.security.join(', ')}).
-            </ParamField>
-          )}
-          {PARAM_LOCATIONS.map(location =>
-            operation.parameters[location].map(parameter => (
-              <ParamField
-                key={`${location}-${parameter.name}`}
-                {...{ [location]: parameter.name }}
-                type={parameter.type}
-                required={parameter.required}
-              >
-                <FieldChildren node={{ ...parameter, name: undefined, description: undefined }} />
-                {parameter.description}
+          <div className={styles.fieldGroup}>
+            {operation.security.length > 0 && (
+              <ParamField header="Authorization" type="string" required>
+                Authentication credentials, e.g. <code>Bearer &lt;token&gt;</code>.
               </ParamField>
-            )),
-          )}
+            )}
+            {PARAM_LOCATIONS.map(location =>
+              operation.parameters[location].map(parameter => (
+                <ParamField
+                  key={`${location}-${parameter.name}`}
+                  {...{ [location]: parameter.name }}
+                  type={parameter.type}
+                  required={parameter.required}
+                >
+                  <FieldChildren node={{ ...parameter, name: undefined, description: undefined }} />
+                  {parameter.description}
+                </ParamField>
+              )),
+            )}
+          </div>
         </section>
       )}
       {operation.requestBody && (
@@ -162,7 +166,11 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
                   <span className="text-muted-foreground text-sm">{response.description}</span>
                 )}
               </div>
-              {response.schema && <SchemaFields node={response.schema} />}
+              {response.schema && (
+                <div className={styles.fieldGroup}>
+                  <SchemaFields node={response.schema} />
+                </div>
+              )}
               {response.example && (
                 <HighlightedCode
                   language="json"

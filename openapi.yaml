@@ -8,13 +8,12 @@ servers:
 security:
   - bearerAuth: []
 tags:
-  - name: User
-  - name: Events
+  - name: Users API
 paths:
   /users:
     get:
       operationId: listUsers
-      tags: [User]
+      tags: [Users API]
       summary: List users
       description: Returns a paginated list of users.
       parameters:
@@ -40,7 +39,7 @@ paths:
                   $ref: '#/components/schemas/User'
     post:
       operationId: createUser
-      tags: [User]
+      tags: [Users API]
       summary: Create a user
       description: Creates a new user account.
       requestBody:
@@ -69,7 +68,7 @@ paths:
           format: uuid
     get:
       operationId: getUser
-      tags: [User]
+      tags: [Users API]
       summary: Get a user
       description: Returns a user by ID.
       responses:
@@ -83,41 +82,12 @@ paths:
           description: No user with this ID exists.
     delete:
       operationId: deleteUser
-      tags: [User]
+      tags: [Users API]
       summary: Delete a user
       description: Deletes a user by ID.
       responses:
         '204':
           description: The user was deleted.
-  /users/{id}/events:
-    get:
-      operationId: listEvents
-      tags: [Events]
-      summary: List events
-      description: Returns events recorded for a user, newest first.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: User identifier.
-          schema:
-            type: string
-            format: uuid
-        - name: type
-          in: query
-          description: Filter by event type.
-          schema:
-            type: string
-            enum: [pageview, click, custom]
-      responses:
-        '200':
-          description: A list of events.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
 components:
   securitySchemes:
     bearerAuth:
@@ -131,6 +101,7 @@ components:
         id:
           type: string
           format: uuid
+          description: Unique identifier for the user.
         name:
           type: string
           description: Display name of the user.
@@ -143,29 +114,17 @@ components:
         createdAt:
           type: string
           format: date-time
+          description: Date and time when the user was created.
     NewUser:
       type: object
       required: [name, email]
       properties:
         name:
           type: string
+          description: Display name of the user.
           example: Ada Lovelace
         email:
           type: string
           format: email
+          description: Email address of the user.
           example: ada@example.com
-    Event:
-      type: object
-      required: [id, type]
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum: [pageview, click, custom]
-        url:
-          type: string
-          description: Page URL where the event occurred.
-        timestamp:
-          type: string
-          format: date-time
