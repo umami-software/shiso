@@ -1,0 +1,46 @@
+---
+title: Changelog
+description: Group Update entries with shareable tag filters.
+---
+
+Wrap [Update](/docs/components/update) entries in `Changelog` to replace the
+plain list with Mintlify-style tag filtering. Selected tags sync to `?tags=`,
+so filtered views are shareable links.
+
+<Changelog>
+<Update label="March 2025" description="v2.0.0" tags={["Wintergreen", "Spearmint"]}>
+  Added a new Wintergreen flavor.
+</Update>
+
+<Update label="February 2025" description="v0.0.9" tags={["Spearmint"]}>
+  Released a new version of the Spearmint flavor.
+</Update>
+
+<Update label="January 2025" description="v0.0.8" tags={["Peppermint", "Spearmint"]}>
+  Deprecated the Peppermint flavor.
+</Update>
+</Changelog>
+
+```tsx
+<Changelog>
+  <Update label="March 2025" description="v2.0.0" tags={["Wintergreen", "Spearmint"]}>
+    Added a new Wintergreen flavor.
+  </Update>
+
+  <Update label="February 2025" description="v0.0.9" tags={["Spearmint"]}>
+    Released a new version of the Spearmint flavor.
+  </Update>
+</Changelog>
+```
+
+Filtering keeps only updates that include every selected tag. Updates without
+tags are hidden while a filter is active. Pages with no tagged updates render
+as a plain list.
+
+## Properties
+
+<PropertiesTable>
+<ResponseField name="children" type="ReactNode">
+  One or more `Update` entries. Non-`Update` children always stay visible.
+</ResponseField>
+</PropertiesTable>

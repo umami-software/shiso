@@ -45,11 +45,11 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
                   <span className="inline-flex flex-wrap items-center gap-2">
                     {name}
                     {required ? (
-                      <Badge size="xs" tone="primary">
+                      <Badge size="sm" tone="primary">
                         required
                       </Badge>
                     ) : null}
-                    {deprecated ? <Badge size="xs">deprecated</Badge> : null}
+                    {deprecated ? <Badge size="sm">deprecated</Badge> : null}
                   </span>
                 </td>
                 <td>{displayValue(type)}</td>

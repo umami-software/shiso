@@ -86,4 +86,51 @@ export const styles = {
 
   tooltipTrigger:
     'peer cursor-help border-0 border-muted-foreground border-b border-dotted bg-transparent p-0 text-inherit [font:inherit]',
+
+  update:
+    'my-8 grid scroll-mt-24 grid-cols-1 gap-4 border-border border-t pt-6 md:grid-cols-[220px_minmax(0,1fr)]',
+  updateMeta: 'flex min-w-0 flex-col items-start gap-2 md:sticky md:top-24 md:self-start',
+  updateLabel:
+    'w-fit text-lg font-semibold text-foreground hover:text-primary hover:underline [&:hover]:decoration-primary',
+  updateDescription: 'text-sm text-muted-foreground leading-6',
+  updateTags: 'flex flex-wrap gap-1.5',
+  updateBody: 'min-w-0 [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:leading-7',
+  changelog: 'my-4 flex flex-col',
+  changelogFilters: 'mb-2 flex flex-wrap items-center gap-1',
+  changelogFilterButton:
+    'rounded-md p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring [&>[data-slot=badge]]:cursor-pointer',
+  changelogClear:
+    'ml-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:underline',
+  changelogEmpty: 'my-6 text-sm text-muted-foreground',
+
+  mermaid: 'my-4',
+  mermaidTitle: 'mb-2 text-sm font-semibold text-foreground',
+  mermaidViewport:
+    'relative overflow-auto rounded-lg border border-border bg-card p-4 [&_svg]:mx-auto [&_svg]:max-w-full [&_svg]:shrink-0',
+  mermaidSvg: 'origin-top-left transition-transform duration-150 [&_svg]:h-auto [&_svg]:max-w-none',
+  mermaidFallback: 'bg-transparent p-0 font-mono text-xs text-muted-foreground whitespace-pre-wrap',
+  mermaidError: 'mt-2 text-sm text-destructive',
+  mermaidControls:
+    'absolute flex items-center gap-1 rounded-md border border-border bg-background/90 p-1 shadow-sm [&_button]:flex [&_button]:size-6 [&_button]:items-center [&_button]:justify-center [&_button]:rounded [&_button]:text-sm [&_button]:text-muted-foreground [&_button:hover]:bg-muted [&_button:hover]:text-foreground',
+
+  panel: 'flex min-w-0 flex-col gap-4 text-sm [&>:first-child]:mt-0 [&>:last-child]:mb-0',
+  panelInline: 'my-4 lg:hidden',
+
+  tile: 'block h-full overflow-hidden rounded-lg border border-border bg-card hover:border-primary',
+  tilePreview:
+    'flex h-36 items-center justify-center gap-2 overflow-hidden border-border border-b bg-muted/40 bg-[radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] bg-[size:16px_16px] p-4 [&_img]:max-h-full [&_img]:w-auto [&_img]:max-w-full [&_img]:object-contain',
+  tileBody: 'flex flex-col gap-1 p-4',
+  tileTitle: 'text-sm font-semibold text-foreground',
+  tileDescription: 'text-sm text-muted-foreground leading-6',
+
+  tree: 'not-prose my-4 overflow-hidden rounded-lg border border-border bg-card text-sm',
+  treeList: 'flex flex-col gap-0.5 p-3',
+  treeGroup: 'my-0 ml-[15px] flex list-none flex-col gap-px border-border border-l pl-1',
+  treeItem: 'my-0 min-w-0 list-none p-0 [&::marker]:content-none',
+  treeRow:
+    'flex w-full min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-left text-foreground hover:bg-muted [&:focus-visible]:bg-muted [&:focus-visible]:ring-2 [&:focus-visible]:ring-ring [&:focus-visible]:outline-none',
+  treeChevron: 'shrink-0 text-muted-foreground transition-transform [&[data-open]]:rotate-90',
+  treeIcon: 'shrink-0 text-muted-foreground',
+  treeName: 'min-w-0 flex-1 truncate font-mono text-[0.85rem]',
+  treeHighlight: 'bg-primary/10 text-primary [&_svg]:text-primary',
 } as const;

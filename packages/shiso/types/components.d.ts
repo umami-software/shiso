@@ -211,6 +211,85 @@ export interface TooltipProps {
 
 export declare function Tooltip(props: TooltipProps): ReactElement;
 
+export interface UpdateRss {
+  title?: string;
+  description?: string;
+}
+
+export interface UpdateProps {
+  label: string;
+  description?: ReactNode;
+  tags?: string[];
+  rss?: UpdateRss;
+  children?: ReactNode;
+}
+
+export declare function Update(props: UpdateProps): ReactElement;
+
+export interface ChangelogProps {
+  children?: ReactNode;
+}
+
+export declare function Changelog(props: ChangelogProps): ReactElement;
+
+export type MermaidPlacement = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+
+export interface MermaidProps {
+  chart?: string;
+  title?: ReactNode;
+  actions?: boolean;
+  placement?: MermaidPlacement;
+  children?: ReactNode;
+}
+
+export declare function Mermaid(props: MermaidProps): ReactElement;
+
+export interface PanelProps {
+  children?: ReactNode;
+}
+
+export declare function Panel(props: PanelProps): ReactElement;
+
+export interface TileProps {
+  href: string;
+  title?: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+  target?: '_self' | '_blank';
+}
+
+export interface TilesProps {
+  children?: ReactNode;
+  cols?: 1 | 2 | 3 | 4;
+}
+
+export declare function Tile(props: TileProps): ReactElement;
+export declare function Tiles(props: TilesProps): ReactElement;
+
+export interface TreeFolderProps {
+  name: string;
+  defaultOpen?: boolean;
+  openable?: boolean;
+  highlight?: boolean;
+  children?: ReactNode;
+}
+
+export interface TreeFileProps {
+  name: string;
+  highlight?: boolean;
+}
+
+export interface TreeProps {
+  children?: ReactNode;
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+export declare function Tree(props: TreeProps): ReactElement;
+export declare function FileTree(props: TreeProps): ReactElement;
+export declare function TreeFolder(props: TreeFolderProps): ReactElement;
+export declare function TreeFile(props: TreeFileProps): ReactElement;
+
 export interface ZoomableImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   noZoom?: boolean;
 }

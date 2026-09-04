@@ -1,0 +1,62 @@
+---
+title: Tiles
+description: Visual previews in a clickable grid.
+---
+
+Use `Tile` for navigation with a visual preview: a patterned thumbnail area
+plus a title and description. Arrange tiles with [Columns](/docs/components/columns)
+or the `Tiles` grid wrapper.
+
+<Columns cols={2}>
+  <Tile href="/docs/components/card" title="Card" description="Summary cards">
+    <span>Preview</span>
+  </Tile>
+  <Tile href="/docs/components/tabs" title="Tabs" description="Tabbed views">
+    <span>Preview</span>
+  </Tile>
+</Columns>
+
+```tsx
+<Columns cols={2}>
+  <Tile href="/docs/components/card" title="Card" description="Summary cards">
+    <img src="/preview-light.svg" alt="Card preview" className="block dark:hidden" />
+    <img src="/preview-dark.svg" alt="Card preview" className="hidden dark:block" />
+  </Tile>
+</Columns>
+```
+
+Use light/dark image variants in the preview area for theme-aware thumbnails.
+
+## Properties
+
+### Tile
+
+<PropertiesTable>
+<ResponseField name="href" type="string" required>
+  Destination when the tile is clicked.
+</ResponseField>
+
+<ResponseField name="title" type="ReactNode">
+  Title below the preview.
+</ResponseField>
+
+<ResponseField name="description" type="ReactNode">
+  Short description below the title.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode" required>
+  Preview content, typically images or SVGs.
+</ResponseField>
+</PropertiesTable>
+
+### Tiles
+
+<PropertiesTable>
+<ResponseField name="cols" type="1 | 2 | 3 | 4" default="2">
+  Number of columns in the grid.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  One or more `Tile` children.
+</ResponseField>
+</PropertiesTable>

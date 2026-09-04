@@ -1,11 +1,17 @@
 import * as React$1 from "react";
-import { Children, cloneElement, createContext, createElement, forwardRef, isValidElement, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, useSyncExternalStore as useSyncExternalStore$1 } from "react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { Children, Fragment, cloneElement, createContext, createElement, forwardRef, isValidElement, useContext, useDebugValue, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, useSyncExternalStore as useSyncExternalStore$1 } from "react";
+import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 import * as ReactDOM from "react-dom";
 import { ICON_REGISTRY } from "@/lib/icon-registry.generated";
 
 //#region \0rolldown/runtime.js
+var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
 var __exportAll = (all, no_symbols) => {
 	let target = {};
 	for (var name in all) {
@@ -19,6 +25,24 @@ var __exportAll = (all, no_symbols) => {
 	}
 	return target;
 };
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") {
+		for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+			key = keys[i];
+			if (!__hasOwnProp.call(to, key) && key !== except) {
+				__defProp(to, key, {
+					get: ((k) => from[k]).bind(null, key),
+					enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+				});
+			}
+		}
+	}
+	return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
 
 //#endregion
 //#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/router/url.js
@@ -1855,6 +1879,47 @@ function isModifiedEvent(event) {
 function shouldProcessLinkClick(event, target) {
 	return event.button === 0 && (!target || target === "_self") && !isModifiedEvent(event);
 }
+/**
+* Creates a URLSearchParams object using the given initializer.
+*
+* This is identical to `new URLSearchParams(init)` except it also supports
+* arrays as values in the object form of the initializer instead of just
+* strings. This is convenient when you need multiple values for a given key,
+* but don't want to use an array initializer.
+*
+* @example
+* // Instead of:
+* let searchParams = new URLSearchParams([
+*   ["sort", "name"],
+*   ["sort", "price"],
+* ]);
+*
+* // You can do:
+* let searchParams = createSearchParams({
+*   sort: ["name", "price"],
+* });
+*
+* @public
+* @category Utils
+* @param init The value used to initialize the URL search parameters.
+* @returns A URLSearchParams object containing the initialized search
+* parameters.
+*/
+function createSearchParams(init = "") {
+	return new URLSearchParams(typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo, key) => {
+		let value = init[key];
+		return memo.concat(Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]);
+	}, []));
+}
+function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
+	let searchParams = createSearchParams(locationSearch);
+	if (defaultSearchParams) defaultSearchParams.forEach((_, key) => {
+		if (!searchParams.has(key)) defaultSearchParams.getAll(key).forEach((value) => {
+			searchParams.append(key, value);
+		});
+	});
+	return searchParams;
+}
 let _formDataSupportsSubmitter = null;
 function isFormDataSubmitterSupported() {
 	if (_formDataSupportsSubmitter === null) try {
@@ -2873,6 +2938,115 @@ function useLinkClickHandler(to, { target, replace: replaceProp, mask, state, pr
 		useTransitions
 	]);
 }
+/**
+* Returns a tuple of the current URL's [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+* and a function to update them. Setting the search params causes a navigation.
+*
+* ```tsx
+* import { useSearchParams } from "react-router";
+*
+* export function SomeComponent() {
+*   const [searchParams, setSearchParams] = useSearchParams();
+*   // ...
+* }
+* ```
+*
+* ### `setSearchParams` function
+*
+* The second element of the tuple is a function that can be used to update the
+* search params. It accepts the same types as `defaultInit` and will cause a
+* navigation to the new URL.
+*
+* ```tsx
+* let [searchParams, setSearchParams] = useSearchParams();
+*
+* // a search param string
+* setSearchParams("?tab=1");
+*
+* // a shorthand object
+* setSearchParams({ tab: "1" });
+*
+* // object keys can be arrays for multiple values on the key
+* setSearchParams({ brand: ["nike", "reebok"] });
+*
+* // an array of tuples
+* setSearchParams([["tab", "1"]]);
+*
+* // a `URLSearchParams` object
+* setSearchParams(new URLSearchParams("?tab=1"));
+* ```
+*
+* It also supports a function callback like React's
+* [`setState`](https://react.dev/reference/react/useState#setstate):
+*
+* ```tsx
+* setSearchParams((searchParams) => {
+*   searchParams.set("tab", "2");
+*   return searchParams;
+* });
+* ```
+*
+* <docs-warning>The function callback version of `setSearchParams` does not support
+* the [queueing](https://react.dev/reference/react/useState#setstate-parameters)
+* logic that React's `setState` implements.  Multiple calls to `setSearchParams`
+* in the same tick will not build on the prior value.  If you need this behavior,
+* you can use `setState` manually.</docs-warning>
+*
+* ### Notes
+*
+* Note that `searchParams` is a stable reference, so you can reliably use it
+* as a dependency in React's [`useEffect`](https://react.dev/reference/react/useEffect)
+* hooks.
+*
+* ```tsx
+* useEffect(() => {
+*   console.log(searchParams.get("tab"));
+* }, [searchParams]);
+* ```
+*
+* However, this also means it's mutable. If you change the object without
+* calling `setSearchParams`, its values will change between renders if some
+* other state causes the component to re-render and URL will not reflect the
+* values.
+*
+* @public
+* @category Hooks
+* @param defaultInit
+* You can initialize the search params with a default value, though it **will
+* not** change the URL on the first render.
+*
+* ```tsx
+* // a search param string
+* useSearchParams("?tab=1");
+*
+* // a shorthand object
+* useSearchParams({ tab: "1" });
+*
+* // object keys can be arrays for multiple values on the key
+* useSearchParams({ brand: ["nike", "reebok"] });
+*
+* // an array of tuples
+* useSearchParams([["tab", "1"]]);
+*
+* // a `URLSearchParams` object
+* useSearchParams(new URLSearchParams("?tab=1"));
+* ```
+* @returns A tuple of the current [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams)
+* and a function to update them.
+*/
+function useSearchParams(defaultInit) {
+	warning(typeof URLSearchParams !== "undefined", "You cannot use the `useSearchParams` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.");
+	let defaultSearchParamsRef = React$1.useRef(createSearchParams(defaultInit));
+	let hasSetSearchParamsRef = React$1.useRef(false);
+	let location = useLocation();
+	let searchParams = React$1.useMemo(() => getSearchParamsForLocation(location.search, hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current), [location.search]);
+	let navigate = useNavigate();
+	return [searchParams, React$1.useCallback((nextInit, navigateOptions) => {
+		const newSearchParams = createSearchParams(typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit);
+		hasSetSearchParamsRef.current = true;
+		navigate("?" + newSearchParams, navigateOptions);
+	}, [navigate, searchParams])];
+}
 let fetcherId = 0;
 let getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
 /**
@@ -3280,11 +3454,11 @@ const createLucideIcon = (iconName, iconNode) => {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$9 = [["path", {
+const __iconNode$12 = [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
 }]];
-const Check$1 = createLucideIcon("check", __iconNode$9);
+const Check$1 = createLucideIcon("check", __iconNode$12);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-down.mjs
@@ -3294,11 +3468,11 @@ const Check$1 = createLucideIcon("check", __iconNode$9);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$8 = [["path", {
+const __iconNode$11 = [["path", {
 	d: "m6 9 6 6 6-6",
 	key: "qrunsl"
 }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$8);
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$11);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-right.mjs
@@ -3308,11 +3482,11 @@ const ChevronDown = createLucideIcon("chevron-down", __iconNode$8);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$7 = [["path", {
+const __iconNode$10 = [["path", {
 	d: "m9 18 6-6-6-6",
 	key: "mthhwq"
 }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$7);
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$10);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/chevron-up.mjs
@@ -3322,11 +3496,11 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$7);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$6 = [["path", {
+const __iconNode$9 = [["path", {
 	d: "m18 15-6-6-6 6",
 	key: "153udz"
 }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$6);
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$9);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/circle-alert.mjs
@@ -3336,7 +3510,7 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$6);
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-const __iconNode$5 = [
+const __iconNode$8 = [
 	["circle", {
 		cx: "12",
 		cy: "12",
@@ -3358,7 +3532,52 @@ const __iconNode$5 = [
 		key: "4dfq90"
 	}]
 ];
-const CircleAlert = createLucideIcon("circle-alert", __iconNode$5);
+const CircleAlert = createLucideIcon("circle-alert", __iconNode$8);
+
+//#endregion
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$7 = [["path", {
+	d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",
+	key: "1oefj6"
+}], ["path", {
+	d: "M14 2v5a1 1 0 0 0 1 1h5",
+	key: "wfsgrz"
+}]];
+const File = createLucideIcon("file", __iconNode$7);
+
+//#endregion
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/folder-open.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$6 = [["path", {
+	d: "m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2",
+	key: "usdka0"
+}]];
+const FolderOpen = createLucideIcon("folder-open", __iconNode$6);
+
+//#endregion
+//#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/folder.mjs
+/**
+* @license lucide-react v1.28.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+const __iconNode$5 = [["path", {
+	d: "M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
+	key: "1kt360"
+}]];
+const Folder = createLucideIcon("folder", __iconNode$5);
 
 //#endregion
 //#region ../../node_modules/.pnpm/lucide-react@1.28.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/hand.mjs
@@ -7880,7 +8099,7 @@ const maybeReactUseId = SafeReact.useId;
 * @param idOverride
 * @returns {string}
 */
-function useId(idOverride, prefix) {
+function useId$1(idOverride, prefix) {
 	if (maybeReactUseId !== void 0) {
 		const reactId = maybeReactUseId();
 		return idOverride ?? (prefix ? `${prefix}-${reactId}` : reactId);
@@ -7896,7 +8115,7 @@ function useId(idOverride, prefix) {
 * @returns {string | undefined}
 */
 function useBaseUiId(idOverride) {
-	return useId(idOverride, "base-ui");
+	return useId$1(idOverride, "base-ui");
 }
 
 //#endregion
@@ -8415,6 +8634,237 @@ function addEventListener(target, type, listener, options) {
 	return () => {
 		target.removeEventListener(type, listener, options);
 	};
+}
+
+//#endregion
+//#region src/components/docs/styles.ts
+/** Shared Tailwind utility groups for the built-in MDX components. */
+const styles = {
+	accordion: "my-3 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
+	accordionGroup: "my-4 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
+	accordionItem: "",
+	accordionTrigger: "text-foreground",
+	accordionContent: "text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0",
+	expandableTrigger: "items-center py-3 text-sm font-normal text-foreground hover:no-underline",
+	expandableContent: "pl-6",
+	callout: "my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6",
+	calloutIcon: "flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4",
+	calloutBody: "flex min-w-0 flex-1 flex-col gap-[0.35rem] [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:my-[0.35rem] [&>:where(p,ul,ol):first-child]:mt-0 [&>:where(p,ul,ol):last-child]:mb-0",
+	calloutDescription: "text-sm text-inherit leading-6 [&>:first-child]:mt-0 [&>:last-child]:mb-0",
+	calloutTitle: "font-semibold leading-6",
+	note: "border-border bg-muted/50 text-foreground",
+	info: "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-400/40 dark:bg-blue-400/10 dark:text-blue-300",
+	warning: "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-300",
+	tip: "border-green-300 bg-green-50 text-green-900 dark:border-green-400/40 dark:bg-green-400/10 dark:text-green-300",
+	check: "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300",
+	danger: "border-destructive/40 bg-destructive/10 text-destructive",
+	card: "block h-full gap-0 rounded-lg border border-border p-4 text-sm ring-0 hover:border-primary",
+	cardPlain: "bg-card",
+	cardHorizontal: "[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2",
+	cardTyped: "[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit",
+	cardImageLayout: "p-0 [&_[data-slot=card-inner]]:p-6",
+	cardImage: "block aspect-video w-full border-border border-b object-cover",
+	cardInner: "flex items-start justify-between gap-3",
+	cardMain: "flex min-w-0 flex-col gap-2",
+	cardHeader: "flex flex-col items-start gap-3",
+	cardIcon: "inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6",
+	cardTitle: "text-sm font-semibold text-foreground",
+	cardBody: "text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0",
+	cardCta: "flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground",
+	cardArrow: "shrink-0 text-muted-foreground",
+	grid: "my-4 grid grid-cols-1 gap-4",
+	gridCols1: "md:grid-cols-1",
+	gridCols2: "md:grid-cols-2",
+	gridCols3: "md:grid-cols-3",
+	gridCols4: "md:grid-cols-4",
+	column: "min-w-0 [&>:first-child]:mt-0 [&>:last-child]:mb-0",
+	icon: "inline-block align-[-0.145em]",
+	tabs: "my-4 gap-0",
+	frameWrapper: "my-4",
+	frameHint: "mb-4 flex items-start gap-2 text-sm font-medium leading-5 text-foreground",
+	frameHintIcon: "flex h-5 shrink-0 items-center text-muted-foreground [&_svg]:size-4 [&_svg]:fill-current",
+	frame: "relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2",
+	frameContent: "relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full",
+	frameCaption: "relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold",
+	field: "my-3",
+	fieldGroup: "my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs",
+	paramField: "my-3",
+	fieldHeader: "flex flex-wrap items-center gap-2",
+	fieldBody: "mt-3",
+	fieldType: "text-[0.9rem] text-muted-foreground",
+	fieldName: "font-bold text-foreground",
+	code: "rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono",
+	steps: "relative my-4 flex flex-col gap-5 before:absolute before:top-4 before:bottom-4 before:left-4 before:w-px before:-translate-x-1/2 before:bg-border before:content-['']",
+	step: "relative flex items-start gap-4",
+	stepNumber: "relative z-[1] flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-[0.9rem] font-semibold text-foreground",
+	stepContent: "flex min-w-0 grow flex-col gap-2",
+	stepTitle: "text-[1.1rem] font-semibold text-foreground",
+	tooltipTrigger: "peer cursor-help border-0 border-muted-foreground border-b border-dotted bg-transparent p-0 text-inherit [font:inherit]",
+	update: "my-8 grid scroll-mt-24 grid-cols-1 gap-4 border-border border-t pt-6 md:grid-cols-[220px_minmax(0,1fr)]",
+	updateMeta: "flex min-w-0 flex-col items-start gap-2 md:sticky md:top-24 md:self-start",
+	updateLabel: "w-fit text-lg font-semibold text-foreground hover:text-primary hover:underline [&:hover]:decoration-primary",
+	updateDescription: "text-sm text-muted-foreground leading-6",
+	updateTags: "flex flex-wrap gap-1.5",
+	updateBody: "min-w-0 [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:leading-7",
+	changelog: "my-4 flex flex-col",
+	changelogFilters: "mb-2 flex flex-wrap items-center gap-1",
+	changelogFilterButton: "rounded-md p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring [&>[data-slot=badge]]:cursor-pointer",
+	changelogClear: "ml-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:underline",
+	changelogEmpty: "my-6 text-sm text-muted-foreground",
+	mermaid: "my-4",
+	mermaidTitle: "mb-2 text-sm font-semibold text-foreground",
+	mermaidViewport: "relative overflow-auto rounded-lg border border-border bg-card p-4 [&_svg]:mx-auto [&_svg]:max-w-full [&_svg]:shrink-0",
+	mermaidSvg: "origin-top-left transition-transform duration-150 [&_svg]:h-auto [&_svg]:max-w-none",
+	mermaidFallback: "bg-transparent p-0 font-mono text-xs text-muted-foreground whitespace-pre-wrap",
+	mermaidError: "mt-2 text-sm text-destructive",
+	mermaidControls: "absolute flex items-center gap-1 rounded-md border border-border bg-background/90 p-1 shadow-sm [&_button]:flex [&_button]:size-6 [&_button]:items-center [&_button]:justify-center [&_button]:rounded [&_button]:text-sm [&_button]:text-muted-foreground [&_button:hover]:bg-muted [&_button:hover]:text-foreground",
+	panel: "flex min-w-0 flex-col gap-4 text-sm [&>:first-child]:mt-0 [&>:last-child]:mb-0",
+	panelInline: "my-4 lg:hidden",
+	tile: "block h-full overflow-hidden rounded-lg border border-border bg-card hover:border-primary",
+	tilePreview: "flex h-36 items-center justify-center gap-2 overflow-hidden border-border border-b bg-muted/40 bg-[radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] bg-[size:16px_16px] p-4 [&_img]:max-h-full [&_img]:w-auto [&_img]:max-w-full [&_img]:object-contain",
+	tileBody: "flex flex-col gap-1 p-4",
+	tileTitle: "text-sm font-semibold text-foreground",
+	tileDescription: "text-sm text-muted-foreground leading-6",
+	tree: "not-prose my-4 overflow-hidden rounded-lg border border-border bg-card text-sm",
+	treeList: "flex flex-col gap-0.5 p-3",
+	treeGroup: "my-0 ml-[15px] flex list-none flex-col gap-px border-border border-l pl-1",
+	treeItem: "my-0 min-w-0 list-none p-0 [&::marker]:content-none",
+	treeRow: "flex w-full min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-left text-foreground hover:bg-muted [&:focus-visible]:bg-muted [&:focus-visible]:ring-2 [&:focus-visible]:ring-ring [&:focus-visible]:outline-none",
+	treeChevron: "shrink-0 text-muted-foreground transition-transform [&[data-open]]:rotate-90",
+	treeIcon: "shrink-0 text-muted-foreground",
+	treeName: "min-w-0 flex-1 truncate font-mono text-[0.85rem]",
+	treeHighlight: "bg-primary/10 text-primary [&_svg]:text-primary"
+};
+
+//#endregion
+//#region src/components/docs/Mermaid.tsx
+function childrenToText(node) {
+	if (typeof node === "string" || typeof node === "number") return String(node);
+	if (Array.isArray(node)) return node.map(childrenToText).join("");
+	if (node && typeof node === "object" && "props" in node) {
+		const props = node.props;
+		return childrenToText(props?.children);
+	}
+	return "";
+}
+/** Extracts raw diagram source from MDX children (string or <code> element). */
+function mermaidSource(chart, children) {
+	return (typeof chart === "string" && chart.trim() ? chart : childrenToText(children)).replace(/^\n+|\n+$/g, "").replace(/\\n$/, "");
+}
+function isDarkMode() {
+	if (typeof document === "undefined") return false;
+	return document.documentElement.classList.contains("dark");
+}
+const PLACEMENT_CLASS = {
+	"top-left": "top-2 left-2",
+	"top-right": "top-2 right-2",
+	"bottom-left": "bottom-2 left-2",
+	"bottom-right": "bottom-2 right-2"
+};
+/**
+* Renders a Mermaid diagram. Server/prerender output is the raw definition in
+* a <pre> so search indexing and no-JS still see the content; the client
+* replaces it with SVG via a lazy `mermaid` import (kept out of the SSR bundle).
+*/
+function Mermaid({ chart, title, actions, placement = "bottom-right", children }) {
+	const source = mermaidSource(chart, children);
+	const containerRef = useRef(null);
+	const svgHostRef = useRef(null);
+	const diagramId = useId().replace(/[^a-zA-Z0-9]/g, "");
+	const [svg, setSvg] = useState(null);
+	const [error, setError] = useState(false);
+	const [zoom, setZoom] = useState(1);
+	const [dark, setDark] = useState(false);
+	useEffect(() => {
+		setDark(isDarkMode());
+		const observer = new MutationObserver(() => setDark(isDarkMode()));
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class"]
+		});
+		return () => observer.disconnect();
+	}, []);
+	useEffect(() => {
+		if (!source.trim() || typeof window === "undefined") return;
+		let cancelled = false;
+		setError(false);
+		setSvg(null);
+		(async () => {
+			try {
+				const { default: mermaid } = await import("./mermaid.core.js");
+				if (cancelled) return;
+				mermaid.initialize({
+					startOnLoad: false,
+					theme: dark ? "dark" : "neutral",
+					securityLevel: "strict"
+				});
+				const { svg: rendered } = await mermaid.render(`shiso-mermaid-${diagramId}`, source);
+				if (!cancelled) setSvg(rendered);
+			} catch {
+				if (!cancelled) setError(true);
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
+	}, [
+		source,
+		diagramId,
+		dark
+	]);
+	const showControls = actions ?? true;
+	return /* @__PURE__ */ jsxs("figure", {
+		className: styles.mermaid,
+		"data-dark": dark ? "" : void 0,
+		children: [title ? /* @__PURE__ */ jsx("figcaption", {
+			className: styles.mermaidTitle,
+			children: title
+		}) : null, /* @__PURE__ */ jsxs("div", {
+			ref: containerRef,
+			className: styles.mermaidViewport,
+			children: [
+				svg && !error ? /* @__PURE__ */ jsx("div", {
+					ref: svgHostRef,
+					className: styles.mermaidSvg,
+					style: { transform: `scale(${zoom})` },
+					dangerouslySetInnerHTML: { __html: svg },
+					role: "img",
+					"aria-label": title ? String(title) : "Diagram"
+				}) : /* @__PURE__ */ jsx("pre", {
+					className: styles.mermaidFallback,
+					title: "Diagram source",
+					children: source
+				}),
+				error ? /* @__PURE__ */ jsx("p", {
+					className: styles.mermaidError,
+					children: "Could not render this diagram."
+				}) : null,
+				showControls && svg && !error ? /* @__PURE__ */ jsxs("div", {
+					className: `${styles.mermaidControls} ${PLACEMENT_CLASS[placement]}`,
+					children: [
+						/* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Zoom out",
+							onClick: () => setZoom((z) => Math.max(.5, +(z - .25).toFixed(2))),
+							children: "−"
+						}),
+						/* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Reset view",
+							onClick: () => setZoom(1),
+							children: "⟳"
+						}),
+						/* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Zoom in",
+							onClick: () => setZoom((z) => Math.min(2.5, +(z + .25).toFixed(2))),
+							children: "+"
+						})
+					]
+				}) : null
+			]
+		})]
+	});
 }
 
 //#endregion
@@ -9824,72 +10274,6 @@ function AccordionContent({ className, children, ...props }) {
 }
 
 //#endregion
-//#region src/components/docs/styles.ts
-/** Shared Tailwind utility groups for the built-in MDX components. */
-const styles = {
-	accordion: "my-3 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
-	accordionGroup: "my-4 [&_h3:has(>[data-slot=accordion-trigger])]:m-0",
-	accordionItem: "",
-	accordionTrigger: "text-foreground",
-	accordionContent: "text-muted-foreground [&_p]:mt-0 [&_p:last-child]:mb-0",
-	expandableTrigger: "items-center py-3 text-sm font-normal text-foreground hover:no-underline",
-	expandableContent: "pl-6",
-	callout: "my-4 flex items-start gap-3 rounded-lg border px-3 py-2.5 text-sm leading-6",
-	calloutIcon: "flex h-6 w-5 shrink-0 items-center justify-center [&_svg]:block [&_svg]:size-4",
-	calloutBody: "flex min-w-0 flex-1 flex-col gap-[0.35rem] [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_:where(p,ul,ol)]:my-[0.35rem] [&>:where(p,ul,ol):first-child]:mt-0 [&>:where(p,ul,ol):last-child]:mb-0",
-	calloutDescription: "text-sm text-inherit leading-6 [&>:first-child]:mt-0 [&>:last-child]:mb-0",
-	calloutTitle: "font-semibold leading-6",
-	note: "border-border bg-muted/50 text-foreground",
-	info: "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-400/40 dark:bg-blue-400/10 dark:text-blue-300",
-	warning: "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-300",
-	tip: "border-green-300 bg-green-50 text-green-900 dark:border-green-400/40 dark:bg-green-400/10 dark:text-green-300",
-	check: "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-300",
-	danger: "border-destructive/40 bg-destructive/10 text-destructive",
-	card: "block h-full gap-0 rounded-lg border border-border p-4 text-sm ring-0 hover:border-primary",
-	cardPlain: "bg-card",
-	cardHorizontal: "[&_[data-slot=card-inner]]:items-center [&_[data-slot=card-main]]:flex-row [&_[data-slot=card-main]]:items-center [&_[data-slot=card-main]]:gap-3 [&_[data-slot=card-body]]:m-0 [&_[data-slot=card-header]]:flex-row [&_[data-slot=card-header]]:items-center [&_[data-slot=card-header]]:gap-2",
-	cardTyped: "[&_[data-slot=card-title]]:text-inherit [&_[data-slot=card-body]]:text-inherit [&_[data-slot=card-cta]]:text-inherit [&_[data-slot=card-arrow]]:text-inherit",
-	cardImageLayout: "p-0 [&_[data-slot=card-inner]]:p-6",
-	cardImage: "block aspect-video w-full border-border border-b object-cover",
-	cardInner: "flex items-start justify-between gap-3",
-	cardMain: "flex min-w-0 flex-col gap-2",
-	cardHeader: "flex flex-col items-start gap-3",
-	cardIcon: "inline-flex shrink-0 items-center justify-center [&_img]:size-6 [&_svg]:size-6",
-	cardTitle: "text-sm font-semibold text-foreground",
-	cardBody: "text-muted-foreground [&>:first-child]:mt-0 [&>:last-child]:mb-0",
-	cardCta: "flex shrink-0 items-center gap-[0.35rem] text-[0.9rem] font-medium text-muted-foreground",
-	cardArrow: "shrink-0 text-muted-foreground",
-	grid: "my-4 grid grid-cols-1 gap-4",
-	gridCols1: "md:grid-cols-1",
-	gridCols2: "md:grid-cols-2",
-	gridCols3: "md:grid-cols-3",
-	gridCols4: "md:grid-cols-4",
-	column: "min-w-0 [&>:first-child]:mt-0 [&>:last-child]:mb-0",
-	icon: "inline-block align-[-0.145em]",
-	tabs: "my-4 gap-0",
-	frameWrapper: "my-4",
-	frameHint: "mb-4 flex items-start gap-2 text-sm font-medium leading-5 text-foreground",
-	frameHintIcon: "flex h-5 shrink-0 items-center text-muted-foreground [&_svg]:size-4 [&_svg]:fill-current",
-	frame: "relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2",
-	frameContent: "relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full",
-	frameCaption: "relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold",
-	field: "my-3",
-	fieldGroup: "my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs",
-	paramField: "my-3",
-	fieldHeader: "flex flex-wrap items-center gap-2",
-	fieldBody: "mt-3",
-	fieldType: "text-[0.9rem] text-muted-foreground",
-	fieldName: "font-bold text-foreground",
-	code: "rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono",
-	steps: "relative my-4 flex flex-col gap-5 before:absolute before:top-4 before:bottom-4 before:left-4 before:w-px before:-translate-x-1/2 before:bg-border before:content-['']",
-	step: "relative flex items-start gap-4",
-	stepNumber: "relative z-[1] flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-[0.9rem] font-semibold text-foreground",
-	stepContent: "flex min-w-0 grow flex-col gap-2",
-	stepTitle: "text-[1.1rem] font-semibold text-foreground",
-	tooltipTrigger: "peer cursor-help border-0 border-muted-foreground border-b border-dotted bg-transparent p-0 text-inherit [font:inherit]"
-};
-
-//#endregion
 //#region src/lib/icons.ts
 /** `circle-check`, `circle_check`, `CircleCheck` all resolve to the same icon. */
 function normalizeIconName(name) {
@@ -10166,7 +10550,7 @@ function Badge({ color, size = "md", shape = "rounded", icon, stroke = false, di
 */
 function Button({ href, variant = "default", size = "default", icon, className, children }) {
 	const resolvedIcon = resolveIcon(icon, 16);
-	const content = /* @__PURE__ */ jsxs(Fragment, { children: [resolvedIcon, children] });
+	const content = /* @__PURE__ */ jsxs(Fragment$1, { children: [resolvedIcon, children] });
 	const baseClassName = cn(resolvedIcon ? "gap-2" : "", "[&_p]:m-0", className);
 	if (!href) return /* @__PURE__ */ jsx(Button$1, {
 		variant,
@@ -10413,6 +10797,161 @@ function CardGroup({ children, cols = 2 }) {
 	return /* @__PURE__ */ jsx("div", {
 		className: `${styles.grid} ${styles[gridColsClass(cols)]}`,
 		children
+	});
+}
+
+//#endregion
+//#region src/components/docs/Update.tsx
+function normalizeTags(tags) {
+	if (!Array.isArray(tags)) return [];
+	const seen = /* @__PURE__ */ new Set();
+	for (const tag of tags) {
+		if (typeof tag !== "string") continue;
+		const trimmed = tag.trim();
+		if (trimmed && !seen.has(trimmed)) seen.add(trimmed);
+	}
+	return [...seen];
+}
+function Update({ label, description, tags, rss: _rss, children }) {
+	const id = slugify(label, "update");
+	const normalizedTags = normalizeTags(tags);
+	return /* @__PURE__ */ jsxs("section", {
+		id,
+		"aria-label": label,
+		className: styles.update,
+		"data-tags": normalizedTags.join(","),
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: styles.updateMeta,
+			children: [
+				/* @__PURE__ */ jsx("a", {
+					href: `#${id}`,
+					className: styles.updateLabel,
+					children: label
+				}),
+				description ? /* @__PURE__ */ jsx("div", {
+					className: styles.updateDescription,
+					children: description
+				}) : null,
+				normalizedTags.length > 0 ? /* @__PURE__ */ jsx("div", {
+					className: styles.updateTags,
+					children: normalizedTags.map((tag) => /* @__PURE__ */ jsx(Badge, {
+						size: "sm",
+						children: tag
+					}, tag))
+				}) : null
+			]
+		}), /* @__PURE__ */ jsx("div", {
+			className: styles.updateBody,
+			children
+		})]
+	});
+}
+
+//#endregion
+//#region src/components/docs/Changelog.tsx
+/** Flattens fragments so <Update> entries are found however MDX nests them. */
+function flatElements(children) {
+	const flat = [];
+	Children.forEach(children, (child) => {
+		if (!isValidElement(child)) return;
+		if (child.type === Fragment) flat.push(...flatElements(child.props.children));
+		else flat.push(child);
+	});
+	return flat;
+}
+/** Reads `tags` off <Update> children without rendering them. */
+function updateInfo(children) {
+	const info = /* @__PURE__ */ new Map();
+	flatElements(children).forEach((child, index) => {
+		if (child.type !== Update) return;
+		const key = String(child.key ?? `update-${index}`);
+		const raw = child.props.tags;
+		const tags = Array.isArray(raw) ? [...new Set(raw.filter((tag) => typeof tag === "string" && tag.trim()))].map((tag) => tag.trim()) : [];
+		info.set(key, {
+			key,
+			tags
+		});
+	});
+	return info;
+}
+/**
+* Groups <Update> entries with Mintlify-style tag filtering.
+* Selected tags sync to `?tags=a,b` so filtered views are shareable.
+* Pages without any tagged updates render as a plain list.
+*/
+function Changelog({ children }) {
+	const [searchParams, setSearchParams] = useSearchParams();
+	const allTags = useMemo(() => {
+		const seen = /* @__PURE__ */ new Map();
+		for (const { tags } of updateInfo(children).values()) for (const tag of tags) {
+			const key = tag.toLowerCase();
+			if (!seen.has(key)) seen.set(key, tag);
+		}
+		return [...seen.values()];
+	}, [children]);
+	const selected = useMemo(() => {
+		const param = searchParams.get("tags");
+		if (!param) return [];
+		const wanted = new Set(param.split(",").map((tag) => tag.trim().toLowerCase()).filter(Boolean));
+		return allTags.filter((tag) => wanted.has(tag.toLowerCase()));
+	}, [searchParams, allTags]);
+	const infoByKey = useMemo(() => updateInfo(children), [children]);
+	if (allTags.length === 0) return /* @__PURE__ */ jsx("div", {
+		className: styles.changelog,
+		children
+	});
+	const toggle = (tag) => {
+		const lower = tag.toLowerCase();
+		const next = selected.some((item) => item.toLowerCase() === lower) ? selected.filter((item) => item.toLowerCase() !== lower) : [...selected, tag];
+		setSearchParams(next.length ? { tags: next.join(",") } : {}, { preventScrollReset: true });
+	};
+	const clear = () => {
+		setSearchParams({}, { preventScrollReset: true });
+	};
+	const selectedSet = new Set(selected.map((tag) => tag.toLowerCase()));
+	const filtered = flatElements(children).map((child, index) => {
+		if (child.type !== Update) return child;
+		const key = String(child.key ?? `update-${index}`);
+		const tags = infoByKey.get(key)?.tags ?? [];
+		if (selectedSet.size === 0) return child;
+		const lower = tags.map((tag) => tag.toLowerCase());
+		return [...selectedSet].every((tag) => lower.includes(tag)) ? child : null;
+	});
+	const visibleUpdates = filtered.filter((child) => child && child.type === Update).length;
+	return /* @__PURE__ */ jsxs("div", {
+		className: styles.changelog,
+		children: [
+			/* @__PURE__ */ jsxs("div", {
+				className: styles.changelogFilters,
+				role: "group",
+				"aria-label": "Filter updates by tag",
+				children: [allTags.map((tag) => {
+					const active = selectedSet.has(tag.toLowerCase());
+					return /* @__PURE__ */ jsx("button", {
+						type: "button",
+						onClick: () => toggle(tag),
+						"aria-pressed": active,
+						className: styles.changelogFilterButton,
+						"data-active": active ? "" : void 0,
+						children: /* @__PURE__ */ jsx(Badge, {
+							size: "sm",
+							color: active ? "primary" : void 0,
+							children: tag
+						})
+					}, tag);
+				}), selected.length > 0 ? /* @__PURE__ */ jsx("button", {
+					type: "button",
+					onClick: clear,
+					className: styles.changelogClear,
+					children: "Clear"
+				}) : null]
+			}),
+			visibleUpdates === 0 ? /* @__PURE__ */ jsx("p", {
+				className: styles.changelogEmpty,
+				children: "No updates match the selected tags."
+			}) : null,
+			filtered
+		]
 	});
 }
 
@@ -11682,6 +12221,51 @@ function Link(props) {
 }
 
 //#endregion
+//#region src/components/docs/panel-context.tsx
+const PanelContext = createContext({
+	content: null,
+	setContent: () => {}
+});
+function PanelProvider({ children }) {
+	const [content, setContent] = useState(null);
+	return /* @__PURE__ */ jsx(PanelContext.Provider, {
+		value: {
+			content,
+			setContent
+		},
+		children
+	});
+}
+function usePanelContent() {
+	return useContext(PanelContext).content;
+}
+function useSetPanelContent() {
+	return useContext(PanelContext).setContent;
+}
+
+//#endregion
+//#region src/components/docs/Panel.tsx
+/**
+* Pins supplementary content to the right rail (replacing the table of
+* contents on desktop). On small screens the content renders inline where it
+* is written. Only one Panel per page is supported; the last one wins.
+*/
+function Panel({ children }) {
+	const setContent = useSetPanelContent();
+	useEffect(() => {
+		setContent(children ? /* @__PURE__ */ jsx("div", {
+			className: styles.panel,
+			children
+		}) : null);
+		return () => setContent(null);
+	}, [children, setContent]);
+	return /* @__PURE__ */ jsx("div", {
+		className: styles.panelInline,
+		children
+	});
+}
+
+//#endregion
 //#region src/components/docs/ParamField.tsx
 function ParamField({ name, query, path, header, body, type, required, children }) {
 	const label = name || query || path || header || body || "parameter";
@@ -11757,12 +12341,12 @@ function PropertiesTable({ children }) {
 						children: [
 							name,
 							required ? /* @__PURE__ */ jsx(Badge, {
-								size: "xs",
+								size: "sm",
 								tone: "primary",
 								children: "required"
 							}) : null,
 							deprecated ? /* @__PURE__ */ jsx(Badge, {
-								size: "xs",
+								size: "sm",
 								children: "deprecated"
 							}) : null
 						]
@@ -11821,7 +12405,7 @@ function ResponseField({ name, type, required, deprecated, children }) {
 //#endregion
 //#region src/components/docs/Steps.tsx
 function Step({ children }) {
-	return /* @__PURE__ */ jsx(Fragment, { children });
+	return /* @__PURE__ */ jsx(Fragment$1, { children });
 }
 function Steps({ children }) {
 	const steps = useMemo(() => {
@@ -11854,7 +12438,7 @@ function Steps({ children }) {
 //#endregion
 //#region src/components/docs/Tabs.tsx
 function Tab({ children }) {
-	return /* @__PURE__ */ jsx(Fragment, { children });
+	return /* @__PURE__ */ jsx(Fragment$1, { children });
 }
 function Tabs({ children, group }) {
 	const tabs = useMemo(() => {
@@ -11922,6 +12506,49 @@ function Tabs({ children, group }) {
 			className: "pt-4 text-base",
 			children: tab.content
 		}, tab.id))]
+	});
+}
+
+//#endregion
+//#region src/components/docs/Tiles.tsx
+function Tile({ href, title, description, children, target }) {
+	const external = /^https?:\/\//i.test(href);
+	const resolvedTarget = target ?? (external ? "_blank" : void 0);
+	const content = /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("div", {
+		className: styles.tilePreview,
+		"data-slot": "tile-preview",
+		children
+	}), title || description ? /* @__PURE__ */ jsxs("div", {
+		className: styles.tileBody,
+		"data-slot": "tile-body",
+		children: [title ? /* @__PURE__ */ jsx("div", {
+			className: styles.tileTitle,
+			children: title
+		}) : null, description ? /* @__PURE__ */ jsx("div", {
+			className: styles.tileDescription,
+			children: description
+		}) : null]
+	}) : null] });
+	const className = `${styles.tile} no-underline hover:no-underline active:no-underline`;
+	if (external) return /* @__PURE__ */ jsx("a", {
+		href,
+		className,
+		target: resolvedTarget,
+		rel: "noreferrer",
+		children: content
+	});
+	return /* @__PURE__ */ jsx(Link$1, {
+		to: href,
+		className,
+		target: resolvedTarget,
+		children: content
+	});
+}
+/** Grid wrapper for <Tile> when <Columns> is not used directly. */
+function Tiles({ children, cols = 2 }) {
+	return /* @__PURE__ */ jsx("div", {
+		className: `${styles.grid} ${styles[gridColsClass(cols)]}`,
+		children
 	});
 }
 
@@ -12468,7 +13095,7 @@ const usePortalContext = () => React$1.useContext(PortalContext);
 const attr = createAttribute("portal");
 function useFloatingPortalNode(props = {}) {
 	const { ref, container: containerProp, componentProps = EMPTY_OBJECT, elementProps } = props;
-	const uniqueId = useId();
+	const uniqueId = useId$1();
 	const parentPortalNode = usePortalContext()?.portalNode;
 	const [containerElement, setContainerElement] = React$1.useState(null);
 	const [portalNode, setPortalNode] = React$1.useState(null);
@@ -12659,7 +13286,7 @@ const useFloatingTree = (externalTree) => {
 * @see https://floating-ui.com/docs/FloatingTree
 */
 function useFloatingNodeId(externalTree) {
-	const id = useId();
+	const id = useId$1();
 	const tree = useFloatingTree(externalTree);
 	const parentId = useFloatingParentNodeId();
 	useIsoLayoutEffect(() => {
@@ -15483,7 +16110,7 @@ function createDefaultInitialFocus(popupRef) {
 * floating element instead of the default positioner.
 */
 function usePopupRootStore(createStore, treatPopupAsFloatingElement = false) {
-	const floatingId = useId();
+	const floatingId = useId$1();
 	const nested = useFloatingParentNodeId() != null;
 	const store = useRefWithInit(() => createStore(floatingId, nested)).current;
 	useSyncedFloatingRootContext({
@@ -18022,6 +18649,244 @@ function Tooltip({ tip, children }) {
 }
 
 //#endregion
+//#region src/components/docs/Tree.tsx
+function elementText(node) {
+	if (typeof node === "string" || typeof node === "number") return String(node);
+	if (Array.isArray(node)) return node.map(elementText).join("");
+	if (isValidElement(node)) return elementText(node.props.children);
+	return "";
+}
+function isListElement(node) {
+	return isValidElement(node) && (node.type === "ul" || node.type === "ol");
+}
+/** Stable key for MDX-generated list wrappers (static content, never reordered). */
+function listFingerprint(node) {
+	const text = elementText(node).replace(/\s+/g, " ").trim().slice(0, 64);
+	let hash = 0;
+	for (let i = 0; i < text.length; i += 1) hash = hash * 31 + text.charCodeAt(i) | 0;
+	return `mdx-list-${text.length}-${hash}`;
+}
+/** Split an MDX <li> into its label (inline content) and an optional nested list. */
+function splitListItem(li) {
+	let nested = null;
+	const labelParts = [];
+	Children.forEach(li.props.children, (child) => {
+		if (isListElement(child)) nested = child;
+		else labelParts.push(child);
+	});
+	return {
+		label: elementText(labelParts).trim(),
+		nested
+	};
+}
+function ListItemsAsNodes({ items }) {
+	const nodes = [];
+	let index = 0;
+	Children.forEach(items, (li) => {
+		if (!isValidElement(li) || li.type !== "li") return;
+		const { label, nested } = splitListItem(li);
+		if (!label && !nested) return;
+		const name = label || "untitled";
+		const isFolder = name.endsWith("/") || Boolean(nested);
+		index += 1;
+		if (isFolder) nodes.push(/* @__PURE__ */ jsx(TreeFolder, {
+			name,
+			defaultOpen: Boolean(nested),
+			children: nested ? /* @__PURE__ */ jsx(ListItemsAsNodes, { items: nested.props.children }) : null
+		}, `${name}-${index}`));
+		else nodes.push(/* @__PURE__ */ jsx(TreeFile, { name }, `${name}-${index}`));
+	});
+	return /* @__PURE__ */ jsx(Fragment$1, { children: nodes });
+}
+function containsList(children) {
+	let found = false;
+	Children.forEach(children, (child) => {
+		if (isListElement(child)) found = true;
+	});
+	return found;
+}
+function TreeFolder({ name, defaultOpen = false, openable = true, highlight = false, children }) {
+	const [open, setOpen] = useState(defaultOpen);
+	const expanded = openable ? open : true;
+	const Icon = expanded ? FolderOpen : Folder;
+	return /* @__PURE__ */ jsxs("li", {
+		role: "treeitem",
+		"aria-expanded": openable ? expanded : void 0,
+		"data-highlight": highlight ? "" : void 0,
+		className: styles.treeItem,
+		children: [openable ? /* @__PURE__ */ jsxs("button", {
+			type: "button",
+			"data-tree-focus": true,
+			onClick: () => setOpen((value) => !value),
+			className: `${styles.treeRow} ${highlight ? styles.treeHighlight : ""}`,
+			children: [
+				/* @__PURE__ */ jsx(ChevronRight, {
+					size: 14,
+					className: styles.treeChevron,
+					"data-open": expanded ? "" : void 0,
+					"aria-hidden": true
+				}),
+				/* @__PURE__ */ jsx(Icon, {
+					size: 15,
+					className: styles.treeIcon,
+					"aria-hidden": true
+				}),
+				/* @__PURE__ */ jsx("span", {
+					className: styles.treeName,
+					children: name
+				})
+			]
+		}) : /* @__PURE__ */ jsxs("span", {
+			"data-tree-focus": true,
+			tabIndex: -1,
+			className: `${styles.treeRow} ${highlight ? styles.treeHighlight : ""}`,
+			children: [/* @__PURE__ */ jsx(Icon, {
+				size: 15,
+				className: styles.treeIcon,
+				"aria-hidden": true
+			}), /* @__PURE__ */ jsx("span", {
+				className: styles.treeName,
+				children: name
+			})]
+		}), children ? /* @__PURE__ */ jsx("ul", {
+			role: "group",
+			hidden: openable && !expanded ? true : void 0,
+			className: styles.treeGroup,
+			children
+		}) : null]
+	});
+}
+function TreeFile({ name, highlight = false }) {
+	return /* @__PURE__ */ jsx("li", {
+		role: "treeitem",
+		"data-highlight": highlight ? "" : void 0,
+		className: styles.treeItem,
+		children: /* @__PURE__ */ jsxs("span", {
+			"data-tree-focus": true,
+			tabIndex: -1,
+			className: `${styles.treeRow} ${highlight ? styles.treeHighlight : ""}`,
+			children: [/* @__PURE__ */ jsx(File, {
+				size: 15,
+				className: styles.treeIcon,
+				"aria-hidden": true
+			}), /* @__PURE__ */ jsx("span", {
+				className: styles.treeName,
+				children: name
+			})]
+		})
+	});
+}
+function visibleFocusables(root) {
+	return [...root.querySelectorAll("[data-tree-focus]")].filter((element) => !element.closest("[hidden]"));
+}
+function TreeRoot({ children, style, className }) {
+	const rootRef = useRef(null);
+	const searchRef = useRef({
+		text: "",
+		timer: 0
+	});
+	const onKeyDown = (event) => {
+		const root = rootRef.current;
+		const target = event.target;
+		if (!root || !target.closest("[data-tree-focus]")) return;
+		const items = visibleFocusables(root);
+		const index = items.indexOf(target);
+		const focusAt = (next) => {
+			event.preventDefault();
+			items[(next + items.length) % items.length]?.focus();
+		};
+		switch (event.key) {
+			case "ArrowDown":
+				focusAt(index + 1);
+				break;
+			case "ArrowUp":
+				focusAt(index - 1);
+				break;
+			case "Home":
+				focusAt(0);
+				break;
+			case "End":
+				focusAt(items.length - 1);
+				break;
+			case "ArrowRight": {
+				const row = target.closest("[role=\"treeitem\"]");
+				const toggle = row?.querySelector(":scope > [data-tree-focus]");
+				if (toggle && toggle.tagName === "BUTTON" && toggle.getAttribute("aria-expanded") === "false") {
+					event.preventDefault();
+					toggle.click();
+				} else {
+					const firstChild = row?.querySelector(":scope > ul [data-tree-focus]");
+					if (firstChild) {
+						event.preventDefault();
+						firstChild.focus();
+					}
+				}
+				break;
+			}
+			case "ArrowLeft": {
+				const row = target.closest("[role=\"treeitem\"]");
+				const toggle = row?.querySelector(":scope > [data-tree-focus]");
+				if (toggle && toggle.tagName === "BUTTON" && toggle.getAttribute("aria-expanded") === "true") {
+					event.preventDefault();
+					toggle.click();
+				} else {
+					const parentFocus = (row?.parentElement?.closest("[role=\"treeitem\"]"))?.querySelector(":scope > [data-tree-focus]");
+					if (parentFocus) {
+						event.preventDefault();
+						parentFocus.focus();
+					}
+				}
+				break;
+			}
+			case "*":
+				target.closest("ul")?.querySelectorAll(":scope > [role=\"treeitem\"] > button[aria-expanded=\"false\"]").forEach((button) => {
+					button.click();
+				});
+				break;
+			default: if (event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
+				const state = searchRef.current;
+				window.clearTimeout(state.timer);
+				state.text += event.key.toLowerCase();
+				state.timer = window.setTimeout(() => {
+					state.text = "";
+				}, 500);
+				const match = items.find((item) => (item.textContent || "").trim().toLowerCase().startsWith(state.text));
+				if (match) {
+					event.preventDefault();
+					match.focus();
+				}
+			}
+		}
+	};
+	const content = containsList(children) ? Children.map(children, (child) => isListElement(child) ? /* @__PURE__ */ jsx(ListItemsAsNodes, { items: child.props.children }, listFingerprint(child)) : child) : children;
+	return /* @__PURE__ */ jsx("div", {
+		ref: rootRef,
+		style,
+		className: `${styles.tree} ${className || ""}`,
+		onKeyDown,
+		children: /* @__PURE__ */ jsx("ul", {
+			role: "tree",
+			"aria-label": "File tree",
+			className: styles.treeList,
+			children: content
+		})
+	});
+}
+function Tree(props) {
+	return /* @__PURE__ */ jsx(TreeRoot, { ...props });
+}
+/** Alias: <Tree> and <FileTree> are interchangeable, like Mintlify. */
+function FileTree(props) {
+	return /* @__PURE__ */ jsx(TreeRoot, { ...props });
+}
+Tree.Folder = TreeFolder;
+Tree.File = TreeFile;
+FileTree.Folder = TreeFolder;
+FileTree.File = TreeFile;
+const FileTreeFolder = TreeFolder;
+const FileTreeFile = TreeFile;
+
+//#endregion
 //#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/root/DialogRootContext.mjs
 const DialogRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 DialogRootContext.displayName = "DialogRootContext";
@@ -18911,17 +19776,24 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 	Callout: () => Callout,
 	Card: () => Card,
 	CardGroup: () => CardGroup,
+	Changelog: () => Changelog,
 	Check: () => Check,
 	CodeGroup: () => CodeGroup,
 	Column: () => Column,
 	Columns: () => Columns,
 	Danger: () => Danger,
 	Expandable: () => Expandable,
+	FileTree: () => FileTree,
+	FileTreeFile: () => FileTreeFile,
+	FileTreeFolder: () => FileTreeFolder,
 	Frame: () => Frame,
 	Icon: () => Icon,
 	Info: () => Info,
 	Link: () => Link,
+	Mermaid: () => Mermaid,
 	Note: () => Note,
+	Panel: () => Panel,
+	PanelProvider: () => PanelProvider,
 	Param: () => Param,
 	ParamField: () => ParamField,
 	PropertiesTable: () => PropertiesTable,
@@ -18930,12 +19802,21 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 	Steps: () => Steps,
 	Tab: () => Tab,
 	Tabs: () => Tabs,
+	Tile: () => Tile,
+	Tiles: () => Tiles,
 	Tip: () => Tip,
 	Tooltip: () => Tooltip,
+	Tree: () => Tree,
+	TreeFile: () => TreeFile,
+	TreeFolder: () => TreeFolder,
+	Update: () => Update,
 	Warning: () => Warning,
 	WarningBanner: () => WarningBanner,
-	ZoomableImage: () => ZoomableImage
+	ZoomableImage: () => ZoomableImage,
+	mermaidSource: () => mermaidSource,
+	usePanelContent: () => usePanelContent,
+	useSetPanelContent: () => useSetPanelContent
 });
 
 //#endregion
-export { POPUP_COLLISION_AVOIDANCE as $, getWindow as $n, imperativeAction as $t, popupStoreSelectors as A, ARROW_RIGHT$1 as An, Danger as At, useSyncedFloatingRootContext as B, useRenderElement as Bn, AccordionGroup as Bt, pressableTriggerOpenStateMapping as C, getFloatingFocusElement as Cn, COMPOSITE_KEYS as Ct, useFocus as D, getTarget as Dn, CardGroup as Dt, useHoverFloatingInteraction as E, contains as En, Card as Et, setPopupOpenState as F, useBaseUiId as Fn, WarningBanner as Ft, FloatingNode as G, dispatchClickWithModifiers as Gn, useAnimationsFinished as Gt, useDismiss as H, EMPTY_OBJECT as Hn, getIcon as Ht, useImplicitActiveTrigger as I, useId as In, Button as It, useFloatingParentNodeId as J, mergeProps as Jn, useAnimationFrame as Jt, FloatingTree as K, ownerDocument as Kn, useValueAsRef as Kt, useOpenStateTransitions as L, useTimeout as Ln, Badge as Lt, FOCUSABLE_POPUP_PROPS as M, jsdom as Mn, Note as Mt, PopupHandleAttachment as N, webkit as Nn, Tip as Nt, usePopupHandleStore as O, ARROW_DOWN$1 as On, Callout as Ot, attachPreventUnmountOnClose as P, mac as Pn, Warning as Pt, DROPDOWN_COLLISION_AVOIDANCE as Q, getParentNode as Qn, focusOut as Qt, usePopupInteractionProps as R, Button$1 as Rn, Badge$1 as Rt, popupTransitionStateMapping as S, stopEvent as Sn, CodeGroup as St, useHoverReferenceInteraction as T, activeElement as Tn, useCompositeItem as Tt, useClick as U, useMergedRefs as Un, styles as Ut, ReactStore as V, EMPTY_ARRAY$1 as Vn, resolveIcon as Vt, FloatingFocusManager as W, useButton as Wn, useOpenChangeComplete as Wt, FloatingTreeStore as X, useStableCallback as Xn, cancelOpen as Xt, useFloatingTree as Y, useIsoLayoutEffect as Yn, createChangeEventDetails as Yt, FloatingPortal as Z, useRefWithInit as Zn, escapeKey as Zt, Tooltip as _, isElementVisible as _n, Collapsible as _t, DialogTitle as a, triggerHover as an, createLucideIcon as ar, Tabs as at, getDisabledMountTransitionStyles as b, isVirtualClick as bn, Column as bt, useOpenInteractionType as c, addEventListener as cn, Navigate as cr, ResponseField as ct, useScrollLock as d, getTabbableAfterElement as dn, Routes as dr, ParamField as dt, itemPress as en, isHTMLElement as er, enqueueFocus as et, DialogPortal$1 as f, getTabbableBeforeElement as fn, useLocation as fr, Link as ft, DialogBackdrop as g, getMinListIndex as gn, ABSOLUTE_URL_REGEX as gr, Expandable as gt, DialogClose as h, getMaxListIndex as hn, parsePath as hr, renderInlineMarkdown as ht, DialogContent as i, triggerFocus as in, Check$1 as ir, Tab as it, PopupTriggerMap as j, ARROW_UP$1 as jn, Info as jt, createInitialPopupStoreState as k, ARROW_LEFT$1 as kn, Check as kt, DialogTitle$1 as l, useDirection as ln, Route as lr, PropertiesTable as lt, DialogPopup as m, findNonDisabledListIndex as mn, createPath as mr, Frame as mt, ZoomableImage as n, outsidePress as nn, X as nr, fastComponent as nt, DialogTrigger as o, triggerPress as on, BrowserRouter as or, Step as ot, InternalBackdrop as p, isOutsideEvent as pn, useNavigate as pr, Icon as pt, useFloatingNodeId as q, useCompositeRootContext as qn, useCompositeListItem as qt, Dialog as r, siblingOpen as rn, ChevronRight as rr, fastComponentRef as rt, DialogTrigger$1 as s, CompositeList as sn, Link$1 as sr, Steps as st, docs_exports as t, listNavigation as tn, isLastTraversableNode as tr, FocusGuard as tt, DialogRoot as u, getNextTabbable as un, Router as ur, Param as ut, TooltipProvider as v, isIndexOutOfListBounds as vn, CollapsibleContent as vt, safePolygon as w, isTypeableCombobox as wn, inertValue as wt, useAnchorPositioning as x, isVirtualPointerEvent as xn, Columns as xt, usePositioner as y, isListIndexDisabled as yn, CollapsibleTrigger as yt, useTriggerDataForwarding as z, cn as zn, Accordion as zt };
+export { useFloatingNodeId as $, useTimeout as $n, Accordion as $t, safePolygon as A, findNonDisabledListIndex as An, createPath as Ar, CollapsibleContent as At, attachPreventUnmountOnClose as B, isTypeableCombobox as Bn, Card as Bt, Tooltip as C, styles as Cn, Link$1 as Cr, useSetPanelContent as Ct, useAnchorPositioning as D, getTabbableAfterElement as Dn, Routes as Dr, renderInlineMarkdown as Dt, getDisabledMountTransitionStyles as E, getNextTabbable as En, Router as Er, Frame as Et, createInitialPopupStoreState as F, isListIndexDisabled as Fn, COMPOSITE_KEYS as Ft, useTriggerDataForwarding as G, ARROW_LEFT$1 as Gn, Info as Gt, useImplicitActiveTrigger as H, contains as Hn, Callout as Ht, popupStoreSelectors as I, isVirtualClick as In, inertValue as It, useDismiss as J, jsdom as Jn, Warning as Jt, useSyncedFloatingRootContext as K, ARROW_RIGHT$1 as Kn, Note as Kt, PopupTriggerMap as L, isVirtualPointerEvent as Ln, useCompositeItem as Lt, useHoverFloatingInteraction as M, getMinListIndex as Mn, ABSOLUTE_URL_REGEX as Mr, Column as Mt, useFocus as N, isElementVisible as Nn, __commonJSMin as Nr, Columns as Nt, popupTransitionStateMapping as O, getTabbableBeforeElement as On, useLocation as Or, Expandable as Ot, usePopupHandleStore as P, isIndexOutOfListBounds as Pn, __toESM as Pr, CodeGroup as Pt, FloatingTree as Q, useId$1 as Qn, Badge$1 as Qt, FOCUSABLE_POPUP_PROPS as R, stopEvent as Rn, Changelog as Rt, TreeFolder as S, mermaidSource as Sn, BrowserRouter as Sr, usePanelContent as St, usePositioner as T, useDirection as Tn, Route as Tr, Icon as Tt, useOpenStateTransitions as U, getTarget as Un, Check as Ut, setPopupOpenState as V, activeElement as Vn, CardGroup as Vt, usePopupInteractionProps as W, ARROW_DOWN$1 as Wn, Danger as Wt, FloatingFocusManager as X, mac as Xn, Button as Xt, useClick as Y, webkit as Yn, WarningBanner as Yt, FloatingNode as Z, useBaseUiId as Zn, Badge as Zt, FileTree as _, triggerFocus as _n, isLastTraversableNode as _r, PropertiesTable as _t, DialogTitle as a, useValueAsRef as an, useMergedRefs as ar, POPUP_COLLISION_AVOIDANCE as at, Tree as b, CompositeList as bn, Check$1 as br, Panel as bt, useOpenInteractionType as c, createChangeEventDetails as cn, ownerDocument as cr, fastComponent as ct, useScrollLock as d, focusOut as dn, useIsoLayoutEffect as dr, Tiles as dt, AccordionGroup as en, Button$1 as er, useFloatingParentNodeId as et, DialogPortal$1 as f, imperativeAction as fn, useStableCallback as fr, Tab as ft, DialogBackdrop as g, siblingOpen as gn, isHTMLElement as gr, ResponseField as gt, DialogClose as h, outsidePress as hn, getWindow as hr, Steps as ht, DialogContent as i, useAnimationsFinished as in, EMPTY_OBJECT as ir, DROPDOWN_COLLISION_AVOIDANCE as it, useHoverReferenceInteraction as j, getMaxListIndex as jn, parsePath as jr, CollapsibleTrigger as jt, pressableTriggerOpenStateMapping as k, isOutsideEvent as kn, useNavigate as kr, Collapsible as kt, DialogTitle$1 as l, cancelOpen as ln, useCompositeRootContext as lr, fastComponentRef as lt, DialogPopup as m, listNavigation as mn, getParentNode as mr, Step as mt, ZoomableImage as n, getIcon as nn, useRenderElement as nr, FloatingTreeStore as nt, DialogTrigger as o, useCompositeListItem as on, useButton as or, enqueueFocus as ot, InternalBackdrop as p, itemPress as pn, useRefWithInit as pr, Tabs as pt, ReactStore as q, ARROW_UP$1 as qn, Tip as qt, Dialog as r, useOpenChangeComplete as rn, EMPTY_ARRAY$1 as rr, FloatingPortal as rt, DialogTrigger$1 as s, useAnimationFrame as sn, dispatchClickWithModifiers as sr, FocusGuard as st, docs_exports as t, resolveIcon as tn, cn as tr, useFloatingTree as tt, DialogRoot as u, escapeKey as un, mergeProps as ur, Tile as ut, FileTreeFile as v, triggerHover as vn, X as vr, Param as vt, TooltipProvider as w, addEventListener as wn, Navigate as wr, Link as wt, TreeFile as x, Mermaid as xn, createLucideIcon as xr, PanelProvider as xt, FileTreeFolder as y, triggerPress as yn, ChevronRight as yr, ParamField as yt, PopupHandleAttachment as z, getFloatingFocusElement as zn, Update as zt };

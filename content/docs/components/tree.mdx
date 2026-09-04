@@ -1,0 +1,128 @@
+---
+title: Tree
+description: Hierarchical file and folder structures.
+---
+
+Use `Tree` (or its alias `FileTree`) to display file systems and project
+directories. `Tree.Folder` and `Tree.File` compose explicitly, or write a
+nested Markdown list inside the tree for quick static structures.
+
+<Tree>
+  <Tree.Folder name="app" defaultOpen>
+    <Tree.File name="layout.tsx" />
+    <Tree.File name="page.tsx" />
+    <Tree.File name="global.css" />
+  </Tree.Folder>
+  <Tree.Folder name="lib">
+    <Tree.File name="utils.ts" />
+    <Tree.File name="db.ts" />
+  </Tree.Folder>
+  <Tree.File name="package.json" />
+  <Tree.File name="tsconfig.json" />
+</Tree>
+
+```tsx
+<Tree>
+  <Tree.Folder name="app" defaultOpen>
+    <Tree.File name="layout.tsx" />
+    <Tree.File name="page.tsx" />
+    <Tree.File name="global.css" />
+  </Tree.Folder>
+  <Tree.Folder name="lib">
+    <Tree.File name="utils.ts" />
+    <Tree.File name="db.ts" />
+  </Tree.Folder>
+  <Tree.File name="package.json" />
+  <Tree.File name="tsconfig.json" />
+</Tree>
+```
+
+## Markdown list syntax
+
+Leave a blank line after the opening tag. A trailing slash (or nested items)
+marks a folder; folders with nested items expand by default.
+
+<FileTree>
+
+- docs/
+  - index.mdx
+  - guides/
+    - configuration.mdx
+- docs.config.ts
+
+</FileTree>
+
+```mdx
+<FileTree>
+
+- docs/
+  - index.mdx
+  - guides/
+    - configuration.mdx
+- docs.config.ts
+
+</FileTree>
+```
+
+## Highlight the active path
+
+<Tree>
+  <Tree.Folder name="app" defaultOpen>
+    <Tree.File name="layout.tsx" />
+    <Tree.File name="page.tsx" highlight />
+  </Tree.Folder>
+  <Tree.File name="package.json" />
+</Tree>
+
+```tsx
+<Tree.Folder name="app" defaultOpen>
+  <Tree.File name="page.tsx" highlight />
+</Tree.Folder>
+```
+
+Set `--tree-highlight` on the `Tree` style to override the tint.
+
+Folders support arrow-key navigation: up/down moves, right expands,
+left collapses, `*` expands siblings, typing jumps to a name.
+
+## Properties
+
+### Tree / FileTree
+
+<PropertiesTable>
+<ResponseField name="children" type="ReactNode">
+  `Tree.Folder` / `Tree.File` nodes, or a Markdown list.
+</ResponseField>
+</PropertiesTable>
+
+### Tree.Folder
+
+<PropertiesTable>
+<ResponseField name="name" type="string" required>
+  Folder name shown in the tree.
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="boolean" default="false">
+  Whether the folder expands by default.
+</ResponseField>
+
+<ResponseField name="openable" type="boolean" default="true">
+  Set to false for non-interactive folders.
+</ResponseField>
+
+<ResponseField name="highlight" type="boolean" default="false">
+  Tint the folder as the active path.
+</ResponseField>
+</PropertiesTable>
+
+### Tree.File
+
+<PropertiesTable>
+<ResponseField name="name" type="string" required>
+  File name shown in the tree.
+</ResponseField>
+
+<ResponseField name="highlight" type="boolean" default="false">
+  Tint the file as the active item.
+</ResponseField>
+</PropertiesTable>

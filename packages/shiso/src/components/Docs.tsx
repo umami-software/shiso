@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
+import { PanelProvider, usePanelContent } from '@/components/docs/panel-context';
 import { Footer } from '@/components/Footer';
 import { Menu } from '@/components/icons';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
@@ -13,7 +14,7 @@ import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { getOperation, operationSections } from '@/lib/openapi';
 import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
-import type { DocModule, NormalizedDocsPage, SiteModel } from '@/lib/types';
+import type { DocModule, NormalizedDocsPage, SiteModel, TocEntry } from '@/lib/types';
 
 /**
  * 404 view driven by the `errors.404` config key. The standard defaults to
@@ -46,22 +47,6 @@ export interface DocsProps {
 }
 
 export function Docs({ page, doc, site }: DocsProps) {
-  const { pathname } = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
-  // Navigation follows the scope (version/language) that owns the current page.
-  const scopeDocs = getScopeByPathname(pathname).docs;
-  const { tabs, navigation } = scopeDocs;
-
-  // Close the mobile menu and start each newly loaded page at the top. Hash
-  // links keep their native section-scrolling behavior.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger
-  useEffect(() => {
-    setMenuOpen(false);
-    if (!window.location.hash) {
-      window.scrollTo({ top: 0, left: 0 });
-    }
-  }, [pathname]);
-
   if (!page || !doc) {
     return (
       <div className="flex min-h-full flex-col">
@@ -76,6 +61,42 @@ export function Docs({ page, doc, site }: DocsProps) {
   // API reference pages append their generated section anchors to the TOC.
   const operation = getOperation(doc.frontmatter?.openapi);
   const toc = operation ? [...(doc.toc || []), ...operationSections(operation)] : doc.toc;
+
+  return (
+    <PanelProvider>
+      <DocsBody page={page} doc={doc} site={site} toc={toc} />
+    </PanelProvider>
+  );
+}
+
+function DocsBody({
+  page,
+  doc,
+  site,
+  toc,
+}: {
+  page: NormalizedDocsPage;
+  doc: DocModule;
+  site: SiteModel;
+  toc: TocEntry[] | undefined;
+}) {
+  const { pathname } = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Navigation follows the scope (version/language) that owns the current page.
+  const scopeDocs = getScopeByPathname(pathname).docs;
+  const { tabs, navigation } = scopeDocs;
+  // A <Panel> in the page replaces the table of contents in the right rail.
+  const panel = usePanelContent();
+
+  // Close the mobile menu and start each newly loaded page at the top. Hash
+  // links keep their native section-scrolling behavior.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger
+  useEffect(() => {
+    setMenuOpen(false);
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, left: 0 });
+    }
+  }, [pathname]);
 
   return (
     <div className="flex min-h-full flex-col gap-6 lg:gap-0">
@@ -128,11 +149,13 @@ export function Docs({ page, doc, site }: DocsProps) {
           <div className="flex grow items-start gap-12">
             <DocContent page={page} doc={doc} site={site} />
             <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
-              <PageLinks
-                items={toc}
-                title={site.labels.tableOfContents}
-                navigationLabel={site.labels.tableOfContentsNavigation}
-              />
+              {panel ?? (
+                <PageLinks
+                  items={toc}
+                  title={site.labels.tableOfContents}
+                  navigationLabel={site.labels.tableOfContentsNavigation}
+                />
+              )}
             </div>
           </div>
           <Footer footer={site.footer} className="lg:mr-72" />

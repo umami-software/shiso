@@ -1,0 +1,28 @@
+---
+title: Panel
+description: Pin supplementary content to the right rail.
+---
+
+Use `Panel` to replace the page's table of contents with supplementary
+content: examples, callouts, or anything else. On small screens the content
+renders inline where it is written.
+
+<Panel>
+  <Info>This panel replaces the table of contents on desktop.</Info>
+</Panel>
+
+```tsx
+<Panel>
+  <Info>Pin info to the side panel. Or add any other component.</Info>
+</Panel>
+```
+
+Only one `Panel` per page is supported; the last one wins.
+
+## Properties
+
+<PropertiesTable>
+<ResponseField name="children" type="ReactNode">
+  Content pinned to the right rail on desktop.
+</ResponseField>
+</PropertiesTable>

@@ -1,0 +1,54 @@
+---
+title: Update
+description: Dated changelog entries with anchors, descriptions, and tags.
+---
+
+Use `Update` for changelog entries, version updates, and release notes. Each
+`label` creates an anchor link, so entries appear in the table of contents.
+
+<Update label="March 2025" description="v2.0.0" tags={["dashboard"]}>
+
+## New dashboard
+
+Check out the redesigned dashboard with improved navigation.
+
+</Update>
+
+```tsx
+<Update label="March 2025" description="v2.0.0" tags={["dashboard"]}>
+
+## New dashboard
+
+Check out the redesigned dashboard with improved navigation.
+
+</Update>
+```
+
+Combine several `Update` entries on one page to build a changelog. Wrap them
+in [Changelog](/docs/components/changelog) to get tag filtering synced to
+`?tags=`.
+
+## Properties
+
+<PropertiesTable>
+<ResponseField name="label" type="string" required>
+  Left-hand label. Slugified into the entry's anchor id; use unique labels.
+</ResponseField>
+
+<ResponseField name="description" type="ReactNode">
+  Text shown below the label, e.g. a version number.
+</ResponseField>
+
+<ResponseField name="tags" type="string[]">
+  Tags shown as badges. `Changelog` turns them into sidebar filters.
+</ResponseField>
+
+<ResponseField name="rss" type="{ title?: string; description?: string }">
+  Mintlify compatibility prop for custom RSS entries. Accepted and ignored:
+  Shiso does not generate an RSS feed yet.
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Entry body: headings, text, images, code, or other components.
+</ResponseField>
+</PropertiesTable>

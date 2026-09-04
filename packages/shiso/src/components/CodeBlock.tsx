@@ -1,8 +1,10 @@
+import type { ReactNode } from 'react';
 import { type ComponentProps, type CSSProperties, useRef, useState } from 'react';
 import { CheckIcon, Copy } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { Mermaid, type MermaidPlacement } from './docs/Mermaid';
 
 /**
  * Renders a fenced code block. The `data-*` props are produced at build time by
@@ -15,6 +17,25 @@ export interface CodeBlockProps extends ComponentProps<'pre'> {
   'data-line-start'?: string;
   'data-line-count'?: string;
   'data-diff-markers'?: string;
+  'data-placement'?: MermaidPlacement;
+  'data-actions'?: string;
+}
+
+function reactChildrenToText(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(reactChildrenToText).join('');
+  }
+  if (node && typeof node === 'object' && 'props' in (node as object)) {
+    const props = (node as { props?: { children?: ReactNode; value?: unknown } }).props;
+    if (typeof props?.value === 'string') {
+      return props.value;
+    }
+    return reactChildrenToText(props?.children);
+  }
+  return '';
 }
 
 /**
@@ -44,10 +65,25 @@ export function CodeBlock({ children, className, style, ...rest }: CodeBlockProp
     'data-language': language,
     'data-line-start': lineStart,
     'data-line-count': lineCount,
+    'data-placement': placement,
+    'data-actions': actions,
     ...preProps
   } = rest;
   const textInput = useRef<HTMLPreElement>(null);
   const [copied, setCopied] = useState(false);
+
+  // ```mermaid fences render as diagrams; the raw definition stays in the
+  // markup for search indexing and no-JS fallbacks.
+  if (language === 'mermaid') {
+    return (
+      <Mermaid
+        chart={reactChildrenToText(children).replace(/\n$/, '')}
+        title={title}
+        placement={placement}
+        actions={actions === undefined ? undefined : actions !== 'false'}
+      />
+    );
+  }
 
   const start = Number(lineStart) || 1;
   const lastLine = start + Math.max(Number(lineCount) || 1, 1) - 1;

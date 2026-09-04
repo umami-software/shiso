@@ -133,8 +133,25 @@ async function highlightBlock(pre: MdNode, code: MdNode, config: ResolvedCodeBlo
     ? codeProperties.className.map(String)
     : [];
   const requested = classes.map(value => value.match(/^language-(\S+)$/)?.[1]).find(Boolean);
-  const lang = resolveLanguage(requested);
   const meta = parseCodeMeta(typeof code.data?.meta === 'string' ? code.data.meta : '');
+
+  // Mermaid diagrams render client-side via the <Mermaid> component; keep the
+  // raw definition so CodeBlock can hand it over untouched.
+  if (requested === 'mermaid') {
+    const metaRaw = typeof code.data?.meta === 'string' ? code.data.meta : '';
+    const placement = metaRaw.match(/placement=["'](top-left|top-right|bottom-left|bottom-right)["']/)?.[1];
+    const actions = metaRaw.match(/actions=\{(true|false)\}/)?.[1];
+    pre.properties = {
+      ...(pre.properties as Properties),
+      'data-language': 'mermaid',
+      ...(meta.title ? { 'data-title': meta.title } : {}),
+      ...(placement ? { 'data-placement': placement } : {}),
+      ...(actions ? { 'data-actions': actions } : {}),
+    };
+    return;
+  }
+
+  const lang = resolveLanguage(requested);
   // mdast-util-to-hast appends a trailing newline to the code text.
   const source = toText(code).replace(/\n$/, '');
 

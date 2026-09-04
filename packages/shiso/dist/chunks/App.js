@@ -1,4 +1,4 @@
-import { $ as POPUP_COLLISION_AVOIDANCE, $n as getWindow, $t as imperativeAction, A as popupStoreSelectors, An as ARROW_RIGHT, B as useSyncedFloatingRootContext, Bn as useRenderElement, C as pressableTriggerOpenStateMapping, Cn as getFloatingFocusElement, Ct as COMPOSITE_KEYS, D as useFocus, Dn as getTarget, E as useHoverFloatingInteraction, En as contains, F as setPopupOpenState, Fn as useBaseUiId, G as FloatingNode, Gn as dispatchClickWithModifiers, Gt as useAnimationsFinished, H as useDismiss, Hn as EMPTY_OBJECT, Ht as getIcon, I as useImplicitActiveTrigger, In as useId$1, J as useFloatingParentNodeId, Jn as mergeProps$1, Jt as useAnimationFrame, K as FloatingTree, Kn as ownerDocument, Kt as useValueAsRef, L as useOpenStateTransitions, Ln as useTimeout, Lt as Badge, M as FOCUSABLE_POPUP_PROPS, Mn as jsdom, N as PopupHandleAttachment, Nn as webkit, O as usePopupHandleStore, On as ARROW_DOWN, P as attachPreventUnmountOnClose, Pn as mac, Q as DROPDOWN_COLLISION_AVOIDANCE, Qn as getParentNode, Qt as focusOut, R as usePopupInteractionProps, Rn as Button, Rt as Badge$1, S as popupTransitionStateMapping, Sn as stopEvent, St as CodeGroup, T as useHoverReferenceInteraction, Tn as activeElement, Tt as useCompositeItem, U as useClick, Un as useMergedRefs, Ut as styles, V as ReactStore, Vn as EMPTY_ARRAY, Vt as resolveIcon, W as FloatingFocusManager, Wn as useButton, Wt as useOpenChangeComplete, X as FloatingTreeStore, Xn as useStableCallback, Xt as cancelOpen, Y as useFloatingTree, Yn as useIsoLayoutEffect, Yt as createChangeEventDetails, Z as FloatingPortal, Zn as useRefWithInit, Zt as escapeKey, _n as isElementVisible, _t as Collapsible, a as DialogTitle, an as triggerHover, ar as createLucideIcon, b as getDisabledMountTransitionStyles, bn as isVirtualClick, c as useOpenInteractionType, cn as addEventListener, cr as Navigate, ct as ResponseField, d as useScrollLock, dn as getTabbableAfterElement, dr as Routes, dt as ParamField, en as itemPress, er as isHTMLElement, et as enqueueFocus, f as DialogPortal$1, fn as getTabbableBeforeElement, fr as useLocation, g as DialogBackdrop, gn as getMinListIndex, gt as Expandable, h as DialogClose, hn as getMaxListIndex, ht as renderInlineMarkdown, i as DialogContent$1, in as triggerFocus, ir as Check, j as PopupTriggerMap, jn as ARROW_UP, k as createInitialPopupStoreState, kn as ARROW_LEFT, l as DialogTitle$1, ln as useDirection, lr as Route, m as DialogPopup, mn as findNonDisabledListIndex, n as ZoomableImage, nn as outsidePress, nr as X$1, nt as fastComponent, o as DialogTrigger, on as triggerPress, p as InternalBackdrop, pn as isOutsideEvent, pr as useNavigate, q as useFloatingNodeId, qn as useCompositeRootContext, qt as useCompositeListItem, r as Dialog$1, rn as siblingOpen, rr as ChevronRight, rt as fastComponentRef, s as DialogTrigger$1, sn as CompositeList, sr as Link, t as docs_exports, tn as listNavigation, tr as isLastTraversableNode, tt as FocusGuard, u as DialogRoot, un as getNextTabbable, v as TooltipProvider, vn as isIndexOutOfListBounds, vt as CollapsibleContent, w as safePolygon, wn as isTypeableCombobox, wt as inertValue, x as useAnchorPositioning, xn as isVirtualPointerEvent, y as usePositioner, yn as isListIndexDisabled, yt as CollapsibleTrigger, z as useTriggerDataForwarding, zn as cn } from "./docs.js";
+import { $ as useFloatingNodeId, $n as useTimeout, A as safePolygon, An as findNonDisabledListIndex, At as CollapsibleContent, B as attachPreventUnmountOnClose, Bn as isTypeableCombobox, Cn as styles, Cr as Link, D as useAnchorPositioning, Dn as getTabbableAfterElement, Dr as Routes, Dt as renderInlineMarkdown, E as getDisabledMountTransitionStyles, En as getNextTabbable, F as createInitialPopupStoreState, Fn as isListIndexDisabled, Ft as COMPOSITE_KEYS, G as useTriggerDataForwarding, Gn as ARROW_LEFT, H as useImplicitActiveTrigger, Hn as contains, I as popupStoreSelectors, In as isVirtualClick, It as inertValue, J as useDismiss, Jn as jsdom, K as useSyncedFloatingRootContext, Kn as ARROW_RIGHT, L as PopupTriggerMap, Ln as isVirtualPointerEvent, Lt as useCompositeItem, M as useHoverFloatingInteraction, Mn as getMinListIndex, N as useFocus, Nn as isElementVisible, O as popupTransitionStateMapping, On as getTabbableBeforeElement, Or as useLocation, Ot as Expandable, P as usePopupHandleStore, Pn as isIndexOutOfListBounds, Pt as CodeGroup, Q as FloatingTree, Qn as useId$2, Qt as Badge$1, R as FOCUSABLE_POPUP_PROPS, Rn as stopEvent, St as usePanelContent, T as usePositioner, Tn as useDirection, Tr as Route, U as useOpenStateTransitions, Un as getTarget, V as setPopupOpenState, Vn as activeElement, W as usePopupInteractionProps, Wn as ARROW_DOWN, X as FloatingFocusManager, Xn as mac, Y as useClick, Yn as webkit, Z as FloatingNode, Zn as useBaseUiId, Zt as Badge, _n as triggerFocus, _r as isLastTraversableNode, a as DialogTitle, an as useValueAsRef, ar as useMergedRefs, at as POPUP_COLLISION_AVOIDANCE, bn as CompositeList, br as Check, c as useOpenInteractionType, cn as createChangeEventDetails, cr as ownerDocument, ct as fastComponent, d as useScrollLock, dn as focusOut, dr as useIsoLayoutEffect, er as Button, et as useFloatingParentNodeId, f as DialogPortal$1, fn as imperativeAction, fr as useStableCallback, g as DialogBackdrop, gn as siblingOpen, gr as isHTMLElement, gt as ResponseField, h as DialogClose, hn as outsidePress, hr as getWindow, i as DialogContent$1, in as useAnimationsFinished, ir as EMPTY_OBJECT, it as DROPDOWN_COLLISION_AVOIDANCE, j as useHoverReferenceInteraction, jn as getMaxListIndex, jt as CollapsibleTrigger, k as pressableTriggerOpenStateMapping, kn as isOutsideEvent, kr as useNavigate, kt as Collapsible, l as DialogTitle$1, ln as cancelOpen, lr as useCompositeRootContext, lt as fastComponentRef, m as DialogPopup, mn as listNavigation, mr as getParentNode, n as ZoomableImage, nn as getIcon, nr as useRenderElement, nt as FloatingTreeStore, o as DialogTrigger, on as useCompositeListItem, or as useButton, ot as enqueueFocus, p as InternalBackdrop, pn as itemPress, pr as useRefWithInit, q as ReactStore, qn as ARROW_UP, r as Dialog$1, rn as useOpenChangeComplete, rr as EMPTY_ARRAY, rt as FloatingPortal, s as DialogTrigger$1, sn as useAnimationFrame, sr as dispatchClickWithModifiers, st as FocusGuard, t as docs_exports, tn as resolveIcon, tr as cn, tt as useFloatingTree, u as DialogRoot, un as escapeKey, ur as mergeProps$1, vn as triggerHover, vr as X$1, w as TooltipProvider, wn as addEventListener, wr as Navigate, xn as Mermaid, xr as createLucideIcon, xt as PanelProvider, yn as triggerPress, yr as ChevronRight, yt as ParamField, z as PopupHandleAttachment, zn as getFloatingFocusElement } from "./docs.js";
 import { n as highlightTerms } from "./search.js";
 import { resolveSearchProvider } from "../search.js";
 import * as React from "react";
@@ -7,7 +7,7 @@ import "@fontsource-variable/inter/index.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@umami/shiso/styles.css";
 import { MDXProvider } from "@mdx-js/react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 import * as ReactDOM from "react-dom";
 import shiso from "virtual:shiso-config";
 import rawConfig from "virtual:shiso-docs-config";
@@ -1181,6 +1181,16 @@ function ScrollBar({ className, orientation = "vertical", ...props }) {
 
 //#endregion
 //#region src/components/CodeBlock.tsx
+function reactChildrenToText(node) {
+	if (typeof node === "string" || typeof node === "number") return String(node);
+	if (Array.isArray(node)) return node.map(reactChildrenToText).join("");
+	if (node && typeof node === "object" && "props" in node) {
+		const props = node.props;
+		if (typeof props?.value === "string") return props.value;
+		return reactChildrenToText(props?.children);
+	}
+	return "";
+}
 /**
 * Joins the text of each rendered line. Lines marked as removed by
 * `// [!code --]` are skipped so the clipboard holds the "after" state; in a
@@ -1193,9 +1203,15 @@ function copyText(pre, language) {
 	return lines.filter((line) => language === "diff" || line.dataset.diff !== "remove").map((line) => line.textContent || "").join("\n");
 }
 function CodeBlock({ children, className, style, ...rest }) {
-	const { "data-title": title, "data-language": language, "data-line-start": lineStart, "data-line-count": lineCount, ...preProps } = rest;
+	const { "data-title": title, "data-language": language, "data-line-start": lineStart, "data-line-count": lineCount, "data-placement": placement, "data-actions": actions, ...preProps } = rest;
 	const textInput = useRef(null);
 	const [copied, setCopied] = useState(false);
+	if (language === "mermaid") return /* @__PURE__ */ jsx(Mermaid, {
+		chart: reactChildrenToText(children).replace(/\n$/, ""),
+		title,
+		placement,
+		actions: actions === void 0 ? void 0 : actions !== "false"
+	});
 	const start = Number(lineStart) || 1;
 	const lastLine = start + Math.max(Number(lineCount) || 1, 1) - 1;
 	const gutter = `${String(lastLine).length}ch`;
@@ -2755,8 +2771,8 @@ const MenuRoot = fastComponent(function MenuRoot(props) {
 	store.useControlledProp("openProp", openProp);
 	store.useControlledProp("triggerIdProp", triggerIdProp);
 	store.useContextCallback("onOpenChangeComplete", onOpenChangeComplete);
-	const rootId = useId$1();
-	const floatingId = useId$1();
+	const rootId = useId$2();
+	const floatingId = useId$2();
 	const floatingTreeRoot = store.useState("floatingTreeRoot");
 	const floatingNodeIdFromContext = useFloatingNodeId(floatingTreeRoot);
 	const floatingParentNodeIdFromContext = useFloatingParentNodeId();
@@ -4782,14 +4798,14 @@ var __name$11 = (target, value) => __defProp$11(target, "name", {
 });
 var useReactId = React[" useId ".trim().toString()] || (() => void 0);
 var count$1 = 0;
-function useId(deterministicId) {
+function useId$1(deterministicId) {
 	const [id, setId] = React.useState(useReactId());
 	useLayoutEffect2(() => {
 		if (!deterministicId) setId((reactId) => reactId ?? String(count$1++));
 	}, [deterministicId]);
 	return deterministicId || (id ? `radix-${id}` : "");
 }
-__name$11(useId, "useId");
+__name$11(useId$1, "useId");
 
 //#endregion
 //#region ../../node_modules/.pnpm/@radix-ui+react-use-effect-_e8d5e8242c04825bf34212c7f6280f14/node_modules/@radix-ui/react-use-effect-event/dist/index.mjs
@@ -6657,9 +6673,9 @@ var Dialog = /* @__PURE__ */ __name((props) => {
 		scope: __scopeDialog,
 		triggerRef,
 		contentRef,
-		contentId: useId(),
-		titleId: useId(),
-		descriptionId: useId(),
+		contentId: useId$1(),
+		titleId: useId$1(),
+		descriptionId: useId$1(),
 		titlePresent: titleCount > 0,
 		descriptionPresent: descriptionCount > 0,
 		setTitleCount,
@@ -6798,7 +6814,7 @@ var DialogContentImpl = /* @__PURE__ */ React.forwardRef(/* @__PURE__ */ __name(
 	const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
 	const context = useDialogContext(CONTENT_NAME, __scopeDialog);
 	useFocusGuards();
-	return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(FocusScope, {
+	return /* @__PURE__ */ jsx(Fragment$1, { children: /* @__PURE__ */ jsx(FocusScope, {
 		asChild: true,
 		loop: true,
 		trapped: trapFocus,
@@ -6850,7 +6866,7 @@ var me = React.forwardRef((r, o) => {
 				groups: /* @__PURE__ */ new Set()
 			}
 		};
-	}), u = L(() => /* @__PURE__ */ new Set()), c = L(() => /* @__PURE__ */ new Map()), d = L(() => /* @__PURE__ */ new Map()), f = L(() => /* @__PURE__ */ new Set()), p = pe(r), { label: b, children: m, value: R, onValueChange: x, filter: C, shouldFilter: S, loop: A, disablePointerSelection: ge = !1, vimBindings: j = !0, ...O } = r, $ = useId(), q = useId(), _ = useId(), I = React.useRef(null), v = ke();
+	}), u = L(() => /* @__PURE__ */ new Set()), c = L(() => /* @__PURE__ */ new Map()), d = L(() => /* @__PURE__ */ new Map()), f = L(() => /* @__PURE__ */ new Set()), p = pe(r), { label: b, children: m, value: R, onValueChange: x, filter: C, shouldFilter: S, loop: A, disablePointerSelection: ge = !1, vimBindings: j = !0, ...O } = r, $ = useId$1(), q = useId$1(), _ = useId$1(), I = React.useRef(null), v = ke();
 	k(() => {
 		if (R !== void 0) {
 			let e = R.trim();
@@ -7048,7 +7064,7 @@ var me = React.forwardRef((r, o) => {
 });
 var he = React.forwardRef((r, o) => {
 	var _, I;
-	let n = useId(), u = React.useRef(null), c = React.useContext(fe), d = K(), f = pe(r), p = (I = (_ = f.current) == null ? void 0 : _.forceMount) != null ? I : c == null ? void 0 : c.forceMount;
+	let n = useId$1(), u = React.useRef(null), c = React.useContext(fe), d = K(), f = pe(r), p = (I = (_ = f.current) == null ? void 0 : _.forceMount) != null ? I : c == null ? void 0 : c.forceMount;
 	k(() => {
 		if (!p) return d.item(n, c == null ? void 0 : c.id);
 	}, [p]);
@@ -7089,7 +7105,7 @@ var he = React.forwardRef((r, o) => {
 	}, r.children);
 });
 var Ee = React.forwardRef((r, o) => {
-	let { heading: n, children: u, forceMount: c, ...d } = r, f = useId(), p = React.useRef(null), b = React.useRef(null), m = useId(), R = K(), x = P((S) => c || R.filter() === !1 ? !0 : S.search ? S.filtered.groups.has(f) : !0);
+	let { heading: n, children: u, forceMount: c, ...d } = r, f = useId$1(), p = React.useRef(null), b = React.useRef(null), m = useId$1(), R = K(), x = P((S) => c || R.filter() === !1 ? !0 : S.search ? S.filtered.groups.has(f) : !0);
 	k(() => R.group(f), []), ve(f, p, [
 		r.value,
 		r.heading,
@@ -7501,7 +7517,7 @@ function Search({ config, labels, className }) {
 							onSelect: () => select(result),
 							children: [/* @__PURE__ */ jsxs("div", {
 								className: "text-[0.9rem] font-semibold text-foreground",
-								children: [renderWithQueryHighlight(result.page, query), result.heading ? /* @__PURE__ */ jsxs(Fragment, { children: [" › ", renderWithQueryHighlight(result.heading, query)] }) : null]
+								children: [renderWithQueryHighlight(result.page, query), result.heading ? /* @__PURE__ */ jsxs(Fragment$1, { children: [" › ", renderWithQueryHighlight(result.heading, query)] }) : null]
 							}), result.snippet && /* @__PURE__ */ jsx("div", {
 								className: "mt-[0.15rem] line-clamp-2 text-[0.8rem] text-muted-foreground",
 								children: renderSnippet(result.snippet)
@@ -7690,7 +7706,7 @@ function NavbarLinkItem({ link, primary = false }) {
 	const iconOnly = !link.label;
 	const accessibleLabel = link.ariaLabel || link.icon || link.href;
 	const className = primary ? `ml-1 inline-flex items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 ${iconOnly ? "size-8" : "gap-1.5 px-3.5 py-1.5"}` : `inline-flex items-center rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-foreground ${iconOnly ? "size-8 justify-center" : "gap-1.5 px-2.5 py-1.5"}`;
-	const content = /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(ConfiguredIcon, { icon: link.icon }), link.label] });
+	const content = /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(ConfiguredIcon, { icon: link.icon }), link.label] });
 	if (isRoutedHref(link.href, link.target)) return /* @__PURE__ */ jsx(Link, {
 		to: link.href,
 		className,
@@ -7713,11 +7729,11 @@ function Header({ site }) {
 	const brandHref = logo?.href || (hasRootStandalonePage ? "/" : docsHomeUrl);
 	const hasBrand = !!name || !!logo?.light || !!logo?.dark;
 	const brandClassName = "inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]";
-	const brandContent = /* @__PURE__ */ jsxs(Fragment, { children: [logo?.invert && logo.light ? /* @__PURE__ */ jsx("img", {
+	const brandContent = /* @__PURE__ */ jsxs(Fragment$1, { children: [logo?.invert && logo.light ? /* @__PURE__ */ jsx("img", {
 		src: logo.light,
 		alt: "",
 		className: "h-6 w-auto dark:brightness-0 dark:invert"
-	}) : /* @__PURE__ */ jsxs(Fragment, { children: [logo?.light ? /* @__PURE__ */ jsx("img", {
+	}) : /* @__PURE__ */ jsxs(Fragment$1, { children: [logo?.light ? /* @__PURE__ */ jsx("img", {
 		src: logo.light,
 		alt: "",
 		className: "h-6 w-auto dark:hidden"
@@ -8124,7 +8140,7 @@ const PARAM_LOCATIONS = [
 	"cookie"
 ];
 function FieldChildren({ node }) {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		node.description,
 		node.enum && node.enum.length > 0 && /* @__PURE__ */ jsxs("div", {
 			className: "mt-1",
@@ -8153,7 +8169,7 @@ function SchemaField({ node }) {
 }
 /** Renders a schema tree: a root object's properties, or the node itself. */
 function SchemaFields({ node }) {
-	if (!node.name && node.children?.length) return /* @__PURE__ */ jsx(Fragment, { children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type)) });
+	if (!node.name && node.children?.length) return /* @__PURE__ */ jsx(Fragment$1, { children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type)) });
 	return /* @__PURE__ */ jsx(SchemaField, { node });
 }
 function HighlightedCode({ language, title, html, source, lineCount }) {
@@ -8718,7 +8734,7 @@ function NavNodes({ nodes, pathname, depth, drilldown, expandLabel, collapseLabe
 			collapseLabel
 		}, `group-${node.label}`));
 	});
-	return /* @__PURE__ */ jsx(Fragment, { children: rendered });
+	return /* @__PURE__ */ jsx(Fragment$1, { children: rendered });
 }
 function SideNav({ tabs, navigation, anchors, activeTabId, isSticky, drilldown, navigationLabel, expandLabel, collapseLabel }) {
 	const { pathname } = useLocation();
@@ -8822,17 +8838,6 @@ function NotFound({ site }) {
 	});
 }
 function Docs({ page, doc, site }) {
-	const { pathname } = useLocation();
-	const [menuOpen, setMenuOpen] = useState(false);
-	const scopeDocs = getScopeByPathname(pathname).docs;
-	const { tabs, navigation } = scopeDocs;
-	useEffect(() => {
-		setMenuOpen(false);
-		if (!window.location.hash) window.scrollTo({
-			top: 0,
-			left: 0
-		});
-	}, [pathname]);
 	if (!page || !doc) return /* @__PURE__ */ jsxs("div", {
 		className: "flex min-h-full flex-col",
 		children: [/* @__PURE__ */ jsx("div", {
@@ -8842,6 +8847,26 @@ function Docs({ page, doc, site }) {
 	});
 	const operation = getOperation(doc.frontmatter?.openapi);
 	const toc = operation ? [...doc.toc || [], ...operationSections(operation)] : doc.toc;
+	return /* @__PURE__ */ jsx(PanelProvider, { children: /* @__PURE__ */ jsx(DocsBody, {
+		page,
+		doc,
+		site,
+		toc
+	}) });
+}
+function DocsBody({ page, doc, site, toc }) {
+	const { pathname } = useLocation();
+	const [menuOpen, setMenuOpen] = useState(false);
+	const scopeDocs = getScopeByPathname(pathname).docs;
+	const { tabs, navigation } = scopeDocs;
+	const panel = usePanelContent();
+	useEffect(() => {
+		setMenuOpen(false);
+		if (!window.location.hash) window.scrollTo({
+			top: 0,
+			left: 0
+		});
+	}, [pathname]);
 	return /* @__PURE__ */ jsxs("div", {
 		className: "flex min-h-full flex-col gap-6 lg:gap-0",
 		children: [/* @__PURE__ */ jsxs(Sheet, {
@@ -8908,7 +8933,7 @@ function Docs({ page, doc, site }) {
 						site
 					}), /* @__PURE__ */ jsx("div", {
 						className: "hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0",
-						children: /* @__PURE__ */ jsx(PageLinks, {
+						children: panel ?? /* @__PURE__ */ jsx(PageLinks, {
 							items: toc,
 							title: site.labels.tableOfContents,
 							navigationLabel: site.labels.tableOfContentsNavigation

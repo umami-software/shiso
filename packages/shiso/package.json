@@ -83,6 +83,7 @@
     "github-slugger": "^2.0.0",
     "jiti": "^2.4.0",
     "lucide-react": "^1.28.0",
+    "mermaid": "^11.17.2",
     "react-router": "^8.3.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",

@@ -1,4 +1,4 @@
-import { or as BrowserRouter } from "./chunks/docs.js";
+import { Sr as BrowserRouter } from "./chunks/docs.js";
 import { h as BASE_URL, t as App } from "./chunks/App.js";
 import { jsx } from "react/jsx-runtime";
 
