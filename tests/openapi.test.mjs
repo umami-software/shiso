@@ -175,13 +175,18 @@ describe('operationAnchors and search sections', () => {
     const remove = operations.find(item => item.key === 'DELETE /users/{id}');
 
     expect(operationAnchors(create)).toEqual([
-      'parameters',
+      'headers',
       'request-body',
       'responses',
       'code-samples',
     ]);
     // DELETE has a path parameter (from the path item) plus auth, no body.
-    expect(operationAnchors(remove)).toEqual(['parameters', 'responses', 'code-samples']);
+    expect(operationAnchors(remove)).toEqual([
+      'headers',
+      'path-parameters',
+      'responses',
+      'code-samples',
+    ]);
 
     const sections = operationSearchSections(create);
     expect(sections[0].text).toContain('POST /users Create a user');

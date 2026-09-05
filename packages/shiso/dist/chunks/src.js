@@ -1,4 +1,4 @@
-import { Nr as __commonJSMin, Pr as __toESM } from "./docs.js";
+import { Ar as __commonJSMin, jr as __toESM } from "./docs.js";
 import { n as __name } from "./chunk-Y2CYZVJY.js";
 
 //#region ../../node_modules/.pnpm/dayjs@1.11.23/node_modules/dayjs/dayjs.min.js

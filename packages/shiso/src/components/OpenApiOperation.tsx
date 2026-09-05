@@ -2,15 +2,9 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { Badge } from '@/components/docs/Badge';
 import { CodeGroup } from '@/components/docs/CodeGroup';
 import { Expandable } from '@/components/docs/Expandable';
-import { ParamField } from '@/components/docs/ParamField';
-import { ResponseField } from '@/components/docs/ResponseField';
-import { styles } from '@/components/docs/styles';
-import { operationSections, statusColor } from '@/lib/openapi';
+import { PropertiesTable } from '@/components/docs/PropertiesTable';
+import { operationParameterSections, operationSections, statusColor } from '@/lib/openapi';
 import type { NormalizedOperation, SchemaNode } from '@/lib/types';
-
-type ParamLocation = 'path' | 'query' | 'header' | 'cookie';
-
-const PARAM_LOCATIONS: ParamLocation[] = ['path', 'query', 'header', 'cookie'];
 
 function FieldChildren({ node }: { node: SchemaNode }) {
   return (
@@ -29,44 +23,35 @@ function FieldChildren({ node }: { node: SchemaNode }) {
       )}
       {node.children && node.children.length > 0 && (
         <Expandable title="properties">
-          {node.children.map(child => (
-            <SchemaField key={child.name || child.type} node={child} />
-          ))}
+          <SchemaTable nodes={node.children} />
         </Expandable>
       )}
     </>
   );
 }
 
-function SchemaField({ node }: { node: SchemaNode }) {
-  const hasDetails = Boolean(node.description || node.enum?.length || node.children?.length);
-
+function SchemaTable({ nodes }: { nodes: SchemaNode[] }) {
   return (
-    <ResponseField
-      name={node.name || node.type}
-      type={node.name ? node.type : undefined}
-      required={node.required}
-      deprecated={node.deprecated}
-      default={node.default}
-    >
-      {hasDetails ? <FieldChildren node={node} /> : null}
-    </ResponseField>
+    <PropertiesTable>
+      {nodes.map(node => (
+        <PropertiesTable.Row
+          key={node.name || node.type}
+          name={node.name || node.type}
+          type={node.type}
+          required={node.required}
+          deprecated={node.deprecated}
+          default={node.default}
+        >
+          <FieldChildren node={node} />
+        </PropertiesTable.Row>
+      ))}
+    </PropertiesTable>
   );
 }
 
 /** Renders a schema tree: a root object's properties, or the node itself. */
 function SchemaFields({ node }: { node: SchemaNode }) {
-  if (!node.name && node.children?.length) {
-    return (
-      <>
-        {node.children.map(child => (
-          <SchemaField key={child.name || child.type} node={child} />
-        ))}
-      </>
-    );
-  }
-
-  return <SchemaField node={node} />;
+  return <SchemaTable nodes={!node.name && node.children?.length ? node.children : [node]} />;
 }
 
 function HighlightedCode({
@@ -110,35 +95,33 @@ export interface OpenApiOperationProps {
 /** The generated reference for one API operation, rendered under the page body. */
 export function OpenApiOperation({ operation }: OpenApiOperationProps) {
   const sections = new Map(operationSections(operation).map(entry => [entry.name, entry.id]));
-  const showParameters = sections.has('Parameters');
 
   return (
     <div className="docs-markdown">
-      {showParameters && (
-        <section>
-          <h2 id={sections.get('Parameters')}>Parameters</h2>
-          <div className={styles.fieldGroup}>
-            {operation.security.length > 0 && (
-              <ParamField header="Authorization" type="string" required>
+      {operationParameterSections(operation).map(({ location, name }) => (
+        <section key={location}>
+          <h2 id={sections.get(name)}>{name}</h2>
+          <PropertiesTable>
+            {location === 'header' && operation.security.length > 0 && (
+              <PropertiesTable.Row name="Authorization" type="string" required>
                 Authentication credentials, e.g. <code>Bearer &lt;token&gt;</code>.
-              </ParamField>
+              </PropertiesTable.Row>
             )}
-            {PARAM_LOCATIONS.map(location =>
-              operation.parameters[location].map(parameter => (
-                <ParamField
-                  key={`${location}-${parameter.name}`}
-                  {...{ [location]: parameter.name }}
-                  type={parameter.type}
-                  required={parameter.required}
-                >
-                  <FieldChildren node={{ ...parameter, name: undefined, description: undefined }} />
-                  {parameter.description}
-                </ParamField>
-              )),
-            )}
-          </div>
+            {operation.parameters[location].map(parameter => (
+              <PropertiesTable.Row
+                key={parameter.name}
+                name={parameter.name || parameter.type}
+                type={parameter.type}
+                required={parameter.required}
+                deprecated={parameter.deprecated}
+                default={parameter.default}
+              >
+                <FieldChildren node={parameter} />
+              </PropertiesTable.Row>
+            ))}
+          </PropertiesTable>
         </section>
-      )}
+      ))}
       {operation.requestBody && (
         <section>
           <h2 id={sections.get('Request body')}>Request body</h2>
@@ -166,11 +149,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
                   <span className="text-muted-foreground text-sm">{response.description}</span>
                 )}
               </div>
-              {response.schema && (
-                <div className={styles.fieldGroup}>
-                  <SchemaFields node={response.schema} />
-                </div>
-              )}
+              {response.schema && <SchemaFields node={response.schema} />}
               {response.example && (
                 <HighlightedCode
                   language="json"

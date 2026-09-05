@@ -67,14 +67,6 @@ export const styles = {
   frameCaption:
     'relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold',
 
-  field: 'my-3',
-  fieldGroup:
-    'my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs',
-  paramField: 'my-3',
-  fieldHeader: 'flex flex-wrap items-center gap-2',
-  fieldBody: 'mt-3',
-  fieldType: 'text-[0.9rem] text-muted-foreground',
-  fieldName: 'font-bold text-foreground',
   code: 'rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono',
   steps:
     "relative my-4 flex flex-col gap-5 before:absolute before:top-4 before:bottom-4 before:left-4 before:w-px before:-translate-x-1/2 before:bg-border before:content-['']",

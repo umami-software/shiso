@@ -51,31 +51,31 @@ For a single collapsible without group styling, use
 ### Accordion
 
 <PropertiesTable>
-<ResponseField name="title" type="ReactNode">
+<PropertiesTable.Row name="title" type="ReactNode">
   Summary label shown in the header.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="icon" type="ReactNode | string">
+<PropertiesTable.Row name="icon" type="ReactNode | string">
   Lucide icon name or element shown before the title.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="defaultOpen" type="boolean" default="false">
+<PropertiesTable.Row name="defaultOpen" type="boolean" default="false">
   Whether the accordion starts expanded.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   Content revealed when open.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>
 
 ### AccordionGroup
 
 <PropertiesTable>
-<ResponseField name="defaultOpen" type="boolean" default="false">
+<PropertiesTable.Row name="defaultOpen" type="boolean" default="false">
   When `true`, opens the first child that does not set its own `defaultOpen`.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   One or more `Accordion` items. Empty groups render nothing.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

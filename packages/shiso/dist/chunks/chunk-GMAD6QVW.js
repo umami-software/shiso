@@ -1,4 +1,4 @@
-import { Nr as __commonJSMin, Pr as __toESM } from "./docs.js";
+import { Ar as __commonJSMin, jr as __toESM } from "./docs.js";
 import { n as __name } from "./chunk-Y2CYZVJY.js";
 import { m as log, p as select_default } from "./src.js";
 import { A as hasKatex, F as renderKatexSanitized, b as getConfig, s as common_default, z as sanitizeText } from "./chunk-DU6HZSFF.js";

@@ -53,7 +53,8 @@ const operation: NormalizedOperation = {
 describe('operationSections', () => {
   it('produces stable heading ids in render order', () => {
     expect(operationSections(operation)).toEqual([
-      { name: 'Parameters', id: 'parameters', size: 2 },
+      { name: 'Headers', id: 'headers', size: 2 },
+      { name: 'Path parameters', id: 'path-parameters', size: 2 },
       { name: 'Request body', id: 'request-body', size: 2 },
       { name: 'Responses', id: 'responses', size: 2 },
       { name: 'Code samples', id: 'code-samples', size: 2 },
@@ -86,7 +87,8 @@ describe('OpenApiOperation', () => {
   const html = renderToStaticMarkup(<OpenApiOperation operation={operation} />);
 
   it('renders all sections with anchor ids', () => {
-    expect(html).toContain('id="parameters"');
+    expect(html).toContain('id="headers"');
+    expect(html).toContain('id="path-parameters"');
     expect(html).toContain('id="request-body"');
     expect(html).toContain('id="responses"');
     expect(html).toContain('id="code-samples"');
@@ -94,8 +96,65 @@ describe('OpenApiOperation', () => {
 
   it('renders parameters including the auth header', () => {
     expect(html).toContain('Authorization');
-    expect(html).toContain('bearerAuth (http bearer)');
+    expect(html).toContain('Authentication credentials');
     expect(html).toContain('User identifier.');
+  });
+
+  it('keeps parameter locations in separate tables and preserves field details', () => {
+    const grouped = renderToStaticMarkup(
+      <OpenApiOperation
+        operation={{
+          ...operation,
+          parameters: {
+            ...operation.parameters,
+            query: [{ name: 'limit', type: 'integer', default: '20', description: 'Page size.' }],
+            cookie: [{ name: 'session', type: 'string', deprecated: true }],
+          },
+        }}
+      />,
+    );
+    const sections = grouped.split('<section>');
+    const headers = sections.find(section => section.includes('id="headers"'));
+    const path = sections.find(section => section.includes('id="path-parameters"'));
+    const query = sections.find(section => section.includes('id="query-parameters"'));
+    const cookie = sections.find(section => section.includes('id="cookie-parameters"'));
+    for (const section of [headers, path, query, cookie]) {
+      expect(section).toContain('<table');
+      expect(section).toContain('>Name</th>');
+      expect(section).toContain('>Type</th>');
+      expect(section).toContain('>Description</th>');
+    }
+    expect(headers).toContain('Authorization');
+    expect(headers).not.toContain('User identifier.');
+    expect(path).toContain('User identifier.');
+    expect(path).not.toContain('Page size.');
+    expect(query).toContain('Page size.');
+    expect(query).toContain('Default: 20');
+    expect(cookie).toContain('deprecated');
+  });
+
+  it('renders response schemas as tables, including primitive responses', () => {
+    const responseHtml = renderToStaticMarkup(
+      <OpenApiOperation
+        operation={{
+          ...operation,
+          responses: [
+            {
+              status: '200',
+              schema: {
+                type: 'object',
+                children: [{ name: 'id', type: 'string', required: true, description: 'User ID.' }],
+              },
+            },
+            { status: '202', schema: { type: 'string', description: 'Pending.' } },
+          ],
+        }}
+      />,
+    ).split('id="responses"')[1];
+    expect(responseHtml.match(/<table /g)).toHaveLength(2);
+    expect(responseHtml).toContain('User ID.');
+    expect(responseHtml).toContain('Pending.');
+    expect(responseHtml).toContain('required');
   });
 
   it('renders nested schema fields inside an expandable', () => {

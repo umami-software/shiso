@@ -14,6 +14,7 @@
     "dev": "shiso dev",
     "check:config": "shiso check",
     "build": "shiso build",
+    "build:runtime": "pnpm --filter @umami/shiso build:runtime",
     "release:check": "node scripts/prepare-release.mjs",
     "release:check:shiso": "node scripts/prepare-release.mjs --package shiso",
     "test:create-app": "node scripts/smoke-create-shiso-app.mjs",

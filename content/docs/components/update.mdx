@@ -31,24 +31,24 @@ in [Changelog](/docs/components/changelog) to get tag filtering synced to
 ## Properties
 
 <PropertiesTable>
-<ResponseField name="label" type="string" required>
+<PropertiesTable.Row name="label" type="string" required>
   Left-hand label. Slugified into the entry's anchor id; use unique labels.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="description" type="ReactNode">
+<PropertiesTable.Row name="description" type="ReactNode">
   Text shown below the label, e.g. a version number.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="tags" type="string[]">
+<PropertiesTable.Row name="tags" type="string[]">
   Tags shown as badges. `Changelog` turns them into sidebar filters.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="rss" type="{ title?: string; description?: string }">
+<PropertiesTable.Row name="rss" type="{ title?: string; description?: string }">
   Mintlify compatibility prop for custom RSS entries. Accepted and ignored:
   Shiso does not generate an RSS feed yet.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   Entry body: headings, text, images, code, or other components.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

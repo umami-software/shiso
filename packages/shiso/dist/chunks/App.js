@@ -1,4 +1,4 @@
-import { $ as useFloatingNodeId, $n as useTimeout, A as safePolygon, An as findNonDisabledListIndex, At as CollapsibleContent, B as attachPreventUnmountOnClose, Bn as isTypeableCombobox, Cn as styles, Cr as Link, D as useAnchorPositioning, Dn as getTabbableAfterElement, Dr as Routes, Dt as renderInlineMarkdown, E as getDisabledMountTransitionStyles, En as getNextTabbable, F as createInitialPopupStoreState, Fn as isListIndexDisabled, Ft as COMPOSITE_KEYS, G as useTriggerDataForwarding, Gn as ARROW_LEFT, H as useImplicitActiveTrigger, Hn as contains, I as popupStoreSelectors, In as isVirtualClick, It as inertValue, J as useDismiss, Jn as jsdom, K as useSyncedFloatingRootContext, Kn as ARROW_RIGHT, L as PopupTriggerMap, Ln as isVirtualPointerEvent, Lt as useCompositeItem, M as useHoverFloatingInteraction, Mn as getMinListIndex, N as useFocus, Nn as isElementVisible, O as popupTransitionStateMapping, On as getTabbableBeforeElement, Or as useLocation, Ot as Expandable, P as usePopupHandleStore, Pn as isIndexOutOfListBounds, Pt as CodeGroup, Q as FloatingTree, Qn as useId$2, Qt as Badge$1, R as FOCUSABLE_POPUP_PROPS, Rn as stopEvent, St as usePanelContent, T as usePositioner, Tn as useDirection, Tr as Route, U as useOpenStateTransitions, Un as getTarget, V as setPopupOpenState, Vn as activeElement, W as usePopupInteractionProps, Wn as ARROW_DOWN, X as FloatingFocusManager, Xn as mac, Y as useClick, Yn as webkit, Z as FloatingNode, Zn as useBaseUiId, Zt as Badge, _n as triggerFocus, _r as isLastTraversableNode, a as DialogTitle, an as useValueAsRef, ar as useMergedRefs, at as POPUP_COLLISION_AVOIDANCE, bn as CompositeList, br as Check, c as useOpenInteractionType, cn as createChangeEventDetails, cr as ownerDocument, ct as fastComponent, d as useScrollLock, dn as focusOut, dr as useIsoLayoutEffect, er as Button, et as useFloatingParentNodeId, f as DialogPortal$1, fn as imperativeAction, fr as useStableCallback, g as DialogBackdrop, gn as siblingOpen, gr as isHTMLElement, gt as ResponseField, h as DialogClose, hn as outsidePress, hr as getWindow, i as DialogContent$1, in as useAnimationsFinished, ir as EMPTY_OBJECT, it as DROPDOWN_COLLISION_AVOIDANCE, j as useHoverReferenceInteraction, jn as getMaxListIndex, jt as CollapsibleTrigger, k as pressableTriggerOpenStateMapping, kn as isOutsideEvent, kr as useNavigate, kt as Collapsible, l as DialogTitle$1, ln as cancelOpen, lr as useCompositeRootContext, lt as fastComponentRef, m as DialogPopup, mn as listNavigation, mr as getParentNode, n as ZoomableImage, nn as getIcon, nr as useRenderElement, nt as FloatingTreeStore, o as DialogTrigger, on as useCompositeListItem, or as useButton, ot as enqueueFocus, p as InternalBackdrop, pn as itemPress, pr as useRefWithInit, q as ReactStore, qn as ARROW_UP, r as Dialog$1, rn as useOpenChangeComplete, rr as EMPTY_ARRAY, rt as FloatingPortal, s as DialogTrigger$1, sn as useAnimationFrame, sr as dispatchClickWithModifiers, st as FocusGuard, t as docs_exports, tn as resolveIcon, tr as cn, tt as useFloatingTree, u as DialogRoot, un as escapeKey, ur as mergeProps$1, vn as triggerHover, vr as X$1, w as TooltipProvider, wn as addEventListener, wr as Navigate, xn as Mermaid, xr as createLucideIcon, xt as PanelProvider, yn as triggerPress, yr as ChevronRight, yt as ParamField, z as PopupHandleAttachment, zn as getFloatingFocusElement } from "./docs.js";
+import { $ as useFloatingNodeId, $n as useRenderElement, $t as resolveIcon, A as safePolygon, An as isElementVisible, B as attachPreventUnmountOnClose, Bn as getTarget, Cn as getNextTabbable, D as useAnchorPositioning, Dn as findNonDisabledListIndex, Dt as Collapsible, E as getDisabledMountTransitionStyles, En as isOutsideEvent, Er as useNavigate, Et as Expandable, F as createInitialPopupStoreState, Fn as stopEvent, Ft as useCompositeItem, G as useTriggerDataForwarding, Gn as jsdom, H as useImplicitActiveTrigger, Hn as ARROW_LEFT, I as popupStoreSelectors, In as getFloatingFocusElement, J as useDismiss, Jn as useBaseUiId, K as useSyncedFloatingRootContext, Kn as webkit, L as PopupTriggerMap, Ln as isTypeableCombobox, M as useHoverFloatingInteraction, Mn as isListIndexDisabled, Mt as CodeGroup, N as useFocus, Nn as isVirtualClick, Nt as COMPOSITE_KEYS, O as popupTransitionStateMapping, On as getMaxListIndex, Ot as CollapsibleContent, P as usePopupHandleStore, Pn as isVirtualPointerEvent, Pt as inertValue, Q as FloatingTree, Qn as cn, R as FOCUSABLE_POPUP_PROPS, Rn as activeElement, Sn as useDirection, Sr as Route, T as usePositioner, Tn as getTabbableBeforeElement, Tr as useLocation, Tt as renderInlineMarkdown, U as useOpenStateTransitions, Un as ARROW_RIGHT, V as setPopupOpenState, Vn as ARROW_DOWN, W as usePopupInteractionProps, Wn as ARROW_UP, X as FloatingFocusManager, Xn as useTimeout, Xt as Badge$1, Y as useClick, Yn as useId$2, Yt as Badge, Z as FloatingNode, Zn as Button, _n as triggerPress, _r as Check, a as DialogTitle, an as useAnimationFrame, ar as ownerDocument, at as POPUP_COLLISION_AVOIDANCE, br as Link, bt as usePanelContent, c as useOpenInteractionType, cn as escapeKey, cr as useIsoLayoutEffect, ct as fastComponent, d as useScrollLock, dn as itemPress, dr as getParentNode, en as getIcon, er as EMPTY_ARRAY, et as useFloatingParentNodeId, f as DialogPortal$1, fn as listNavigation, fr as getWindow, g as DialogBackdrop, gn as triggerHover, gr as ChevronRight, gt as PropertiesTable, h as DialogClose, hn as triggerFocus, hr as X$1, i as DialogContent$1, in as useCompositeListItem, ir as dispatchClickWithModifiers, it as DROPDOWN_COLLISION_AVOIDANCE, j as useHoverReferenceInteraction, jn as isIndexOutOfListBounds, k as pressableTriggerOpenStateMapping, kn as getMinListIndex, kt as CollapsibleTrigger, l as DialogTitle$1, ln as focusOut, lr as useStableCallback, lt as fastComponentRef, m as DialogPopup, mn as siblingOpen, mr as isLastTraversableNode, n as ZoomableImage, nn as useAnimationsFinished, nr as useMergedRefs, nt as FloatingTreeStore, o as DialogTrigger, on as createChangeEventDetails, or as useCompositeRootContext, ot as enqueueFocus, p as InternalBackdrop, pn as outsidePress, pr as isHTMLElement, q as ReactStore, qn as mac, r as Dialog$1, rn as useValueAsRef, rr as useButton, rt as FloatingPortal, s as DialogTrigger$1, sn as cancelOpen, sr as mergeProps$1, st as FocusGuard, t as docs_exports, tn as useOpenChangeComplete, tr as EMPTY_OBJECT, tt as useFloatingTree, u as DialogRoot, un as imperativeAction, ur as useRefWithInit, vn as CompositeList, vr as createLucideIcon, w as TooltipProvider, wn as getTabbableAfterElement, wr as Routes, xn as addEventListener, xr as Navigate, yn as Mermaid, yt as PanelProvider, z as PopupHandleAttachment, zn as contains } from "./docs.js";
 import { n as highlightTerms } from "./search.js";
 import { resolveSearchProvider } from "../search.js";
 import * as React from "react";
@@ -303,7 +303,7 @@ const __iconNode = [
 const Sun = createLucideIcon("sun", __iconNode);
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRootContext.mjs
 const ScrollAreaRootContext = /*#__PURE__*/ React.createContext(void 0);
 ScrollAreaRootContext.displayName = "ScrollAreaRootContext";
 function useScrollAreaRootContext() {
@@ -313,7 +313,7 @@ function useScrollAreaRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/utils/getOffset.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/utils/getOffset.mjs
 function getOffset$1(element, prop, axis) {
 	if (!element) return 0;
 	const styles = getComputedStyle(element);
@@ -324,7 +324,7 @@ function getOffset$1(element, prop, axis) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/styles.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/styles.mjs
 const DISABLE_SCROLLBAR_CLASS_NAME = "base-ui-disable-scrollbar";
 const styleDisableScrollbar = {
 	className: DISABLE_SCROLLBAR_CLASS_NAME,
@@ -340,7 +340,7 @@ const styleDisableScrollbar = {
 styleDisableScrollbar.getElement.displayName = "styleDisableScrollbar.getElement";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/root/stateAttributes.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/stateAttributes.mjs
 const attr = (name) => (value) => value ? { [name]: "" } : null;
 const scrollAreaStateAttributesMapping = {
 	hasOverflowX: attr("data-has-overflow-x"),
@@ -353,7 +353,7 @@ const scrollAreaStateAttributesMapping = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
 const CSPContext = /*#__PURE__*/ React.createContext(void 0);
 CSPContext.displayName = "CSPContext";
 const DEFAULT_CSP_CONTEXT_VALUE = { disableStyleElements: false };
@@ -362,7 +362,7 @@ function useCSPContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRoot.mjs
 const DEFAULT_COORDS = {
 	x: 0,
 	y: 0
@@ -622,7 +622,7 @@ function normalizeOverflowEdgeThreshold(threshold) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewportContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewportContext.mjs
 const ScrollAreaViewportContext = /*#__PURE__*/ React.createContext(void 0);
 ScrollAreaViewportContext.displayName = "ScrollAreaViewportContext";
 function useScrollAreaViewportContext() {
@@ -632,13 +632,13 @@ function useScrollAreaViewportContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/clamp.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/clamp.mjs
 function clamp(val, min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER) {
 	return Math.max(min, Math.min(val, max));
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/scrollEdges.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/scrollEdges.mjs
 const SCROLL_EDGE_TOLERANCE_PX = 1;
 function normalizeScrollOffset(value, max) {
 	if (max <= 0) return 0;
@@ -654,7 +654,7 @@ function normalizeScrollOffset(value, max) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewport.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewport.mjs
 const OVERFLOW_EDGE_VARS = [
 	"--scroll-area-overflow-x-start",
 	"--scroll-area-overflow-x-end",
@@ -909,7 +909,7 @@ function applyOverscrollThumb(thumbEl, sizeVar, scrollFromStart, maxScroll, cont
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbarContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbarContext.mjs
 const ScrollAreaScrollbarContext = /*#__PURE__*/ React.createContext(void 0);
 ScrollAreaScrollbarContext.displayName = "ScrollAreaScrollbarContext";
 function useScrollAreaScrollbarContext() {
@@ -919,7 +919,7 @@ function useScrollAreaScrollbarContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
 /**
 * A vertical or horizontal scrollbar for the scroll area.
 * Renders a `<div>` element.
@@ -1042,7 +1042,7 @@ const ScrollAreaScrollbar = /*#__PURE__*/ React.forwardRef(function ScrollAreaSc
 ScrollAreaScrollbar.displayName = "ScrollAreaScrollbar";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/content/ScrollAreaContent.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/content/ScrollAreaContent.mjs
 /**
 * A container for the content of the scroll area.
 * Renders a `<div>` element.
@@ -1083,7 +1083,7 @@ const ScrollAreaContent = /*#__PURE__*/ React.forwardRef(function ScrollAreaCont
 ScrollAreaContent.displayName = "ScrollAreaContent";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/thumb/ScrollAreaThumb.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/thumb/ScrollAreaThumb.mjs
 /**
 * The draggable part of the scrollbar that indicates the current scroll position.
 * Renders a `<div>` element.
@@ -1116,7 +1116,7 @@ const ScrollAreaThumb = /*#__PURE__*/ React.forwardRef(function ScrollAreaThumb(
 ScrollAreaThumb.displayName = "ScrollAreaThumb";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/scroll-area/corner/ScrollAreaCorner.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/corner/ScrollAreaCorner.mjs
 /**
 * A small rectangular area that appears at the intersection of horizontal and vertical scrollbars.
 * Renders a `<div>` element.
@@ -1261,7 +1261,7 @@ function CodeBlock({ children, className, style, ...rest }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useListNavigation.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useListNavigation.mjs
 const ESCAPE = "Escape";
 function isStationaryWebKitPointer(event) {
 	return webkit && event.movementX === 0 && event.movementY === 0;
@@ -1702,7 +1702,7 @@ function useListNavigation(context, props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useTypeahead.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useTypeahead.mjs
 /**
 * Provides a matching callback that can be used to focus an item as the user
 * types, often used in tandem with `useListNavigation()`.
@@ -2043,7 +2043,7 @@ function ConfiguredIcon({ icon, size = 14 }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/positioner/MenuPositionerContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/positioner/MenuPositionerContext.mjs
 const MenuPositionerContext = /*#__PURE__*/ React.createContext(void 0);
 MenuPositionerContext.displayName = "MenuPositionerContext";
 function useMenuPositionerContext(optional) {
@@ -2053,7 +2053,7 @@ function useMenuPositionerContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/root/MenuRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/root/MenuRootContext.mjs
 const MenuRootContext = /*#__PURE__*/ React.createContext(void 0);
 MenuRootContext.displayName = "MenuRootContext";
 function useMenuRootContext(optional) {
@@ -2063,7 +2063,7 @@ function useMenuRootContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/context-menu/root/ContextMenuRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/context-menu/root/ContextMenuRootContext.mjs
 const ContextMenuRootContext = /*#__PURE__*/ React.createContext(void 0);
 ContextMenuRootContext.displayName = "ContextMenuRootContext";
 function useContextMenuRootContext(optional = true) {
@@ -2073,7 +2073,7 @@ function useContextMenuRootContext(optional = true) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/item/useMenuItemCommonProps.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/useMenuItemCommonProps.mjs
 /**
 * Returns common props shared by all menu item types.
 * This hook extracts the shared logic for id, role, tabIndex, onKeyDown,
@@ -2133,7 +2133,7 @@ function useMenuItemCommonProps(params) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/item/useMenuItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/useMenuItem.mjs
 const REGULAR_ITEM = { type: "regular-item" };
 function useMenuItem(params) {
 	const { closeOnClick, disabled, highlighted, id, store, typingRef = store.context.typingRef, nativeButton, itemMetadata, nodeId } = params;
@@ -2172,7 +2172,7 @@ function useMenuItem(params) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/item/MenuItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/MenuItem.mjs
 /**
 * An individual interactive item in the menu.
 * Renders a `<div>` element.
@@ -2222,7 +2222,7 @@ const MenuItem = /*#__PURE__*/ React.forwardRef(function MenuItem(componentProps
 MenuItem.displayName = "MenuItem";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/toolbar/root/ToolbarRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/root/ToolbarRootContext.mjs
 const ToolbarRootContext = /*#__PURE__*/ React.createContext(void 0);
 ToolbarRootContext.displayName = "ToolbarRootContext";
 function useToolbarRootContext(optional) {
@@ -2232,7 +2232,7 @@ function useToolbarRootContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/popup/MenuPopup.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/popup/MenuPopup.mjs
 /**
 * A container for the menu items.
 * Renders a `<div>` element.
@@ -2327,7 +2327,7 @@ const MenuPopup = /*#__PURE__*/ React.forwardRef(function MenuPopup(componentPro
 MenuPopup.displayName = "MenuPopup";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/portal/MenuPortalContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/portal/MenuPortalContext.mjs
 const MenuPortalContext = /*#__PURE__*/ React.createContext(void 0);
 MenuPortalContext.displayName = "MenuPortalContext";
 function useMenuPortalContext() {
@@ -2337,7 +2337,7 @@ function useMenuPortalContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/portal/MenuPortal.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/portal/MenuPortal.mjs
 /**
 * A portal element that moves the popup to a different part of the DOM.
 * By default, the portal element is appended to `<body>`.
@@ -2360,7 +2360,7 @@ const MenuPortal = /*#__PURE__*/ React.forwardRef(function MenuPortal(props, for
 MenuPortal.displayName = "MenuPortal";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/useAnchoredPopupScrollLock.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchoredPopupScrollLock.mjs
 const VIEWPORT_WIDTH_TOLERANCE_PX = 20;
 /**
 * Manages scroll lock for anchored popups. For non-touch opens, scroll lock is applied when
@@ -2386,7 +2386,7 @@ function useAnchoredPopupScrollLock(enabled, touchOpen, positionerElement, refer
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/positioner/MenuPositioner.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/positioner/MenuPositioner.mjs
 /**
 * Positions the menu popup against the trigger.
 * Renders a `<div>` element.
@@ -2595,7 +2595,7 @@ const MenuPositioner = /*#__PURE__*/ React.forwardRef(function MenuPositioner(co
 MenuPositioner.displayName = "MenuPositioner";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menubar/MenubarContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menubar/MenubarContext.mjs
 const MenubarContext = /*#__PURE__*/ React.createContext(null);
 MenubarContext.displayName = "MenubarContext";
 function useMenubarContext(optional) {
@@ -2605,7 +2605,7 @@ function useMenubarContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/store/MenuStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/store/MenuStore.mjs
 const selectors = {
 	...popupStoreSelectors,
 	disabled: (state) => state.parent.type === "menubar" ? state.parent.context.disabled || state.disabled : state.disabled,
@@ -2720,7 +2720,7 @@ function createInitialState() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/submenu-root/MenuSubmenuRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/submenu-root/MenuSubmenuRootContext.mjs
 const MenuSubmenuRootContext = /*#__PURE__*/ React.createContext(void 0);
 MenuSubmenuRootContext.displayName = "MenuSubmenuRootContext";
 function useMenuSubmenuRootContext() {
@@ -2728,7 +2728,7 @@ function useMenuSubmenuRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/root/MenuRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/root/MenuRoot.mjs
 /**
 * Groups all parts of the menu.
 * Doesn't render its own HTML element.
@@ -3029,7 +3029,7 @@ function useMenuRootStore(initialState) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/getPseudoElementBounds.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/getPseudoElementBounds.mjs
 const BOUNDARY_OFFSET = 5;
 /**
 * Determines if a mouse event occurred within the bounds of an element
@@ -3063,7 +3063,7 @@ function getPseudoElementBounds(element) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/item/CompositeItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/item/CompositeItem.mjs
 function CompositeItem(componentProps) {
 	const { render, className, style, state = EMPTY_OBJECT, props = EMPTY_ARRAY, refs = EMPTY_ARRAY, metadata, stateAttributesMapping, tag = "div", ...elementProps } = componentProps;
 	const { compositeProps, compositeRef } = useCompositeItem({ metadata });
@@ -3080,7 +3080,7 @@ function CompositeItem(componentProps) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/utils/findRootOwnerId.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/utils/findRootOwnerId.mjs
 function findRootOwnerId(node) {
 	if (isHTMLElement(node) && node.hasAttribute("data-rootownerid")) return node.getAttribute("data-rootownerid");
 	if (isLastTraversableNode(node)) return;
@@ -3088,7 +3088,7 @@ function findRootOwnerId(node) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popups/useTriggerFocusGuards.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/useTriggerFocusGuards.mjs
 /**
 * Minimal store interface required by the focus guard hook.
 * Both PopoverStore and MenuStore satisfy this interface.
@@ -3132,7 +3132,7 @@ function useTriggerFocusGuards(store, triggerElementRef) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/useMixedToggleClickHandler.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useMixedToggleClickHandler.mjs
 /**
 * Returns `click` and `mousedown` handlers that fix the behavior of triggers of popups that are toggled by different events.
 * For example, a button that opens a popup on mousedown and closes it on click.
@@ -3167,7 +3167,7 @@ function useMixedToggleClickHandler(params) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/menu/trigger/MenuTrigger.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/trigger/MenuTrigger.mjs
 /**
 * A button that opens the menu.
 * Renders a `<button>` element.
@@ -4576,7 +4576,7 @@ function LanguageSwitcher() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/cmdk@1.1.1_@types+react-dom_b7833f22e642c0a58838e454e2cd1ba9/node_modules/cmdk/dist/chunk-NZJY6EH4.mjs
+//#region ../../node_modules/.pnpm/cmdk@1.1.1_@types+react-dom@19.2.4_@types+react@19.2.18__@types+react@19.2.18_react-dom_b7833f22e642c0a58838e454e2cd1ba9/node_modules/cmdk/dist/chunk-NZJY6EH4.mjs
 var U = 1;
 var Y$1 = .9;
 var H = .8;
@@ -4648,7 +4648,7 @@ function isFrame(element) {
 __name$14(isFrame, "isFrame");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-compose-ref_60a8f511f5a953d1cc58e5040847ca1c/node_modules/@radix-ui/react-compose-refs/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-compose-refs@1.1.5_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-compose-refs/dist/index.mjs
 var __defProp$13 = Object.defineProperty;
 var __name$13 = (target, value) => __defProp$13(target, "name", {
 	value,
@@ -4683,7 +4683,7 @@ function useComposedRefs(...refs) {
 __name$13(useComposedRefs, "useComposedRefs");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-context@1.2_dc174a77f999d3bc0470f0b9c664f7ff/node_modules/@radix-ui/react-context/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-context@1.2.2_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-context/dist/index.mjs
 var __defProp$12 = Object.defineProperty;
 var __name$12 = (target, value) => __defProp$12(target, "name", {
 	value,
@@ -4786,7 +4786,7 @@ function composeContextScopes(...scopes) {
 __name$12(composeContextScopes, "composeContextScopes");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-use-layout-_c99e7a4bfc0168fd072fc8506ded8cde/node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-use-layout-effect@1.1.4_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs
 var useLayoutEffect2 = globalThis?.document ? React.useLayoutEffect : () => {};
 
 //#endregion
@@ -4808,7 +4808,7 @@ function useId$1(deterministicId) {
 __name$11(useId$1, "useId");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-use-effect-_e8d5e8242c04825bf34212c7f6280f14/node_modules/@radix-ui/react-use-effect-event/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-use-effect-event@0.0.5_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-use-effect-event/dist/index.mjs
 var __defProp$10 = Object.defineProperty;
 var __name$10 = (target, value) => __defProp$10(target, "name", {
 	value,
@@ -4832,7 +4832,7 @@ function useEffectEvent(callback) {
 __name$10(useEffectEvent, "useEffectEvent");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-use-control_22187853d61b94632003c277d0370b10/node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-use-controllable-state@1.2.6_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
 var __defProp$9 = Object.defineProperty;
 var __name$9 = (target, value) => __defProp$9(target, "name", {
 	value,
@@ -5065,7 +5065,7 @@ var createSlottableError = /* @__PURE__ */ __name$8((ownerName) => {
 var use = React[" use ".trim().toString()];
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-primitive@2_89d529a1bae70a6b01b956c8b2bdbce1/node_modules/@radix-ui/react-primitive/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-primitive@2.1.10_@types+react-dom@19.2.4_@types+react@19.2.18__@types+r_89d529a1bae70a6b01b956c8b2bdbce1/node_modules/@radix-ui/react-primitive/dist/index.mjs
 var __defProp$7 = Object.defineProperty;
 var __name$7 = (target, value) => __defProp$7(target, "name", {
 	value,
@@ -5112,7 +5112,7 @@ function dispatchDiscreteCustomEvent(target, event) {
 __name$7(dispatchDiscreteCustomEvent, "dispatchDiscreteCustomEvent");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-use-callbac_b03f33a0fc5867b4ab17368fb2aecc43/node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-use-callback-ref@1.1.4_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs
 var __defProp$6 = Object.defineProperty;
 var __name$6 = (target, value) => __defProp$6(target, "name", {
 	value,
@@ -5128,7 +5128,7 @@ function useCallbackRef$1(callback) {
 __name$6(useCallbackRef$1, "useCallbackRef");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-dismissable_40e495cae3a960f65f80435c18b02650/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-dismissable-layer@1.1.19_@types+react-dom@19.2.4_@types+react@19.2.18___40e495cae3a960f65f80435c18b02650/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs
 var __defProp$5 = Object.defineProperty;
 var __name$5 = (target, value) => __defProp$5(target, "name", {
 	value,
@@ -5393,7 +5393,7 @@ function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
 __name$5(handleAndDispatchCustomEvent, "handleAndDispatchCustomEvent");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-focus-scope_3b4e29b84c639c7da7ed6c275ef9f34b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-focus-scope@1.1.16_@types+react-dom@19.2.4_@types+react@19.2.18__@types_3b4e29b84c639c7da7ed6c275ef9f34b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs
 var __defProp$4 = Object.defineProperty;
 var __name$4 = (target, value) => __defProp$4(target, "name", {
 	value,
@@ -5600,7 +5600,7 @@ function removeLinks(items) {
 __name$4(removeLinks, "removeLinks");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-portal@1.1._7d49bbd59f67da7ea06e84940374bb40/node_modules/@radix-ui/react-portal/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-portal@1.1.17_@types+react-dom@19.2.4_@types+react@19.2.18__@types+reac_7d49bbd59f67da7ea06e84940374bb40/node_modules/@radix-ui/react-portal/dist/index.mjs
 var __defProp$3 = Object.defineProperty;
 var __name$3 = (target, value) => __defProp$3(target, "name", {
 	value,
@@ -5618,7 +5618,7 @@ var Portal = /* @__PURE__ */ React.forwardRef(/* @__PURE__ */ __name$3(function 
 }, "Portal"));
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-presence@1._c16522d094fa2977c5a9a5cd628ab890/node_modules/@radix-ui/react-presence/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-presence@1.1.10_@types+react-dom@19.2.4_@types+react@19.2.18__@types+re_c16522d094fa2977c5a9a5cd628ab890/node_modules/@radix-ui/react-presence/dist/index.mjs
 var __defProp$2 = Object.defineProperty;
 var __name$2 = (target, value) => __defProp$2(target, "name", {
 	value,
@@ -5761,7 +5761,7 @@ function getElementRef(element) {
 __name$2(getElementRef, "getElementRef");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-focus-guard_0b6dc35411495c11d7017f4d480bfd1d/node_modules/@radix-ui/react-focus-guards/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-focus-guards@1.1.6_@types+react@19.2.18_react@19.2.8/node_modules/@radix-ui/react-focus-guards/dist/index.mjs
 var __defProp$1 = Object.defineProperty;
 var __name$1 = (target, value) => __defProp$1(target, "name", {
 	value,
@@ -5838,7 +5838,7 @@ function __spreadArray(to, from, pack) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3_6765803d5ca9f56610f613c0cdac7218/node_modules/react-remove-scroll-bar/dist/es2015/constants.js
+//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3.8_@types+react@19.2.18_react@19.2.8/node_modules/react-remove-scroll-bar/dist/es2015/constants.js
 var zeroRightClassName = "right-scroll-bar-position";
 var fullWidthClassName = "width-before-scroll-bar";
 var noScrollbarsClassName = "with-scroll-bars-hidden";
@@ -6116,7 +6116,7 @@ var getNonce = function() {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_b6136bc3c152300a6c842c4b9688e211/node_modules/react-style-singleton/dist/es2015/singleton.js
+//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_@types+react@19.2.18_react@19.2.8/node_modules/react-style-singleton/dist/es2015/singleton.js
 function makeStyleTag() {
 	if (!document) return null;
 	var tag = document.createElement("style");
@@ -6156,7 +6156,7 @@ var stylesheetSingleton = function() {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_b6136bc3c152300a6c842c4b9688e211/node_modules/react-style-singleton/dist/es2015/hook.js
+//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_@types+react@19.2.18_react@19.2.8/node_modules/react-style-singleton/dist/es2015/hook.js
 /**
 * creates a hook to control style singleton
 * @see {@link styleSingleton} for a safer component version
@@ -6179,7 +6179,7 @@ var styleHookSingleton = function() {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_b6136bc3c152300a6c842c4b9688e211/node_modules/react-style-singleton/dist/es2015/component.js
+//#region ../../node_modules/.pnpm/react-style-singleton@2.2.3_@types+react@19.2.18_react@19.2.8/node_modules/react-style-singleton/dist/es2015/component.js
 /**
 * create a Component to add styles on demand
 * - styles are added when first instance is mounted
@@ -6197,7 +6197,7 @@ var styleSingleton = function() {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3_6765803d5ca9f56610f613c0cdac7218/node_modules/react-remove-scroll-bar/dist/es2015/utils.js
+//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3.8_@types+react@19.2.18_react@19.2.8/node_modules/react-remove-scroll-bar/dist/es2015/utils.js
 var zeroGap = {
 	left: 0,
 	top: 0,
@@ -6233,7 +6233,7 @@ var getGapWidth = function(gapMode) {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3_6765803d5ca9f56610f613c0cdac7218/node_modules/react-remove-scroll-bar/dist/es2015/component.js
+//#region ../../node_modules/.pnpm/react-remove-scroll-bar@2.3.8_@types+react@19.2.18_react@19.2.8/node_modules/react-remove-scroll-bar/dist/es2015/component.js
 var Style = styleSingleton();
 var lockAttribute = "data-scroll-locked";
 var getStyles = function(_a, allowRelative, gapMode, important) {
@@ -6648,7 +6648,7 @@ var hideOthers = function(originalTarget, parentNode, markerName) {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@radix-ui+react-dialog@1.1._f43cda4f5f60c6fd8f384ced683c6d90/node_modules/@radix-ui/react-dialog/dist/index.mjs
+//#region ../../node_modules/.pnpm/@radix-ui+react-dialog@1.1.23_@types+react-dom@19.2.4_@types+react@19.2.18__@types+reac_f43cda4f5f60c6fd8f384ced683c6d90/node_modules/@radix-ui/react-dialog/dist/index.mjs
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", {
 	value,
@@ -6839,7 +6839,7 @@ function getState(open) {
 __name(getState, "getState");
 
 //#endregion
-//#region ../../node_modules/.pnpm/cmdk@1.1.1_@types+react-dom_b7833f22e642c0a58838e454e2cd1ba9/node_modules/cmdk/dist/index.mjs
+//#region ../../node_modules/.pnpm/cmdk@1.1.1_@types+react-dom@19.2.4_@types+react@19.2.18__@types+react@19.2.18_react-dom_b7833f22e642c0a58838e454e2cd1ba9/node_modules/cmdk/dist/index.mjs
 var N = "[cmdk-group=\"\"]";
 var Y = "[cmdk-group-items=\"\"]";
 var be = "[cmdk-group-heading=\"\"]";
@@ -8108,9 +8108,26 @@ function getOperation(key) {
 	const [method, ...rest] = key.trim().split(/\s+/);
 	return OPENAPI_OPERATIONS[`${method.toUpperCase()} ${rest.join(" ")}`];
 }
-function hasParameters(operation) {
-	const { query, path, header, cookie } = operation.parameters;
-	return query.length + path.length + header.length + cookie.length > 0 || operation.security.length > 0;
+/** Parameter groups shared by the renderer and table of contents. */
+function operationParameterSections(operation) {
+	return [
+		{
+			location: "header",
+			name: "Headers"
+		},
+		{
+			location: "path",
+			name: "Path parameters"
+		},
+		{
+			location: "query",
+			name: "Query parameters"
+		},
+		{
+			location: "cookie",
+			name: "Cookie parameters"
+		}
+	].filter(({ location }) => operation.parameters[location].length > 0 || location === "header" && operation.security.length > 0);
 }
 /**
 * Section headings for an operation, in render order. The single source of
@@ -8120,7 +8137,7 @@ function hasParameters(operation) {
 function operationSections(operation) {
 	const slugger = createSlugger();
 	return [
-		hasParameters(operation) ? "Parameters" : void 0,
+		...operationParameterSections(operation).map((section) => section.name),
 		operation.requestBody ? "Request body" : void 0,
 		operation.responses.length ? "Responses" : void 0,
 		operation.samples.length ? "Code samples" : void 0
@@ -8133,12 +8150,6 @@ function operationSections(operation) {
 
 //#endregion
 //#region src/components/OpenApiOperation.tsx
-const PARAM_LOCATIONS = [
-	"path",
-	"query",
-	"header",
-	"cookie"
-];
 function FieldChildren({ node }) {
 	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		node.description,
@@ -8152,25 +8163,23 @@ function FieldChildren({ node }) {
 		}),
 		node.children && node.children.length > 0 && /* @__PURE__ */ jsx(Expandable, {
 			title: "properties",
-			children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type))
+			children: /* @__PURE__ */ jsx(SchemaTable, { nodes: node.children })
 		})
 	] });
 }
-function SchemaField({ node }) {
-	const hasDetails = Boolean(node.description || node.enum?.length || node.children?.length);
-	return /* @__PURE__ */ jsx(ResponseField, {
+function SchemaTable({ nodes }) {
+	return /* @__PURE__ */ jsx(PropertiesTable, { children: nodes.map((node) => /* @__PURE__ */ jsx(PropertiesTable.Row, {
 		name: node.name || node.type,
-		type: node.name ? node.type : void 0,
+		type: node.type,
 		required: node.required,
 		deprecated: node.deprecated,
 		default: node.default,
-		children: hasDetails ? /* @__PURE__ */ jsx(FieldChildren, { node }) : null
-	});
+		children: /* @__PURE__ */ jsx(FieldChildren, { node })
+	}, node.name || node.type)) });
 }
 /** Renders a schema tree: a root object's properties, or the node itself. */
 function SchemaFields({ node }) {
-	if (!node.name && node.children?.length) return /* @__PURE__ */ jsx(Fragment$1, { children: node.children.map((child) => /* @__PURE__ */ jsx(SchemaField, { node: child }, child.name || child.type)) });
-	return /* @__PURE__ */ jsx(SchemaField, { node });
+	return /* @__PURE__ */ jsx(SchemaTable, { nodes: !node.name && node.children?.length ? node.children : [node] });
 }
 function HighlightedCode({ language, title, html, source, lineCount }) {
 	return /* @__PURE__ */ jsx(CodeBlock, {
@@ -8189,35 +8198,29 @@ function HighlightedCode({ language, title, html, source, lineCount }) {
 /** The generated reference for one API operation, rendered under the page body. */
 function OpenApiOperation({ operation }) {
 	const sections = new Map(operationSections(operation).map((entry) => [entry.name, entry.id]));
-	const showParameters = sections.has("Parameters");
 	return /* @__PURE__ */ jsxs("div", {
 		className: "docs-markdown",
 		children: [
-			showParameters && /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", {
-				id: sections.get("Parameters"),
-				children: "Parameters"
-			}), /* @__PURE__ */ jsxs("div", {
-				className: styles.fieldGroup,
-				children: [operation.security.length > 0 && /* @__PURE__ */ jsxs(ParamField, {
-					header: "Authorization",
-					type: "string",
-					required: true,
-					children: [
-						"Authentication credentials, e.g. ",
-						/* @__PURE__ */ jsx("code", { children: "Bearer <token>" }),
-						"."
-					]
-				}), PARAM_LOCATIONS.map((location) => operation.parameters[location].map((parameter) => /* @__PURE__ */ jsxs(ParamField, {
-					[location]: parameter.name,
-					type: parameter.type,
-					required: parameter.required,
-					children: [/* @__PURE__ */ jsx(FieldChildren, { node: {
-						...parameter,
-						name: void 0,
-						description: void 0
-					} }), parameter.description]
-				}, `${location}-${parameter.name}`)))]
-			})] }),
+			operationParameterSections(operation).map(({ location, name }) => /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", {
+				id: sections.get(name),
+				children: name
+			}), /* @__PURE__ */ jsxs(PropertiesTable, { children: [location === "header" && operation.security.length > 0 && /* @__PURE__ */ jsxs(PropertiesTable.Row, {
+				name: "Authorization",
+				type: "string",
+				required: true,
+				children: [
+					"Authentication credentials, e.g. ",
+					/* @__PURE__ */ jsx("code", { children: "Bearer <token>" }),
+					"."
+				]
+			}), operation.parameters[location].map((parameter) => /* @__PURE__ */ jsx(PropertiesTable.Row, {
+				name: parameter.name || parameter.type,
+				type: parameter.type,
+				required: parameter.required,
+				deprecated: parameter.deprecated,
+				default: parameter.default,
+				children: /* @__PURE__ */ jsx(FieldChildren, { node: parameter })
+			}, parameter.name))] })] }, location)),
 			operation.requestBody && /* @__PURE__ */ jsxs("section", { children: [
 				/* @__PURE__ */ jsx("h2", {
 					id: sections.get("Request body"),
@@ -8248,10 +8251,7 @@ function OpenApiOperation({ operation }) {
 							children: response.description
 						})]
 					}),
-					response.schema && /* @__PURE__ */ jsx("div", {
-						className: styles.fieldGroup,
-						children: /* @__PURE__ */ jsx(SchemaFields, { node: response.schema })
-					}),
+					response.schema && /* @__PURE__ */ jsx(SchemaFields, { node: response.schema }),
 					response.example && /* @__PURE__ */ jsx(HighlightedCode, {
 						language: "json",
 						title: `${response.status} example`,

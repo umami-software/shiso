@@ -45,7 +45,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/router/url.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/router/url.js
 /**
 * react-router v8.3.0
 *
@@ -63,7 +63,7 @@ function normalizeProtocolRelativeUrl(url, protocol) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/router/history.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/router/history.js
 /**
 * react-router v8.3.0
 *
@@ -295,7 +295,7 @@ function createBrowserURLImpl(windowImpl, to, isAbsolute = false) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/router/utils.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/router/utils.js
 /**
 * react-router v8.3.0
 *
@@ -709,7 +709,7 @@ function parseToInfo(_to, basename) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/router/router.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/router/router.js
 /**
 * react-router v8.3.0
 *
@@ -750,7 +750,7 @@ function hasInvalidProtocol(location) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/context.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/context.js
 /**
 * react-router v8.3.0
 *
@@ -789,7 +789,7 @@ const RouteErrorContext = React$1.createContext(null);
 RouteErrorContext.displayName = "RouteError";
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/errors.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/errors.js
 /**
 * react-router v8.3.0
 *
@@ -817,7 +817,7 @@ function decodeRouteErrorResponseDigest(digest) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/hooks.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/hooks.js
 /**
 * react-router v8.3.0
 *
@@ -1533,7 +1533,7 @@ function warningOnce(key, cond, message) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/components.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/components.js
 /**
 * react-router v8.3.0
 *
@@ -1849,7 +1849,7 @@ function createRoutesFromChildren(children, parentPath = []) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/dom.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/dom.js
 /**
 * react-router v8.3.0
 *
@@ -1991,7 +1991,7 @@ function getFormSubmissionInfo(target, basename) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/invariant.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/invariant.js
 /**
 * react-router v8.3.0
 *
@@ -2007,7 +2007,7 @@ function invariant(value, message) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/markup.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/markup.js
 /**
 * react-router v8.3.0
 *
@@ -2031,7 +2031,7 @@ function escapeHtml(html) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/single-fetch.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/single-fetch.js
 /**
 * react-router v8.3.0
 *
@@ -2050,7 +2050,7 @@ function singleFetchUrl(reqUrl, extension) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/routeModules.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/routeModules.js
 /**
 * react-router v8.3.0
 *
@@ -2081,7 +2081,7 @@ async function loadRouteModule(route, routeModulesCache) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/links.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/links.js
 /**
 * react-router v8.3.0
 *
@@ -2183,7 +2183,7 @@ function dedupeLinkDescriptors(descriptors, preloads) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/ssr/components.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/ssr/components.js
 /**
 * react-router v8.3.0
 *
@@ -2443,7 +2443,7 @@ function mergeRefs(...refs) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/lib.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/lib.js
 /**
 * react-router v8.3.0
 *
@@ -3813,7 +3813,7 @@ function getFrameElement(win) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/safeReact.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
 /**
 * A clone of the React namespace for reading APIs that may be missing in older
 * supported React versions. Bundlers can rewrite direct `React.someNewApi`
@@ -3825,7 +3825,7 @@ function getFrameElement(win) {
 const SafeReact = { ...React$1 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useRefWithInit.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
 const UNINITIALIZED = {};
 /**
 * A React.useRef() that is initialized with a function. Note that it accepts an optional
@@ -3841,7 +3841,7 @@ function useRefWithInit(init, initArg) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useStableCallback.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useStableCallback.mjs
 const useInsertionEffect = SafeReact.useInsertionEffect;
 const useSafeInsertionEffect = useInsertionEffect && useInsertionEffect !== SafeReact.useLayoutEffect ? useInsertionEffect : (fn) => fn();
 /**
@@ -3876,7 +3876,7 @@ function assertNotCalled() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/error.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/error.mjs
 let set$1;
 set$1 = /* @__PURE__ */ new Set();
 function error(...messages) {
@@ -3890,12 +3890,12 @@ function error(...messages) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
 const noop = () => {};
 const useIsoLayoutEffect = typeof document !== "undefined" ? React$1.useLayoutEffect : noop;
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/mergeObjects.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/mergeObjects.mjs
 function mergeObjects(a, b) {
 	if (a && !b) return a;
 	if (!a && b) return b;
@@ -3906,7 +3906,7 @@ function mergeObjects(a, b) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/merge-props/mergeProps.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/merge-props/mergeProps.mjs
 const EMPTY_PROPS = {};
 /**
 * Merges multiple sets of React props. It follows the Object.assign pattern where the rightmost object's fields overwrite
@@ -4058,7 +4058,7 @@ function isSyntheticEvent(event) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
 const CompositeRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 CompositeRootContext.displayName = "CompositeRootContext";
 function useCompositeRootContext(optional = false) {
@@ -4068,7 +4068,7 @@ function useCompositeRootContext(optional = false) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
 function useFocusableWhenDisabled(parameters) {
 	const { focusableWhenDisabled, disabled, composite = false, tabIndex: tabIndexProp = 0, isNativeButton } = parameters;
 	const isFocusableComposite = composite && focusableWhenDisabled !== false;
@@ -4096,13 +4096,13 @@ function useFocusableWhenDisabled(parameters) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/owner.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/owner.mjs
 function ownerDocument(node) {
 	return node?.ownerDocument || document;
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/dispatchClickWithModifiers.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/dispatchClickWithModifiers.mjs
 /**
 * Dispatches a constructed click on the target so it carries the source event's
 * modifier state, which `click()` always reports as unpressed. Like `click()`,
@@ -4126,7 +4126,7 @@ function dispatchClickWithModifiers(target, sourceEvent, { detail = 0 } = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/use-button/useButton.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/use-button/useButton.mjs
 function useButton(parameters = {}) {
 	const { disabled = false, focusableWhenDisabled, tabIndex = 0, native: isNativeButton = true, composite: compositeProp } = parameters;
 	const elementRef = React$1.useRef(null);
@@ -4252,7 +4252,7 @@ function isValidLinkElement(elem) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useMergedRefs.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 /**
 * Merges refs into a single memoized callback ref or `null`.
 * This makes sure multiple refs are updated together and have the same value.
@@ -4338,14 +4338,14 @@ function update(forkRef, refs) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/reactVersion.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
 const majorVersion = parseInt(React$1.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
 	return majorVersion >= reactVersionToCheck;
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/getReactElementRef.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 /**
 * Extracts the `ref` from a React element, handling different React versions.
 */
@@ -4357,7 +4357,7 @@ function getReactElementRef(element) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/warn.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/warn.mjs
 let set;
 set = /* @__PURE__ */ new Set();
 function warn(...messages) {
@@ -4371,13 +4371,13 @@ function warn(...messages) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/empty.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/empty.mjs
 function NOOP() {}
 const EMPTY_ARRAY$1 = Object.freeze([]);
 const EMPTY_OBJECT = Object.freeze({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/getStateAttributesProps.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/getStateAttributesProps.mjs
 function getStateAttributesProps(state, customMapping) {
 	const props = {};
 	for (const key in state) {
@@ -4394,7 +4394,7 @@ function getStateAttributesProps(state, customMapping) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/resolveClassName.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/resolveClassName.mjs
 /**
 * If the provided className is a string, it will be returned as is.
 * Otherwise, the function will call the className function with the state as the first argument.
@@ -4407,7 +4407,7 @@ function resolveClassName(className, state) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/resolveStyle.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/resolveStyle.mjs
 /**
 * If the provided style is an object, it will be returned as is.
 * Otherwise, the function will call the style function with the state as the first argument.
@@ -4420,7 +4420,7 @@ function resolveStyle(style, state) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useRenderElement.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
 /**
 * Renders a Base UI element.
 *
@@ -4508,7 +4508,7 @@ function renderTag(Tag, props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/button/Button.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/button/Button.mjs
 /**
 * A button component that can be used to trigger actions.
 * Renders a `<button>` element.
@@ -8030,7 +8030,7 @@ function Button$1({ className, variant = "default", size = "default", ...props }
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useOnMount.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnMount.mjs
 /**
 * A React.useEffect equivalent that runs once, when the component is mounted.
 */
@@ -8039,7 +8039,7 @@ function useOnMount(fn) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useTimeout.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useTimeout.mjs
 const EMPTY$1 = 0;
 var Timeout = class Timeout {
 	static create() {
@@ -8079,7 +8079,7 @@ function useTimeout() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useId.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
 let globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
 	const [defaultId, setDefaultId] = React$1.useState(idOverride);
@@ -8108,7 +8108,7 @@ function useId$1(idOverride, prefix) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useBaseUiId.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useBaseUiId.mjs
 /**
 * Wraps `useId` and prefixes generated `id`s with `base-ui-`
 * @param {string | undefined} idOverride overrides the generated id when provided
@@ -8119,7 +8119,7 @@ function useBaseUiId(idOverride) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/platform/shared.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/shared.mjs
 /**
 * Reads `navigator.userAgent` / `navigator.platform` (legacy but universally
 * supported) into a normalized shape. In development, prefers the modern
@@ -8155,7 +8155,7 @@ const lowerUserAgent = userAgent.toLowerCase();
 const lowerPlatform = platform$1.toLowerCase();
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/platform/os.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/os.mjs
 /** iPhone, iPad (including iPadOS 13+ reporting as macOS), iPod. */
 const ios = /^i(os$|p)/.test(lowerPlatform) || lowerPlatform === "macintel" && maxTouchPoints > 1;
 /** Android phones, tablets, and embedded Android browsers. */
@@ -8171,7 +8171,7 @@ const linux = !android && /^(linux|chrome os)/.test(lowerPlatform);
 const apple = mac || ios;
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/platform/engine.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/engine.mjs
 /** WebKit: Safari, all iOS browsers, GNOME Web. Excludes Blink. */
 const webkit = typeof CSS !== "undefined" && !!CSS.supports?.("-webkit-backdrop-filter:none");
 /** Gecko: Firefox. */
@@ -8180,7 +8180,7 @@ const gecko = !webkit && lowerUserAgent.includes("firefox");
 const blink = !webkit && lowerUserAgent.includes("chrom");
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/platform/screen-reader.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/screen-reader.mjs
 /**
 * The user *may* be using VoiceOver — actual activation is not detectable.
 * True on any Apple platform (macOS, iOS, iPadOS).
@@ -8188,12 +8188,12 @@ const blink = !webkit && lowerUserAgent.includes("chrom");
 const voiceOver = apple;
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/platform/env.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/env.mjs
 /** Running in jsdom or HappyDOM (used by unit tests). */
 const jsdom = /jsdom|happydom/.test(lowerUserAgent);
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/constants.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/constants.mjs
 const FOCUSABLE_ATTRIBUTE = "data-base-ui-focusable";
 const TYPEABLE_SELECTOR = "input:not([type='hidden']):not([disabled]),[contenteditable]:not([contenteditable='false']),textarea:not([disabled])";
 const ARROW_LEFT$1 = "ArrowLeft";
@@ -8202,7 +8202,7 @@ const ARROW_UP$1 = "ArrowUp";
 const ARROW_DOWN$1 = "ArrowDown";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/shadowDom.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/shadowDom.mjs
 function activeElement(doc) {
 	let element = doc.activeElement;
 	while (element?.shadowRoot?.activeElement != null) element = element.shadowRoot.activeElement;
@@ -8227,7 +8227,7 @@ function getTarget(event) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/element.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/element.mjs
 function isTargetInsideEnabledTrigger(target, triggerElements) {
 	if (!isElement(target)) return false;
 	const targetElement = target;
@@ -8268,7 +8268,7 @@ function getFloatingFocusElement(floatingElement) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/nodes.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/nodes.mjs
 function getNodeChildren(nodes, id, onlyOpenChildren = true) {
 	return nodes.filter((node) => node.parentId === id).flatMap((child) => [...!onlyOpenChildren || child.context?.open ? [child] : [], ...getNodeChildren(nodes, child.id, onlyOpenChildren)]);
 }
@@ -8284,7 +8284,7 @@ function getNodeAncestors(nodes, id) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/event.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/event.mjs
 function stopEvent(event) {
 	event.preventDefault();
 	event.stopPropagation();
@@ -8432,7 +8432,7 @@ function rectToClientRect(rect) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/composite.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/composite.mjs
 function isIndexOutOfListBounds(list, index) {
 	return index < 0 || index >= list.length;
 }
@@ -8471,7 +8471,7 @@ function isElementVisible(element, styles = element ? getComputedStyle$1(element
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/tabbable.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/tabbable.mjs
 const CANDIDATE_SELECTOR = "a[href],button,input,select,textarea,summary,details,iframe,object,embed,[tabindex],[contenteditable]:not([contenteditable=\"false\"]),audio[controls],video[controls]";
 function getParentElement(element) {
 	const assignedSlot = element.assignedSlot;
@@ -8617,7 +8617,7 @@ function enableFocusInside(container) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
 const DirectionContext = /*#__PURE__*/ React$1.createContext(void 0);
 DirectionContext.displayName = "DirectionContext";
 function useDirection() {
@@ -8625,7 +8625,7 @@ function useDirection() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/addEventListener.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/addEventListener.mjs
 /**
 * Adds an event listener and returns a cleanup function to remove it.
 */
@@ -8686,13 +8686,6 @@ const styles = {
 	frame: "relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2",
 	frameContent: "relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full",
 	frameCaption: "relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold",
-	field: "my-3",
-	fieldGroup: "my-4 divide-y divide-border overflow-hidden rounded-lg border border-border text-sm leading-6 [&>[data-slot=field-group-item]]:my-0 [&>[data-slot=field-group-item]]:px-4 [&>[data-slot=field-group-item]]:py-3 [&_[data-slot=field-group-body]]:mt-2 [&_[data-slot=field-group-type]]:text-xs",
-	paramField: "my-3",
-	fieldHeader: "flex flex-wrap items-center gap-2",
-	fieldBody: "mt-3",
-	fieldType: "text-[0.9rem] text-muted-foreground",
-	fieldName: "font-bold text-foreground",
 	code: "rounded-sm bg-[color-mix(in_srgb,currentColor_4%,transparent)] px-[0.35rem] py-[0.1rem] text-sm text-foreground font-mono",
 	steps: "relative my-4 flex flex-col gap-5 before:absolute before:top-4 before:bottom-4 before:left-4 before:w-px before:-translate-x-1/2 before:bg-border before:content-['']",
 	step: "relative flex items-start gap-4",
@@ -8868,7 +8861,7 @@ function Mermaid({ chart, title, actions, placement = "bottom-right", children }
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useControlled.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useControlled.mjs
 function useControlled({ controlled, default: defaultProp, name, state = "value" }) {
 	const { current: isControlled } = React$1.useRef(controlled !== void 0);
 	const [valueState, setValue] = React$1.useState(defaultProp);
@@ -8917,7 +8910,7 @@ function serializeToDevModeString(input) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
 const CompositeListContext = /*#__PURE__*/ React$1.createContext({
 	register: () => {},
 	unregister: () => {},
@@ -8930,7 +8923,7 @@ function useCompositeListContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
 /**
 * Provides context for a list of items in a composite component.
 */
@@ -9097,7 +9090,7 @@ function sortByDocumentPosition(a, b) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/root/AccordionRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/root/AccordionRootContext.mjs
 const AccordionRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 AccordionRootContext.displayName = "AccordionRootContext";
 function useAccordionRootContext() {
@@ -9107,7 +9100,7 @@ function useAccordionRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/root/AccordionRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/root/AccordionRoot.mjs
 const rootStateAttributesMapping = { value: () => null };
 /**
 * Groups all parts of the accordion.
@@ -9190,7 +9183,7 @@ const AccordionRoot = /*#__PURE__*/ React$1.forwardRef(function AccordionRoot(co
 AccordionRoot.displayName = "AccordionRoot";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/reason-parts.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/reason-parts.mjs
 const none = "none";
 const triggerPress = "trigger-press";
 const triggerHover = "trigger-hover";
@@ -9209,7 +9202,7 @@ const initial = "initial";
 const imperativeAction = "imperative-action";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/createBaseUIEventDetails.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/createBaseUIEventDetails.mjs
 /**
 * Maps a change `reason` string to the corresponding native event type.
 */
@@ -9248,7 +9241,7 @@ function createChangeEventDetails(reason, event, trigger, customProperties) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useAnimationFrame.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useAnimationFrame.mjs
 /** Unlike `setTimeout`, rAF doesn't guarantee a positive integer return value, so we can't have
 * a monomorphic `uint` type with `0` meaning empty.
 * See warning note at:
@@ -9331,7 +9324,7 @@ function useAnimationFrame() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useTransitionStatus.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useTransitionStatus.mjs
 /**
 * Provides a status string for CSS animations.
 * @param open - a boolean that determines if the element is open.
@@ -9393,7 +9386,7 @@ function useTransitionStatus(open, enableIdleState = false, deferEndingState = f
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/root/useCollapsibleRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/useCollapsibleRoot.mjs
 function useCollapsibleRoot(parameters) {
 	const { open: openParam, defaultOpen, onOpenChange, disabled } = parameters;
 	const [open, setOpen] = useControlled({
@@ -9439,7 +9432,7 @@ function useCollapsibleRoot(parameters) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/root/CollapsibleRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/CollapsibleRootContext.mjs
 const CollapsibleRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 CollapsibleRootContext.displayName = "CollapsibleRootContext";
 function useCollapsibleRootContext() {
@@ -9449,7 +9442,7 @@ function useCollapsibleRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
 /**
 * Used to register a list item and its index (DOM position) in the `CompositeList`.
 */
@@ -9499,7 +9492,7 @@ function useCompositeListItem(params = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/item/AccordionItemContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItemContext.mjs
 const AccordionItemContext = /*#__PURE__*/ React$1.createContext(void 0);
 AccordionItemContext.displayName = "AccordionItemContext";
 function useAccordionItemContext() {
@@ -9509,7 +9502,7 @@ function useAccordionItemContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/stateAttributesMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/stateAttributesMapping.mjs
 let TransitionStatusDataAttributes = /*#__PURE__*/ function(TransitionStatusDataAttributes) {
 	/**
 	* Present when the component begins animating in.
@@ -9530,7 +9523,7 @@ const transitionStatusMapping = { transitionStatus(value) {
 } };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelDataAttributes.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelDataAttributes.mjs
 let CollapsiblePanelDataAttributes = function(CollapsiblePanelDataAttributes) {
 	/**
 	* Present when the collapsible panel is open.
@@ -9552,7 +9545,7 @@ let CollapsiblePanelDataAttributes = function(CollapsiblePanelDataAttributes) {
 }({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/trigger/CollapsibleTriggerDataAttributes.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/trigger/CollapsibleTriggerDataAttributes.mjs
 let CollapsibleTriggerDataAttributes = /*#__PURE__*/ function(CollapsibleTriggerDataAttributes) {
 	/**
 	* Present when the collapsible panel is open.
@@ -9562,7 +9555,7 @@ let CollapsibleTriggerDataAttributes = /*#__PURE__*/ function(CollapsibleTrigger
 }({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/collapsibleOpenStateMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/collapsibleOpenStateMapping.mjs
 const PANEL_OPEN_HOOK = { [CollapsiblePanelDataAttributes.open]: "" };
 const PANEL_CLOSED_HOOK = { [CollapsiblePanelDataAttributes.closed]: "" };
 const triggerOpenStateMapping$1 = { open(value) {
@@ -9575,7 +9568,7 @@ const collapsibleOpenStateMapping = { open(value) {
 } };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/item/AccordionItemDataAttributes.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItemDataAttributes.mjs
 let AccordionItemDataAttributes = /*#__PURE__*/ function(AccordionItemDataAttributes) {
 	/**
 	* Indicates the index of the accordion item.
@@ -9594,7 +9587,7 @@ let AccordionItemDataAttributes = /*#__PURE__*/ function(AccordionItemDataAttrib
 }({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/item/stateAttributesMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/stateAttributesMapping.mjs
 const accordionStateAttributesMapping = {
 	...collapsibleOpenStateMapping,
 	index: (value) => ({ [AccordionItemDataAttributes.index]: String(value) }),
@@ -9603,7 +9596,7 @@ const accordionStateAttributesMapping = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/item/AccordionItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItem.mjs
 /**
 * Groups an accordion header with the corresponding panel.
 * Renders a `<div>` element.
@@ -9693,7 +9686,7 @@ const AccordionItem$1 = /*#__PURE__*/ React$1.forwardRef(function AccordionItem(
 AccordionItem$1.displayName = "AccordionItem";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/header/AccordionHeader.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/header/AccordionHeader.mjs
 /**
 * A heading that labels the corresponding panel.
 * Renders an `<h3>` element.
@@ -9713,7 +9706,7 @@ const AccordionHeader = /*#__PURE__*/ React$1.forwardRef(function AccordionHeade
 AccordionHeader.displayName = "AccordionHeader";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/trigger/AccordionTrigger.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/trigger/AccordionTrigger.mjs
 /**
 * A button that opens and closes the corresponding panel.
 * Renders a `<button>` element.
@@ -9756,7 +9749,7 @@ const AccordionTrigger$1 = /*#__PURE__*/ React$1.forwardRef(function AccordionTr
 AccordionTrigger$1.displayName = "AccordionTrigger";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useValueAsRef.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useValueAsRef.mjs
 /**
 * Untracks the provided value by turning it into a ref to remove its reactivity.
 *
@@ -9780,7 +9773,7 @@ function createLatestRef(value) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/resolveRef.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/resolveRef.mjs
 /**
 * If the provided argument is a ref object, returns its `current` value.
 * Otherwise, returns the argument itself.
@@ -9791,7 +9784,7 @@ function resolveRef(maybeRef) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
 /**
 * Executes a function once all animations have finished on the provided element.
 * If an animation is canceled, waits for any replacement animations before executing.
@@ -9849,7 +9842,7 @@ function useAnimationsFinished(elementOrRef, waitForStartingStyleRemoved = false
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
 /**
 * Calls the provided function when the CSS open/close animation or transition completes.
 */
@@ -9873,7 +9866,7 @@ function useOpenChangeComplete(parameters) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/panel/useCollapsiblePanel.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/useCollapsiblePanel.mjs
 const EMPTY_DIMENSIONS = {
 	height: void 0,
 	width: void 0
@@ -10139,7 +10132,7 @@ function resetLayoutStyles(element) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/panel/AccordionPanelCssVars.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/panel/AccordionPanelCssVars.mjs
 let AccordionPanelCssVars = /*#__PURE__*/ function(AccordionPanelCssVars) {
 	/**
 	* The accordion panel's height.
@@ -10155,7 +10148,7 @@ let AccordionPanelCssVars = /*#__PURE__*/ function(AccordionPanelCssVars) {
 }({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/accordion/panel/AccordionPanel.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/panel/AccordionPanel.mjs
 /**
 * A collapsible panel with the accordion item contents.
 * Renders a `<div>` element.
@@ -10408,7 +10401,7 @@ function AccordionGroup({ children, defaultOpen = false }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/use-render/useRender.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/use-render/useRender.mjs
 /**
 * Renders a Base UI element.
 *
@@ -10956,7 +10949,7 @@ function Changelog({ children }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/root/TabsRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/TabsRootContext.mjs
 /**
 * @internal
 */
@@ -10969,11 +10962,11 @@ function useTabsRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/root/stateAttributesMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/stateAttributesMapping.mjs
 const tabsStateAttributesMapping = { tabActivationDirection: (dir) => ({ "data-activation-direction": dir }) };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
 /**
 * Groups the tabs and the corresponding panels.
 * Renders a `<div>` element.
@@ -11174,11 +11167,11 @@ function computeActivationDirection(oldValue, newValue, orientation, tabMap) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/constants.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/constants.mjs
 const ACTIVE_COMPOSITE_ITEM = "data-composite-item-active";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/item/useCompositeItem.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/item/useCompositeItem.mjs
 function useCompositeItem(params = {}) {
 	const { highlightItemOnHover, highlightedIndex, onHighlightedIndexChange } = useCompositeRootContext();
 	const { ref, index } = useCompositeListItem(params);
@@ -11204,7 +11197,7 @@ function useCompositeItem(params = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/list/TabsListContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/list/TabsListContext.mjs
 const TabsListContext = /*#__PURE__*/ React$1.createContext(void 0);
 TabsListContext.displayName = "TabsListContext";
 function useTabsListContext() {
@@ -11214,7 +11207,7 @@ function useTabsListContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
 /**
 * An individual interactive tab button that toggles the corresponding panel.
 * Renders a `<button>` element.
@@ -11334,14 +11327,14 @@ const TabsTab = /*#__PURE__*/ React$1.forwardRef(function TabsTab(componentProps
 TabsTab.displayName = "TabsTab";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/inertValue.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/inertValue.mjs
 function inertValue(value) {
 	if (isReactVersionAtLeast(19)) return value;
 	return value ? "true" : void 0;
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/panel/TabsPanel.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/panel/TabsPanel.mjs
 const stateAttributesMapping$1 = {
 	...tabsStateAttributesMapping,
 	...transitionStatusMapping
@@ -11409,13 +11402,13 @@ const TabsPanel = /*#__PURE__*/ React$1.forwardRef(function TabsPanel(componentP
 TabsPanel.displayName = "TabsPanel";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/isElementDisabled.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/isElementDisabled.mjs
 function isElementDisabled(element) {
 	return element == null || element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true";
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/composite.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/composite.mjs
 const ARROW_UP = "ArrowUp";
 const ARROW_DOWN = "ArrowDown";
 const ARROW_LEFT = "ArrowLeft";
@@ -11502,7 +11495,7 @@ function getStyles(element) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
 const EMPTY_ARRAY = [];
 function useCompositeRoot(params) {
 	const { loopFocus = true, orientation = "both", grid, onLoop, direction, highlightedIndex: externalHighlightedIndex, onHighlightedIndexChange: externalSetHighlightedIndex, rootRef: externalRef, enableHomeAndEndKeys = false, stopEventPropagation, disabledIndices, modifierKeys = EMPTY_ARRAY } = params;
@@ -11638,7 +11631,7 @@ function isModifierKeySet(event, ignoredModifierKeys) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
 function CompositeRoot(componentProps) {
 	const { render, className, style, refs = EMPTY_ARRAY$1, props = EMPTY_ARRAY$1, state = EMPTY_OBJECT, stateAttributesMapping, highlightedIndex: highlightedIndexProp, onHighlightedIndexChange: onHighlightedIndexChangeProp, orientation, grid, loopFocus, onLoop, enableHomeAndEndKeys, onMapChange: onMapChangeProp, stopEventPropagation = true, rootRef, disabledIndices, modifierKeys, highlightItemOnHover = false, tag = "div", ...elementProps } = componentProps;
 	const direction = useDirection();
@@ -11691,7 +11684,7 @@ function CompositeRoot(componentProps) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tabs/list/TabsList.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/list/TabsList.mjs
 /**
 * Groups the individual tab buttons.
 * Renders a `<div>` element.
@@ -11879,14 +11872,14 @@ function Column({ children }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/root/stateAttributesMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/stateAttributesMapping.mjs
 const collapsibleStateAttributesMapping = {
 	...collapsibleOpenStateMapping,
 	...transitionStatusMapping
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
 /**
 * Groups all parts of the collapsible.
 * Renders a `<div>` element.
@@ -11934,7 +11927,7 @@ const CollapsibleRoot = /*#__PURE__*/ React$1.forwardRef(function CollapsibleRoo
 CollapsibleRoot.displayName = "CollapsibleRoot";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/trigger/CollapsibleTrigger.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/trigger/CollapsibleTrigger.mjs
 const stateAttributesMapping = {
 	...triggerOpenStateMapping$1,
 	...transitionStatusMapping
@@ -11971,7 +11964,7 @@ const CollapsibleTrigger$1 = /*#__PURE__*/ React$1.forwardRef(function Collapsib
 CollapsibleTrigger$1.displayName = "CollapsibleTrigger";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelCssVars.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelCssVars.mjs
 let CollapsiblePanelCssVars = /*#__PURE__*/ function(CollapsiblePanelCssVars) {
 	/**
 	* The collapsible panel's height.
@@ -11987,7 +11980,7 @@ let CollapsiblePanelCssVars = /*#__PURE__*/ function(CollapsiblePanelCssVars) {
 }({});
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
 /**
 * A panel with the collapsible contents.
 * Renders a `<div>` element.
@@ -12266,42 +12259,7 @@ function Panel({ children }) {
 }
 
 //#endregion
-//#region src/components/docs/ParamField.tsx
-function ParamField({ name, query, path, header, body, type, required, children }) {
-	const label = name || query || path || header || body || "parameter";
-	const location = query ? "query" : path ? "path" : header ? "header" : body ? "body" : void 0;
-	return /* @__PURE__ */ jsxs("div", {
-		className: styles.paramField,
-		"data-slot": "field-group-item",
-		children: [/* @__PURE__ */ jsxs("div", {
-			className: styles.fieldHeader,
-			children: [
-				/* @__PURE__ */ jsx("span", {
-					className: styles.fieldName,
-					children: label
-				}),
-				location ? /* @__PURE__ */ jsx(Badge, {
-					size: "sm",
-					children: location
-				}) : null,
-				type ? /* @__PURE__ */ jsx("span", {
-					className: styles.fieldType,
-					"data-slot": "field-group-type",
-					children: decodeHtmlEntities(type)
-				}) : null,
-				required ? /* @__PURE__ */ jsx(Badge, {
-					size: "sm",
-					tone: "primary",
-					children: "required"
-				}) : null
-			]
-		}), children ? /* @__PURE__ */ jsx("div", {
-			className: styles.fieldBody,
-			"data-slot": "field-group-body",
-			children
-		}) : null]
-	});
-}
+//#region src/components/docs/Param.tsx
 function Param({ children }) {
 	return /* @__PURE__ */ jsx("code", {
 		className: styles.code,
@@ -12324,66 +12282,25 @@ function PropertiesTable({ children }) {
 			className: "m-0 min-w-[40rem] table-fixed",
 			children: [/* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/5",
+					className: "w-[30%]",
 					children: "Name"
 				}),
 				/* @__PURE__ */ jsx("th", {
-					className: "w-1/4",
+					className: "w-[15%]",
 					children: "Type"
 				}),
 				/* @__PURE__ */ jsx("th", { children: "Description" })
-			] }) }), /* @__PURE__ */ jsx("tbody", { children: rows.map((row) => {
-				const { name, type, required, deprecated, children: description } = row.props;
-				const defaultValue = displayValue(row.props.default);
-				return /* @__PURE__ */ jsxs("tr", { children: [
-					/* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsxs("span", {
-						className: "inline-flex flex-wrap items-center gap-2",
-						children: [
-							name,
-							required ? /* @__PURE__ */ jsx(Badge, {
-								size: "sm",
-								tone: "primary",
-								children: "required"
-							}) : null,
-							deprecated ? /* @__PURE__ */ jsx(Badge, {
-								size: "sm",
-								children: "deprecated"
-							}) : null
-						]
-					}) }),
-					/* @__PURE__ */ jsx("td", { children: displayValue(type) }),
-					/* @__PURE__ */ jsxs("td", {
-						className: "[&_p]:m-0",
-						children: [description, defaultValue ? /* @__PURE__ */ jsxs("span", {
-							className: "mt-1 block text-muted-foreground",
-							children: ["Default: ", defaultValue]
-						}) : null]
-					})
-				] }, row.key ?? name);
-			}) })]
+			] }) }), /* @__PURE__ */ jsx("tbody", { children: rows })]
 		})
 	});
 }
-
-//#endregion
-//#region src/components/docs/ResponseField.tsx
-function ResponseField({ name, type, required, deprecated, children }) {
-	const normalizedType = typeof type === "string" ? decodeHtmlEntities(type) : type === void 0 || type === null ? void 0 : String(type);
-	return /* @__PURE__ */ jsxs("div", {
-		className: styles.field,
-		"data-slot": "field-group-item",
-		children: [/* @__PURE__ */ jsxs("div", {
-			className: styles.fieldHeader,
+function PropertiesTableRow({ name, type, required, deprecated, default: value, children }) {
+	const defaultValue = displayValue(value);
+	return /* @__PURE__ */ jsxs("tr", { children: [
+		/* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsxs("span", {
+			className: "inline-flex flex-wrap items-center gap-2",
 			children: [
-				/* @__PURE__ */ jsx("span", {
-					className: styles.fieldName,
-					children: name
-				}),
-				normalizedType ? /* @__PURE__ */ jsx("span", {
-					className: styles.fieldType,
-					"data-slot": "field-group-type",
-					children: normalizedType
-				}) : null,
+				name,
 				required ? /* @__PURE__ */ jsx(Badge, {
 					size: "sm",
 					tone: "primary",
@@ -12394,13 +12311,18 @@ function ResponseField({ name, type, required, deprecated, children }) {
 					children: "deprecated"
 				}) : null
 			]
-		}), children ? /* @__PURE__ */ jsx("div", {
-			className: styles.fieldBody,
-			"data-slot": "field-group-body",
-			children
-		}) : null]
-	});
+		}) }),
+		/* @__PURE__ */ jsx("td", { children: displayValue(type) }),
+		/* @__PURE__ */ jsxs("td", {
+			className: "[&_p]:m-0",
+			children: [children, defaultValue ? /* @__PURE__ */ jsxs("span", {
+				className: "mt-1 block text-muted-foreground",
+				children: ["Default: ", defaultValue]
+			}) : null]
+		})
+	] });
 }
+PropertiesTable.Row = PropertiesTableRow;
 
 //#endregion
 //#region src/components/docs/Steps.tsx
@@ -12553,7 +12475,7 @@ function Tiles({ children, cols = 2 }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/fastHooks.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/fastHooks.mjs
 const hooks = [];
 let currentInstance = void 0;
 function getInstance() {
@@ -12646,7 +12568,7 @@ function createInstance() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
 const TooltipRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 TooltipRootContext.displayName = "TooltipRootContext";
 function useTooltipRootContext(optional) {
@@ -12656,7 +12578,7 @@ function useTooltipRootContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverShared.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverShared.mjs
 function resolveValue(value, pointerType) {
 	if (pointerType != null && !isMouseLikePointerType(pointerType)) return 0;
 	if (typeof value === "function") return value();
@@ -12679,7 +12601,7 @@ function isHoverOpenEvent(openEventType) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
 const FloatingDelayGroupContext = /*#__PURE__*/ React$1.createContext({
 	hasProvider: false,
 	timeoutMs: 0,
@@ -12851,7 +12773,7 @@ function useDelayGroup(context, options = { open: false }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/mergeCleanups.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/mergeCleanups.mjs
 /**
 * Combines multiple cleanup functions into a single cleanup function.
 */
@@ -12865,7 +12787,7 @@ function mergeCleanups(...cleanups) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/visuallyHidden.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/visuallyHidden.mjs
 const visuallyHiddenBase = {
 	clipPath: "inset(50%)",
 	overflow: "hidden",
@@ -12888,7 +12810,7 @@ const visuallyHiddenInput = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/FocusGuard.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FocusGuard.mjs
 /**
 * @internal
 */
@@ -12913,13 +12835,13 @@ const FocusGuard = /*#__PURE__*/ React$1.forwardRef(function FocusGuard(props, r
 FocusGuard.displayName = "FocusGuard";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/createAttribute.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/createAttribute.mjs
 function createAttribute(name) {
 	return `data-base-ui-${name}`;
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/enqueueFocus.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/enqueueFocus.mjs
 let rafId = 0;
 function enqueueFocus(el, options = {}) {
 	const { preventScroll = false, sync = false, shouldFocus } = options;
@@ -12943,7 +12865,7 @@ function enqueueFocus(el, options = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/markOthers.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/markOthers.mjs
 const counters = {
 	inert: /* @__PURE__ */ new WeakMap(),
 	"aria-hidden": /* @__PURE__ */ new WeakMap()
@@ -13057,7 +12979,7 @@ function markOthers(avoidElements, options = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/constants.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/constants.mjs
 const DISABLED_TRANSITIONS_STYLE = { style: { transition: "none" } };
 const CLICK_TRIGGER_IDENTIFIER = "data-base-ui-click-trigger";
 const BASE_UI_SWIPE_IGNORE_ATTRIBUTE = "data-base-ui-swipe-ignore";
@@ -13088,7 +13010,7 @@ const ownerVisuallyHidden = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
 const PortalContext = /*#__PURE__*/ React$1.createContext(null);
 PortalContext.displayName = "PortalContext";
 const usePortalContext = () => React$1.useContext(PortalContext);
@@ -13232,7 +13154,7 @@ const FloatingPortal = /*#__PURE__*/ React$1.forwardRef(function FloatingPortal(
 FloatingPortal.displayName = "FloatingPortal";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
 function createEventEmitter() {
 	const map = /* @__PURE__ */ new Map();
 	return {
@@ -13250,7 +13172,7 @@ function createEventEmitter() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingTreeStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTreeStore.mjs
 /**
 * Stores and manages floating elements in a tree structure.
 * This is a backing store for the `FloatingTree` component.
@@ -13268,7 +13190,7 @@ var FloatingTreeStore = class {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
 const FloatingNodeContext = /*#__PURE__*/ React$1.createContext(null);
 FloatingNodeContext.displayName = "FloatingNodeContext";
 const FloatingTreeContext = /*#__PURE__*/ React$1.createContext(null);
@@ -13343,7 +13265,7 @@ function FloatingTree(props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingFocusManager.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingFocusManager.mjs
 function getEventType(event, lastInteractionType) {
 	const win = getWindow(getTarget(event));
 	if (event instanceof win.KeyboardEvent) return "keyboard";
@@ -13790,7 +13712,7 @@ function FloatingFocusManager(props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useClick.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useClick.mjs
 /**
 * Opens or closes the floating element when clicking the reference element.
 * @see https://floating-ui.com/docs/useClick
@@ -13869,7 +13791,7 @@ function useClick(context, props = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useClientPoint.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useClientPoint.mjs
 function createVirtualElement(domElement, data) {
 	let offsetX = null;
 	let offsetY = null;
@@ -14017,7 +13939,7 @@ function useClientPoint(context, props = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
 function alwaysFalse() {
 	return false;
 }
@@ -15306,7 +15228,7 @@ const computePosition = (reference, floating, options) => {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@floating-ui+react-dom@2.1._735e95704ae5cf22d7cb7c1194888638/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+//#region ../../node_modules/.pnpm/@floating-ui+react-dom@2.1.9_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
 var index = typeof document !== "undefined" ? useLayoutEffect : function noop() {};
 function deepEqual(a, b) {
 	if (a === b) return true;
@@ -15620,7 +15542,7 @@ function useSyncExternalStoreWithSelector(subscribe, getSnapshot, getServerSnaps
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/store/useStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/useStore.mjs
 const useStoreImplementation = isReactVersionAtLeast(19) ? useStoreFast : useStoreLegacy;
 function useStore(store, selector, a1, a2, a3) {
 	return useStoreImplementation(store, selector, a1, a2, a3);
@@ -15710,7 +15632,7 @@ function useStoreLegacy(store, selector, a1, a2, a3) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/store/Store.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/Store.mjs
 /**
 * A data store implementation that allows subscribing to state changes and updating the state.
 * It uses an observer pattern to notify subscribers when the state changes.
@@ -15801,7 +15723,7 @@ var Store = class {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/store/ReactStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/ReactStore.mjs
 /**
 * A Store that supports controlled state keys, non-reactive values and provides utility methods for React.
 */
@@ -15971,7 +15893,7 @@ var ReactStore = class extends Store {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/components/FloatingRootStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingRootStore.mjs
 const selectors$2 = {
 	open: (state) => state.open,
 	transitionStatus: (state) => state.transitionStatus,
@@ -16033,7 +15955,7 @@ var FloatingRootStore = class extends ReactStore {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
 /**
 * Keeps a FloatingRootStore in sync with the provided PopupStore.
 * Uses the provided FloatingRootStore when one exists, otherwise creates one once and updates it on every render.
@@ -16082,7 +16004,7 @@ function useSyncedFloatingRootContext(options) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
 const FOCUSABLE_POPUP_PROPS = {
 	tabIndex: -1,
 	[FOCUSABLE_ATTRIBUTE]: ""
@@ -16419,7 +16341,7 @@ function usePopupRootSync(store, open) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popups/popupTriggerMap.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/popupTriggerMap.mjs
 /**
 * Development-only reverse index of element to registered id, keyed by the owning map.
 *
@@ -16515,7 +16437,7 @@ var PopupTriggerMap = class {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/utils/getEmptyRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/getEmptyRootContext.mjs
 function getEmptyRootContext() {
 	return new FloatingRootStore({
 		open: false,
@@ -16531,7 +16453,7 @@ function getEmptyRootContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popups/store.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/store.mjs
 /**
 * State common to all popup stores.
 */
@@ -16625,7 +16547,7 @@ const popupStoreSelectors = {
 * that an inert store can be passed while detached.
 */
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popups/usePopupHandleStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/usePopupHandleStore.mjs
 /**
 * Reads the store currently exposed by a popup handle and subscribes to store-pointer changes.
 * Detached triggers use this to follow a handle as a root attaches or detaches: while no root is
@@ -16648,7 +16570,7 @@ function usePopupHandleStore(handle) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
 /**
 * Base UI's private `useFloating` path. The caller must supply the root store, so this skips the
 * internal root-context hook used by the public Floating UI-compatible API.
@@ -16769,7 +16691,7 @@ function useFloatingWithStore(options, store) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useFocus.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useFocus.mjs
 const isMacSafari = mac && webkit;
 /**
 * Opens the floating element while the reference element has focus, like CSS
@@ -16881,7 +16803,7 @@ function useFocus(context, props = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
 var HoverInteraction = class HoverInteraction {
 	constructor() {
 		this.pointerType = void 0;
@@ -16946,7 +16868,7 @@ function useHoverInteractionSharedState(store) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
 /**
 * Provides hover interactions that should be attached to the floating element.
 */
@@ -17093,7 +17015,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
 const EMPTY_REF = { current: null };
 /**
 * Provides hover interactions that should be attached to reference or trigger
@@ -17333,7 +17255,7 @@ function useHoverReferenceInteraction(context, props = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/safePolygon.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/safePolygon.mjs
 const CURSOR_SPEED_THRESHOLD = .1;
 const CURSOR_SPEED_THRESHOLD_SQUARED = CURSOR_SPEED_THRESHOLD * CURSOR_SPEED_THRESHOLD;
 const POLYGON_BUFFER = .5;
@@ -17510,7 +17432,7 @@ function safePolygon(options = {}) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
 const selectors$1 = {
 	...popupStoreSelectors,
 	disabled: (state) => state.disabled,
@@ -17570,7 +17492,7 @@ function createInitialContext$1(triggerElements) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
 /**
 * Groups all parts of the tooltip.
 * Doesn't render its own HTML element.
@@ -17678,7 +17600,7 @@ function TooltipInteractions({ store, disabled, trackCursorAxis }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/popupStateMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popupStateMapping.mjs
 let CommonPopupDataAttributes = function(CommonPopupDataAttributes) {
 	/**
 	* Present when the popup is open.
@@ -17744,7 +17666,7 @@ const popupTransitionStateMapping = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
 /**
 * Holds the provider's `delay` value. `closeDelay` is handled by the delay group.
 */
@@ -17755,7 +17677,7 @@ function useTooltipProviderContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
 const TOOLTIP_TRIGGER_IDENTIFIER = "data-base-ui-tooltip-trigger";
 function getTargetElement(event) {
 	if ("composedPath" in event) {
@@ -17921,7 +17843,7 @@ const TooltipTrigger$1 = fastComponentRef(function TooltipTrigger(componentProps
 TooltipTrigger$1.displayName = "TooltipTrigger";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
 const TooltipPortalContext = /*#__PURE__*/ React$1.createContext(void 0);
 TooltipPortalContext.displayName = "TooltipPortalContext";
 function useTooltipPortalContext() {
@@ -17931,7 +17853,7 @@ function useTooltipPortalContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
 /**
 * `FloatingPortal` includes tabbable logic handling for focus management.
 * For components that don't need tabbable logic, use `FloatingPortalLite`.
@@ -17951,7 +17873,7 @@ const FloatingPortalLite = /*#__PURE__*/ React$1.forwardRef(function FloatingPor
 FloatingPortalLite.displayName = "FloatingPortalLite";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
 /**
 * A portal element that moves the popup to a different part of the DOM.
 * By default, the portal element is appended to `<body>`.
@@ -17973,7 +17895,7 @@ const TooltipPortal = /*#__PURE__*/ React$1.forwardRef(function TooltipPortal(pr
 TooltipPortal.displayName = "TooltipPortal";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
 const TooltipPositionerContext = /*#__PURE__*/ React$1.createContext(void 0);
 TooltipPositionerContext.displayName = "TooltipPositionerContext";
 function useTooltipPositionerContext() {
@@ -17983,7 +17905,7 @@ function useTooltipPositionerContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/floating-ui-react/middleware/arrow.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/middleware/arrow.mjs
 /**
 * Fork of the original `arrow` middleware from Floating UI that allows
 * configuring the offset parent.
@@ -18045,7 +17967,7 @@ const arrow = (options, deps) => ({
 });
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/hideMiddleware.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/hideMiddleware.mjs
 const hide = {
 	name: "hide",
 	async fn(state) {
@@ -18057,14 +17979,14 @@ const hide = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/adaptiveOriginConstants.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/adaptiveOriginConstants.mjs
 const DEFAULT_SIDES = {
 	sideX: "left",
 	sideY: "top"
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useAnchorPositioning.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useAnchorPositioning.mjs
 const AVAILABLE_WIDTH_VAR = "--available-width";
 const AVAILABLE_HEIGHT_VAR = "--available-height";
 function getLogicalSide(sideParam, renderedSide, isRtl) {
@@ -18394,13 +18316,13 @@ function isRef(param) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/getDisabledMountTransitionStyles.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/getDisabledMountTransitionStyles.mjs
 function getDisabledMountTransitionStyles(transitionStatus) {
 	return transitionStatus === "starting" ? DISABLED_TRANSITIONS_STYLE : EMPTY_OBJECT;
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/usePositioner.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/usePositioner.mjs
 /**
 * Renders the shared outer Positioner element used by popup components.
 * Applies the common role, hidden state, transition styles, state attributes, and optional inert styling.
@@ -18425,7 +18347,7 @@ function usePositioner(componentProps, state, { styles, transitionStatus, props,
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
 /**
 * Positions the tooltip against the trigger.
 * Renders a `<div>` element.
@@ -18492,7 +18414,7 @@ const TooltipPositioner = /*#__PURE__*/ React$1.forwardRef(function TooltipPosit
 TooltipPositioner.displayName = "TooltipPositioner";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
 /**
 * A container for the tooltip contents.
 * Renders a `<div>` element.
@@ -18547,7 +18469,7 @@ const TooltipPopup = /*#__PURE__*/ React$1.forwardRef(function TooltipPopup(comp
 TooltipPopup.displayName = "TooltipPopup";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
 /**
 * Displays an element positioned against the tooltip anchor.
 * Renders a `<div>` element.
@@ -18578,7 +18500,7 @@ const TooltipArrow = /*#__PURE__*/ React$1.forwardRef(function TooltipArrow(comp
 TooltipArrow.displayName = "TooltipArrow";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
 /**
 * Provides a shared delay for multiple tooltips. The grouping logic ensures that
 * once a tooltip becomes visible, the adjacent tooltips will be shown instantly.
@@ -18887,7 +18809,7 @@ const FileTreeFolder = TreeFolder;
 const FileTreeFile = TreeFile;
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/root/DialogRootContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/DialogRootContext.mjs
 const DialogRootContext = /*#__PURE__*/ React$1.createContext(void 0);
 DialogRootContext.displayName = "DialogRootContext";
 function useDialogRootContext(optional) {
@@ -18897,7 +18819,7 @@ function useDialogRootContext(optional) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/backdrop/DialogBackdrop.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/backdrop/DialogBackdrop.mjs
 /**
 * An overlay displayed beneath the popup.
 * Renders a `<div>` element.
@@ -18932,7 +18854,7 @@ const DialogBackdrop = /*#__PURE__*/ React$1.forwardRef(function DialogBackdrop(
 DialogBackdrop.displayName = "DialogBackdrop";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/close/DialogClose.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/close/DialogClose.mjs
 /**
 * A button that closes the dialog.
 * Renders a `<button>` element.
@@ -18964,7 +18886,7 @@ const DialogClose = /*#__PURE__*/ React$1.forwardRef(function DialogClose(compon
 DialogClose.displayName = "DialogClose";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/portal/DialogPortalContext.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/portal/DialogPortalContext.mjs
 const DialogPortalContext = /*#__PURE__*/ React$1.createContext(void 0);
 DialogPortalContext.displayName = "DialogPortalContext";
 function useDialogPortalContext() {
@@ -18974,7 +18896,7 @@ function useDialogPortalContext() {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/utils/stateAttributesMapping.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/utils/stateAttributesMapping.mjs
 /**
 * Shared by `Dialog.Popup` and `Dialog.Viewport`, whose states have the same shape.
 * `nested` is not mapped: unmapped `true` booleans already render as `data-nested`.
@@ -18988,7 +18910,7 @@ const dialogStateAttributesMapping = {
 };
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/popup/DialogPopup.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/popup/DialogPopup.mjs
 /**
 * A container for the dialog contents.
 * Renders a `<div>` element.
@@ -19068,7 +18990,7 @@ const DialogPopup = /*#__PURE__*/ React$1.forwardRef(function DialogPopup(compon
 DialogPopup.displayName = "DialogPopup";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/InternalBackdrop.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/InternalBackdrop.mjs
 /**
 * @internal
 */
@@ -19096,7 +19018,7 @@ const InternalBackdrop = /*#__PURE__*/ React$1.forwardRef(function InternalBackd
 InternalBackdrop.displayName = "InternalBackdrop";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/portal/DialogPortal.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/portal/DialogPortal.mjs
 /**
 * A portal element that moves the popup to a different part of the DOM.
 * By default, the portal element is appended to `<body>`.
@@ -19126,7 +19048,7 @@ const DialogPortal$1 = /*#__PURE__*/ React$1.forwardRef(function DialogPortal(pr
 DialogPortal$1.displayName = "DialogPortal";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useScrollLock.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useScrollLock.mjs
 let originalHtmlStyles = {};
 let originalBodyStyles = {};
 let originalHtmlScrollBehavior = "";
@@ -19323,7 +19245,7 @@ function useScrollLock(enabled = true, referenceElement = null) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/root/useDialogRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/useDialogRoot.mjs
 function DialogInteractions({ store, parentContext, isDrawer }) {
 	const open = store.useState("open");
 	const disablePointerDismissal = store.useState("disablePointerDismissal");
@@ -19391,7 +19313,7 @@ function DialogInteractions({ store, parentContext, isDrawer }) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/store/DialogStore.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/store/DialogStore.mjs
 const selectors = {
 	...popupStoreSelectors,
 	modal: (state) => state.modal,
@@ -19460,7 +19382,7 @@ function createInitialContext(triggerElements) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/root/useRenderDialogRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/useRenderDialogRoot.mjs
 function useRenderDialogRoot(mode, props) {
 	const { children, open: openProp, defaultOpen = false, onOpenChange, onOpenChangeComplete, disablePointerDismissal: disablePointerDismissalProp = false, modal: modalProp = true, actionsRef, handle, triggerId: triggerIdProp, defaultTriggerId: defaultTriggerIdProp = null } = props;
 	const isDrawer = mode === "drawer";
@@ -19516,7 +19438,7 @@ function useRenderDialogRoot(mode, props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/root/DialogRoot.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/DialogRoot.mjs
 /**
 * Groups all parts of the dialog.
 * Doesn't render its own HTML element.
@@ -19528,7 +19450,7 @@ function DialogRoot(props) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/title/DialogTitle.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/title/DialogTitle.mjs
 /**
 * A heading that labels the dialog.
 * Renders an `<h2>` element.
@@ -19548,7 +19470,7 @@ const DialogTitle$1 = /*#__PURE__*/ React$1.forwardRef(function DialogTitle(comp
 DialogTitle$1.displayName = "DialogTitle";
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types_46200efdf1f5c806fc19b01530afd9e7/node_modules/@base-ui/utils/useEnhancedClickHandler.mjs
+//#region ../../node_modules/.pnpm/@base-ui+utils@0.3.2_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useEnhancedClickHandler.mjs
 /**
 * Provides a cross-browser way to determine the type of the pointer used to click.
 * Safari and Firefox do not provide the PointerEvent to the click handler (they use MouseEvent) yet.
@@ -19578,7 +19500,7 @@ function useEnhancedClickHandler(handler) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/internals/useValueChanged.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useValueChanged.mjs
 function useValueChanged(value, onChange) {
 	const valueRef = React$1.useRef(value);
 	const onChangeCallback = useStableCallback(onChange);
@@ -19589,7 +19511,7 @@ function useValueChanged(value, onChange) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/utils/useOpenInteractionType.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useOpenInteractionType.mjs
 function useOpenMethodTriggerProps(open, setOpenMethod) {
 	const handleTriggerClick = useStableCallback((_, interactionType) => {
 		if (!(typeof open === "function" ? open() : open)) setOpenMethod(interactionType || (ios ? "touch" : ""));
@@ -19618,7 +19540,7 @@ function useOpenInteractionType(open) {
 }
 
 //#endregion
-//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types_e9c1e83f6bc6140c3efaf3427f2fbf0a/node_modules/@base-ui/react/dialog/trigger/DialogTrigger.mjs
+//#region ../../node_modules/.pnpm/@base-ui+react@1.7.0_@types+react@19.2.18_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/trigger/DialogTrigger.mjs
 /**
 * A button that opens the dialog.
 * Renders a `<button>` element.
@@ -19795,9 +19717,7 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 	Panel: () => Panel,
 	PanelProvider: () => PanelProvider,
 	Param: () => Param,
-	ParamField: () => ParamField,
 	PropertiesTable: () => PropertiesTable,
-	ResponseField: () => ResponseField,
 	Step: () => Step,
 	Steps: () => Steps,
 	Tab: () => Tab,
@@ -19819,4 +19739,4 @@ var docs_exports = /* @__PURE__ */ __exportAll({
 });
 
 //#endregion
-export { useFloatingNodeId as $, useTimeout as $n, Accordion as $t, safePolygon as A, findNonDisabledListIndex as An, createPath as Ar, CollapsibleContent as At, attachPreventUnmountOnClose as B, isTypeableCombobox as Bn, Card as Bt, Tooltip as C, styles as Cn, Link$1 as Cr, useSetPanelContent as Ct, useAnchorPositioning as D, getTabbableAfterElement as Dn, Routes as Dr, renderInlineMarkdown as Dt, getDisabledMountTransitionStyles as E, getNextTabbable as En, Router as Er, Frame as Et, createInitialPopupStoreState as F, isListIndexDisabled as Fn, COMPOSITE_KEYS as Ft, useTriggerDataForwarding as G, ARROW_LEFT$1 as Gn, Info as Gt, useImplicitActiveTrigger as H, contains as Hn, Callout as Ht, popupStoreSelectors as I, isVirtualClick as In, inertValue as It, useDismiss as J, jsdom as Jn, Warning as Jt, useSyncedFloatingRootContext as K, ARROW_RIGHT$1 as Kn, Note as Kt, PopupTriggerMap as L, isVirtualPointerEvent as Ln, useCompositeItem as Lt, useHoverFloatingInteraction as M, getMinListIndex as Mn, ABSOLUTE_URL_REGEX as Mr, Column as Mt, useFocus as N, isElementVisible as Nn, __commonJSMin as Nr, Columns as Nt, popupTransitionStateMapping as O, getTabbableBeforeElement as On, useLocation as Or, Expandable as Ot, usePopupHandleStore as P, isIndexOutOfListBounds as Pn, __toESM as Pr, CodeGroup as Pt, FloatingTree as Q, useId$1 as Qn, Badge$1 as Qt, FOCUSABLE_POPUP_PROPS as R, stopEvent as Rn, Changelog as Rt, TreeFolder as S, mermaidSource as Sn, BrowserRouter as Sr, usePanelContent as St, usePositioner as T, useDirection as Tn, Route as Tr, Icon as Tt, useOpenStateTransitions as U, getTarget as Un, Check as Ut, setPopupOpenState as V, activeElement as Vn, CardGroup as Vt, usePopupInteractionProps as W, ARROW_DOWN$1 as Wn, Danger as Wt, FloatingFocusManager as X, mac as Xn, Button as Xt, useClick as Y, webkit as Yn, WarningBanner as Yt, FloatingNode as Z, useBaseUiId as Zn, Badge as Zt, FileTree as _, triggerFocus as _n, isLastTraversableNode as _r, PropertiesTable as _t, DialogTitle as a, useValueAsRef as an, useMergedRefs as ar, POPUP_COLLISION_AVOIDANCE as at, Tree as b, CompositeList as bn, Check$1 as br, Panel as bt, useOpenInteractionType as c, createChangeEventDetails as cn, ownerDocument as cr, fastComponent as ct, useScrollLock as d, focusOut as dn, useIsoLayoutEffect as dr, Tiles as dt, AccordionGroup as en, Button$1 as er, useFloatingParentNodeId as et, DialogPortal$1 as f, imperativeAction as fn, useStableCallback as fr, Tab as ft, DialogBackdrop as g, siblingOpen as gn, isHTMLElement as gr, ResponseField as gt, DialogClose as h, outsidePress as hn, getWindow as hr, Steps as ht, DialogContent as i, useAnimationsFinished as in, EMPTY_OBJECT as ir, DROPDOWN_COLLISION_AVOIDANCE as it, useHoverReferenceInteraction as j, getMaxListIndex as jn, parsePath as jr, CollapsibleTrigger as jt, pressableTriggerOpenStateMapping as k, isOutsideEvent as kn, useNavigate as kr, Collapsible as kt, DialogTitle$1 as l, cancelOpen as ln, useCompositeRootContext as lr, fastComponentRef as lt, DialogPopup as m, listNavigation as mn, getParentNode as mr, Step as mt, ZoomableImage as n, getIcon as nn, useRenderElement as nr, FloatingTreeStore as nt, DialogTrigger as o, useCompositeListItem as on, useButton as or, enqueueFocus as ot, InternalBackdrop as p, itemPress as pn, useRefWithInit as pr, Tabs as pt, ReactStore as q, ARROW_UP$1 as qn, Tip as qt, Dialog as r, useOpenChangeComplete as rn, EMPTY_ARRAY$1 as rr, FloatingPortal as rt, DialogTrigger$1 as s, useAnimationFrame as sn, dispatchClickWithModifiers as sr, FocusGuard as st, docs_exports as t, resolveIcon as tn, cn as tr, useFloatingTree as tt, DialogRoot as u, escapeKey as un, mergeProps as ur, Tile as ut, FileTreeFile as v, triggerHover as vn, X as vr, Param as vt, TooltipProvider as w, addEventListener as wn, Navigate as wr, Link as wt, TreeFile as x, Mermaid as xn, createLucideIcon as xr, PanelProvider as xt, FileTreeFolder as y, triggerPress as yn, ChevronRight as yr, ParamField as yt, PopupHandleAttachment as z, getFloatingFocusElement as zn, Update as zt };
+export { useFloatingNodeId as $, useRenderElement as $n, resolveIcon as $t, safePolygon as A, isElementVisible as An, __commonJSMin as Ar, Column as At, attachPreventUnmountOnClose as B, getTarget as Bn, Callout as Bt, Tooltip as C, getNextTabbable as Cn, Router as Cr, Icon as Ct, useAnchorPositioning as D, findNonDisabledListIndex as Dn, createPath as Dr, Collapsible as Dt, getDisabledMountTransitionStyles as E, isOutsideEvent as En, useNavigate as Er, Expandable as Et, createInitialPopupStoreState as F, stopEvent as Fn, useCompositeItem as Ft, useTriggerDataForwarding as G, jsdom as Gn, Tip as Gt, useImplicitActiveTrigger as H, ARROW_LEFT$1 as Hn, Danger as Ht, popupStoreSelectors as I, getFloatingFocusElement as In, Changelog as It, useDismiss as J, useBaseUiId as Jn, Button as Jt, useSyncedFloatingRootContext as K, webkit as Kn, Warning as Kt, PopupTriggerMap as L, isTypeableCombobox as Ln, Update as Lt, useHoverFloatingInteraction as M, isListIndexDisabled as Mn, CodeGroup as Mt, useFocus as N, isVirtualClick as Nn, COMPOSITE_KEYS as Nt, popupTransitionStateMapping as O, getMaxListIndex as On, parsePath as Or, CollapsibleContent as Ot, usePopupHandleStore as P, isVirtualPointerEvent as Pn, inertValue as Pt, FloatingTree as Q, cn as Qn, AccordionGroup as Qt, FOCUSABLE_POPUP_PROPS as R, activeElement as Rn, Card as Rt, TreeFolder as S, useDirection as Sn, Route as Sr, Link as St, usePositioner as T, getTabbableBeforeElement as Tn, useLocation as Tr, renderInlineMarkdown as Tt, useOpenStateTransitions as U, ARROW_RIGHT$1 as Un, Info as Ut, setPopupOpenState as V, ARROW_DOWN$1 as Vn, Check as Vt, usePopupInteractionProps as W, ARROW_UP$1 as Wn, Note as Wt, FloatingFocusManager as X, useTimeout as Xn, Badge$1 as Xt, useClick as Y, useId$1 as Yn, Badge as Yt, FloatingNode as Z, Button$1 as Zn, Accordion as Zt, FileTree as _, triggerPress as _n, Check$1 as _r, Param as _t, DialogTitle as a, useAnimationFrame as an, ownerDocument as ar, POPUP_COLLISION_AVOIDANCE as at, Tree as b, mermaidSource as bn, Link$1 as br, usePanelContent as bt, useOpenInteractionType as c, escapeKey as cn, useIsoLayoutEffect as cr, fastComponent as ct, useScrollLock as d, itemPress as dn, getParentNode as dr, Tiles as dt, getIcon as en, EMPTY_ARRAY$1 as er, useFloatingParentNodeId as et, DialogPortal$1 as f, listNavigation as fn, getWindow as fr, Tab as ft, DialogBackdrop as g, triggerHover as gn, ChevronRight as gr, PropertiesTable as gt, DialogClose as h, triggerFocus as hn, X as hr, Steps as ht, DialogContent as i, useCompositeListItem as in, dispatchClickWithModifiers as ir, DROPDOWN_COLLISION_AVOIDANCE as it, useHoverReferenceInteraction as j, isIndexOutOfListBounds as jn, __toESM as jr, Columns as jt, pressableTriggerOpenStateMapping as k, getMinListIndex as kn, ABSOLUTE_URL_REGEX as kr, CollapsibleTrigger as kt, DialogTitle$1 as l, focusOut as ln, useStableCallback as lr, fastComponentRef as lt, DialogPopup as m, siblingOpen as mn, isLastTraversableNode as mr, Step as mt, ZoomableImage as n, useAnimationsFinished as nn, useMergedRefs as nr, FloatingTreeStore as nt, DialogTrigger as o, createChangeEventDetails as on, useCompositeRootContext as or, enqueueFocus as ot, InternalBackdrop as p, outsidePress as pn, isHTMLElement as pr, Tabs as pt, ReactStore as q, mac as qn, WarningBanner as qt, Dialog as r, useValueAsRef as rn, useButton as rr, FloatingPortal as rt, DialogTrigger$1 as s, cancelOpen as sn, mergeProps as sr, FocusGuard as st, docs_exports as t, useOpenChangeComplete as tn, EMPTY_OBJECT as tr, useFloatingTree as tt, DialogRoot as u, imperativeAction as un, useRefWithInit as ur, Tile as ut, FileTreeFile as v, CompositeList as vn, createLucideIcon as vr, Panel as vt, TooltipProvider as w, getTabbableAfterElement as wn, Routes as wr, Frame as wt, TreeFile as x, addEventListener as xn, Navigate as xr, useSetPanelContent as xt, FileTreeFolder as y, Mermaid as yn, BrowserRouter as yr, PanelProvider as yt, PopupHandleAttachment as z, contains as zn, CardGroup as zt };

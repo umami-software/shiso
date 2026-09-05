@@ -1,0 +1,67 @@
+---
+title: Properties table
+description: Document parameters and schema fields in tables.
+---
+
+Use `PropertiesTable` with `PropertiesTable.Row` children to document parameters,
+response fields, and component properties. Each row shows a name, type, and
+description, with optional required and deprecated badges.
+
+## Basic usage
+
+<PropertiesTable>
+  <PropertiesTable.Row name="id" type="string" required>
+    Unique identifier for the resource.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="limit" type="integer" default="20">
+    Maximum number of records to return.
+  </PropertiesTable.Row>
+</PropertiesTable>
+
+```tsx
+<PropertiesTable>
+  <PropertiesTable.Row name="id" type="string" required>
+    Unique identifier for the resource.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="limit" type="integer" default="20">
+    Maximum number of records to return.
+  </PropertiesTable.Row>
+</PropertiesTable>
+```
+
+Use separate headings and tables for headers, path parameters, query parameters,
+and cookies. For nested objects, place an [`Expandable`](/docs/components/expandable)
+containing another table inside a row's description.
+
+## Row properties
+
+<PropertiesTable>
+  <PropertiesTable.Row name="name" type="string" required>
+    Property or parameter name.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="type" type="string | number | boolean | null">
+    Type label. HTML entities in string values are decoded before rendering.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="default" type="string | number | boolean | null">
+    Default value, displayed below the description.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="required" type="boolean" default="false">
+    Shows a required badge.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="deprecated" type="boolean" default="false">
+    Shows a deprecated badge.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="children" type="ReactNode">
+    Property description and any nested content.
+  </PropertiesTable.Row>
+</PropertiesTable>
+
+## Inline parameter names
+
+Use `Param` to render inline parameter names as code:
+
+Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+
+```tsx
+Set <Param>limit</Param> and <Param>offset</Param> together for pagination.
+```

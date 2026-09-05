@@ -146,18 +146,6 @@ export interface IconProps {
 
 export declare function Icon(props: IconProps): ReactElement | null;
 
-export interface ParamFieldProps {
-  name?: string;
-  query?: string;
-  path?: string;
-  header?: string;
-  body?: string;
-  type?: string;
-  required?: boolean;
-  children?: ReactNode;
-}
-
-export declare function ParamField(props: ParamFieldProps): ReactElement;
 export declare function Param(props: ChildrenProps): ReactElement;
 
 export interface PropertiesTableProps {
@@ -168,7 +156,7 @@ export declare function PropertiesTable(props: PropertiesTableProps): ReactEleme
 
 type FieldValue = string | number | boolean | null | undefined;
 
-export interface ResponseFieldProps {
+export interface PropertiesTableRowProps {
   name: string;
   type?: FieldValue;
   default?: FieldValue;
@@ -177,7 +165,9 @@ export interface ResponseFieldProps {
   children?: ReactNode;
 }
 
-export declare function ResponseField(props: ResponseFieldProps): ReactElement;
+export declare namespace PropertiesTable {
+  function Row(props: PropertiesTableRowProps): ReactElement;
+}
 
 export interface StepProps {
   title?: ReactNode;

@@ -90,39 +90,39 @@ left collapses, `*` expands siblings, typing jumps to a name.
 ### Tree / FileTree
 
 <PropertiesTable>
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   `Tree.Folder` / `Tree.File` nodes, or a Markdown list.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>
 
 ### Tree.Folder
 
 <PropertiesTable>
-<ResponseField name="name" type="string" required>
+<PropertiesTable.Row name="name" type="string" required>
   Folder name shown in the tree.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="defaultOpen" type="boolean" default="false">
+<PropertiesTable.Row name="defaultOpen" type="boolean" default="false">
   Whether the folder expands by default.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="openable" type="boolean" default="true">
+<PropertiesTable.Row name="openable" type="boolean" default="true">
   Set to false for non-interactive folders.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="highlight" type="boolean" default="false">
+<PropertiesTable.Row name="highlight" type="boolean" default="false">
   Tint the folder as the active path.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>
 
 ### Tree.File
 
 <PropertiesTable>
-<ResponseField name="name" type="string" required>
+<PropertiesTable.Row name="name" type="string" required>
   File name shown in the tree.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="highlight" type="boolean" default="false">
+<PropertiesTable.Row name="highlight" type="boolean" default="false">
   Tint the file as the active item.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

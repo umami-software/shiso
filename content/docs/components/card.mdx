@@ -7,12 +7,12 @@ Use `Card` and `CardGroup` for scannable links or feature summaries.
 
 ## Basic usage
 
-<Card title="API reference" icon="code" href="/docs/components/response-field">
+<Card title="API reference" icon="code" href="/docs/components/properties-table">
   Learn how to model response schemas.
 </Card>
 
 ```tsx
-<Card title="API reference" icon="code" href="/docs/components/response-field">
+<Card title="API reference" icon="code" href="/docs/components/properties-table">
   Learn how to model response schemas.
 </Card>
 ```
@@ -115,55 +115,55 @@ External `href` values open in a new tab. For mixed content side by side, use
 ### Card
 
 <PropertiesTable>
-<ResponseField name="title" type="ReactNode">
+<PropertiesTable.Row name="title" type="ReactNode">
   Card heading.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="href" type="string">
+<PropertiesTable.Row name="href" type="string">
   Optional link destination. When set, the card is interactive.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="icon" type="ReactNode | string">
+<PropertiesTable.Row name="icon" type="ReactNode | string">
   Lucide icon name, image URL or path, or rendered element.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="color" type="string">
+<PropertiesTable.Row name="color" type="string">
   CSS color applied to the icon.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="img" type="string">
+<PropertiesTable.Row name="img" type="string">
   Image shown above the body.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="cta" type="string">
+<PropertiesTable.Row name="cta" type="string">
   Trailing action label.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="horizontal" type="boolean" default="false">
+<PropertiesTable.Row name="horizontal" type="boolean" default="false">
   Lay out icon, title, and body in a row.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="arrow" type="boolean">
+<PropertiesTable.Row name="arrow" type="boolean">
   Show or hide the trailing arrow. External links show it by default.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="type" type="'note' | 'info' | 'warning' | 'tip' | 'check' | 'danger'">
+<PropertiesTable.Row name="type" type="'note' | 'info' | 'warning' | 'tip' | 'check' | 'danger'">
   Apply the matching callout background, border, text color, and default icon.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   Body content.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>
 
 ### CardGroup
 
 <PropertiesTable>
-<ResponseField name="cols" type="1 | 2 | 3 | 4" default="2">
+<PropertiesTable.Row name="cols" type="1 | 2 | 3 | 4" default="2">
   Number of columns in the grid.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   One or more `Card` children.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

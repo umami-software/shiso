@@ -588,13 +588,26 @@ export function hasOperationParameters(operation) {
   );
 }
 
+function operationParameterSections(operation) {
+  return [
+    { location: 'header', heading: 'Headers', id: 'headers' },
+    { location: 'path', heading: 'Path parameters', id: 'path-parameters' },
+    { location: 'query', heading: 'Query parameters', id: 'query-parameters' },
+    { location: 'cookie', heading: 'Cookie parameters', id: 'cookie-parameters' },
+  ].filter(
+    ({ location }) =>
+      operation.parameters[location].length > 0 ||
+      (location === 'header' && operation.security.length > 0),
+  );
+}
+
 /**
  * Anchor ids for the generated sections, in render order. Mirrors
  * operationSections in src/lib/openapi.ts (asserted by tests/openapi.test.mjs).
  */
 export function operationAnchors(operation) {
   return [
-    ...(hasOperationParameters(operation) ? ['parameters'] : []),
+    ...operationParameterSections(operation).map(section => section.id),
     ...(operation.requestBody ? ['request-body'] : []),
     ...(operation.responses.length ? ['responses'] : []),
     ...(operation.samples.length ? ['code-samples'] : []),
@@ -617,13 +630,6 @@ export function normalizeOperationKey(value) {
 
 /** Search-index sections for an operation, matching operationAnchors ids. */
 export function operationSearchSections(operation) {
-  const allParameters = [
-    ...operation.parameters.path,
-    ...operation.parameters.query,
-    ...operation.parameters.header,
-    ...operation.parameters.cookie,
-  ];
-
   return [
     {
       heading: undefined,
@@ -632,11 +638,16 @@ export function operationSearchSections(operation) {
         .filter(Boolean)
         .join(' '),
     },
-    {
-      heading: 'Parameters',
-      id: 'parameters',
-      text: allParameters.map(schemaText).join(' '),
-    },
+    ...operationParameterSections(operation).map(({ location, heading, id }) => ({
+      heading,
+      id,
+      text: [
+        ...operation.parameters[location].map(schemaText),
+        ...(location === 'header' && operation.security.length > 0
+          ? ['Authorization Authentication credentials']
+          : []),
+      ].join(' '),
+    })),
     {
       heading: 'Request body',
       id: 'request-body',

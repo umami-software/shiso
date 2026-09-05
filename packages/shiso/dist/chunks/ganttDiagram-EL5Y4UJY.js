@@ -1,4 +1,4 @@
-import { Nr as __commonJSMin, Pr as __toESM } from "./docs.js";
+import { Ar as __commonJSMin, jr as __toESM } from "./docs.js";
 import { n as __name } from "./chunk-Y2CYZVJY.js";
 import { a as nogamma, c as Rgb, d as define_default, f as extend, g as require_dayjs_min, i as hue, m as log, p as select_default, s as Color, u as rgbConvert } from "./src.js";
 import { H as setAccDescription, K as setDiagramTitle, U as setAccTitle, a as clear, c as configureSvgSize, s as common_default, v as getAccDescription, w as getDiagramTitle, x as getConfig2, y as getAccTitle } from "./chunk-DU6HZSFF.js";

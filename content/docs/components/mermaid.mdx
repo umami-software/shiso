@@ -51,23 +51,23 @@ syntax: flowcharts, sequence diagrams, Gantt charts, and more.
 ## Properties
 
 <PropertiesTable>
-<ResponseField name="chart" type="string">
+<PropertiesTable.Row name="chart" type="string">
   Diagram definition. Defaults to the string children.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="title" type="ReactNode">
+<PropertiesTable.Row name="title" type="ReactNode">
   Optional caption above the diagram.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="actions" type="boolean" default="true">
+<PropertiesTable.Row name="actions" type="boolean" default="true">
   Show zoom and reset controls.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="placement" type="'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'" default="'bottom-right'">
+<PropertiesTable.Row name="placement" type="'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'" default="'bottom-right'">
   Corner for the controls. Fences accept `placement="top-left"` in the info string.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   Diagram definition when `chart` is omitted.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

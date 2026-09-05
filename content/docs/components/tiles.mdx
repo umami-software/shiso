@@ -32,31 +32,31 @@ Use light/dark image variants in the preview area for theme-aware thumbnails.
 ### Tile
 
 <PropertiesTable>
-<ResponseField name="href" type="string" required>
+<PropertiesTable.Row name="href" type="string" required>
   Destination when the tile is clicked.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="title" type="ReactNode">
+<PropertiesTable.Row name="title" type="ReactNode">
   Title below the preview.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="description" type="ReactNode">
+<PropertiesTable.Row name="description" type="ReactNode">
   Short description below the title.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode" required>
+<PropertiesTable.Row name="children" type="ReactNode" required>
   Preview content, typically images or SVGs.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>
 
 ### Tiles
 
 <PropertiesTable>
-<ResponseField name="cols" type="1 | 2 | 3 | 4" default="2">
+<PropertiesTable.Row name="cols" type="1 | 2 | 3 | 4" default="2">
   Number of columns in the grid.
-</ResponseField>
+</PropertiesTable.Row>
 
-<ResponseField name="children" type="ReactNode">
+<PropertiesTable.Row name="children" type="ReactNode">
   One or more `Tile` children.
-</ResponseField>
+</PropertiesTable.Row>
 </PropertiesTable>

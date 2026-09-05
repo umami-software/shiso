@@ -1,4 +1,4 @@
-import { Nr as __commonJSMin } from "./docs.js";
+import { Ar as __commonJSMin } from "./docs.js";
 
 //#region ../../node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/math.js
 const abs = Math.abs;

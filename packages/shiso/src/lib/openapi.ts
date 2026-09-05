@@ -45,6 +45,22 @@ export function hasParameters(operation: NormalizedOperation): boolean {
   );
 }
 
+/** Parameter groups shared by the renderer and table of contents. */
+export function operationParameterSections(operation: NormalizedOperation) {
+  const groups = [
+    { location: 'header', name: 'Headers' },
+    { location: 'path', name: 'Path parameters' },
+    { location: 'query', name: 'Query parameters' },
+    { location: 'cookie', name: 'Cookie parameters' },
+  ] as const;
+
+  return groups.filter(
+    ({ location }) =>
+      operation.parameters[location].length > 0 ||
+      (location === 'header' && operation.security.length > 0),
+  );
+}
+
 /**
  * Section headings for an operation, in render order. The single source of
  * truth for section ids: the component, the table of contents, the content
@@ -53,7 +69,7 @@ export function hasParameters(operation: NormalizedOperation): boolean {
 export function operationSections(operation: NormalizedOperation): TocEntry[] {
   const slugger = createSlugger();
   const names = [
-    hasParameters(operation) ? 'Parameters' : undefined,
+    ...operationParameterSections(operation).map(section => section.name),
     operation.requestBody ? 'Request body' : undefined,
     operation.responses.length ? 'Responses' : undefined,
     operation.samples.length ? 'Code samples' : undefined,

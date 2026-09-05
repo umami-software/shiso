@@ -1,10 +1,10 @@
-import { Ar as createPath, Er as Router, Mr as ABSOLUTE_URL_REGEX, jr as parsePath } from "./chunks/docs.js";
+import { Cr as Router, Dr as createPath, Or as parsePath, kr as ABSOLUTE_URL_REGEX } from "./chunks/docs.js";
 import { a as docsSite, c as getSeo, d as standalonePages, f as getDocModule, g as toAbsoluteUrl, h as BASE_URL, i as docsHomeUrl, l as siteConfig, m as getScopeForPage, n as buildHead, o as getLocaleByPathname, p as getLastModified, r as renderHeadToString, s as getRedirects, t as App, u as siteName } from "./chunks/App.js";
 import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
 
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/server.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/server.js
 /**
 * react-router v8.3.0
 *
