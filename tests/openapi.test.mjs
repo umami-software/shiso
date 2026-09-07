@@ -54,6 +54,20 @@ describe('loadOpenApiSpec', () => {
 });
 
 describe('normalizeOperations', () => {
+  it.each([
+    ['getPixelShares', 'get-pixel-shares'],
+    ['GetPixelShares', 'get-pixel-shares'],
+    ['getHTTPResponse', 'get-http-response'],
+    ['get_pixel_shares', 'get-pixel-shares'],
+    ['get-pixel-shares', 'get-pixel-shares'],
+  ])('uses kebab-case URLs for %s', (operationId, expected) => {
+    const operations = normalizeOperations({
+      paths: { '/pixels/shares': { get: { operationId, responses: {} } } },
+    });
+
+    expect(operations[0].id).toBe(expected);
+  });
+
   it('normalizes every operation with ids, keys, and tags', async () => {
     const operations = normalizeOperations(await fixtureSpec());
 
@@ -65,11 +79,11 @@ describe('normalizeOperations', () => {
       'GET /orders',
     ]);
     expect(operations.map(operation => operation.id)).toEqual([
-      'listusers',
-      'createuser',
-      'getuser',
-      'deleteuser',
-      'listorders',
+      'list-users',
+      'create-user',
+      'get-user',
+      'delete-user',
+      'list-orders',
     ]);
     expect(operations.find(operation => operation.key === 'GET /orders').tags).toEqual(['Orders']);
     expect(operations.find(operation => operation.key === 'DELETE /users/{id}').deprecated).toBe(
@@ -234,7 +248,7 @@ describe('generateOpenApiStubs', () => {
     });
     expect(created).toHaveLength(operations.length);
 
-    const stubPath = path.join(dir, 'content/docs/api-reference/getuser.mdx');
+    const stubPath = path.join(dir, 'content/docs/api-reference/get-user.mdx');
     const stub = await fs.readFile(stubPath, 'utf8');
     expect(stub).toContain('title: "Get a user"');
     expect(stub).toContain('openapi: GET /users/{id}');
@@ -264,7 +278,7 @@ describe('expandOpenApiNavigation', () => {
     expect(pages[1].group).toBe('Users');
     expect(pages[2].group).toBe('Orders');
     expect(pages[1].pages[0]).toMatchObject({
-      page: 'api-reference/listusers',
+      page: 'api-reference/list-users',
       title: 'List users',
       method: 'GET',
     });
@@ -276,7 +290,7 @@ describe('expandOpenApiNavigation', () => {
     const expanded = expandOpenApiNavigation(config, { operations, directory: 'api' });
 
     expect(expanded.navigation.pages).toEqual([
-      { page: 'api/listorders', title: 'List orders', method: 'GET' },
+      { page: 'api/list-orders', title: 'List orders', method: 'GET' },
     ]);
     expect(hasOpenApiItems(config.navigation)).toBe(true);
     expect(() =>

@@ -372,7 +372,12 @@ export function normalizeOperations(spec) {
       const serverUrl = operation.servers?.[0]?.url || spec.servers?.[0]?.url || FALLBACK_SERVER;
       const normalized = {
         id: slugify(
-          operation.operationId || `${method}-${pathName}`,
+          operation.operationId
+            ? operation.operationId
+                .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+                .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+                .replace(/[_\s]+/g, '-')
+            : `${method}-${pathName}`,
           `${method}-${slugify(pathName, 'root')}`,
         ),
         key: `${upper} ${pathName}`,

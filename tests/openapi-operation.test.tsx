@@ -5,7 +5,7 @@ import { methodColor, operationSections, statusColor } from '@/lib/openapi';
 import type { NormalizedOperation } from '@/lib/types';
 
 const operation: NormalizedOperation = {
-  id: 'createuser',
+  id: 'create-user',
   key: 'POST /users',
   method: 'POST',
   path: '/users',
