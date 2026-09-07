@@ -12277,9 +12277,10 @@ function PropertiesTable({ children }) {
 	const rows = toElementArray(children);
 	if (!rows.length) return null;
 	return /* @__PURE__ */ jsx("div", {
+		"data-slot": "properties-table",
 		className: "my-4 overflow-x-auto",
 		children: /* @__PURE__ */ jsxs("table", {
-			className: "m-0 min-w-[40rem] table-fixed",
+			className: "m-0 table-fixed [overflow-wrap:anywhere]",
 			children: [/* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
 				/* @__PURE__ */ jsx("th", {
 					className: "w-[30%]",
@@ -12294,9 +12295,9 @@ function PropertiesTable({ children }) {
 		})
 	});
 }
-function PropertiesTableRow({ name, type, required, deprecated, default: value, children }) {
+function PropertiesTableRow({ name, type, required, deprecated, default: value, children, details }) {
 	const defaultValue = displayValue(value);
-	return /* @__PURE__ */ jsxs("tr", { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("tr", { children: [
 		/* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsxs("span", {
 			className: "inline-flex flex-wrap items-center gap-2",
 			children: [
@@ -12320,7 +12321,11 @@ function PropertiesTableRow({ name, type, required, deprecated, default: value, 
 				children: ["Default: ", defaultValue]
 			}) : null]
 		})
-	] });
+	] }), details && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
+		colSpan: 3,
+		className: "[&>[data-slot=collapsible]]:my-0 [&_[data-slot=collapsible-trigger]]:py-1 [&_[data-slot=properties-table]]:my-2",
+		children: details
+	}) })] });
 }
 PropertiesTable.Row = PropertiesTableRow;
 

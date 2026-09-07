@@ -157,6 +157,35 @@ describe('OpenApiOperation', () => {
     expect(responseHtml).toContain('required');
   });
 
+  it('puts nested properties in a full-width row below their parent', () => {
+    expect(html).toMatch(/<\/tr><tr><td colSpan="3"[^>]*>/);
+    expect(html).not.toContain('min-w-[40rem]');
+  });
+
+  it('labels complex alternatives as allowed types, including root unions', () => {
+    const unionHtml = renderToStaticMarkup(
+      <OpenApiOperation
+        operation={{
+          ...operation,
+          responses: [
+            {
+              status: '200',
+              schema: {
+                type: 'anyOf',
+                children: [
+                  { name: 'option 1', type: 'object', children: [{ name: 'id', type: 'string' }] },
+                ],
+              },
+            },
+          ],
+        }}
+      />,
+    ).split('id="responses"')[1];
+    expect(unionHtml).toContain('anyOf');
+    expect(unionHtml).toContain('Allowed types');
+    expect(unionHtml).toContain('colSpan="3"');
+  });
+
   it('renders nested schema fields inside an expandable', () => {
     expect(html).toContain('name');
     expect(html).toContain('properties');

@@ -97,7 +97,7 @@ function typeLabel(spec, schema) {
     return `enum<${baseType(schema)}>`;
   }
   if (schema.oneOf || schema.anyOf) {
-    return 'oneOf';
+    return schema.oneOf ? 'oneOf' : 'anyOf';
   }
   if (schema.type === 'array' || (Array.isArray(schema.type) && schema.type.includes('array'))) {
     const items = schema.items ? deref(spec, schema.items) : undefined;
@@ -159,6 +159,23 @@ export function schemaTree(spec, schema, { name, required, seen = new Set(), dep
         depth: depth + 1,
       }),
     );
+    // Plain scalar alternatives fit in the type cell; keep richer variants
+    // expanded so descriptions, constraints, and nested properties remain visible.
+    if (
+      variants.length <= MAX_CHILDREN &&
+      node.children.every(
+        child =>
+          /^(string|number|integer|boolean|null)$/.test(child.type) &&
+          !child.description &&
+          !child.enum &&
+          child.default === undefined &&
+          !child.deprecated &&
+          !child.children?.length,
+      )
+    ) {
+      node.type = [...new Set(node.children.map(child => child.type))].join(' | ');
+      delete node.children;
+    }
     return node;
   }
 

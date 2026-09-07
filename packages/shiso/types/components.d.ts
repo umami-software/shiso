@@ -162,6 +162,7 @@ export interface PropertiesTableRowProps {
   default?: FieldValue;
   required?: boolean;
   deprecated?: boolean;
+  details?: ReactNode;
   children?: ReactNode;
 }
 

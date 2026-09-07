@@ -10,6 +10,7 @@ export interface PropertiesTableRowProps {
   default?: FieldValue;
   required?: boolean;
   deprecated?: boolean;
+  details?: ReactNode;
   children?: ReactNode;
 }
 
@@ -35,8 +36,8 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
   // Rendered as a plain table so the .docs-markdown table rules in global.css
   // style it exactly like a GFM table; only column widths are set here.
   return (
-    <div className="my-4 overflow-x-auto">
-      <table className="m-0 min-w-[40rem] table-fixed">
+    <div data-slot="properties-table" className="my-4 overflow-x-auto">
+      <table className="m-0 table-fixed [overflow-wrap:anywhere]">
         <thead>
           <tr>
             <th className="w-[30%]">Name</th>
@@ -57,30 +58,43 @@ function PropertiesTableRow({
   deprecated,
   default: value,
   children,
+  details,
 }: PropertiesTableRowProps) {
   const defaultValue = displayValue(value);
 
   return (
-    <tr>
-      <td>
-        <span className="inline-flex flex-wrap items-center gap-2">
-          {name}
-          {required ? (
-            <Badge size="sm" tone="primary">
-              required
-            </Badge>
+    <>
+      <tr>
+        <td>
+          <span className="inline-flex flex-wrap items-center gap-2">
+            {name}
+            {required ? (
+              <Badge size="sm" tone="primary">
+                required
+              </Badge>
+            ) : null}
+            {deprecated ? <Badge size="sm">deprecated</Badge> : null}
+          </span>
+        </td>
+        <td>{displayValue(type)}</td>
+        <td className="[&_p]:m-0">
+          {children}
+          {defaultValue ? (
+            <span className="mt-1 block text-muted-foreground">Default: {defaultValue}</span>
           ) : null}
-          {deprecated ? <Badge size="sm">deprecated</Badge> : null}
-        </span>
-      </td>
-      <td>{displayValue(type)}</td>
-      <td className="[&_p]:m-0">
-        {children}
-        {defaultValue ? (
-          <span className="mt-1 block text-muted-foreground">Default: {defaultValue}</span>
-        ) : null}
-      </td>
-    </tr>
+        </td>
+      </tr>
+      {details && (
+        <tr>
+          <td
+            colSpan={3}
+            className="[&>[data-slot=collapsible]]:my-0 [&_[data-slot=collapsible-trigger]]:py-1 [&_[data-slot=properties-table]]:my-2"
+          >
+            {details}
+          </td>
+        </tr>
+      )}
+    </>
   );
 }
 

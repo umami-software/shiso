@@ -31,7 +31,109 @@ description, with optional required and deprecated badges.
 
 Use separate headings and tables for headers, path parameters, query parameters,
 and cookies. For nested objects, place an [`Expandable`](/docs/components/expandable)
-containing another table inside a row's description.
+containing another table in the row’s `details` prop. Details render below the
+property in a row spanning all three columns.
+
+## Nested properties
+
+Expand or collapse the address details below. The nested table spans the full
+width, and the following property returns to the normal three-column layout.
+The `id` row also shows a simple union inline.
+
+<PropertiesTable>
+  <PropertiesTable.Row name="id" type="string | number" required>
+    A resource identifier accepting either a string or a number.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row
+    name="address"
+    type="object"
+    details={
+      <Expandable title="properties" defaultOpen>
+        <PropertiesTable>
+          <PropertiesTable.Row name="city" type="string" required>
+            City name.
+          </PropertiesTable.Row>
+          <PropertiesTable.Row name="postalCode" type="string">
+            Postal or ZIP code.
+          </PropertiesTable.Row>
+        </PropertiesTable>
+      </Expandable>
+    }
+  >
+    Mailing address for the resource.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="createdAt" type="string">
+    Date and time when the resource was created.
+  </PropertiesTable.Row>
+</PropertiesTable>
+
+```tsx
+<PropertiesTable>
+  <PropertiesTable.Row name="id" type="string | number" required>
+    A resource identifier accepting either a string or a number.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row
+    name="address"
+    type="object"
+    details={
+      <Expandable title="properties" defaultOpen>
+        <PropertiesTable>
+          <PropertiesTable.Row name="city" type="string" required>
+            City name.
+          </PropertiesTable.Row>
+          <PropertiesTable.Row name="postalCode" type="string">
+            Postal or ZIP code.
+          </PropertiesTable.Row>
+        </PropertiesTable>
+      </Expandable>
+    }
+  >
+    Mailing address for the resource.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="createdAt" type="string">
+    Date and time when the resource was created.
+  </PropertiesTable.Row>
+</PropertiesTable>
+```
+
+## Allowed types
+
+For complex alternatives, use an “Allowed types” expandable. Generated API docs
+use this label for `oneOf` and `anyOf` schemas with detailed alternatives.
+
+<PropertiesTable>
+  <PropertiesTable.Row
+    name="recipient"
+    type="oneOf"
+    required
+    details={
+      <Expandable title="Allowed types" defaultOpen>
+        <PropertiesTable>
+          <PropertiesTable.Row name="User ID" type="string">
+            Reference an existing user by their identifier.
+          </PropertiesTable.Row>
+          <PropertiesTable.Row
+            name="New recipient"
+            type="object"
+            details={
+              <Expandable title="properties">
+                <PropertiesTable>
+                  <PropertiesTable.Row name="email" type="string" required>
+                    Email address of the recipient.
+                  </PropertiesTable.Row>
+                </PropertiesTable>
+              </Expandable>
+            }
+          >
+            Supply contact details for a new recipient.
+          </PropertiesTable.Row>
+        </PropertiesTable>
+      </Expandable>
+    }
+  >
+    Select one of the supported recipient formats.
+  </PropertiesTable.Row>
+</PropertiesTable>
 
 ## Row properties
 
@@ -50,6 +152,9 @@ containing another table inside a row's description.
   </PropertiesTable.Row>
   <PropertiesTable.Row name="deprecated" type="boolean" default="false">
     Shows a deprecated badge.
+  </PropertiesTable.Row>
+  <PropertiesTable.Row name="details" type="ReactNode">
+    Expandable details rendered in a full-width row below the property.
   </PropertiesTable.Row>
   <PropertiesTable.Row name="children" type="ReactNode">
     Property description and any nested content.

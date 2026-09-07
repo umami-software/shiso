@@ -106,6 +106,27 @@ describe('normalizeOperations', () => {
     expect(tree.children.find(child => child.name === 'email').type).toBe('string | null');
   });
 
+  it('renders simple alternatives inline while retaining detailed alternatives', () => {
+    for (const keyword of ['oneOf', 'anyOf']) {
+      const simple = schemaTree({}, { [keyword]: [{ type: 'string' }, { type: 'number' }] });
+      expect(simple.type).toBe('string | number');
+      expect(simple.children).toBeUndefined();
+
+      const detailed = schemaTree(
+        {},
+        {
+          [keyword]: [
+            { type: 'string', description: 'A reference.' },
+            { type: 'object', properties: { id: { type: 'string' } } },
+          ],
+        },
+      );
+      expect(detailed.type).toBe(keyword);
+      expect(detailed.children[0].description).toBe('A reference.');
+      expect(detailed.children[1].children[0].name).toBe('id');
+    }
+  });
+
   it('labels enums and oneOf variants', async () => {
     const spec = await fixtureSpec();
     const tree = schemaTree(spec, { $ref: '#/components/schemas/Order' });

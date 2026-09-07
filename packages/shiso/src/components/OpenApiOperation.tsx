@@ -21,12 +21,19 @@ function FieldChildren({ node }: { node: SchemaNode }) {
           ))}
         </div>
       )}
-      {node.children && node.children.length > 0 && (
-        <Expandable title="properties">
-          <SchemaTable nodes={node.children} />
-        </Expandable>
-      )}
     </>
+  );
+}
+
+function schemaDetails(node: SchemaNode) {
+  if (!node.children?.length) return undefined;
+
+  return (
+    <Expandable
+      title={node.type === 'oneOf' || node.type === 'anyOf' ? 'Allowed types' : 'properties'}
+    >
+      <SchemaTable nodes={node.children} />
+    </Expandable>
   );
 }
 
@@ -41,6 +48,7 @@ function SchemaTable({ nodes }: { nodes: SchemaNode[] }) {
           required={node.required}
           deprecated={node.deprecated}
           default={node.default}
+          details={schemaDetails(node)}
         >
           <FieldChildren node={node} />
         </PropertiesTable.Row>
@@ -51,7 +59,10 @@ function SchemaTable({ nodes }: { nodes: SchemaNode[] }) {
 
 /** Renders a schema tree: a root object's properties, or the node itself. */
 function SchemaFields({ node }: { node: SchemaNode }) {
-  return <SchemaTable nodes={!node.name && node.children?.length ? node.children : [node]} />;
+  const isUnion = node.type === 'oneOf' || node.type === 'anyOf';
+  return (
+    <SchemaTable nodes={!node.name && !isUnion && node.children?.length ? node.children : [node]} />
+  );
 }
 
 function HighlightedCode({
@@ -115,6 +126,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
                 required={parameter.required}
                 deprecated={parameter.deprecated}
                 default={parameter.default}
+                details={schemaDetails(parameter)}
               >
                 <FieldChildren node={parameter} />
               </PropertiesTable.Row>

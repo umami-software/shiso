@@ -8151,21 +8151,21 @@ function operationSections(operation) {
 //#endregion
 //#region src/components/OpenApiOperation.tsx
 function FieldChildren({ node }) {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
-		node.description,
-		node.enum && node.enum.length > 0 && /* @__PURE__ */ jsxs("div", {
-			className: "mt-1",
-			children: [
-				"Options:",
-				" ",
-				node.enum.map((value, index) => /* @__PURE__ */ jsxs("span", { children: [index > 0 && ", ", /* @__PURE__ */ jsx("code", { children: value })] }, value))
-			]
-		}),
-		node.children && node.children.length > 0 && /* @__PURE__ */ jsx(Expandable, {
-			title: "properties",
-			children: /* @__PURE__ */ jsx(SchemaTable, { nodes: node.children })
-		})
-	] });
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [node.description, node.enum && node.enum.length > 0 && /* @__PURE__ */ jsxs("div", {
+		className: "mt-1",
+		children: [
+			"Options:",
+			" ",
+			node.enum.map((value, index) => /* @__PURE__ */ jsxs("span", { children: [index > 0 && ", ", /* @__PURE__ */ jsx("code", { children: value })] }, value))
+		]
+	})] });
+}
+function schemaDetails(node) {
+	if (!node.children?.length) return void 0;
+	return /* @__PURE__ */ jsx(Expandable, {
+		title: node.type === "oneOf" || node.type === "anyOf" ? "Allowed types" : "properties",
+		children: /* @__PURE__ */ jsx(SchemaTable, { nodes: node.children })
+	});
 }
 function SchemaTable({ nodes }) {
 	return /* @__PURE__ */ jsx(PropertiesTable, { children: nodes.map((node) => /* @__PURE__ */ jsx(PropertiesTable.Row, {
@@ -8174,12 +8174,14 @@ function SchemaTable({ nodes }) {
 		required: node.required,
 		deprecated: node.deprecated,
 		default: node.default,
+		details: schemaDetails(node),
 		children: /* @__PURE__ */ jsx(FieldChildren, { node })
 	}, node.name || node.type)) });
 }
 /** Renders a schema tree: a root object's properties, or the node itself. */
 function SchemaFields({ node }) {
-	return /* @__PURE__ */ jsx(SchemaTable, { nodes: !node.name && node.children?.length ? node.children : [node] });
+	const isUnion = node.type === "oneOf" || node.type === "anyOf";
+	return /* @__PURE__ */ jsx(SchemaTable, { nodes: !node.name && !isUnion && node.children?.length ? node.children : [node] });
 }
 function HighlightedCode({ language, title, html, source, lineCount }) {
 	return /* @__PURE__ */ jsx(CodeBlock, {
@@ -8219,6 +8221,7 @@ function OpenApiOperation({ operation }) {
 				required: parameter.required,
 				deprecated: parameter.deprecated,
 				default: parameter.default,
+				details: schemaDetails(parameter),
 				children: /* @__PURE__ */ jsx(FieldChildren, { node: parameter })
 			}, parameter.name))] })] }, location)),
 			operation.requestBody && /* @__PURE__ */ jsxs("section", { children: [
