@@ -17,6 +17,8 @@ const schema = JSON.parse(
  * `passthrough` marks the two deliberate exceptions, with the reason.
  */
 const IMPLEMENTATION = {
+  editLink: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.editLink/ },
+  feedback: { file: 'packages/shiso/src/lib/site-model.ts', pattern: /config\.feedback/ },
   // Resolved while loading the config file, before validation.
   $ref: { file: 'packages/shiso/scripts/load-docs-config.mjs', pattern: /\$ref/ },
   // Editor-only metadata: points editors at this schema and is otherwise inert.

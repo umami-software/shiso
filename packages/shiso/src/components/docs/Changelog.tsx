@@ -1,4 +1,11 @@
-import { Children, Fragment, isValidElement, type ReactElement, useMemo } from 'react';
+import {
+  Children,
+  Fragment,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+  useMemo,
+} from 'react';
 import { useSearchParams } from 'react-router';
 import { Badge } from './Badge';
 import { styles } from './styles';
@@ -13,12 +20,17 @@ interface UpdateChildInfo {
   tags: string[];
 }
 
+interface UpdateChildProps {
+  tags?: unknown;
+  children?: ReactNode;
+}
+
 /** Flattens fragments so <Update> entries are found however MDX nests them. */
-function flatElements(children: React.ReactNode): ReactElement<{ tags?: unknown }>[] {
-  const flat: ReactElement<{ tags?: unknown }>[] = [];
+function flatElements(children: React.ReactNode): ReactElement<UpdateChildProps>[] {
+  const flat: ReactElement<UpdateChildProps>[] = [];
 
   Children.forEach(children, child => {
-    if (!isValidElement<{ tags?: unknown }>(child)) {
+    if (!isValidElement<UpdateChildProps>(child)) {
       return;
     }
     if (child.type === Fragment) {
@@ -43,9 +55,11 @@ function updateInfo(children: React.ReactNode): Map<string, UpdateChildInfo> {
     const key = String(child.key ?? `update-${index}`);
     const raw = child.props.tags;
     const tags = Array.isArray(raw)
-      ? [...new Set(raw.filter((tag): tag is string => typeof tag === 'string' && tag.trim()))].map(
-          tag => tag.trim(),
-        )
+      ? [
+          ...new Set(
+            raw.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0),
+          ),
+        ].map(tag => tag.trim())
       : [];
     info.set(key, { key, tags });
   });
@@ -142,7 +156,7 @@ export function Changelog({ children }: ChangelogProps) {
               className={styles.changelogFilterButton}
               data-active={active ? '' : undefined}
             >
-              <Badge size="sm" color={active ? 'primary' : undefined}>
+              <Badge size="sm" tone={active ? 'primary' : undefined}>
                 {tag}
               </Badge>
             </button>

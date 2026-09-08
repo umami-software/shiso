@@ -18,6 +18,8 @@ const schema = JSON.parse(
 const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter);
 
 const FIELD_DOCUMENTATION = {
+  editLink: 'site-details.mdx',
+  feedback: 'site-details.mdx',
   $ref: 'configuration-references.mdx',
   $schema: 'project-settings.mdx',
   api: 'api-reference.mdx',

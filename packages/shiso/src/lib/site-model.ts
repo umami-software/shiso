@@ -136,6 +136,8 @@ export function resolveSiteModel(
     search: resolveSearchConfig(config.search),
     contextualOptions: config.contextual?.options || [],
     error404: { ...config.errors?.['404'], redirect: config.errors?.['404']?.redirect !== false },
+    editLink: config.editLink || null,
+    feedback: config.feedback || null,
     showTimestamp: config.metadata?.timestamp === true,
     drilldown: config.interaction?.drilldown,
     locale: shiso?.locale || 'en-US',

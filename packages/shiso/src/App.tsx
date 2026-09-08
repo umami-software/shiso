@@ -12,8 +12,16 @@ import { docsHomeUrl, hasRootStandalonePage, siteModel, standalonePages } from '
 import { DocPage } from '@/pages/DocPage';
 import { StandalonePageView } from '@/pages/StandalonePage';
 
+// Runtime helpers are public exports, but cannot be rendered as MDX components.
+const {
+  mermaidSource: _mermaidSource,
+  usePanelContent: _usePanelContent,
+  useSetPanelContent: _useSetPanelContent,
+  ...mdxDocsComponents
+} = docsComponents;
+
 const mdxComponents = {
-  ...docsComponents,
+  ...mdxDocsComponents,
   img: docsComponents.ZoomableImage,
   pre: CodeBlock,
 };

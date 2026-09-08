@@ -14,6 +14,134 @@
       "allOf": [{ "$ref": "#/definitions/stringValue" }],
       "description": "Path or URL to this schema, for editor autocomplete."
     },
+    "editLink": {
+      "description": "Source edit link shown below documentation pages. $file expands to the encoded project-relative source path.",
+      "anyOf": [
+        {
+          "const": false
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^https?://[^\\s]+$"
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "label": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/configRefValue"
+        }
+      ]
+    },
+    "feedback": {
+      "description": "Opt-in page ratings sent as JSON to a configured endpoint.",
+      "anyOf": [
+        {
+          "const": false
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "endpoint"
+          ],
+          "properties": {
+            "endpoint": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(https?://[^\\s]+|/(?!/)[^\\s]*)$"
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "prompt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "helpfulLabel": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "unhelpfulLabel": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "successMessage": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            },
+            "errorMessage": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "$ref": "#/definitions/configRefValue"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/configRefValue"
+        }
+      ]
+    },
     "name": {
       "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
       "description": "Site name, shown in the header and the page title."

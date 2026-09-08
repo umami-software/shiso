@@ -242,6 +242,22 @@ export interface ErrorsConfig {
   '404'?: Error404Config;
 }
 
+export interface EditLinkConfig {
+  /** HTTP(S) URL template. $file is the encoded source path relative to the project root. */
+  url: string;
+  label?: string;
+}
+
+export interface FeedbackConfig {
+  /** HTTP(S) or site-relative endpoint accepting a JSON POST. */
+  endpoint: string;
+  prompt?: string;
+  helpfulLabel?: string;
+  unhelpfulLabel?: string;
+  successMessage?: string;
+  errorMessage?: string;
+}
+
 export interface MetadataConfig {
   /** Show the last-modified date on all pages. Overridable per page via `timestamp` frontmatter. */
   timestamp?: boolean;
@@ -372,6 +388,8 @@ export interface DocsConfig {
   seo?: SeoConfig;
   errors?: ErrorsConfig;
   metadata?: MetadataConfig;
+  editLink?: false | EditLinkConfig;
+  feedback?: false | FeedbackConfig;
   appearance?: AppearanceConfig;
   styling?: StylingConfig;
   fonts?: FontsConfig;
@@ -584,6 +602,8 @@ export interface SiteModel {
   contextualOptions: ContextualOption[];
   error404: Required<Pick<Error404Config, 'redirect'>> & Error404Config;
   showTimestamp: boolean;
+  editLink?: EditLinkConfig | null;
+  feedback?: FeedbackConfig | null;
   drilldown?: boolean;
   locale: string;
   labels: ThemeLabels;
@@ -614,6 +634,10 @@ export interface TocEntry {
 export type RelatedEntry = string | { href: string; title?: string };
 
 export interface DocFrontmatter {
+  /** Override the edit URL, or hide the edit link on this page. */
+  editLink?: string | false;
+  /** Hide the feedback controls on this page. */
+  feedback?: false;
   title?: string;
   description?: string;
   noindex?: boolean;

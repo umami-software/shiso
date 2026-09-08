@@ -117,3 +117,91 @@ omit `theme` without changing the site.
 
 To change colors, fonts, or color mode, continue to
 [Appearance](/docs/customization).
+
+
+## Edit links
+
+Add `editLink` to show an "Edit this page" link below each documentation page:
+
+```json
+{
+  "editLink": {
+    "url": "https://github.com/acme/docs/edit/main/$file",
+    "label": "Edit this page"
+  }
+}
+```
+
+`$file` expands to the actual source path relative to the project root, such as
+`content/docs/installation.mdx`. Each path segment is URL-encoded. Version and
+language folders and the original `.md` or `.mdx` extension are preserved. Include
+any repository subdirectory before `$file` when your site is in a monorepo.
+The URL must use HTTP or HTTPS and opens in a new tab. `label` is optional.
+
+Set `editLink: false` in `docs.json` to disable the default link. A page can
+hide its link or supply its own HTTP(S) URL through frontmatter:
+
+```yaml
+---
+title: Installation
+editLink: https://github.com/acme/docs/edit/main/content/docs/installation.mdx
+---
+```
+
+Use `editLink: false` in frontmatter to hide it on an individual page.
+An explicit page URL works even without a site-wide edit link.
+
+## Page feedback
+
+Add `feedback` to show helpful/unhelpful buttons below documentation pages:
+
+```json
+{
+  "feedback": {
+    "endpoint": "https://api.example.com/docs-feedback",
+    "prompt": "Was this page helpful?",
+    "helpfulLabel": "Yes",
+    "unhelpfulLabel": "No",
+    "successMessage": "Thanks for your feedback!",
+    "errorMessage": "Could not send feedback. Please try again."
+  }
+}
+```
+
+Only `endpoint` is required; the example shows the default text for every optional
+label. Shiso sends a JSON POST when a reader clicks a rating:
+
+```http
+POST /docs-feedback HTTP/1.1
+Content-Type: application/json
+
+{
+  "helpful": true,
+  "path": "/docs/installation",
+  "title": "Installation",
+  "language": "en",
+  "version": "v2"
+}
+```
+
+`path` includes the site's deployment base. `language` and `version` are omitted
+when the page has no corresponding scope. The payload contains no query string,
+credentials, or free-text comments.
+
+Supply your own endpoint; Shiso's static output does not include a feedback
+backend. The endpoint must accept `Content-Type: application/json` and return a
+2xx status on success; no response body is required. An external endpoint must
+allow your docs origin through CORS. An endpoint beginning with `/` resolves
+under the site's deployment base; an absolute HTTP(S) URL is used as supplied.
+Endpoint configuration is public, so do not put API secrets in the URL.
+
+Buttons are disabled while sending and after a successful vote for the current
+page visit. Failed requests (including a 15-second timeout) show the error message
+and allow another attempt. Votes are not stored in the browser; revisiting or
+reloading a page allows another vote. Apply any deduplication or rate limits in
+your endpoint.
+
+Feedback is disabled by default. Set `feedback: false` in `docs.json` to disable
+it site-wide, or in frontmatter to hide it on an individual page. Both page
+feedback and edit links are excluded from Pagefind indexing and appear only on
+documentation pages.

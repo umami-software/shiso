@@ -3,6 +3,7 @@ import { ContextualMenu } from '@/components/ContextualMenu';
 import { Badge } from '@/components/docs/Badge';
 import { ArrowLeft, ArrowRight, FileText } from '@/components/icons';
 import { OpenApiOperation } from '@/components/OpenApiOperation';
+import { PageActions } from '@/components/PageActions';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
 import { resolveLocale } from '@/lib/locale';
@@ -141,6 +142,7 @@ export function DocContent({ page, doc, site }: DocContentProps) {
           <time dateTime={lastModified}>{dateFormat.format(new Date(lastModified))}</time>
         </div>
       )}
+      <PageActions key={page.url} page={page} frontmatter={doc.frontmatter} site={site} />
       {related.length > 0 && (
         <nav className="mt-8" aria-label={site.labels.relatedTopics} data-pagefind-ignore>
           <div className="text-sm text-muted-foreground">{site.labels.relatedTopics}</div>
