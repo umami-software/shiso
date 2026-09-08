@@ -49,6 +49,9 @@
   "metadata": {
     "timestamp": true
   },
+  "editLink": {
+    "url": "https://github.com/umami-software/shiso/edit/master/$file"
+  },
   "api": {
     "spec": "openapi.yaml"
   },

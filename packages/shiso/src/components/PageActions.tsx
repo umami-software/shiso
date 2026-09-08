@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { ExternalLink } from '@/components/icons';
 import { toHref } from '@/lib/paths';
 import type { DocFrontmatter, NormalizedDocsPage, SiteModel } from '@/lib/types';
 
@@ -19,10 +20,12 @@ export function PageActions({
   page,
   frontmatter,
   site,
+  lastUpdated,
 }: {
   page: NormalizedDocsPage;
   frontmatter?: DocFrontmatter;
   site: SiteModel;
+  lastUpdated?: ReactNode;
 }) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
   const [rating, setRating] = useState<boolean>();
@@ -70,15 +73,35 @@ export function PageActions({
     }
   }
 
-  if (!href && !feedback) return null;
+  if (!href && !feedback && !lastUpdated) return null;
 
   return (
-    <div
-      className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-sm"
-      data-pagefind-ignore
-    >
+    <>
+      {(lastUpdated || href) && (
+        <div
+          className="mt-8 flex items-baseline gap-4 text-sm text-muted-foreground"
+          data-pagefind-ignore
+        >
+          {lastUpdated && <div className="min-w-0">{lastUpdated}</div>}
+          {href && (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto inline-flex shrink-0 items-center gap-1.5 text-right no-underline hover:text-primary"
+            >
+              {site.editLink?.label || 'Edit this page'}
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      )}
       {feedback && (
-        <div className="flex flex-col gap-2" aria-busy={status === 'pending'}>
+        <div
+          className="mt-8 flex flex-col gap-2 border-t border-border pt-6 text-sm"
+          aria-busy={status === 'pending'}
+          data-pagefind-ignore
+        >
           <fieldset
             aria-label={feedback.prompt || 'Was this page helpful?'}
             className="flex flex-wrap items-center gap-2"
@@ -106,16 +129,6 @@ export function PageActions({
           </div>
         </div>
       )}
-      {href && (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-muted-foreground underline underline-offset-4 hover:text-primary"
-        >
-          {site.editLink?.label || 'Edit this page'}
-        </a>
-      )}
-    </div>
+    </>
   );
 }

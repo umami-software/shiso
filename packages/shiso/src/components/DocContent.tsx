@@ -136,13 +136,20 @@ export function DocContent({ page, doc, site }: DocContentProps) {
         <Content />
       </div>
       {operation && <OpenApiOperation operation={operation} />}
-      {lastModified && (
-        <div className="mt-8 text-sm text-muted-foreground">
-          {site.labels.lastUpdated}{' '}
-          <time dateTime={lastModified}>{dateFormat.format(new Date(lastModified))}</time>
-        </div>
-      )}
-      <PageActions key={page.url} page={page} frontmatter={doc.frontmatter} site={site} />
+      <PageActions
+        key={page.url}
+        page={page}
+        frontmatter={doc.frontmatter}
+        site={site}
+        lastUpdated={
+          lastModified ? (
+            <>
+              {site.labels.lastUpdated}{' '}
+              <time dateTime={lastModified}>{dateFormat.format(new Date(lastModified))}</time>
+            </>
+          ) : undefined
+        }
+      />
       {related.length > 0 && (
         <nav className="mt-8" aria-label={site.labels.relatedTopics} data-pagefind-ignore>
           <div className="text-sm text-muted-foreground">{site.labels.relatedTopics}</div>

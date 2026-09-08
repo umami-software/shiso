@@ -4,7 +4,7 @@ import * as React$1 from "react";
 import { jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
 
-//#region ../../node_modules/.pnpm/react-router@8.3.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/production/lib/dom/server.js
+//#region ../../node_modules/.pnpm/react-router@8.3.0_react-do_c27277bcf657dc321048682bd02ab633/node_modules/react-router/dist/production/lib/dom/server.js
 /**
 * react-router v8.3.0
 *
