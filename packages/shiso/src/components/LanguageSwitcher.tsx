@@ -8,13 +8,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getLanguageScopes } from '@/lib/docs-config';
+import { getLanguageName, isValidLocale } from '@/lib/locale';
 import { docsSite, getScopeByPathname } from '@/lib/site-config';
 
 /**
  * Language selector for multi-language sites. Each option is a language's
  * landing scope — its default version — so switching languages always lands
  * on that language's default-version first page. Hidden languages never
- * appear as options.
+ * appear as options. Each language is shown by its native name, e.g. "ja"
+ * as "日本語".
  */
 export function LanguageSwitcher() {
   const { pathname } = useLocation();
@@ -36,7 +38,7 @@ export function LanguageSwitcher() {
           />
         }
       >
-        {current.language}
+        {getLanguageName(current.language)}
         <ChevronRight className="size-3.5 rotate-90 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-32">
@@ -49,7 +51,12 @@ export function LanguageSwitcher() {
               }
             }}
           >
-            <span className="grow">{scope.language}</span>
+            <span
+              className="grow"
+              lang={isValidLocale(scope.language) ? scope.language : undefined}
+            >
+              {scope.language ? getLanguageName(scope.language) : null}
+            </span>
             {scope.language === current.language ? <Check className="size-3.5" /> : null}
           </DropdownMenuItem>
         ))}

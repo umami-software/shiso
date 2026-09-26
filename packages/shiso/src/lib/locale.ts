@@ -37,3 +37,28 @@ export function getTextDirection(locale: string): 'ltr' | 'rtl' {
   const primary = locale.split('-')[0]?.toLowerCase() || '';
   return RTL_LANGUAGES.has(primary) ? 'rtl' : 'ltr';
 }
+
+/**
+ * A language's name written in that language, for language selectors:
+ * "ja" -> "日本語", "zh-Hant" -> "繁體中文", "es" -> "Español". Labels that
+ * are not valid locale codes (e.g. "English") are returned unchanged.
+ */
+export function getLanguageName(language: string): string {
+  if (!isValidLocale(language)) {
+    return language;
+  }
+
+  const locale = Intl.getCanonicalLocales(language)[0];
+
+  try {
+    const name = new Intl.DisplayNames([locale], { type: 'language', fallback: 'none' }).of(locale);
+
+    if (!name) {
+      return language;
+    }
+
+    return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
+  } catch {
+    return language;
+  }
+}

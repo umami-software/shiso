@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getTextDirection, isValidLocale, resolveLocale } from '@/lib/locale';
+import { getLanguageName, getTextDirection, isValidLocale, resolveLocale } from '@/lib/locale';
 
 describe('isValidLocale', () => {
   it('accepts language codes and full tags', () => {
@@ -39,5 +39,28 @@ describe('getTextDirection', () => {
   it('defaults to left-to-right', () => {
     expect(getTextDirection('en-US')).toBe('ltr');
     expect(getTextDirection('es')).toBe('ltr');
+  });
+});
+
+describe('getLanguageName', () => {
+  it('names each language in its own language', () => {
+    expect(getLanguageName('en')).toBe('English');
+    expect(getLanguageName('ja')).toBe('日本語');
+    expect(getLanguageName('zh-Hant')).toBe('繁體中文');
+    expect(getLanguageName('de')).toBe('Deutsch');
+  });
+
+  it('capitalizes names that are lowercase in their own language', () => {
+    expect(getLanguageName('es')).toBe('Español');
+    expect(getLanguageName('fr')).toBe('Français');
+  });
+
+  it('canonicalizes the code before naming it', () => {
+    expect(getLanguageName('zh-hant')).toBe('繁體中文');
+  });
+
+  it('returns labels that are not locale codes unchanged', () => {
+    expect(getLanguageName('English')).toBe('English');
+    expect(getLanguageName('not a locale')).toBe('not a locale');
   });
 });
