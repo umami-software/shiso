@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "shiso dev",
     "check:config": "shiso check",
-    "build": "shiso build",
+    "build": "pnpm build:runtime && shiso build",
     "build:runtime": "pnpm --filter @umami/shiso build:runtime",
     "release:check": "node scripts/prepare-release.mjs",
     "release:check:shiso": "node scripts/prepare-release.mjs --package shiso",
