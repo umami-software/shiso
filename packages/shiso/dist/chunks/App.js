@@ -4077,6 +4077,66 @@ function isNodeHidden(node) {
 }
 
 //#endregion
+//#region src/lib/locale.ts
+/** Primary language subtags written right-to-left. */
+const RTL_LANGUAGES = /* @__PURE__ */ new Set([
+	"ar",
+	"ckb",
+	"dv",
+	"fa",
+	"he",
+	"iw",
+	"ps",
+	"sd",
+	"ug",
+	"ur",
+	"yi"
+]);
+/** BCP 47-shaped tags with a 2-3 letter primary subtag, e.g. "es" or "pt-BR". */
+const LOCALE_PATTERN = /^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i;
+function isValidLocale(value) {
+	if (!value || !LOCALE_PATTERN.test(value)) return false;
+	try {
+		return Intl.getCanonicalLocales(value).length > 0;
+	} catch {
+		return false;
+	}
+}
+/**
+* Locale for a page: its scope's language code when valid, then the
+* site-wide shiso.config `locale`, then en-US.
+*/
+function resolveLocale(language, fallback) {
+	if (isValidLocale(language)) return Intl.getCanonicalLocales(language)[0];
+	if (isValidLocale(fallback)) return Intl.getCanonicalLocales(fallback)[0];
+	return "en-US";
+}
+/** Document direction for a locale, e.g. "ar" and "he" read right-to-left. */
+function getTextDirection(locale) {
+	const primary = locale.split("-")[0]?.toLowerCase() || "";
+	return RTL_LANGUAGES.has(primary) ? "rtl" : "ltr";
+}
+/**
+* A language's name written in that language, for language selectors:
+* "ja" -> "日本語", "zh-Hant" -> "繁體中文", "es" -> "Español". Labels that
+* are not valid locale codes (e.g. "English") are returned unchanged.
+*/
+function getLanguageName(language) {
+	if (!isValidLocale(language)) return language;
+	const locale = Intl.getCanonicalLocales(language)[0];
+	try {
+		const name = new Intl.DisplayNames([locale], {
+			type: "language",
+			fallback: "none"
+		}).of(locale);
+		if (!name) return language;
+		return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
+	} catch {
+		return language;
+	}
+}
+
+//#endregion
 //#region src/lib/content.ts
 /**
 * Eagerly imports every content file at build time. Markdown/MDX modules
@@ -4121,47 +4181,6 @@ function getDocModule(filePath) {
 */
 function getLastModified(filePath) {
 	return LAST_MODIFIED[filePath];
-}
-
-//#endregion
-//#region src/lib/locale.ts
-/** Primary language subtags written right-to-left. */
-const RTL_LANGUAGES = /* @__PURE__ */ new Set([
-	"ar",
-	"ckb",
-	"dv",
-	"fa",
-	"he",
-	"iw",
-	"ps",
-	"sd",
-	"ug",
-	"ur",
-	"yi"
-]);
-/** BCP 47-shaped tags with a 2-3 letter primary subtag, e.g. "es" or "pt-BR". */
-const LOCALE_PATTERN = /^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i;
-function isValidLocale(value) {
-	if (!value || !LOCALE_PATTERN.test(value)) return false;
-	try {
-		return Intl.getCanonicalLocales(value).length > 0;
-	} catch {
-		return false;
-	}
-}
-/**
-* Locale for a page: its scope's language code when valid, then the
-* site-wide shiso.config `locale`, then en-US.
-*/
-function resolveLocale(language, fallback) {
-	if (isValidLocale(language)) return Intl.getCanonicalLocales(language)[0];
-	if (isValidLocale(fallback)) return Intl.getCanonicalLocales(fallback)[0];
-	return "en-US";
-}
-/** Document direction for a locale, e.g. "ar" and "he" read right-to-left. */
-function getTextDirection(locale) {
-	const primary = locale.split("-")[0]?.toLowerCase() || "";
-	return RTL_LANGUAGES.has(primary) ? "rtl" : "ltr";
 }
 
 //#endregion
@@ -4548,7 +4567,8 @@ function getPageTitle(pageTitle) {
 * Language selector for multi-language sites. Each option is a language's
 * landing scope — its default version — so switching languages always lands
 * on that language's default-version first page. Hidden languages never
-* appear as options.
+* appear as options. Each language is shown by its native name, e.g. "ja"
+* as "日本語".
 */
 function LanguageSwitcher() {
 	const { pathname } = useLocation();
@@ -4561,7 +4581,7 @@ function LanguageSwitcher() {
 			variant: "outline",
 			className: "h-auto gap-1.5 rounded-md bg-card px-2.5 py-1.5 text-sm font-medium text-foreground"
 		}),
-		children: [current.language, /* @__PURE__ */ jsx(ChevronRight, { className: "size-3.5 rotate-90 text-muted-foreground" })]
+		children: [getLanguageName(current.language), /* @__PURE__ */ jsx(ChevronRight, { className: "size-3.5 rotate-90 text-muted-foreground" })]
 	}), /* @__PURE__ */ jsx(DropdownMenuContent, {
 		align: "start",
 		className: "min-w-32",
@@ -4571,7 +4591,8 @@ function LanguageSwitcher() {
 			},
 			children: [/* @__PURE__ */ jsx("span", {
 				className: "grow",
-				children: scope.language
+				lang: isValidLocale(scope.language) ? scope.language : void 0,
+				children: scope.language ? getLanguageName(scope.language) : null
 			}), scope.language === current.language ? /* @__PURE__ */ jsx(Check, { className: "size-3.5" }) : null]
 		}, scope.id))
 	})] });
