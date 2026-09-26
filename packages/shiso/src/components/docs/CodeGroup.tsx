@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { TabsContent, TabsList, Tabs as TabsPrimitive, TabsTrigger } from '@/components/ui/tabs';
+import { useLabels } from '@/lib/label-context';
 import { styles } from './styles';
 import { findCodeLanguage, findCodeTitle, slugify, toElementArray } from './utils';
 
@@ -9,6 +10,7 @@ export interface CodeGroupProps {
 }
 
 export function CodeGroup({ children }: CodeGroupProps) {
+  const labels = useLabels();
   const blocks = useMemo(() => {
     const counts = new Map<string, number>();
 
@@ -55,7 +57,7 @@ export function CodeGroup({ children }: CodeGroupProps) {
       <TabsList
         variant="line"
         className="h-9 w-full justify-start gap-5 overflow-x-auto overflow-y-hidden rounded-none px-3 py-0 shadow-[inset_0_-1px_0_var(--border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        aria-label="Code snippets"
+        aria-label={labels.codeSnippets}
       >
         {blocks.map(block => (
           <TabsTrigger

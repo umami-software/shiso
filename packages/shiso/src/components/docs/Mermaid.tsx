@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { useLabels } from '@/lib/label-context';
 import { styles } from './styles';
 
 export type MermaidPlacement = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
@@ -63,6 +64,7 @@ export function Mermaid({
   placement = 'bottom-right',
   children,
 }: MermaidProps) {
+  const labels = useLabels();
   const source = mermaidSource(chart, children);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgHostRef = useRef<HTMLDivElement>(null);
@@ -129,29 +131,29 @@ export function Mermaid({
             // biome-ignore lint/security/noDangerouslySetInnerHtml: mermaid generates this SVG from the page's own diagram source.
             dangerouslySetInnerHTML={{ __html: svg }}
             role="img"
-            aria-label={title ? String(title) : 'Diagram'}
+            aria-label={title ? String(title) : labels.diagram}
           />
         ) : (
-          <pre className={styles.mermaidFallback} title="Diagram source">
+          <pre className={styles.mermaidFallback} title={labels.diagramSource}>
             {source}
           </pre>
         )}
-        {error ? <p className={styles.mermaidError}>Could not render this diagram.</p> : null}
+        {error ? <p className={styles.mermaidError}>{labels.diagramError}</p> : null}
         {showControls && svg && !error ? (
           <div className={`${styles.mermaidControls} ${PLACEMENT_CLASS[placement]}`}>
             <button
               type="button"
-              aria-label="Zoom out"
+              aria-label={labels.zoomOut}
               onClick={() => setZoom(z => Math.max(0.5, +(z - 0.25).toFixed(2)))}
             >
               −
             </button>
-            <button type="button" aria-label="Reset view" onClick={() => setZoom(1)}>
+            <button type="button" aria-label={labels.resetView} onClick={() => setZoom(1)}>
               ⟳
             </button>
             <button
               type="button"
-              aria-label="Zoom in"
+              aria-label={labels.zoomIn}
               onClick={() => setZoom(z => Math.min(2.5, +(z + 0.25).toFixed(2)))}
             >
               +

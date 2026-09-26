@@ -9,12 +9,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { getLanguageScopes } from '@/lib/docs-config';
 import { getLanguageName, isValidLocale } from '@/lib/locale';
-import { docsSite, getScopeByPathname } from '@/lib/site-config';
+import {
+  docsSite,
+  getScopeByPathname,
+  getStandaloneCounterpart,
+  getStandalonePage,
+} from '@/lib/site-config';
 
 /**
  * Language selector for multi-language sites. Each option is a language's
- * landing scope — its default version — so switching languages always lands
- * on that language's default-version first page. Hidden languages never
+ * landing scope — its default version — so switching languages lands on that
+ * language's default-version first page. On a standalone page (e.g. a home
+ * page) it lands on the same page in the chosen language when one exists.
+ * Hidden languages never
  * appear as options. Each language is shown by its native name, e.g. "ja"
  * as "日本語".
  */
@@ -23,6 +30,7 @@ export function LanguageSwitcher() {
   const navigate = useNavigate();
   const current = getScopeByPathname(pathname);
   const options = getLanguageScopes(docsSite);
+  const standalone = getStandalonePage(pathname);
 
   if (!current.language || (options.length < 2 && !current.hidden)) {
     return null;
@@ -47,7 +55,12 @@ export function LanguageSwitcher() {
             key={scope.id}
             onClick={() => {
               if (scope.language !== current.language) {
-                navigate(scope.firstPageUrl);
+                const counterpart =
+                  standalone && scope.language
+                    ? getStandaloneCounterpart(standalone, scope.language)
+                    : null;
+
+                navigate(counterpart?.path || scope.firstPageUrl);
               }
             }}
           >

@@ -60,7 +60,9 @@ export function Docs({ page, doc, site }: DocsProps) {
 
   // API reference pages append their generated section anchors to the TOC.
   const operation = getOperation(doc.frontmatter?.openapi);
-  const toc = operation ? [...(doc.toc || []), ...operationSections(operation)] : doc.toc;
+  const toc = operation
+    ? [...(doc.toc || []), ...operationSections(operation, site.labels)]
+    : doc.toc;
 
   return (
     <PanelProvider>

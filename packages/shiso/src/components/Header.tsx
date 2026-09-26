@@ -6,7 +6,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { isExternalHref } from '@/lib/paths';
-import { docsHomeUrl, getScopeByPathname, hasRootStandalonePage } from '@/lib/site-config';
+import { getHomeHref, getScopeByPathname } from '@/lib/site-config';
 import type { NormalizedLink, SiteModel } from '@/lib/types';
 
 /**
@@ -62,8 +62,9 @@ export function Header({ site }: { site: SiteModel }) {
   const { pathname } = useLocation();
   // The header renders the navigation of whichever scope owns the current page.
   const docs = getScopeByPathname(pathname).docs;
-  // The brand links to the standalone home page when one owns "/".
-  const brandHref = logo?.href || (hasRootStandalonePage ? '/' : docsHomeUrl);
+  // The brand links to the standalone home page in the current language when
+  // one owns "/", else the docs home.
+  const brandHref = logo?.href || getHomeHref(pathname);
   const hasBrand = !!name || !!logo?.light || !!logo?.dark;
   const brandClassName =
     'inline-flex items-center gap-2 text-xl font-bold text-foreground tracking-[-0.03em]';

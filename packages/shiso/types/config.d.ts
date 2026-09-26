@@ -1,3 +1,7 @@
+import type { Translations } from './labels';
+
+export type { ThemeLabels, Translations } from './labels';
+
 import type { PluggableList } from 'unified';
 
 /** Build-time Markdown and MDX compiler extensions. */
@@ -16,8 +20,10 @@ export interface ShisoConfig {
   contentDir?: string;
   /** Absolute site origin (e.g. "https://docs.example.com") used for canonical URLs, og:url, and the sitemap. */
   siteUrl?: string;
-  /** Locale used for deterministic date formatting. Default "en-US". */
+  /** Default locale for UI labels and date formatting. Default "en-US". */
   locale?: string;
+  /** Partial UI label overrides keyed by BCP 47 locale. */
+  translations?: Translations;
   /** Build-time remark and rehype plugins for Markdown and MDX content. */
   mdx?: MdxConfig;
 }

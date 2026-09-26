@@ -6,7 +6,7 @@
 /coverage
 
 # production
-/dist
+dist/
 /.shiso
 
 # misc
@@ -33,5 +33,4 @@ yarn-error.log*
 /packages/create-shiso-app/template/
 
 # multi-scope fixture build output
-/tests/fixtures/multi-scope/dist
 /tests/fixtures/multi-scope/.shiso

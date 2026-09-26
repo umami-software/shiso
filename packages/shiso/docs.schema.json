@@ -232,6 +232,10 @@
           "title": {
             "allOf": [{ "$ref": "#/definitions/stringValue" }],
             "description": "Page title used in the document head. Frontmatter title wins."
+          },
+          "language": {
+            "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+            "description": "Navigation language this page belongs to, e.g. \"ja\". Must match a language in navigation.languages. The language selector links pages whose file slugs match once the language folder is removed, e.g. \"ja/home\" and \"home\"."
           }
         }
       }

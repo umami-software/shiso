@@ -1,4 +1,5 @@
 import { resolveCodeBlockConfig } from '@/lib/code-blocks';
+import { resolveLabels, englishLabels as SHISO_THEME_LABELS } from '@/lib/labels';
 import { toAbsoluteUrl, toHref } from '@/lib/paths';
 import { resolveSearchConfig } from '@/lib/search/config';
 import type {
@@ -17,37 +18,6 @@ import type {
   SiteModel,
   ThemeLabels,
 } from '@/lib/types';
-
-const SHISO_THEME_LABELS: ThemeLabels = {
-  menu: 'Menu',
-  documentationNavigation: 'Documentation navigation',
-  sections: 'Sections',
-  tableOfContents: 'On this page',
-  tableOfContentsNavigation: 'Table of contents',
-  searchTitle: 'Search',
-  searching: 'Searching...',
-  searchUnavailable: 'Search unavailable',
-  noResults: 'No results',
-  lastUpdated: 'Last updated on',
-  relatedTopics: 'Related topics',
-  previousPage: 'Previous',
-  nextPage: 'Next',
-  notFound: 'Page not found',
-  dismissBanner: 'Dismiss banner',
-  toggleTheme: 'Toggle theme',
-  moreOptions: 'More options',
-  copied: 'Copied',
-  expand: 'Expand',
-  collapse: 'Collapse',
-  copyPage: 'Copy page',
-  copyPageDescription: 'Copy this page as Markdown',
-  viewMarkdown: 'View as Markdown',
-  viewMarkdownDescription: 'Open this page as plain Markdown',
-  openInChatGPT: 'Open in ChatGPT',
-  openInClaude: 'Open in Claude',
-  openInPerplexity: 'Open in Perplexity',
-  askQuestionsAboutPage: 'Ask questions about this page',
-};
 
 function isInternalHref(href: string): boolean {
   return /^(?:#|\/|\.\.?\/)/.test(href);
@@ -141,7 +111,7 @@ export function resolveSiteModel(
     showTimestamp: config.metadata?.timestamp === true,
     drilldown: config.interaction?.drilldown,
     locale: shiso?.locale || 'en-US',
-    labels: SHISO_THEME_LABELS,
+    labels: resolveLabels(shiso?.locale || 'en-US', shiso?.translations),
     docs,
   };
 }

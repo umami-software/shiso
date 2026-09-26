@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { TabsContent, TabsList, Tabs as TabsPrimitive, TabsTrigger } from '@/components/ui/tabs';
+import { useLabels } from '@/lib/label-context';
 import { slugify, toElementArray } from './utils';
 
 interface TabChildProps {
@@ -18,6 +19,7 @@ export interface TabsProps {
 }
 
 export function Tabs({ children, group }: TabsProps) {
+  const labels = useLabels();
   const tabs = useMemo(() => {
     const counts = new Map<string, number>();
 
@@ -94,7 +96,7 @@ export function Tabs({ children, group }: TabsProps) {
       <TabsList
         variant="line"
         className="w-full justify-start gap-5 overflow-x-auto overflow-y-hidden p-0 shadow-[inset_0_-1px_0_var(--border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        aria-label="Content tabs"
+        aria-label={labels.contentTabs}
       >
         {tabs.map(tab => (
           <TabsTrigger

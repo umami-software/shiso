@@ -8,6 +8,7 @@ import {
   getPageByPathname as getSitePageByPathname,
   normalizeDocsSite,
 } from '@/lib/docs-config';
+import { resolveLabels } from '@/lib/labels';
 import { getTextDirection, resolveLocale } from '@/lib/locale';
 import { DOCS_PREFIX, stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
@@ -53,16 +54,79 @@ export function getStandalonePage(pathname: string): StandalonePage | null {
   return getStandalonePageByPathname(standalonePages, stripBase(pathname));
 }
 
-/** Scope that owns the current pathname; the default scope for unknown paths. */
+/** Landing scope of a language: its default version. */
+function getLanguageScope(language: string): DocsScope | undefined {
+  return docsSite.scopes.find(scope => scope.language === language && scope.isLanguageDefault);
+}
+
+/**
+ * Scope that owns the current pathname. A standalone page tagged with a
+ * `language` belongs to that language's landing scope; unknown paths and
+ * untagged standalone pages belong to the default scope.
+ */
 export function getScopeByPathname(pathname: string): DocsScope {
   const page = getPageByPathname(pathname);
-  return page ? getScopeForPage(docsSite, page) : getDefaultScope(docsSite);
+
+  if (page) {
+    return getScopeForPage(docsSite, page);
+  }
+
+  const standalone = getStandalonePage(pathname);
+  const languageScope = standalone?.language ? getLanguageScope(standalone.language) : undefined;
+
+  return languageScope || getDefaultScope(docsSite);
+}
+
+/**
+ * The same standalone page in another language, matched by `key`. Untagged
+ * pages count as the default scope's language.
+ */
+export function getStandaloneCounterpart(
+  page: StandalonePage,
+  language: string,
+): StandalonePage | null {
+  const defaultLanguage = getDefaultScope(docsSite).language;
+
+  return (
+    standalonePages.find(
+      candidate =>
+        candidate.key === page.key && (candidate.language || defaultLanguage) === language,
+    ) || null
+  );
+}
+
+/**
+ * Home link for the current pathname: the "/" standalone page in the current
+ * language when one exists, else "/", else the docs home when nothing owns "/".
+ */
+export function getHomeHref(pathname: string): string {
+  const root = standalonePages.find(page => page.path === '/');
+
+  if (!root) {
+    return docsHomeUrl;
+  }
+
+  const language = getScopeByPathname(pathname).language;
+  return (language && getStandaloneCounterpart(root, language)?.path) || '/';
 }
 
 /** Document language and direction for a pathname, from its scope's language. */
 export function getLocaleByPathname(pathname: string): { lang: string; dir: 'ltr' | 'rtl' } {
   const lang = resolveLocale(getScopeByPathname(pathname).language, siteModel.locale);
   return { lang, dir: getTextDirection(lang) };
+}
+
+/** Resolve UI text on every route, including standalone pages and language switches. */
+export function getSiteModelByPathname(pathname: string) {
+  const { lang } = getLocaleByPathname(pathname);
+  const labels = resolveLabels(lang, shisoConfig.translations);
+  const customPrompt =
+    typeof siteConfig.search === 'object' ? siteConfig.search.prompt?.trim() : undefined;
+  return {
+    ...siteModel,
+    labels,
+    search: { ...siteModel.search, prompt: customPrompt || labels.searchPlaceholder },
+  };
 }
 
 export const siteName = siteModel.name;

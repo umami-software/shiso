@@ -35,8 +35,13 @@ describe('normalizeStandalonePages', () => {
     ]);
 
     expect(pages).toEqual([
-      { path: '/', filePath: '/content/pages/home.mdx', title: undefined },
-      { path: '/about', filePath: '/content/pages/about.md', title: 'About us' },
+      { path: '/', filePath: '/content/pages/home.mdx', title: undefined, key: 'home' },
+      {
+        path: '/about',
+        filePath: '/content/pages/about.md',
+        title: 'About us',
+        key: 'about',
+      },
     ]);
   });
 
@@ -111,5 +116,42 @@ describe('getStandalonePageByPathname', () => {
 
   it('returns null for unknown paths', () => {
     expect(getStandalonePageByPathname(pages, '/pricing')).toBeNull();
+  });
+});
+
+describe('normalizeStandalonePages languages', () => {
+  const multiSite = normalizeDocsSite(
+    {
+      navigation: {
+        languages: [
+          { language: 'en', pages: ['index'] },
+          { language: 'ja', pages: ['ja/index'] },
+        ],
+      },
+    } as DocsConfig,
+    resolveDocs,
+    { docsPrefix: '/docs' },
+  );
+  const resolveMulti = (fileSlug: string) =>
+    ({ home: '/content/pages/home.tsx', 'ja/home': '/content/pages/ja/home.tsx' })[fileSlug];
+  const normalizeMulti = (pages: StandalonePageItem[]) =>
+    normalizeStandalonePages({ pages } as DocsConfig, resolveMulti, multiSite, {
+      docsPrefix: '/docs',
+    });
+
+  it('keeps the language and keys translated pages by their slug without the language folder', () => {
+    const pages = normalizeMulti([
+      { path: '/', page: 'home' },
+      { path: '/ja', page: 'ja/home', language: 'ja' },
+    ]);
+
+    expect(pages[0]).toMatchObject({ key: 'home', language: undefined });
+    expect(pages[1]).toMatchObject({ path: '/ja', key: 'home', language: 'ja' });
+  });
+
+  it('throws for a language missing from navigation.languages', () => {
+    expect(() => normalizeMulti([{ path: '/ja', page: 'ja/home', language: 'fr' }])).toThrow(
+      'uses language "fr", which is not declared in navigation.languages',
+    );
   });
 });

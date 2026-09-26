@@ -1,3 +1,4 @@
+import { englishLabels } from '@/lib/labels';
 /**
  * Runtime helpers for OpenAPI reference pages. Operation data is produced at
  * build time by scripts/generate-openapi.mjs and reaches the client through
@@ -7,7 +8,7 @@
 import type { BadgeColor } from '@/components/docs/Badge';
 import { OPENAPI_OPERATIONS } from '@/lib/openapi.generated';
 import { createSlugger } from '@/lib/slug';
-import type { NormalizedOperation, TocEntry } from '@/lib/types';
+import type { NormalizedOperation, ThemeLabels, TocEntry } from '@/lib/types';
 
 export const METHOD_COLORS: Record<string, BadgeColor> = {
   GET: 'green',
@@ -46,12 +47,15 @@ export function hasParameters(operation: NormalizedOperation): boolean {
 }
 
 /** Parameter groups shared by the renderer and table of contents. */
-export function operationParameterSections(operation: NormalizedOperation) {
+export function operationParameterSections(
+  operation: NormalizedOperation,
+  labels: ThemeLabels = englishLabels,
+) {
   const groups = [
-    { location: 'header', name: 'Headers' },
-    { location: 'path', name: 'Path parameters' },
-    { location: 'query', name: 'Query parameters' },
-    { location: 'cookie', name: 'Cookie parameters' },
+    { location: 'header', name: labels.apiHeaders },
+    { location: 'path', name: labels.apiPathParameters },
+    { location: 'query', name: labels.apiQueryParameters },
+    { location: 'cookie', name: labels.apiCookieParameters },
   ] as const;
 
   return groups.filter(
@@ -66,7 +70,10 @@ export function operationParameterSections(operation: NormalizedOperation) {
  * truth for section ids: the component, the table of contents, the content
  * checker, and the search indexer all derive their anchors from these labels.
  */
-export function operationSections(operation: NormalizedOperation): TocEntry[] {
+export function operationSections(
+  operation: NormalizedOperation,
+  labels: ThemeLabels = englishLabels,
+): TocEntry[] {
   const slugger = createSlugger();
   const names = [
     ...operationParameterSections(operation).map(section => section.name),
@@ -75,5 +82,11 @@ export function operationSections(operation: NormalizedOperation): TocEntry[] {
     operation.samples.length ? 'Code samples' : undefined,
   ].filter((name): name is string => Boolean(name));
 
-  return names.map(name => ({ name, id: slugger.slug(name), size: 2 }));
+  const translated = [
+    ...operationParameterSections(operation, labels).map(section => section.name),
+    ...(operation.requestBody ? [labels.apiRequestBody] : []),
+    ...(operation.responses.length ? [labels.apiResponses] : []),
+    ...(operation.samples.length ? [labels.apiCodeSamples] : []),
+  ];
+  return names.map((name, index) => ({ name: translated[index], id: slugger.slug(name), size: 2 }));
 }

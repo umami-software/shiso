@@ -1,3 +1,7 @@
+import type { ThemeLabels, Translations } from '../../types/labels';
+
+export type { ThemeLabels, Translations } from '../../types/labels';
+
 import type { PluggableList } from 'unified';
 
 /* ---------------------------------------------------------------------------
@@ -134,8 +138,10 @@ export interface ShisoConfig {
   contentDir?: string;
   /** Absolute site origin, required for canonical and og:url tags. */
   siteUrl?: string;
-  /** Locale used for deterministic date formatting. */
+  /** Default locale for UI labels and date formatting. */
   locale?: string;
+  /** Partial UI label overrides keyed by BCP 47 locale. */
+  translations?: Translations;
   /** Build-time remark and rehype plugins. */
   mdx?: MdxConfig;
 }
@@ -146,6 +152,7 @@ export interface ResolvedShisoConfig {
   contentDir: string;
   siteUrl?: string;
   locale: string;
+  translations?: Translations;
   /** Build-only compiler hooks. Removed from the virtual browser module. */
   mdx?: MdxConfig;
 }
@@ -211,6 +218,11 @@ export interface StandalonePageItem {
   page: string;
   /** Page title used in the document head. Frontmatter title wins. */
   title?: string;
+  /**
+   * Navigation language this page belongs to, e.g. "ja". Sets the document
+   * language, header navigation, and language selector for the page.
+   */
+  language?: string;
 }
 
 /** Normalized standalone page. */
@@ -221,6 +233,13 @@ export interface StandalonePage {
   filePath: string;
   /** Config-level head-title override. */
   title?: string;
+  /** Navigation language the page belongs to; untagged pages use the default language. */
+  language?: string;
+  /**
+   * Language-independent identity: the file slug without its language folder,
+   * so "ja/home" (language "ja") and "home" are the same page in two languages.
+   */
+  key: string;
 }
 
 export interface SeoConfig {
@@ -548,37 +567,6 @@ export interface NormalizedFooter {
   socials: NormalizedLink[];
   links: FooterLinkColumn[];
   attribution: boolean;
-}
-
-export interface ThemeLabels {
-  menu: string;
-  documentationNavigation: string;
-  sections: string;
-  tableOfContents: string;
-  tableOfContentsNavigation: string;
-  searchTitle: string;
-  searching: string;
-  searchUnavailable: string;
-  noResults: string;
-  lastUpdated: string;
-  relatedTopics: string;
-  previousPage: string;
-  nextPage: string;
-  notFound: string;
-  dismissBanner: string;
-  toggleTheme: string;
-  moreOptions: string;
-  copied: string;
-  expand: string;
-  collapse: string;
-  copyPage: string;
-  copyPageDescription: string;
-  viewMarkdown: string;
-  viewMarkdownDescription: string;
-  openInChatGPT: string;
-  openInClaude: string;
-  openInPerplexity: string;
-  askQuestionsAboutPage: string;
 }
 
 export interface SiteModel {

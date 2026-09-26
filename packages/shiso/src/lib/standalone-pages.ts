@@ -108,7 +108,21 @@ export function normalizeStandalonePages(
       );
     }
 
-    pages.push({ path, filePath, title: item?.title?.trim() || undefined });
+    const language = item?.language?.trim() || undefined;
+
+    if (language && !site.scopes.some(scope => scope.language === language)) {
+      throw invalid(
+        `standalone page "${path}" uses language "${language}", which is not declared in navigation.languages.`,
+      );
+    }
+
+    // Language-independent identity: "ja/home" in language "ja" is the "home" page.
+    const key =
+      language && fileSlug.startsWith(`${language}/`)
+        ? fileSlug.slice(language.length + 1)
+        : fileSlug;
+
+    pages.push({ path, filePath, title: item?.title?.trim() || undefined, language, key });
   }
 
   return pages;

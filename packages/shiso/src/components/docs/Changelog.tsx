@@ -7,6 +7,7 @@ import {
   useMemo,
 } from 'react';
 import { useSearchParams } from 'react-router';
+import { useLabels } from '@/lib/label-context';
 import { Badge } from './Badge';
 import { styles } from './styles';
 import { Update } from './Update';
@@ -73,6 +74,7 @@ function updateInfo(children: React.ReactNode): Map<string, UpdateChildInfo> {
  * Pages without any tagged updates render as a plain list.
  */
 export function Changelog({ children }: ChangelogProps) {
+  const labels = useLabels();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const allTags = useMemo(() => {
@@ -144,7 +146,7 @@ export function Changelog({ children }: ChangelogProps) {
   return (
     <div className={styles.changelog}>
       {/* biome-ignore lint/a11y/useSemanticElements: toggle-button group labelled for the filter */}
-      <div className={styles.changelogFilters} role="group" aria-label="Filter updates by tag">
+      <div className={styles.changelogFilters} role="group" aria-label={labels.filterUpdates}>
         {allTags.map(tag => {
           const active = selectedSet.has(tag.toLowerCase());
           return (
@@ -164,13 +166,11 @@ export function Changelog({ children }: ChangelogProps) {
         })}
         {selected.length > 0 ? (
           <button type="button" onClick={clear} className={styles.changelogClear}>
-            Clear
+            {labels.clear}
           </button>
         ) : null}
       </div>
-      {visibleUpdates === 0 ? (
-        <p className={styles.changelogEmpty}>No updates match the selected tags.</p>
-      ) : null}
+      {visibleUpdates === 0 ? <p className={styles.changelogEmpty}>{labels.noUpdates}</p> : null}
       {filtered}
     </div>
   );

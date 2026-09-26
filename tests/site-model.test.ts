@@ -49,7 +49,7 @@ describe('site model', () => {
     expect(site.footer).toBeNull();
   });
 
-  it('applies the shiso.config locale while keeping interface labels theme-owned', () => {
+  it('applies the shiso.config locale to interface labels', () => {
     const site = resolveSiteModel({ navigation: { pages: ['index'] } }, docs, {
       docsPrefix: '/docs',
       contentDir: 'content/docs',
@@ -57,8 +57,8 @@ describe('site model', () => {
     });
 
     expect(site.locale).toBe('fr-FR');
-    expect(site.labels.tableOfContents).toBe('On this page');
-    expect(site.labels.noResults).toBe('No results');
+    expect(site.labels.tableOfContents).toBe('Sur cette page');
+    expect(site.labels.noResults).toBe('Aucun résultat');
   });
 
   it('normalizes generic navbar link configuration', () => {

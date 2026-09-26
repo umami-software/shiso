@@ -85,9 +85,10 @@ structured data, `sitemap.xml`, and absolute links for AI actions.
 
 ## Locale
 
-`locale` controls deterministic date formatting. Interface text such as menu,
-search, and table-of-contents labels is supplied by the active theme rather
-than configured as documentation content:
+`locale` sets the default language for Shiso’s interface and date formatting.
+On multilingual sites, the current page’s language takes precedence. This
+also applies to standalone pages with a language and updates when readers
+switch languages:
 
 ```ts
 import { defineConfig } from '@umami/shiso/config';
@@ -96,6 +97,55 @@ export default defineConfig({
   locale: 'fr-FR',
 });
 ```
+
+## Interface translations
+
+Shiso includes English (`en`), Spanish (`es`), French (`fr`), German (`de`),
+Japanese (`ja`), Simplified Chinese (`zh-Hans`), and Traditional Chinese
+(`zh-Hant`). These dictionaries cover navigation, search, feedback, copy
+controls, accessibility text, and generated API reference labels.
+
+Use `translations` in `shiso.config.ts` to override individual labels or add
+another language. Keys are checked by TypeScript and validated when Shiso
+loads the config. Locale tags are canonicalized, so `fr-ca` becomes `fr-CA`.
+
+```ts
+import { defineConfig } from '@umami/shiso/config';
+
+export default defineConfig({
+  locale: 'fr-FR',
+  translations: {
+    fr: {
+      nextPage: 'Continuer',
+      previousPage: 'Retour',
+    },
+    'fr-CA': {
+      searchPlaceholder: 'Rechercher dans la documentation...',
+    },
+    nl: {
+      nextPage: 'Volgende',
+      previousPage: 'Vorige',
+    },
+  },
+});
+```
+
+Each label falls back from the exact locale to its script (when applicable),
+then its base language, then English. At each level, your overrides take
+precedence over Shiso’s dictionary. For Chinese, Shiso infers the script when
+omitted: `zh-TW`, `zh-HK`, and `zh-MO` use Traditional Chinese; `zh-CN`,
+`zh-SG`, and `zh` use Simplified Chinese. An explicit script always wins.
+Unsupported languages and missing keys fall back to English.
+
+Import `ThemeLabels` or `Translations` from `@umami/shiso/config` for separately
+maintained dictionaries. `ThemeLabels` describes a complete dictionary;
+`Translations` accepts partial dictionaries keyed by locale. When translating
+`viewNamedImage` or `apiExampleResponse`, preserve the `{alt}` or `{status}`
+placeholder respectively.
+
+Shiso translates its built-in defaults. Your page content, navigation titles,
+and explicit `docs.json` text (such as `search.prompt`, edit-link labels, and
+feedback messages) remain under your control and take precedence.
 
 ## MDX plugins
 

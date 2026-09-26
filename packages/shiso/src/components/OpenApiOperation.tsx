@@ -3,16 +3,18 @@ import { Badge } from '@/components/docs/Badge';
 import { CodeGroup } from '@/components/docs/CodeGroup';
 import { Expandable } from '@/components/docs/Expandable';
 import { PropertiesTable } from '@/components/docs/PropertiesTable';
+import { useLabels } from '@/lib/label-context';
 import { operationParameterSections, operationSections, statusColor } from '@/lib/openapi';
-import type { NormalizedOperation, SchemaNode } from '@/lib/types';
+import type { NormalizedOperation, SchemaNode, ThemeLabels } from '@/lib/types';
 
 function FieldChildren({ node }: { node: SchemaNode }) {
+  const labels = useLabels();
   return (
     <>
       {node.description}
       {node.enum && node.enum.length > 0 && (
         <div className="mt-1">
-          Options:{' '}
+          {labels.fieldOptions}{' '}
           {node.enum.map((value, index) => (
             <span key={value}>
               {index > 0 && ', '}
@@ -25,12 +27,14 @@ function FieldChildren({ node }: { node: SchemaNode }) {
   );
 }
 
-function schemaDetails(node: SchemaNode) {
+function schemaDetails(node: SchemaNode, labels: ThemeLabels) {
   if (!node.children?.length) return undefined;
 
   return (
     <Expandable
-      title={node.type === 'oneOf' || node.type === 'anyOf' ? 'Allowed types' : 'properties'}
+      title={
+        node.type === 'oneOf' || node.type === 'anyOf' ? labels.allowedTypes : labels.properties
+      }
     >
       <SchemaTable nodes={node.children} />
     </Expandable>
@@ -38,6 +42,7 @@ function schemaDetails(node: SchemaNode) {
 }
 
 function SchemaTable({ nodes }: { nodes: SchemaNode[] }) {
+  const labels = useLabels();
   return (
     <PropertiesTable>
       {nodes.map(node => (
@@ -48,7 +53,7 @@ function SchemaTable({ nodes }: { nodes: SchemaNode[] }) {
           required={node.required}
           deprecated={node.deprecated}
           default={node.default}
-          details={schemaDetails(node)}
+          details={schemaDetails(node, labels)}
         >
           <FieldChildren node={node} />
         </PropertiesTable.Row>
@@ -105,17 +110,19 @@ export interface OpenApiOperationProps {
 
 /** The generated reference for one API operation, rendered under the page body. */
 export function OpenApiOperation({ operation }: OpenApiOperationProps) {
-  const sections = new Map(operationSections(operation).map(entry => [entry.name, entry.id]));
+  const labels = useLabels();
+  const sectionEntries = operationSections(operation);
+  const sections = new Map(sectionEntries.map(entry => [entry.name, entry.id]));
 
   return (
     <div className="docs-markdown">
-      {operationParameterSections(operation).map(({ location, name }) => (
+      {operationParameterSections(operation, labels).map(({ location, name }, index) => (
         <section key={location}>
-          <h2 id={sections.get(name)}>{name}</h2>
+          <h2 id={sectionEntries[index].id}>{name}</h2>
           <PropertiesTable>
             {location === 'header' && operation.security.length > 0 && (
               <PropertiesTable.Row name="Authorization" type="string" required>
-                Authentication credentials, e.g. <code>Bearer &lt;token&gt;</code>.
+                {labels.apiCredentials} <code>Bearer &lt;token&gt;</code>.
               </PropertiesTable.Row>
             )}
             {operation.parameters[location].map(parameter => (
@@ -126,7 +133,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
                 required={parameter.required}
                 deprecated={parameter.deprecated}
                 default={parameter.default}
-                details={schemaDetails(parameter)}
+                details={schemaDetails(parameter, labels)}
               >
                 <FieldChildren node={parameter} />
               </PropertiesTable.Row>
@@ -136,12 +143,12 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
       ))}
       {operation.requestBody && (
         <section>
-          <h2 id={sections.get('Request body')}>Request body</h2>
+          <h2 id={sections.get('Request body')}>{labels.apiRequestBody}</h2>
           <SchemaFields node={operation.requestBody.schema} />
           {operation.requestBody.example && (
             <HighlightedCode
               language="json"
-              title="Example request"
+              title={labels.apiExampleRequest}
               html={operation.requestBody.exampleHtml}
               source={operation.requestBody.example}
             />
@@ -150,7 +157,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
       )}
       {operation.responses.length > 0 && (
         <section>
-          <h2 id={sections.get('Responses')}>Responses</h2>
+          <h2 id={sections.get('Responses')}>{labels.apiResponses}</h2>
           {operation.responses.map(response => (
             <div key={response.status} className="mt-6 first:mt-0">
               <div className="flex items-center gap-2">
@@ -165,7 +172,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
               {response.example && (
                 <HighlightedCode
                   language="json"
-                  title={`${response.status} example`}
+                  title={labels.apiExampleResponse.replace('{status}', () => response.status)}
                   html={response.exampleHtml}
                   source={response.example}
                 />
@@ -176,7 +183,7 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
       )}
       {operation.samples.length > 0 && (
         <section>
-          <h2 id={sections.get('Code samples')}>Code samples</h2>
+          <h2 id={sections.get('Code samples')}>{labels.apiCodeSamples}</h2>
           <CodeGroup>
             {operation.samples.map(sample => (
               <HighlightedCode

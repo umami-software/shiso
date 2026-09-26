@@ -3,6 +3,7 @@ import { type ComponentProps, type CSSProperties, useRef, useState } from 'react
 import { CheckIcon, Copy } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useLabels } from '@/lib/label-context';
 import { cn } from '@/lib/utils';
 import { Mermaid, type MermaidPlacement } from './docs/Mermaid';
 
@@ -60,6 +61,7 @@ function copyText(pre: HTMLPreElement | null, language?: string): string {
 }
 
 export function CodeBlock({ children, className, style, ...rest }: CodeBlockProps) {
+  const labels = useLabels();
   const {
     'data-title': title,
     'data-language': language,
@@ -137,7 +139,7 @@ export function CodeBlock({ children, className, style, ...rest }: CodeBlockProp
           title ? 'top-1' : 'top-2.5',
         )}
         onClick={handleCopy}
-        aria-label="Copy code"
+        aria-label={copied ? labels.copied : labels.copyCode}
       >
         {copied ? <CheckIcon className="size-3.5 text-primary" /> : <Copy className="size-3.5" />}
       </Button>

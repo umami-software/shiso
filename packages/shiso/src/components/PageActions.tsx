@@ -90,7 +90,7 @@ export function PageActions({
               rel="noopener noreferrer"
               className="ml-auto inline-flex shrink-0 items-center gap-1.5 text-right no-underline hover:text-primary"
             >
-              {site.editLink?.label || 'Edit this page'}
+              {site.editLink?.label || site.labels.editPage}
               <ExternalLink size={14} aria-hidden="true" />
             </a>
           )}
@@ -103,11 +103,11 @@ export function PageActions({
           data-pagefind-ignore
         >
           <fieldset
-            aria-label={feedback.prompt || 'Was this page helpful?'}
+            aria-label={feedback.prompt || site.labels.feedbackPrompt}
             className="flex flex-wrap items-center gap-2"
           >
             <span className="mr-2 text-muted-foreground">
-              {feedback.prompt || 'Was this page helpful?'}
+              {feedback.prompt || site.labels.feedbackPrompt}
             </span>
             {[true, false].map(helpful => (
               <button
@@ -118,14 +118,15 @@ export function PageActions({
                 onClick={() => void submit(helpful)}
                 className="rounded-md border border-border px-3 py-1.5 text-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-default disabled:opacity-60 aria-pressed:border-primary aria-pressed:text-primary"
               >
-                {helpful ? feedback.helpfulLabel || 'Yes' : feedback.unhelpfulLabel || 'No'}
+                {helpful
+                  ? feedback.helpfulLabel || site.labels.feedbackYes
+                  : feedback.unhelpfulLabel || site.labels.feedbackNo}
               </button>
             ))}
           </fieldset>
           <div role="status" aria-live="polite" className="text-muted-foreground">
-            {status === 'success' && (feedback.successMessage || 'Thanks for your feedback!')}
-            {status === 'error' &&
-              (feedback.errorMessage || 'Could not send feedback. Please try again.')}
+            {status === 'success' && (feedback.successMessage || site.labels.feedbackSuccess)}
+            {status === 'error' && (feedback.errorMessage || site.labels.feedbackError)}
           </div>
         </div>
       )}

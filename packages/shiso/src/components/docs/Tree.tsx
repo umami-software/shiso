@@ -14,6 +14,7 @@ import {
   Folder as FolderIcon,
   FolderOpen,
 } from '@/components/icons';
+import { useLabels } from '@/lib/label-context';
 import { styles } from './styles';
 
 export interface TreeFolderProps {
@@ -208,6 +209,7 @@ function visibleFocusables(root: HTMLElement): HTMLElement[] {
 }
 
 function TreeRoot({ children, style, className }: TreeProps) {
+  const labels = useLabels();
   const rootRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef({ text: '', timer: 0 });
 
@@ -334,7 +336,7 @@ function TreeRoot({ children, style, className }: TreeProps) {
       onKeyDown={onKeyDown}
     >
       {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: tree is the required ARIA role for this widget */}
-      <ul role="tree" aria-label="File tree" className={styles.treeList}>
+      <ul role="tree" aria-label={labels.fileTree} className={styles.treeList}>
         {content}
       </ul>
     </div>

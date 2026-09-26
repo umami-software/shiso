@@ -87,6 +87,8 @@ function collectPageReferences(navigation) {
 
   function visitContainer(container) {
     if (!container || typeof container !== 'object') return;
+    // Groups reached through tabs/dropdowns/languages carry their own landing page.
+    if (typeof container.root === 'string') references.push(container.root);
     if (Array.isArray(container.pages)) visitItems(container.pages);
     for (const key of ['tabs', 'dropdowns', 'groups', 'versions', 'languages']) {
       if (Array.isArray(container[key])) container[key].forEach(visitContainer);

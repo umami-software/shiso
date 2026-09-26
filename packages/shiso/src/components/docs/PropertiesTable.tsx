@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useLabels } from '@/lib/label-context';
 import { Badge } from './Badge';
 import { decodeHtmlEntities, toElementArray } from './utils';
 
@@ -27,6 +28,7 @@ function displayValue(value: PropertiesTableRowProps['type']): string | undefine
 }
 
 export function PropertiesTable({ children }: PropertiesTableProps) {
+  const labels = useLabels();
   const rows = toElementArray<PropertiesTableRowProps>(children);
 
   if (!rows.length) {
@@ -40,9 +42,9 @@ export function PropertiesTable({ children }: PropertiesTableProps) {
       <table className="m-0 table-fixed [overflow-wrap:anywhere]">
         <thead>
           <tr>
-            <th className="w-[30%]">Name</th>
-            <th className="w-[15%]">Type</th>
-            <th>Description</th>
+            <th className="w-[30%]">{labels.fieldName}</th>
+            <th className="w-[15%]">{labels.fieldType}</th>
+            <th>{labels.fieldDescription}</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
@@ -60,6 +62,7 @@ function PropertiesTableRow({
   children,
   details,
 }: PropertiesTableRowProps) {
+  const labels = useLabels();
   const defaultValue = displayValue(value);
 
   return (
@@ -70,17 +73,19 @@ function PropertiesTableRow({
             {name}
             {required ? (
               <Badge size="sm" tone="primary">
-                required
+                {labels.fieldRequired}
               </Badge>
             ) : null}
-            {deprecated ? <Badge size="sm">deprecated</Badge> : null}
+            {deprecated ? <Badge size="sm">{labels.fieldDeprecated}</Badge> : null}
           </span>
         </td>
         <td>{displayValue(type)}</td>
         <td className="[&_p]:m-0">
           {children}
           {defaultValue ? (
-            <span className="mt-1 block text-muted-foreground">Default: {defaultValue}</span>
+            <span className="mt-1 block text-muted-foreground">
+              {labels.fieldDefault} {defaultValue}
+            </span>
           ) : null}
         </td>
       </tr>

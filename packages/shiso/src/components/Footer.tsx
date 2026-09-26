@@ -1,4 +1,5 @@
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
+import { useLabels } from '@/lib/label-context';
 import type { NormalizedFooter } from '@/lib/types';
 
 export function Footer({
@@ -8,6 +9,7 @@ export function Footer({
   footer: NormalizedFooter | null;
   className?: string;
 }) {
+  const labels = useLabels();
   if (!footer) {
     return null;
   }
@@ -48,7 +50,7 @@ export function Footer({
               href="https://shiso.umami.is?ref=docs-footer"
               className="text-sm hover:text-foreground"
             >
-              Powered by <span className="font-bold">shiso</span>
+              {labels.poweredBy} <span className="font-bold">shiso</span>
             </a>
           ) : (
             <span />

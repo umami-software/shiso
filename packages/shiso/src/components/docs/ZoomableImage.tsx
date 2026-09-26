@@ -1,5 +1,6 @@
 import type { ImgHTMLAttributes } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useLabels } from '@/lib/label-context';
 import { cn } from '@/lib/utils';
 
 export interface ZoomableImageProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -13,6 +14,7 @@ export function ZoomableImage({
   src,
   ...props
 }: ZoomableImageProps) {
+  const labels = useLabels();
   const image = (
     <img
       {...props}
@@ -26,7 +28,7 @@ export function ZoomableImage({
     return image;
   }
 
-  const label = alt ? `View “${alt}” full size` : 'View image full size';
+  const label = alt ? labels.viewNamedImage.replace('{alt}', () => alt) : labels.viewImage;
 
   return (
     <Dialog>
@@ -47,7 +49,7 @@ export function ZoomableImage({
         overlayClassName="bg-black/80 supports-backdrop-filter:backdrop-blur-sm"
         className="flex max-h-[calc(100vh-2rem)] w-auto max-w-[calc(100vw-2rem)] items-center justify-center bg-transparent p-0 ring-0 shadow-none sm:max-w-[calc(100vw-2rem)]"
       >
-        <DialogTitle className="sr-only">{alt || 'Full-size image'}</DialogTitle>
+        <DialogTitle className="sr-only">{alt || labels.fullSizeImage}</DialogTitle>
         <img
           src={src}
           srcSet={props.srcSet}

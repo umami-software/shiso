@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createJiti } from 'jiti';
+import englishLabels from '../src/lib/translations/en.json' with { type: 'json' };
 
 /**
  * Loads the optional project code config (shiso.config.ts/.mjs/.js).
@@ -16,7 +17,7 @@ import { createJiti } from 'jiti';
 export const SHISO_CONFIG_FILES = ['shiso.config.ts', 'shiso.config.mjs', 'shiso.config.js'];
 
 const STRING_KEYS = ['docsPrefix', 'contentDir', 'siteUrl', 'locale'];
-const KNOWN_KEYS = [...STRING_KEYS, 'mdx'];
+const KNOWN_KEYS = [...STRING_KEYS, 'mdx', 'translations'];
 const MDX_KEYS = ['remarkPlugins', 'rehypePlugins'];
 
 let importGeneration = 0;
@@ -88,6 +89,31 @@ function resolveMdxConfig(value, sourcePath) {
   };
 }
 
+function resolveTranslations(value, sourcePath) {
+  if (value === undefined) return undefined;
+  const invalid = message => {
+    throw new ShisoConfigLoadError(message, { code: 'INVALID_OPTION', sourcePath });
+  };
+  if (!isPlainObject(value)) invalid('Shiso config option "translations" must be an object.');
+  const result = {};
+  for (const [locale, labels] of Object.entries(value)) {
+    let canonical;
+    try {
+      canonical = Intl.getCanonicalLocales(locale)[0];
+    } catch {
+      invalid(`Invalid translations locale "${locale}". Use a BCP 47 tag such as "fr" or "pt-BR".`);
+    }
+    if (!isPlainObject(labels)) invalid(`translations.${locale} must be an object.`);
+    for (const [key, label] of Object.entries(labels)) {
+      if (!Object.hasOwn(englishLabels, key))
+        invalid(`Unknown UI label "translations.${locale}.${key}".`);
+      if (typeof label !== 'string') invalid(`translations.${locale}.${key} must be a string.`);
+    }
+    result[canonical] = { ...result[canonical], ...labels };
+  }
+  return result;
+}
+
 /**
  * Applies defaults and normalization. Single source of truth for resolved
  * values, so runtime and build-time consumers never re-implement defaulting.
@@ -103,6 +129,9 @@ export function resolveShisoConfig(raw = {}, sourcePath = null) {
     siteUrl: raw.siteUrl?.trim().replace(/\/+$/, '') || undefined,
     locale: raw.locale?.trim() || 'en-US',
     mdx: resolveMdxConfig(raw.mdx, sourcePath),
+    ...(raw.translations === undefined
+      ? {}
+      : { translations: resolveTranslations(raw.translations, sourcePath) }),
   };
 }
 
