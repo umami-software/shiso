@@ -1,1 +1,360 @@
 /* Add site-specific CSS overrides here. */
+
+/* ---------------------------------------------------------------------------
+   Home page blueprint background (content/pages/components/BlueprintBackground.tsx)
+   ------------------------------------------------------------------------ */
+
+.bp-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 600px;
+  padding-bottom: 6rem;
+}
+
+/* The backdrop bleeds to the viewport edges; clip the few pixels of the
+   scrollbar gutter it would otherwise overflow by. */
+html:has(.bp-hero) {
+  overflow-x: clip;
+}
+
+.bp-bg {
+  --bp-cycle: 9s;
+  --bp-ink: color-mix(in srgb, var(--primary) 60%, transparent);
+  --bp-ink-strong: color-mix(in srgb, var(--primary) 90%, transparent);
+  --bp-line: color-mix(in srgb, var(--primary) 7%, transparent);
+  --bp-line-major: color-mix(in srgb, var(--primary) 13%, transparent);
+  --bp-spot: color-mix(in srgb, var(--primary) 38%, transparent);
+  --mx: 50%;
+  --my: 30%;
+
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--header-height) * -1);
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: var(--bp-ink);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent 100%);
+}
+
+[data-theme="dark"] .bp-bg {
+  --bp-ink: color-mix(in srgb, #4ade80 42%, transparent);
+  --bp-ink-strong: color-mix(in srgb, #4ade80 85%, transparent);
+  --bp-line: color-mix(in srgb, #4ade80 5%, transparent);
+  --bp-line-major: color-mix(in srgb, #4ade80 10%, transparent);
+  --bp-spot: color-mix(in srgb, #4ade80 30%, transparent);
+}
+
+/* Soft light pooling at the top of the sheet. */
+.bp-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 45% 38% at 50% 0%,
+    color-mix(in srgb, var(--primary) 16%, transparent),
+    transparent 70%
+  );
+  animation: bp-breathe 5s ease-in-out infinite alternate;
+}
+
+/* Minor 24px grid inside a major 120px grid, centred on the page axis. */
+.bp-grid {
+  --minor: var(--bp-line);
+  --major: var(--bp-line-major);
+
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--major) 1px, transparent 1px),
+    linear-gradient(to right, var(--minor) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--minor) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: calc(50% + 60px) 0;
+  mask-image: radial-gradient(ellipse 75% 85% at 50% 25%, #000 35%, transparent 100%);
+}
+
+/* Brighter grid revealed around the pointer. */
+.bp-grid-spot {
+  --minor: var(--bp-spot);
+  --major: var(--bp-spot);
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mask-image: radial-gradient(circle 240px at var(--mx) var(--my), #000, transparent);
+}
+
+.bp-bg[data-pointer="on"] .bp-grid-spot {
+  opacity: 0.6;
+}
+
+/* A plotter beam sweeping across the sheet. */
+.bp-grid-scan {
+  --minor: var(--bp-spot);
+  --major: var(--bp-spot);
+
+  opacity: 0.5;
+  mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  mask-size: 24% 100%;
+  mask-repeat: no-repeat;
+  animation: bp-scan 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Figures ------------------------------------------------------------------ */
+
+.bp-figures {
+  position: absolute;
+  inset: 0;
+}
+
+.bp-col {
+  position: absolute;
+  top: calc(var(--header-height) + 36px);
+  /* Rendered at 82% of the 380x680 drawing size to fit the hero. */
+  width: 312px;
+  height: 558px;
+  max-width: none;
+  overflow: visible;
+}
+
+.bp-col-left {
+  right: calc(50% + 410px);
+}
+
+.bp-col-right {
+  left: calc(50% + 410px);
+}
+
+.bp-ruler {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  max-width: none;
+  overflow: visible;
+  transform: translateX(-50%);
+  opacity: 0.8;
+}
+
+.bp-draw {
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  animation: bp-draw var(--bp-cycle) cubic-bezier(0.65, 0, 0.35, 1) infinite both;
+  animation-delay: calc(var(--fig, 0s) + var(--i, 0) * 55ms);
+}
+
+/* Dashed construction lines fade in rather than draw. */
+.bp-draw.bp-dash {
+  stroke-dasharray: 0.012 0.02;
+  animation-name: bp-fade;
+}
+
+.bp-fade {
+  animation: bp-fade var(--bp-cycle) ease infinite both;
+  animation-delay: calc(var(--fig, 0s) + var(--i, 0) * 55ms);
+}
+
+.bp-stroke {
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.bp-stroke-strong {
+  stroke: var(--bp-ink-strong);
+}
+
+.bp-fill {
+  fill: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.bp-fill-strong {
+  fill: var(--bp-ink-strong);
+}
+
+.bp-plate {
+  fill: color-mix(in srgb, var(--primary) 5%, var(--background));
+}
+
+.bp-label {
+  fill: currentColor;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.bp-label-sm {
+  font-size: 8px;
+  letter-spacing: 0;
+}
+
+.bp-pulse {
+  fill: var(--bp-ink-strong);
+  filter: drop-shadow(0 0 3px var(--primary));
+}
+
+.bp-pulses {
+  animation: bp-fade var(--bp-cycle) ease infinite both;
+  animation-delay: calc(var(--fig, 0s) + 0.6s);
+}
+
+.bp-float {
+  animation: bp-float 3.5s ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+.bp-spin {
+  transform-origin: 190px 430px;
+  animation: bp-spin 24s linear infinite;
+}
+
+.bp-sweep {
+  transform-origin: 190px 430px;
+  animation: bp-sweep 3.5s ease-in-out infinite alternate;
+}
+
+.bp-slide {
+  animation: bp-slide 4.5s ease-in-out infinite alternate;
+}
+
+/* Title-block readouts in the sheet corners. */
+.bp-meta {
+  position: absolute;
+  top: calc(var(--header-height) + 20px);
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  white-space: pre;
+  color: var(--muted-foreground);
+  opacity: 0.7;
+}
+
+.bp-meta-left {
+  left: max(28px, calc(50% - 780px));
+}
+
+.bp-meta-right {
+  right: max(28px, calc(50% - 780px));
+}
+
+@keyframes bp-draw {
+  0% {
+    stroke-dashoffset: 1.01;
+    opacity: 1;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes bp-fade {
+  0%,
+  18% {
+    opacity: 0;
+  }
+  32%,
+  86% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bp-scan {
+  from {
+    mask-position: -40% 0;
+  }
+  to {
+    mask-position: 140% 0;
+  }
+}
+
+@keyframes bp-breathe {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bp-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--dy, 0px));
+  }
+}
+
+@keyframes bp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bp-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes bp-slide {
+  from {
+    transform: translateX(80px);
+  }
+  to {
+    transform: translateX(560px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .bp-col,
+  .bp-meta {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .bp-ruler {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-bg,
+  .bp-bg * {
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must override every animation rule */
+    animation: none !important;
+  }
+
+  .bp-pulses,
+  .bp-grid-scan {
+    display: none;
+  }
+}
