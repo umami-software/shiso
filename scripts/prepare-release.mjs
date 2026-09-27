@@ -58,36 +58,6 @@ function parseArguments(argv) {
   return options;
 }
 
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function releaseNotes(changelog, version) {
-  const heading = new RegExp(`^## ${escapeRegExp(version)} - (\\d{4}-\\d{2}-\\d{2})\\s*$`, 'm');
-  const match = changelog.match(heading);
-
-  if (!match || match.index === undefined) {
-    throw new Error(`CHANGELOG.md is missing "## ${version} - YYYY-MM-DD".`);
-  }
-
-  const date = new Date(`${match[1]}T00:00:00Z`);
-
-  if (Number.isNaN(date.valueOf()) || date.toISOString().slice(0, 10) !== match[1]) {
-    throw new Error(`CHANGELOG.md has an invalid release date for ${version}.`);
-  }
-
-  const notesStart = match.index + match[0].length;
-  const nextHeading = changelog.slice(notesStart).search(/^## /m);
-  const notesEnd = nextHeading === -1 ? changelog.length : notesStart + nextHeading;
-  const notes = changelog.slice(notesStart, notesEnd).trim();
-
-  if (!notes || /\bTBD\b/i.test(notes)) {
-    throw new Error(`CHANGELOG.md has no finalized release notes for ${version}.`);
-  }
-
-  return notes;
-}
-
 async function registryHasVersion(name, version) {
   const response = await fetch(
     `https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`,
@@ -123,9 +93,7 @@ async function main() {
   const options = parseArguments(process.argv.slice(2));
   const releasePackage = RELEASE_PACKAGES[options.packageName];
   const packageFile = path.join(releasePackage.root, 'package.json');
-  const changelogFile = path.join(releasePackage.root, 'CHANGELOG.md');
   const packageMetadata = JSON.parse(await fs.readFile(packageFile, 'utf8'));
-  const changelog = await fs.readFile(changelogFile, 'utf8');
   const { name, version, publishConfig, repository } = packageMetadata;
 
   const semver = version.match(SEMVER_PATTERN);
@@ -163,20 +131,15 @@ async function main() {
     throw new Error(`Tag "${tag}" does not match package version. Expected "${expectedTag}".`);
   }
 
-  const notes = releaseNotes(changelog, version);
   const prerelease = version.includes('-');
   const npmTag = prerelease ? 'next' : 'latest';
-  let notesFile = '';
   let tarball = '';
 
   if (options.outputDirectory) {
     const outputDirectory = path.resolve(REPOSITORY_ROOT, options.outputDirectory);
     await fs.mkdir(outputDirectory, { recursive: true });
-    notesFile = path.join(outputDirectory, `${tag}.md`);
     const archiveName = name.replace(/^@/, '').replaceAll('/', '-');
     tarball = path.join(outputDirectory, `${archiveName}-${version}.tgz`);
-    await fs.writeFile(notesFile, `${notes}\n`);
-    notesFile = path.relative(REPOSITORY_ROOT, notesFile).split(path.sep).join('/');
     tarball = path.relative(REPOSITORY_ROOT, tarball).split(path.sep).join('/');
   }
 
@@ -188,7 +151,6 @@ async function main() {
     prerelease,
     npm_tag: npmTag,
     published,
-    notes_file: notesFile,
     tarball,
   });
 

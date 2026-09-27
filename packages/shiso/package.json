@@ -38,7 +38,6 @@
     "docs.schema.json",
     "mdx.config.ts",
     "vite.config.ts",
-    "CHANGELOG.md",
     "README.md"
   ],
   "scripts": {

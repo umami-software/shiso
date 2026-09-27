@@ -24,7 +24,7 @@ function runReleaseCheck(tag: string, packageName?: string) {
 }
 
 describe('release metadata validation', () => {
-  it('accepts the tag matching the package version and changelog', () => {
+  it('accepts the tag matching the package version', () => {
     const result = runReleaseCheck(expectedTag);
 
     expect(result.status).toBe(0);
@@ -38,7 +38,7 @@ describe('release metadata validation', () => {
     expect(result.stderr).toContain('does not match package version');
   });
 
-  it('accepts the Shiso framework tag and changelog', () => {
+  it('accepts the Shiso framework tag', () => {
     const tag = `shiso-v${frameworkMetadata.version}`;
     const result = runReleaseCheck(tag, 'shiso');
 

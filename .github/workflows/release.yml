@@ -61,7 +61,7 @@ jobs:
             "${{ steps.release.outputs.tarball }}#npm package"
             --verify-tag
             --title "create-shiso-app ${{ steps.release.outputs.version }}"
-            --notes-file "${{ steps.release.outputs.notes_file }}"
+            --generate-notes
           )
 
           if [[ "${{ steps.release.outputs.prerelease }}" == "true" ]]; then

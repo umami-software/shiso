@@ -7,7 +7,6 @@
     "create-shiso-app": "./index.mjs"
   },
   "files": [
-    "CHANGELOG.md",
     "index.mjs",
     "template"
   ],
