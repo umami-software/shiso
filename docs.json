@@ -108,6 +108,10 @@
           {
             "group": "API demo",
             "pages": [{ "openapi": true }]
+          },
+          {
+            "group": "API objects",
+            "pages": [{ "page": "api-reference/user", "title": "User" }]
           }
         ]
       },

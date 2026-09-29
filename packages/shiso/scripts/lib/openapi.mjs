@@ -11,7 +11,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import { buildCodeSamples } from './request-samples.mjs';
 import { slugify } from './slug.mjs';
+
+export { buildCodeSamples, buildRequest } from './request-samples.mjs';
 
 const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace'];
 const MAX_DEPTH = 8;
@@ -287,21 +290,68 @@ function formatExample(value) {
   return value === undefined ? undefined : JSON.stringify(value, null, 2);
 }
 
-function securitySummaries(spec, operation) {
+const SECURITY_TYPES = new Set(['http', 'apiKey', 'oauth2', 'openIdConnect']);
+
+/** Human-readable label for a security scheme, e.g. "bearerAuth (http bearer)". */
+export function securityLabel(scheme) {
+  const detail = [scheme.type !== 'unknown' ? scheme.type : undefined, scheme.scheme]
+    .filter(Boolean)
+    .join(' ');
+  return detail ? `${scheme.name} (${detail})` : scheme.name;
+}
+
+/**
+ * Resolves the security schemes an operation accepts. Every scheme named by
+ * any requirement alternative is listed once, in declaration order, so the
+ * playground can offer an input for each and samples show how it is sent.
+ */
+function securitySchemes(spec, operation) {
   const requirements = operation.security ?? spec.security ?? [];
-  const schemes = spec.components?.securitySchemes || {};
-  const names = new Set();
+  const definitions = spec.components?.securitySchemes || {};
+  const schemes = new Map();
 
   for (const requirement of requirements) {
     for (const name of Object.keys(requirement || {})) {
-      const scheme = deref(spec, schemes[name]);
-      names.add(
-        scheme ? `${name} (${[scheme.type, scheme.scheme].filter(Boolean).join(' ')})` : name,
-      );
+      if (schemes.has(name)) continue;
+      const definition = deref(spec, definitions[name]);
+      const type = SECURITY_TYPES.has(definition?.type) ? definition.type : 'unknown';
+      const scheme = { name, type };
+      if (type === 'http' && typeof definition.scheme === 'string') {
+        scheme.scheme = definition.scheme.toLowerCase();
+      }
+      if (type === 'apiKey') {
+        scheme.in = ['query', 'cookie'].includes(definition.in) ? definition.in : 'header';
+        scheme.paramName = definition.name || name;
+      }
+      if (typeof definition?.description === 'string') scheme.description = definition.description;
+      scheme.label = securityLabel(scheme);
+      schemes.set(name, scheme);
     }
   }
 
-  return [...names];
+  return [...schemes.values()];
+}
+
+/** Fills server URL variables with their default values. */
+function expandServerUrl(server) {
+  return String(server.url || '').replace(/\{([^}]+)\}/g, (match, name) => {
+    const variable = server.variables?.[name];
+    return variable?.default !== undefined ? String(variable.default) : match;
+  });
+}
+
+/** Servers for an operation: operation-level, then path-level, then global. */
+function resolveServers(spec, pathItem, operation) {
+  const list = [operation.servers, pathItem.servers, spec.servers].find(
+    candidate => Array.isArray(candidate) && candidate.length > 0,
+  );
+  const servers = (list || [])
+    .filter(server => server && typeof server === 'object' && typeof server.url === 'string')
+    .map(server => ({
+      url: expandServerUrl(server),
+      ...(server.description ? { description: server.description } : {}),
+    }));
+  return servers.length ? servers : [{ url: FALLBACK_SERVER }];
 }
 
 function parameterNode(spec, parameter) {
@@ -312,36 +362,57 @@ function parameterNode(spec, parameter) {
   });
   if (resolved.description && !node.description) node.description = resolved.description;
   if (resolved.deprecated === true) node.deprecated = true;
-  return { location: resolved.in, node, example: exampleFromSchema(spec, resolved.schema || {}) };
+  const example =
+    resolved.example !== undefined
+      ? resolved.example
+      : exampleFromSchema(spec, resolved.schema || {});
+  if (example !== null && example !== undefined) node.example = stringifyValue(example);
+  return { location: resolved.in, node };
 }
 
-/** Normalizes every operation in the spec into a serializable shape. */
-export function normalizeOperations(spec) {
-  const operations = [];
+const HTTP_METHODS = new Set(METHODS.map(method => method.toUpperCase()));
 
-  for (const [pathName, pathItem] of Object.entries(spec.paths || {})) {
+/**
+ * Normalizes every operation in the spec into a serializable shape. OpenAPI
+ * 3.1 `webhooks` (and the `x-webhooks` extension) become operations flagged
+ * `webhook: true`, keyed `WEBHOOK <name>`: they describe payloads the API
+ * sends, so they carry no servers, samples, or playground.
+ */
+export function normalizeOperations(spec, { specId } = {}) {
+  const operations = [];
+  const sources = [
+    ...Object.entries(spec.paths || {}).map(([name, item]) => [name, item, false]),
+    ...Object.entries(spec.webhooks || spec['x-webhooks'] || {}).map(([name, item]) => [
+      name,
+      item,
+      true,
+    ]),
+  ];
+
+  for (const [pathName, pathItem, webhook] of sources) {
     const resolvedPath = deref(spec, pathItem);
     if (!resolvedPath || typeof resolvedPath !== 'object') continue;
 
     for (const method of METHODS) {
       const operation = resolvedPath[method];
       if (!operation || typeof operation !== 'object') continue;
+      // A webhook name maps to one page; a second method on the same
+      // webhook would collide with it, so only the first is documented.
+      if (webhook && operations.some(item => item.webhook && item.path === pathName)) break;
 
       const upper = method.toUpperCase();
       const parameters = { query: [], path: [], header: [], cookie: [] };
       const merged = [...(resolvedPath.parameters || []), ...(operation.parameters || [])];
       const seenParams = new Set();
-      const paramExamples = {};
 
       // Operation-level parameters override path-level ones with the same
       // name and location, so walk the merged list from the end.
       for (const parameter of merged.reverse()) {
-        const { location, node, example } = parameterNode(spec, parameter);
+        const { location, node } = parameterNode(spec, parameter);
         const dedupeKey = `${location}:${node.name}`;
         if (!parameters[location] || seenParams.has(dedupeKey)) continue;
         seenParams.add(dedupeKey);
         parameters[location].unshift(node);
-        if (example !== null && example !== undefined) paramExamples[dedupeKey] = example;
       }
 
       const bodySource = deref(spec, operation.requestBody);
@@ -369,18 +440,22 @@ export function normalizeOperations(spec) {
           };
         });
 
-      const serverUrl = operation.servers?.[0]?.url || spec.servers?.[0]?.url || FALLBACK_SERVER;
+      const servers = webhook ? [] : resolveServers(spec, resolvedPath, operation);
+      const kebab = value =>
+        value
+          .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+          .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+          .replace(/[_\s.]+/g, '-');
+      const idSource = operation.operationId
+        ? kebab(operation.operationId)
+        : webhook
+          ? `webhook-${kebab(pathName)}`
+          : `${method}-${pathName}`;
       const normalized = {
-        id: slugify(
-          operation.operationId
-            ? operation.operationId
-                .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-                .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-                .replace(/[_\s]+/g, '-')
-            : `${method}-${pathName}`,
-          `${method}-${slugify(pathName, 'root')}`,
-        ),
-        key: `${upper} ${pathName}`,
+        id: slugify(idSource, `${webhook ? 'webhook' : method}-${slugify(pathName, 'root')}`),
+        key: webhook ? `WEBHOOK ${pathName}` : `${upper} ${pathName}`,
+        ...(specId ? { spec: specId } : {}),
+        ...(webhook ? { webhook: true } : {}),
         method: upper,
         path: pathName,
         summary: operation.summary || undefined,
@@ -390,12 +465,13 @@ export function normalizeOperations(spec) {
         parameters,
         requestBody,
         responses,
-        security: securitySummaries(spec, operation),
-        serverUrl,
+        security: webhook ? [] : securitySchemes(spec, operation),
+        servers,
+        serverUrl: servers[0]?.url || '',
         samples: [],
       };
 
-      normalized.samples = buildCodeSamples(normalized, paramExamples);
+      if (!webhook) normalized.samples = buildCodeSamples(normalized);
       operations.push(normalized);
     }
   }
@@ -415,70 +491,6 @@ export function normalizeOperations(spec) {
   return operations;
 }
 
-function queryString(operation, paramExamples) {
-  const pairs = operation.parameters.query
-    .filter(parameter => parameter.required)
-    .map(parameter => {
-      const example = paramExamples[`query:${parameter.name}`];
-      return `${parameter.name}=${encodeURIComponent(String(example ?? ''))}`;
-    });
-  return pairs.length ? `?${pairs.join('&')}` : '';
-}
-
-function pythonLiteral(json) {
-  return json
-    .replace(/"([^"]+)":/g, "'$1':")
-    .replace(/"/g, "'")
-    .replace(/\btrue\b/g, 'True')
-    .replace(/\bfalse\b/g, 'False')
-    .replace(/\bnull\b/g, 'None');
-}
-
-/** Builds curl, JavaScript, and Python request samples for an operation. */
-export function buildCodeSamples(operation, paramExamples = {}) {
-  const url = `${operation.serverUrl.replace(/\/$/, '')}${operation.path}${queryString(operation, paramExamples)}`;
-  const hasAuth = operation.security.length > 0;
-  const body = operation.requestBody?.example;
-  const method = operation.method;
-
-  const escapedBody = body ? body.replace(/'/g, `'\\''`) : undefined;
-  const curl = [
-    `curl -X ${method} '${url}'`,
-    ...(hasAuth ? [`  -H 'Authorization: Bearer <token>'`] : []),
-    ...(body ? [`  -H 'Content-Type: application/json'`, `  -d '${escapedBody}'`] : []),
-  ].join(' \\\n');
-
-  const headers = [
-    ...(body ? [`    'Content-Type': 'application/json',`] : []),
-    ...(hasAuth ? [`    Authorization: 'Bearer <token>',`] : []),
-  ];
-  const javascript = [
-    `const response = await fetch('${url}', {`,
-    `  method: '${method}',`,
-    ...(headers.length ? ['  headers: {', ...headers, '  },'] : []),
-    ...(body ? [`  body: JSON.stringify(${body}),`] : []),
-    '});',
-    'const data = await response.json();',
-  ].join('\n');
-
-  const python = [
-    'import requests',
-    '',
-    `response = requests.${method.toLowerCase()}(`,
-    `    '${url}',`,
-    ...(hasAuth ? [`    headers={'Authorization': 'Bearer <token>'},`] : []),
-    ...(body ? [`    json=${pythonLiteral(body)},`] : []),
-    ')',
-    'print(response.json())',
-  ].join('\n');
-
-  return [
-    { language: 'bash', label: 'cURL', source: curl },
-    { language: 'javascript', label: 'JavaScript', source: javascript },
-    { language: 'python', label: 'Python', source: python },
-  ];
-}
-
 function markdownSchemaLines(node, depth = 0) {
   if (!node) return [];
   const indent = '  '.repeat(depth);
@@ -493,10 +505,18 @@ function markdownSchemaLines(node, depth = 0) {
 
 /** Renders an operation as markdown for the .md export and llms-full.txt. */
 export function operationToMarkdown(operation) {
-  const lines = [`## ${operation.method} ${operation.path}`, ''];
+  const lines = [
+    operation.webhook
+      ? `## Webhook: ${operation.path}`
+      : `## ${operation.method} ${operation.path}`,
+    '',
+  ];
 
   if (operation.summary) lines.push(operation.summary, '');
   if (operation.description) lines.push(operation.description, '');
+  if (operation.security.length) {
+    lines.push(`Authentication: ${operation.security.map(scheme => scheme.label).join(', ')}`, '');
+  }
 
   const allParameters = ['path', 'query', 'header', 'cookie'].flatMap(location =>
     operation.parameters[location].map(parameter => ({ location, parameter })),
@@ -514,7 +534,12 @@ export function operationToMarkdown(operation) {
   }
 
   if (operation.requestBody) {
-    lines.push('### Request body', '', ...markdownSchemaLines(operation.requestBody.schema), '');
+    lines.push(
+      operation.webhook ? '### Payload' : '### Request body',
+      '',
+      ...markdownSchemaLines(operation.requestBody.schema),
+      '',
+    );
     if (operation.requestBody.example) {
       lines.push('```json', operation.requestBody.example, '```', '');
     }
@@ -541,20 +566,99 @@ export function operationToMarkdown(operation) {
   return lines.join('\n').trim();
 }
 
+/**
+ * Normalizes every named schema under components.schemas into a page-ready
+ * shape, keyed by its name (and `<spec> <name>` on multi-spec sites).
+ */
+export function normalizeSchemas(spec, { specId } = {}) {
+  const schemas = [];
+
+  for (const [name, schema] of Object.entries(spec.components?.schemas || {})) {
+    if (!schema || typeof schema !== 'object') continue;
+    const resolved = deref(spec, schema);
+    const example = exampleFromSchema(spec, schema);
+    schemas.push({
+      name,
+      key: name,
+      ...(specId ? { spec: specId } : {}),
+      title: typeof resolved?.title === 'string' ? resolved.title : undefined,
+      description: typeof resolved?.description === 'string' ? resolved.description : undefined,
+      schema: schemaTree(spec, schema),
+      example: formatExample(example === null ? undefined : example),
+    });
+  }
+
+  return schemas;
+}
+
+/** Anchor ids for a schema page's generated sections; mirrors src/lib/openapi.ts. */
+export function schemaAnchors(page) {
+  return [
+    ...(page.schema?.children?.length ? ['properties'] : []),
+    ...(page.example ? ['example'] : []),
+  ];
+}
+
+/** Search-index sections for a schema page, matching schemaAnchors ids. */
+export function schemaSearchSections(page) {
+  return [
+    {
+      heading: undefined,
+      id: undefined,
+      text: [page.name, page.description].filter(Boolean).join(' '),
+    },
+    { heading: 'Properties', id: 'properties', text: schemaText(page.schema) },
+  ].filter(section => section.text.replace(/\s+/g, ' ').trim());
+}
+
+/** Renders a schema page as markdown for the .md export and llms-full.txt. */
+export function schemaToMarkdown(page) {
+  const lines = [`## ${page.name}`, ''];
+  if (page.description) lines.push(page.description, '');
+  if (page.schema?.children?.length) {
+    lines.push(
+      '### Properties',
+      '',
+      ...markdownSchemaLines(page.schema)
+        .slice(1)
+        .map(line => line.slice(2)),
+      '',
+    );
+  }
+  if (page.example) lines.push('### Example', '', '```json', page.example, '```', '');
+  return lines.join('\n').trim();
+}
+
 function yamlString(value) {
   return JSON.stringify(String(value).split('\n')[0]);
+}
+
+/** The frontmatter value that binds a page to an operation. */
+export function operationReference(operation, prefixSpec = false) {
+  const key = operation.webhook ? `webhook ${operation.path}` : operation.key;
+  return prefixSpec && operation.spec ? `${operation.spec} ${key}` : key;
 }
 
 /**
  * Writes one stub .mdx page per operation, skipping files that already exist
  * so authors can customize titles or add prose above the generated reference.
  */
-export async function generateOpenApiStubs({ root, contentDir, directory, operations }) {
-  const target = path.join(path.resolve(root), contentDir, directory);
-  await fs.mkdir(target, { recursive: true });
+export async function generateOpenApiStubs({
+  root,
+  contentDir,
+  directory,
+  operations,
+  prefixSpec = false,
+}) {
   const created = [];
 
   for (const operation of operations) {
+    const target = path.join(
+      path.resolve(root),
+      contentDir,
+      operation.directory || directory || DEFAULT_API_DIRECTORY,
+    );
+    await fs.mkdir(target, { recursive: true });
     const filePath = path.join(target, `${operation.id}.mdx`);
 
     try {
@@ -568,13 +672,13 @@ export async function generateOpenApiStubs({ root, contentDir, directory, operat
       '---',
       `title: ${yamlString(operation.summary || `${operation.method} ${operation.path}`)}`,
       ...(operation.description ? [`description: ${yamlString(operation.description)}`] : []),
-      `openapi: ${operation.method} ${operation.path}`,
+      `openapi: ${operationReference(operation, prefixSpec)}`,
       '---',
       '',
     ].join('\n');
 
     await fs.writeFile(filePath, frontmatter);
-    created.push(`${directory}/${operation.id}`);
+    created.push(operation.pageRef || `${directory}/${operation.id}`);
   }
 
   return created;
@@ -601,6 +705,15 @@ export function resolveApiDirectory(api) {
   return directory;
 }
 
+/** Where a scheme's credential travels; mirrors securityLocation in src/lib/openapi.ts. */
+export function securityLocation(scheme) {
+  return scheme.type === 'apiKey' && scheme.in ? scheme.in : 'header';
+}
+
+function securityForLocation(operation, location) {
+  return operation.security.filter(scheme => securityLocation(scheme) === location);
+}
+
 /** True when the operation renders a Parameters section (incl. auth). */
 export function hasOperationParameters(operation) {
   const { query, path: pathParams, header, cookie } = operation.parameters;
@@ -619,7 +732,7 @@ function operationParameterSections(operation) {
   ].filter(
     ({ location }) =>
       operation.parameters[location].length > 0 ||
-      (location === 'header' && operation.security.length > 0),
+      securityForLocation(operation, location).length > 0,
   );
 }
 
@@ -627,10 +740,11 @@ function operationParameterSections(operation) {
  * Anchor ids for the generated sections, in render order. Mirrors
  * operationSections in src/lib/openapi.ts (asserted by tests/openapi.test.mjs).
  */
-export function operationAnchors(operation) {
+export function operationAnchors(operation, { playground = false } = {}) {
   return [
+    ...(playground && !operation.webhook ? ['try-it'] : []),
     ...operationParameterSections(operation).map(section => section.id),
-    ...(operation.requestBody ? ['request-body'] : []),
+    ...(operation.requestBody ? [operation.webhook ? 'payload' : 'request-body'] : []),
     ...(operation.responses.length ? ['responses'] : []),
     ...(operation.samples.length ? ['code-samples'] : []),
   ];
@@ -643,11 +757,41 @@ function schemaText(node) {
     .join(' ');
 }
 
-/** Normalizes an openapi frontmatter value into the operation lookup key. */
+/**
+ * Whether an endpoint page renders the "Try it" panel. Mirrors
+ * resolvePlaygroundDisplay in src/lib/openapi.ts: the page's `playground`
+ * frontmatter wins over `api.playground.display`, and only "interactive"
+ * (the default) renders the panel.
+ */
+export function hasPlayground(api, frontmatterValue) {
+  const override = String(frontmatterValue ?? '').trim();
+  if (['interactive', 'simple', 'none'].includes(override)) return override === 'interactive';
+  const display = api?.playground?.display;
+  return display !== 'simple' && display !== 'none';
+}
+
+/**
+ * Normalizes an openapi frontmatter value into the operation lookup key:
+ * "get /users" -> "GET /users", "webhook userCreated" -> "WEBHOOK userCreated",
+ * and "users.yaml GET /users" -> "users.yaml GET /users" (a spec-qualified key
+ * for multi-spec sites). Returns undefined for blank values.
+ */
 export function normalizeOperationKey(value) {
   if (typeof value !== 'string' || !value.trim()) return undefined;
-  const [method, ...rest] = value.trim().split(/\s+/);
-  return `${method.toUpperCase()} ${rest.join(' ')}`;
+  const [first, ...rest] = value.trim().split(/\s+/);
+  if (!rest.length) return undefined;
+  const upper = first.toUpperCase();
+  if (upper === 'WEBHOOK' || HTTP_METHODS.has(upper)) {
+    return `${upper} ${rest.join(' ')}`;
+  }
+  const inner = normalizeOperationKey(rest.join(' '));
+  return inner ? `${first} ${inner}` : undefined;
+}
+
+/** Normalizes an openapi-schema frontmatter value: "User" or "users.yaml User". */
+export function normalizeSchemaKey(value) {
+  if (typeof value !== 'string' || !value.trim()) return undefined;
+  return value.trim().split(/\s+/).join(' ');
 }
 
 /** Search-index sections for an operation, matching operationAnchors ids. */
@@ -665,14 +809,16 @@ export function operationSearchSections(operation) {
       id,
       text: [
         ...operation.parameters[location].map(schemaText),
-        ...(location === 'header' && operation.security.length > 0
-          ? ['Authorization Authentication credentials']
-          : []),
+        ...securityForLocation(operation, location).flatMap(scheme => [
+          scheme.type === 'apiKey' ? scheme.paramName || scheme.name : 'Authorization',
+          'Authentication credentials',
+          scheme.label,
+        ]),
       ].join(' '),
     })),
     {
-      heading: 'Request body',
-      id: 'request-body',
+      heading: operation.webhook ? 'Payload' : 'Request body',
+      id: operation.webhook ? 'payload' : 'request-body',
       text: schemaText(operation.requestBody?.schema),
     },
     {

@@ -22,12 +22,8 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from './lib/mdast.mjs';
-import {
-  loadOpenApiSpec,
-  normalizeOperationKey,
-  normalizeOperations,
-  operationSearchSections,
-} from './lib/openapi.mjs';
+import { operationSearchSections, schemaSearchSections } from './lib/openapi.mjs';
+import { loadApiProject, lookupOperation, lookupSchema } from './lib/openapi-project.mjs';
 import { createSlugger, slugifyId } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
@@ -148,10 +144,10 @@ function collectVisiblePages(container, pages = [], hidden = false) {
 }
 
 /** Frontmatter is YAML, but search only needs single lines from it. */
-function frontmatterOpenApi(tree) {
+function frontmatterField(tree, name) {
   const yaml = tree.children?.find(node => node.type === 'yaml');
-  const match = yaml?.value?.match(/^openapi:\s*(.+)$/m);
-  return match ? match[1].trim() : undefined;
+  const match = yaml?.value?.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'));
+  return match ? match[1].trim().replace(/^["']|["']$/g, '') : undefined;
 }
 
 function frontmatterTitle(tree) {
@@ -225,13 +221,9 @@ export async function generateSearchIndex({
 
   // Pages bound to an API operation get synthesized sections from the spec, so
   // parameters and responses are searchable even though they render from data.
-  let operationsByKey;
-  if (docsJson.api?.spec) {
-    const { spec } = await loadOpenApiSpec({ root, specPath: docsJson.api.spec });
-    operationsByKey = new Map(
-      normalizeOperations(spec).map(operation => [operation.key, operation]),
-    );
-  }
+  const project = docsJson.api?.spec
+    ? await loadApiProject({ root, api: docsJson.api })
+    : undefined;
 
   for (const scope of collectScopes(docsJson.navigation || {})) {
     // Single-scope sites omit scope fields so their index stays unchanged.
@@ -272,10 +264,19 @@ export async function generateSearchIndex({
         records.push({ url, page, heading, id, text, ...scopeFields });
       }
 
-      const operationKey = normalizeOperationKey(frontmatterOpenApi(tree));
-      const operation = operationKey ? operationsByKey?.get(operationKey) : undefined;
+      const operation = project
+        ? lookupOperation(project, frontmatterField(tree, 'openapi'))
+        : undefined;
       if (operation) {
         for (const { heading, id, text } of operationSearchSections(operation)) {
+          records.push({ url, page, heading, id, text, ...scopeFields });
+        }
+      }
+      const schema = project
+        ? lookupSchema(project, frontmatterField(tree, 'openapi-schema'))
+        : undefined;
+      if (schema) {
+        for (const { heading, id, text } of schemaSearchSections(schema)) {
           records.push({ url, page, heading, id, text, ...scopeFields });
         }
       }

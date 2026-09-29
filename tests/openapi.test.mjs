@@ -9,8 +9,10 @@ import {
 } from '../packages/shiso/scripts/expand-openapi-navigation.mjs';
 import { DEFAULT_OPENAPI_THEME } from '../packages/shiso/scripts/generate-openapi.mjs';
 import {
+  buildRequest,
   exampleFromSchema,
   generateOpenApiStubs,
+  hasPlayground,
   loadOpenApiSpec,
   normalizeOperationKey,
   normalizeOperations,
@@ -100,14 +102,76 @@ describe('normalizeOperations', () => {
     expect(operation.parameters.header[0].name).toBe('X-Request-Id');
   });
 
-  it('resolves security into readable summaries', async () => {
+  it('resolves security into structured schemes with labels', async () => {
     const operations = normalizeOperations(await fixtureSpec());
 
     expect(operations.find(item => item.key === 'POST /users').security).toEqual([
-      'bearerAuth (http bearer)',
+      { name: 'bearerAuth', type: 'http', scheme: 'bearer', label: 'bearerAuth (http bearer)' },
     ]);
     // listUsers opts out with security: [].
     expect(operations.find(item => item.key === 'GET /users').security).toEqual([]);
+  });
+
+  it('resolves API key, basic, and unknown schemes', () => {
+    const [operation] = normalizeOperations({
+      components: {
+        securitySchemes: {
+          apiKey: { type: 'apiKey', in: 'query', name: 'key' },
+          basicAuth: { type: 'http', scheme: 'Basic' },
+        },
+      },
+      paths: {
+        '/x': {
+          get: { security: [{ apiKey: [] }, { basicAuth: [] }, { ghost: [] }], responses: {} },
+        },
+      },
+    });
+
+    expect(operation.security).toEqual([
+      { name: 'apiKey', type: 'apiKey', in: 'query', paramName: 'key', label: 'apiKey (apiKey)' },
+      { name: 'basicAuth', type: 'http', scheme: 'basic', label: 'basicAuth (http basic)' },
+      { name: 'ghost', type: 'unknown', label: 'ghost' },
+    ]);
+  });
+
+  it('resolves servers from the operation, path, or document and expands variables', () => {
+    const spec = {
+      servers: [
+        {
+          url: 'https://{region}.example.com/{version}',
+          variables: { region: { default: 'eu' }, version: { default: 'v2' } },
+        },
+      ],
+      paths: {
+        '/a': { get: { responses: {} } },
+        '/b': {
+          servers: [{ url: 'https://b.example.com', description: 'Path server' }],
+          get: { responses: {} },
+          post: { servers: [{ url: 'https://op.example.com' }], responses: {} },
+        },
+      },
+    };
+    const operations = normalizeOperations(spec);
+    const byKey = key => operations.find(item => item.key === key);
+
+    expect(byKey('GET /a').servers).toEqual([{ url: 'https://eu.example.com/v2' }]);
+    expect(byKey('GET /a').serverUrl).toBe('https://eu.example.com/v2');
+    expect(byKey('GET /b').servers).toEqual([
+      { url: 'https://b.example.com', description: 'Path server' },
+    ]);
+    expect(byKey('POST /b').servers).toEqual([{ url: 'https://op.example.com' }]);
+    expect(normalizeOperations({ paths: { '/c': { get: { responses: {} } } } })[0].servers).toEqual(
+      [{ url: 'https://api.example.com' }],
+    );
+  });
+
+  it('records parameter examples on schema nodes', async () => {
+    const operations = normalizeOperations(await fixtureSpec());
+    const limit = operations
+      .find(item => item.key === 'GET /users')
+      .parameters.query.find(node => node.name === 'limit');
+
+    expect(limit.example).toBe('20');
   });
 
   it('guards against circular refs in schema trees', async () => {
@@ -187,6 +251,139 @@ describe('buildCodeSamples', () => {
     const operation = operations.find(item => item.key === 'GET /users');
 
     expect(operation.samples[0].source).toContain('/users?limit=20');
+    // Path placeholders stay recognizable in the static samples.
+    expect(operations.find(item => item.key === 'GET /users/{id}').samples[0].source).toContain(
+      '/users/{id}',
+    );
+  });
+
+  it('renders each security scheme the way it is sent', () => {
+    const spec = {
+      components: {
+        securitySchemes: {
+          keyHeader: { type: 'apiKey', in: 'header', name: 'X-API-Key' },
+          keyQuery: { type: 'apiKey', in: 'query', name: 'api_key' },
+          keyCookie: { type: 'apiKey', in: 'cookie', name: 'session' },
+          basic: { type: 'http', scheme: 'basic' },
+          oauth: { type: 'oauth2', flows: {} },
+        },
+      },
+      paths: {
+        '/a': { get: { security: [{ keyHeader: [] }], responses: {} } },
+        '/b': { get: { security: [{ keyQuery: [] }], responses: {} } },
+        '/c': { get: { security: [{ keyCookie: [] }], responses: {} } },
+        '/d': { get: { security: [{ basic: [] }], responses: {} } },
+        '/e': { get: { security: [{ oauth: [] }], responses: {} } },
+      },
+    };
+    const curl = key =>
+      normalizeOperations(spec)
+        .find(item => item.key === key)
+        .samples.find(sample => sample.language === 'bash').source;
+
+    expect(curl('GET /a')).toContain("-H 'X-API-Key: <api-key>'");
+    expect(curl('GET /b')).toContain("'https://api.example.com/b?api_key=<api-key>'");
+    expect(curl('GET /c')).toContain("-H 'Cookie: session=<api-key>'");
+    expect(curl('GET /d')).toContain("-H 'Authorization: Basic <credentials>'");
+    expect(curl('GET /e')).toContain("-H 'Authorization: Bearer <access-token>'");
+    expect(curl('GET /a')).not.toContain('Bearer');
+  });
+
+  it('renders form, multipart, and raw bodies with matching content types', () => {
+    const spec = {
+      paths: {
+        '/form': {
+          post: {
+            requestBody: {
+              content: {
+                'application/x-www-form-urlencoded': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      name: { type: 'string', example: 'Ada' },
+                      age: { type: 'integer', example: 36 },
+                    },
+                  },
+                },
+              },
+            },
+            responses: {},
+          },
+        },
+        '/upload': {
+          post: {
+            requestBody: {
+              content: {
+                'multipart/form-data': {
+                  schema: {
+                    type: 'object',
+                    properties: { title: { type: 'string', example: 'Report' } },
+                  },
+                },
+              },
+            },
+            responses: {},
+          },
+        },
+        '/raw': {
+          post: {
+            requestBody: {
+              content: { 'text/plain': { schema: { type: 'string', example: 'hello' } } },
+            },
+            responses: {},
+          },
+        },
+      },
+    };
+    const samples = key =>
+      Object.fromEntries(
+        normalizeOperations(spec)
+          .find(item => item.key === key)
+          .samples.map(sample => [sample.language, sample.source]),
+      );
+
+    const form = samples('POST /form');
+    expect(form.bash).toContain("--data-urlencode 'name=Ada'");
+    expect(form.bash).toContain("--data-urlencode 'age=36'");
+    expect(form.bash).not.toContain('application/json');
+    expect(form.javascript).toContain('new URLSearchParams({');
+    expect(form.python).toContain("data={'name': 'Ada', 'age': '36'}");
+
+    const upload = samples('POST /upload');
+    expect(upload.bash).toContain("-F 'title=Report'");
+    expect(upload.javascript).toContain('new FormData()');
+    expect(upload.javascript).toContain("body.append('title', 'Report')");
+    expect(upload.python).toContain("files={'title': (None, 'Report')}");
+
+    const raw = samples('POST /raw');
+    expect(raw.bash).toContain("-H 'Content-Type: text/plain'");
+    expect(raw.bash).toContain(`-d '"hello"'`);
+    expect(raw.python).toContain("'Content-Type': 'text/plain'");
+  });
+
+  it('builds live requests from playground values', async () => {
+    const operations = normalizeOperations(await fixtureSpec());
+    const operation = operations.find(item => item.key === 'GET /users/{id}');
+    const request = buildRequest(operation, {
+      live: true,
+      server: 'http://localhost:3000/',
+      path: { id: 'a b' },
+      header: { 'X-Request-Id': 'req-1' },
+      auth: { bearerAuth: 'secret' },
+    });
+
+    expect(request.url).toBe('http://localhost:3000/users/a%20b');
+    expect(request.headers).toEqual({ Authorization: 'Bearer secret', 'X-Request-Id': 'req-1' });
+    expect(request.bodyKind).toBe('none');
+
+    const basic = buildRequest(
+      normalizeOperations({
+        components: { securitySchemes: { basic: { type: 'http', scheme: 'basic' } } },
+        paths: { '/x': { get: { security: [{ basic: [] }], responses: {} } } },
+      })[0],
+      { live: true, auth: { basic: { username: 'ada', password: 'pw' } } },
+    );
+    expect(basic.headers.Authorization).toBe(`Basic ${Buffer.from('ada:pw').toString('base64')}`);
   });
 });
 
@@ -215,6 +412,7 @@ describe('operationAnchors and search sections', () => {
       'responses',
       'code-samples',
     ]);
+    expect(operationAnchors(create, { playground: true })[0]).toBe('try-it');
     // DELETE has a path parameter (from the path item) plus auth, no body.
     expect(operationAnchors(remove)).toEqual([
       'headers',
@@ -226,6 +424,25 @@ describe('operationAnchors and search sections', () => {
     const sections = operationSearchSections(create);
     expect(sections[0].text).toContain('POST /users Create a user');
     expect(sections.find(section => section.id === 'request-body').text).toContain('name');
+  });
+
+  it('places query and cookie API keys in their own sections', () => {
+    const [operation] = normalizeOperations({
+      components: { securitySchemes: { key: { type: 'apiKey', in: 'query', name: 'api_key' } } },
+      paths: { '/x': { get: { security: [{ key: [] }], responses: {} } } },
+    });
+
+    expect(operationAnchors(operation)).toEqual(['query-parameters', 'code-samples']);
+    expect(
+      operationSearchSections(operation).find(section => section.id === 'query-parameters').text,
+    ).toContain('api_key');
+  });
+
+  it('resolves playground display from config and frontmatter', () => {
+    expect(hasPlayground(undefined, undefined)).toBe(true);
+    expect(hasPlayground({ playground: { display: 'none' } }, undefined)).toBe(false);
+    expect(hasPlayground({ playground: { display: 'simple' } }, 'interactive')).toBe(true);
+    expect(hasPlayground({}, 'none')).toBe(false);
   });
 
   it('normalizes frontmatter keys case-insensitively', () => {

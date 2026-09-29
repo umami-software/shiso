@@ -421,11 +421,38 @@ export interface DocsConfig {
   api?: ApiConfig;
 }
 
+export type ApiPlaygroundDisplay = 'interactive' | 'simple' | 'none';
+
+export interface ApiPlaygroundConfig {
+  /**
+   * "interactive" (default) renders the "Try it" panel on endpoint pages;
+   * "simple" and "none" show the reference without it.
+   */
+  display?: ApiPlaygroundDisplay;
+  /**
+   * URL of a CORS proxy the playground sends requests through. `$url` in the
+   * value is replaced with the encoded target URL; without it the target URL
+   * is appended. Requests go directly to the API when omitted.
+   */
+  proxy?: string;
+}
+
 export interface ApiConfig {
-  /** Path to a local OpenAPI 3.x spec (JSON or YAML), relative to the project root. */
-  spec: string;
+  /**
+   * One OpenAPI 3.x spec (JSON or YAML) or a list of them: paths relative to
+   * the project root, or https URLs fetched at build time.
+   */
+  spec: string | string[];
   /** Folder inside the content directory for generated endpoint pages. Default "api-reference". */
   directory?: string;
+  /** "Try it" panel settings for endpoint pages. */
+  playground?: ApiPlaygroundConfig;
+}
+
+/** Playground settings after defaults, as carried on the site model. */
+export interface ResolvedApiPlayground {
+  display: ApiPlaygroundDisplay;
+  proxy?: string;
 }
 
 /* ---------------------------------------------------------------------------
@@ -595,6 +622,7 @@ export interface SiteModel {
   drilldown?: boolean;
   locale: string;
   labels: ThemeLabels;
+  api: { playground: ResolvedApiPlayground };
   docs: NormalizedDocsConfig;
 }
 
@@ -635,8 +663,16 @@ export interface DocFrontmatter {
   timestamp?: boolean;
   /** Related pages rendered above the prev/next pager. */
   related?: RelatedEntry[];
-  /** Binds the page to an API operation, e.g. "GET /users/{id}". */
+  /**
+   * Binds the page to an API operation, e.g. "GET /users/{id}", a webhook
+   * ("webhook userCreated"), or a spec-qualified key on multi-spec sites
+   * ("users.yaml GET /users").
+   */
   openapi?: string;
+  /** Binds the page to a named component schema, e.g. "User" or "users.yaml User". */
+  'openapi-schema'?: string;
+  /** Overrides `api.playground.display` for this page. */
+  playground?: ApiPlaygroundDisplay;
   [key: string]: unknown;
 }
 
@@ -659,7 +695,30 @@ export interface SchemaNode {
   description?: string;
   default?: string;
   enum?: string[];
+  /** Example value (stringified) for parameters, used by samples and the playground. */
+  example?: string;
   children?: SchemaNode[];
+}
+
+/** A security scheme an operation accepts, resolved from components.securitySchemes. */
+export interface SecurityScheme {
+  /** Scheme key in the spec, e.g. "bearerAuth". */
+  name: string;
+  type: 'http' | 'apiKey' | 'oauth2' | 'openIdConnect' | 'unknown';
+  /** HTTP authentication scheme, lowercased: "bearer", "basic", ... */
+  scheme?: string;
+  /** Where an API key is sent. */
+  in?: 'header' | 'query' | 'cookie';
+  /** Header, query, or cookie name carrying an API key. */
+  paramName?: string;
+  description?: string;
+  /** Display label, e.g. "bearerAuth (http bearer)". */
+  label: string;
+}
+
+export interface ApiServer {
+  url: string;
+  description?: string;
 }
 
 export interface OpenApiSample {
@@ -682,9 +741,18 @@ export interface OpenApiResponse {
 
 export interface NormalizedOperation {
   id: string;
-  /** Frontmatter lookup key, e.g. "GET /users/{id}". */
+  /** Frontmatter lookup key, e.g. "GET /users/{id}" or "WEBHOOK userCreated". */
   key: string;
+  /** The configured spec (path or URL) this operation came from. */
+  spec?: string;
+  /** True for OpenAPI `webhooks` entries: payloads the API sends to subscribers. */
+  webhook?: boolean;
+  /** Content folder of the endpoint page, relative to the content directory. */
+  directory?: string;
+  /** Navigation page reference of the endpoint page, e.g. "api-reference/get-user". */
+  pageRef?: string;
   method: string;
+  /** URL path, or the webhook name for webhooks. */
   path: string;
   summary?: string;
   description?: string;
@@ -704,7 +772,23 @@ export interface NormalizedOperation {
     exampleHtml?: string;
   };
   responses: OpenApiResponse[];
-  security: string[];
+  security: SecurityScheme[];
+  /** Servers the operation can be sent to, most specific level first. */
+  servers: ApiServer[];
+  /** URL of the first server; kept for consumers that need a single origin. */
   serverUrl: string;
   samples: OpenApiSample[];
+}
+
+/** A named component schema rendered by an `openapi-schema:` page. */
+export interface SchemaPage {
+  name: string;
+  /** Frontmatter lookup key: the schema name. */
+  key: string;
+  spec?: string;
+  title?: string;
+  description?: string;
+  schema: SchemaNode;
+  example?: string;
+  exampleHtml?: string;
 }

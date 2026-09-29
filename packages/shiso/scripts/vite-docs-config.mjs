@@ -43,6 +43,7 @@ export async function createDocsConfigModule({
     getConfig: () => loaded.config,
     getShisoConfig: () => loadedShiso.config,
     getSpecPath: () => loaded.specPath,
+    getSpecPaths: () => loaded.specPaths || [],
     getSourcePaths: () => [...loaded.sourcePaths, ...loadedShiso.sourcePaths],
     sourcePath: loaded.sourcePath,
     shisoSourcePath: loadedShiso.sourcePath,

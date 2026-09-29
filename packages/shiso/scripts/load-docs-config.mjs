@@ -2,12 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { expandNavigationGlobs, hasNavigationGlobs } from './expand-navigation-globs.mjs';
 import { expandOpenApiNavigation, hasOpenApiItems } from './expand-openapi-navigation.mjs';
-import {
-  generateOpenApiStubs,
-  loadOpenApiSpec,
-  normalizeOperations,
-  resolveApiDirectory,
-} from './lib/openapi.mjs';
+import { generateOpenApiStubs } from './lib/openapi.mjs';
+import { loadApiProject } from './lib/openapi-project.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
 
 /** Error raised while locating, reading, or parsing a Shiso configuration file. */
@@ -244,24 +240,27 @@ export async function loadDocsConfig({
   const sourcePath = sourcePaths[0] || requestedSourcePath;
   const hasGlobs = hasNavigationGlobs(sourceConfig.navigation);
   let working = sourceConfig;
-  let specPath;
+  let specPaths = [];
 
   // OpenAPI expansion runs before glob expansion so generated stub pages are
   // visible to navigation globs and every downstream consumer.
   if (expandGlobs && working.api?.spec) {
-    const loadedSpec = await loadOpenApiSpec({ root: projectRoot, specPath: working.api.spec });
-    specPath = loadedSpec.specPath;
-    const operations = normalizeOperations(loadedSpec.spec);
-    const directory = resolveApiDirectory(working.api);
+    const project = await loadApiProject({ root: projectRoot, api: working.api });
+    specPaths = project.specPaths;
     const { config: shisoConfig } = await loadShisoConfig({ root: projectRoot });
 
     await generateOpenApiStubs({
       root: projectRoot,
       contentDir: shisoConfig.contentDir,
-      directory,
-      operations,
+      directory: project.directory,
+      operations: project.operations,
+      prefixSpec: project.multi,
     });
-    working = expandOpenApiNavigation(working, { operations, directory });
+    working = expandOpenApiNavigation(working, {
+      operations: project.operations,
+      directory: project.directory,
+      specs: project.specs,
+    });
   } else if (expandGlobs && hasOpenApiItems(working.navigation)) {
     throw new Error(
       'Navigation contains an { "openapi" } entry but docs.json has no "api.spec" setting.',
@@ -275,7 +274,16 @@ export async function loadDocsConfig({
       })
     : working;
 
-  return { config, projectRoot, sourcePath, sourcePaths, hasGlobs, specPath };
+  return {
+    config,
+    projectRoot,
+    sourcePath,
+    sourcePaths,
+    hasGlobs,
+    specPaths,
+    /** @deprecated use specPaths */
+    specPath: specPaths[0],
+  };
 }
 
 export async function loadDocsSchema({

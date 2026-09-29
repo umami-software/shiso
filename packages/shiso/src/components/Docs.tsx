@@ -12,7 +12,13 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
-import { getOperation, operationSections } from '@/lib/openapi';
+import {
+  getOperation,
+  getSchema,
+  operationSections,
+  resolvePlaygroundDisplay,
+  schemaSections,
+} from '@/lib/openapi';
 import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
 import type { DocModule, NormalizedDocsPage, SiteModel, TocEntry } from '@/lib/types';
 
@@ -60,9 +66,18 @@ export function Docs({ page, doc, site }: DocsProps) {
 
   // API reference pages append their generated section anchors to the TOC.
   const operation = getOperation(doc.frontmatter?.openapi);
+  const schema = operation ? undefined : getSchema(doc.frontmatter?.['openapi-schema']);
   const toc = operation
-    ? [...(doc.toc || []), ...operationSections(operation, site.labels)]
-    : doc.toc;
+    ? [
+        ...(doc.toc || []),
+        ...operationSections(operation, site.labels, {
+          playground:
+            resolvePlaygroundDisplay(site.api.playground, doc.frontmatter) === 'interactive',
+        }),
+      ]
+    : schema
+      ? [...(doc.toc || []), ...schemaSections(schema, site.labels)]
+      : doc.toc;
 
   return (
     <PanelProvider>

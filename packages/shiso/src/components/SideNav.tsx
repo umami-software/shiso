@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { flattenNav, isNodeHidden } from '@/lib/docs-config';
-import { methodColor } from '@/lib/openapi';
+import { methodBadgeText, methodColor } from '@/lib/openapi';
 import type { DocsTab, NavGroupNode, NavNode } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -281,7 +281,7 @@ function NavNodes({
               size="xs"
               className="w-10 shrink-0 justify-center whitespace-nowrap font-mono"
             >
-              {method === 'DELETE' ? 'DEL' : method}
+              {methodBadgeText(method)}
             </MethodBadge>
           ) : null}
           {label}

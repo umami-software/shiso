@@ -4,9 +4,10 @@ description: Generate API reference pages from an OpenAPI spec.
 ---
 
 Shiso turns a local OpenAPI 3.0 or 3.1 spec (JSON or YAML) into full reference
-pages: parameters, request and response schemas, status codes, and ready-to-use
-code samples in cURL, JavaScript, and Python. Everything is resolved at build
-time — no client-side spec parsing and no external service.
+pages: parameters, request and response schemas, status codes, ready-to-use
+code samples in cURL, JavaScript, and Python, and an interactive "Try it"
+panel that sends real requests from the browser. Everything is resolved at
+build time — no client-side spec parsing and no external service.
 
 See the [API demo](/docs/api-reference/list-users) section in this site's
 Documentation tab for a live example.
@@ -24,9 +25,48 @@ Add the `api` key to `docs.json`:
 }
 ```
 
-- `spec`: path to the spec file, relative to the project root.
+- `spec`: path to the spec file, relative to the project root, or an `https`
+  URL. A list of specs is accepted too; see [Multiple specs](#multiple-specs).
 - `directory` (optional): folder inside your content directory where endpoint
   pages live. Defaults to `api-reference`.
+
+### Hosted specs
+
+Point `spec` at a URL to document an API whose spec is published elsewhere:
+
+```json
+{
+  "api": {
+    "spec": "https://api.example.com/openapi.json"
+  }
+}
+```
+
+The document is downloaded whenever the configuration loads and cached under
+`.shiso/openapi-cache`, so a build still succeeds when the URL is temporarily
+unreachable (a warning notes that the cached copy was used). Commit the cache
+directory if you need fully offline builds.
+
+### Multiple specs
+
+List several specs to document more than one API on the same site:
+
+```json
+{
+  "api": {
+    "spec": ["specs/users.yaml", "https://billing.example.com/openapi.json"],
+    "directory": "api-reference"
+  }
+}
+```
+
+Each spec's endpoint pages land in their own subfolder named after the spec
+file (`api-reference/users/…`, `api-reference/openapi/…`). Operations and
+schemas are looked up by their bare key (`GET /users`, `User`) when only one
+spec defines them; when several do, qualify the key with the spec as
+configured — `openapi: specs/users.yaml GET /users` — or `pnpm check` reports
+the ambiguity. Generated stubs on multi-spec sites always use the qualified
+form.
 
 ## Add endpoints to navigation
 
@@ -44,11 +84,13 @@ Use an `openapi` entry anywhere a page list is accepted:
 ```
 
 - `{ "openapi": true }` expands into one group per spec tag, containing every
-  operation.
+  operation. Webhooks without tags collect in a "Webhooks" group.
 - `{ "openapi": "<tag>" }` expands into a flat list of that tag's operations.
+- `{ "openapi": "<spec>" }`, where `<spec>` is a path or URL from `api.spec`,
+  expands into that spec's tag groups on multi-spec sites.
 
-Expanded entries show a colored method badge (GET, POST, PUT, PATCH, DELETE)
-next to the page title in the sidebar.
+Expanded entries show a colored method badge (GET, POST, PUT, PATCH, DELETE,
+or HOOK for webhooks) next to the page title in the sidebar.
 
 ## Endpoint pages
 
@@ -71,17 +113,128 @@ markdown export, and navigation working exactly like the rest of your docs.
 Existing files are never overwritten, so you can freely edit titles, add
 descriptions, or write an introduction above the generated reference.
 
+## Webhooks
+
+Entries under the spec's top-level `webhooks` map (OpenAPI 3.1) or the
+`x-webhooks` extension (OpenAPI 3.0) become pages too. Bind one with
+`openapi: webhook <name>`:
+
+```mdx
+---
+title: "User created"
+openapi: webhook user.created
+---
+```
+
+A webhook page shows a WEBHOOK badge, the **Payload** the API sends, and the
+responses it expects back. Webhooks describe requests your API makes, so they
+have no code samples and no playground.
+
+## Schema pages
+
+Document a named schema from `components.schemas` on its own page with the
+`openapi-schema` frontmatter key:
+
+```mdx
+---
+title: "User object"
+description: "The user record returned by every user endpoint."
+openapi-schema: User
+---
+
+Any prose you write here appears above the generated reference.
+```
+
+The page renders the schema's **Properties** table (nested objects expand in
+place) and a highlighted **Example**, taken from the spec or derived from the
+schema. Schema pages are ordinary content pages: add them to `navigation`,
+and they are searchable and exported as Markdown like every other page. See
+the [User object](/docs/api-reference/user) page in this site's API demo.
+
 ## What gets generated
 
+- **Try it** — the interactive playground described below.
 - **Parameters** — path, query, header, and cookie parameters rendered as
-  fields, plus an `Authorization` entry when the operation declares security.
+  fields. Each security scheme the operation accepts adds an entry where the
+  credential is sent: `Authorization` for HTTP bearer and basic schemes, and
+  the configured header, query, or cookie name for API keys.
 - **Request body** — the schema tree with nested and expandable object
   properties, plus a highlighted example (taken from the spec, or derived from
   the schema when the spec has none).
 - **Responses** — one entry per status code with schema and example.
 - **Code samples** — cURL, JavaScript `fetch`, and Python `requests` snippets
-  built from the operation and its server URL, highlighted with the same
-  theme as your [code blocks](/docs/customization#code-blocks).
+  built from the operation, highlighted with the same theme as your
+  [code blocks](/docs/customization#code-blocks). Samples send credentials the
+  way the spec declares them, use the operation's own `servers` entry when it
+  has one, and encode JSON, form-urlencoded, multipart, and raw bodies
+  according to the request body's content type.
+
+## API playground
+
+Every endpoint page opens with a **Try it** panel: a form built from the
+operation's servers, security schemes, parameters, and request body. Send
+request runs the call from the browser and shows the status, timing, response
+headers, and a pretty-printed body. A collapsible **Request** section shows the
+exact cURL command for the current inputs, so readers can copy it to a
+terminal instead.
+
+- The **Server** field starts at the operation's first server URL. When the
+  spec lists several servers, they appear as suggestions; any URL can be typed,
+  which is handy for pointing the playground at a local instance.
+- **Authorization** shows one input per security scheme: a token for bearer
+  and OAuth schemes, a username and password for HTTP basic, and a key for
+  `apiKey` schemes. Values are kept in the browser tab's session storage so
+  they are reused across endpoint pages and cleared when the tab closes.
+- Parameters are prefilled with the spec's examples or defaults. Enum and
+  boolean parameters render as selects. Cookie parameters cannot be set from
+  browser scripts and are listed for reference only.
+- The **Body** editor is prefilled with the example request. For
+  `application/x-www-form-urlencoded` and `multipart/form-data` operations,
+  enter a JSON object; its keys become form fields.
+
+Requests are sent with `fetch` directly from the reader's browser, so the API
+must allow cross-origin requests from your docs domain. When it does not,
+route requests through a proxy you host:
+
+```json
+{
+  "api": {
+    "spec": "openapi.yaml",
+    "playground": {
+      "proxy": "https://proxy.example.com/?url=$url"
+    }
+  }
+}
+```
+
+`$url` is replaced with the URL-encoded target; if the value has no `$url`,
+the encoded target is appended to it. Shiso does not ship a proxy: any CORS
+proxy that forwards the method, headers, and body will do.
+
+### Turn the playground off
+
+Set `api.playground.display` to `"simple"` or `"none"` to render endpoint
+pages without the panel (both values are accepted for compatibility with
+Mintlify configs and behave the same):
+
+```json
+{
+  "api": {
+    "spec": "openapi.yaml",
+    "playground": { "display": "none" }
+  }
+}
+```
+
+Override the site setting on one page with `playground` frontmatter:
+
+```mdx
+---
+title: "Delete a user"
+openapi: DELETE /users/{id}
+playground: none
+---
+```
 
 The published Markdown copy of each endpoint page (used by the contextual menu
 and `llms-full.txt`) includes a Markdown rendering of the full reference.
@@ -90,11 +243,15 @@ and `llms-full.txt`) includes a Markdown rendering of the full reference.
 
 - `$ref` references must point inside the spec document; remote or file
   references are not resolved.
+- Server URL variables are filled with their `default` values. Relative server
+  URLs (such as `/v1`) are used as written, so type a full URL in the
+  playground's Server field to call them.
 - Recursive schemas render as their type name once a cycle is detected.
 - Swagger 2.0 specs are not supported — convert them to OpenAPI 3 first.
-- Avoid headings named "Parameters", "Request body", "Responses", or
-  "Code samples" in an endpoint page's prose; the generated sections already
-  use those anchors.
+- Avoid headings named "Try it", "Headers", "Path parameters", "Query
+  parameters", "Cookie parameters", "Request body", "Payload", "Responses", or
+  "Code samples" in an endpoint page's prose, and "Properties" or "Example" on
+  a schema page; the generated sections already use those anchors.
 - In `shiso dev`, editing the spec regenerates stubs for new operations and
   reloads the site. Removing an operation leaves its stub behind — delete the
   file and its navigation reference manually if you no longer want the page.

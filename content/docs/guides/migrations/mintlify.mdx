@@ -87,15 +87,26 @@ example `/docs/old-page`.
 
 ### Hosted features that do not apply
 
-Mintlify-hosted services — hosted search, analytics integrations, API
-playgrounds, authentication, and live GitHub star counts — are not part of
+Mintlify-hosted services — hosted search, analytics integrations, the
+request proxy, authentication, and live GitHub star counts — are not part of
 Shiso. Built-in replacements:
 
 | Mintlify feature | Shiso equivalent |
 | --- | --- |
 | Hosted search | Client-side search (`⌘K` / `Ctrl K`) |
 | AI chat / MCP | [Markdown export](/docs/search-and-ai#markdown-export) + `contextual` menu |
+| API playground | Built in; see [API playground](/docs/api-reference#api-playground). `api.playground.display` and the `playground` frontmatter values carry over. Mintlify's `proxy: true` has no hosted counterpart — set `api.playground.proxy` to a proxy URL you host, or omit it to call the API directly |
 | Custom domain hosting | Deploy `dist/client` to any static host |
+
+### API references
+
+Mintlify attaches OpenAPI specs to navigation entries (`"openapi": "spec.yaml"`
+on a tab or group). Shiso lists specs — local paths or URLs — under `api.spec`
+and expands `{ "openapi": true }`, `{ "openapi": "<tag>" }`, or
+`{ "openapi": "<spec>" }` page entries into endpoint pages. Page frontmatter
+carries over: `openapi: GET /users`, `openapi: spec.yaml GET /users`,
+`openapi: webhook <name>`, and `openapi-schema: <Name>` all work as in
+Mintlify. See [API references](/docs/api-reference) for the setup.
 
 ### Icons
 

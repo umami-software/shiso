@@ -41,7 +41,7 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig, root: string, output
  */
 function shisoOpenApi(
   getDocsConfig: () => DocsConfig,
-  getSpecPath: () => string | undefined,
+  getSpecPaths: () => string[],
   root: string,
   output: string,
 ): Plugin {
@@ -59,8 +59,7 @@ function shisoOpenApi(
       await generate();
     },
     async handleHotUpdate({ file }) {
-      const specPath = getSpecPath();
-      if ((specPath && path.resolve(file) === specPath) || file.endsWith('docs.json')) {
+      if (getSpecPaths().includes(path.resolve(file)) || file.endsWith('docs.json')) {
         await generate();
       }
     },
@@ -494,7 +493,7 @@ export default defineConfig(async () => {
       ),
       shisoOpenApi(
         getDocsConfig,
-        () => configModule.getSpecPath?.(),
+        () => configModule.getSpecPaths?.() ?? [],
         projectRoot,
         path.join(generatedRoot, 'openapi.generated.ts'),
       ),

@@ -71,6 +71,31 @@ export interface ThemeLabels {
   apiExampleRequest: string;
   apiExampleResponse: string;
   apiCredentials: string;
+  apiPlayground: string;
+  apiServer: string;
+  apiAuthorization: string;
+  apiUsername: string;
+  apiPassword: string;
+  apiToken: string;
+  apiApiKey: string;
+  apiBody: string;
+  apiSend: string;
+  apiSending: string;
+  apiCancel: string;
+  apiRequest: string;
+  apiResponse: string;
+  apiResponseHeaders: string;
+  apiResponseBody: string;
+  apiNoResponse: string;
+  apiRequestFailed: string;
+  apiRequestTimedOut: string;
+  apiCookiesUnsupported: string;
+  apiOptional: string;
+  apiElapsed: string;
+  apiCredentialsStored: string;
+  apiPayload: string;
+  apiSchemaProperties: string;
+  apiExample: string;
 }
 
 export type Translations = Record<string, Partial<ThemeLabels>>;

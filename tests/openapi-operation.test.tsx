@@ -1,8 +1,16 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { OpenApiOperation } from '@/components/OpenApiOperation';
-import { methodColor, operationSections, statusColor } from '@/lib/openapi';
-import type { NormalizedOperation } from '@/lib/types';
+import { OpenApiSchema } from '@/components/OpenApiSchema';
+import {
+  methodBadgeText,
+  methodColor,
+  normalizeOperationKey,
+  operationSections,
+  schemaSections,
+  statusColor,
+} from '@/lib/openapi';
+import type { NormalizedOperation, SchemaPage } from '@/lib/types';
 
 const operation: NormalizedOperation = {
   id: 'create-user',
@@ -42,7 +50,10 @@ const operation: NormalizedOperation = {
     { status: '201', description: 'Created.', example: '{\n  "id": "1"\n}' },
     { status: '404', description: 'Missing.' },
   ],
-  security: ['bearerAuth (http bearer)'],
+  security: [
+    { name: 'bearerAuth', type: 'http', scheme: 'bearer', label: 'bearerAuth (http bearer)' },
+  ],
+  servers: [{ url: 'https://api.demo.dev' }],
   serverUrl: 'https://api.demo.dev',
   samples: [
     { language: 'bash', label: 'cURL', source: "curl -X POST 'https://api.demo.dev/users'" },
@@ -59,6 +70,14 @@ describe('operationSections', () => {
       { name: 'Responses', id: 'responses', size: 2 },
       { name: 'Code samples', id: 'code-samples', size: 2 },
     ]);
+  });
+
+  it('prepends the playground section when enabled', () => {
+    expect(operationSections(operation, undefined, { playground: true })[0]).toEqual({
+      name: 'Try it',
+      id: 'try-it',
+      size: 2,
+    });
   });
 
   it('omits sections without content', () => {
@@ -97,7 +116,43 @@ describe('OpenApiOperation', () => {
   it('renders parameters including the auth header', () => {
     expect(html).toContain('Authorization');
     expect(html).toContain('Authentication credentials');
+    expect(html).toContain('Bearer &lt;token&gt;');
     expect(html).toContain('User identifier.');
+    expect(html).not.toContain('id="try-it"');
+  });
+
+  it('describes API keys where they are sent', () => {
+    const keyed = renderToStaticMarkup(
+      <OpenApiOperation
+        operation={{
+          ...operation,
+          security: [
+            { name: 'key', type: 'apiKey', in: 'query', paramName: 'api_key', label: 'key' },
+          ],
+        }}
+      />,
+    );
+    const query = keyed
+      .split('<section>')
+      .find(section => section.includes('id="query-parameters"'));
+    expect(query).toContain('api_key');
+    expect(query).toContain('&lt;api-key&gt;');
+    expect(keyed).not.toContain('id="headers"');
+  });
+
+  it('renders the playground form ahead of the reference when enabled', () => {
+    const withPlayground = renderToStaticMarkup(
+      <OpenApiOperation operation={operation} playground={{}} />,
+    );
+    expect(withPlayground.indexOf('id="try-it"')).toBeLessThan(
+      withPlayground.indexOf('id="headers"'),
+    );
+    expect(withPlayground).toContain('data-slot="api-playground"');
+    expect(withPlayground).toContain('value="https://api.demo.dev"');
+    expect(withPlayground).toContain('Send request');
+    expect(withPlayground).toContain('type="password"');
+    expect(withPlayground).toContain('<textarea');
+    expect(withPlayground).toContain('curl -X POST');
   });
 
   it('keeps parameter locations in separate tables and preserves field details', () => {
@@ -210,5 +265,64 @@ describe('OpenApiOperation', () => {
     // The tab list keeps its "Code snippets" aria-label; only the fallback
     // "snippet N" tab labels must never appear.
     expect(html).not.toContain('snippet 1');
+  });
+});
+
+describe('webhooks and schema pages', () => {
+  const webhook: NormalizedOperation = {
+    ...operation,
+    key: 'WEBHOOK userCreated',
+    webhook: true,
+    path: 'userCreated',
+    parameters: { query: [], path: [], header: [], cookie: [] },
+    security: [],
+    servers: [],
+    serverUrl: '',
+    samples: [],
+  };
+
+  it('renders webhooks with a payload section and never a playground', () => {
+    expect(operationSections(webhook, undefined, { playground: true }).map(entry => entry.id)).toEqual(
+      ['payload', 'responses'],
+    );
+    const html = renderToStaticMarkup(<OpenApiOperation operation={webhook} playground={{}} />);
+    expect(html).toContain('id="payload"');
+    expect(html).toContain('>Payload<');
+    expect(html).not.toContain('id="try-it"');
+    expect(html).not.toContain('id="code-samples"');
+  });
+
+  it('normalizes frontmatter keys like the build scripts', () => {
+    expect(normalizeOperationKey('get /users')).toBe('GET /users');
+    expect(normalizeOperationKey('Webhook userCreated')).toBe('WEBHOOK userCreated');
+    expect(normalizeOperationKey('users.yaml get /users')).toBe('users.yaml GET /users');
+    expect(normalizeOperationKey('User')).toBeUndefined();
+    expect(methodBadgeText('WEBHOOK')).toBe('HOOK');
+    expect(methodColor('WEBHOOK')).toBe('yellow');
+  });
+
+  it('renders schema pages with properties and an example', () => {
+    const page: SchemaPage = {
+      name: 'User',
+      key: 'User',
+      description: 'A user.',
+      schema: {
+        type: 'object',
+        children: [
+          { name: 'id', type: 'string', required: true },
+          { name: 'address', type: 'object', children: [{ name: 'city', type: 'string' }] },
+        ],
+      },
+      example: '{\n  "id": "1"\n}',
+    };
+    expect(schemaSections(page).map(entry => entry.id)).toEqual(['properties', 'example']);
+    const html = renderToStaticMarkup(<OpenApiSchema page={page} />);
+    expect(html).toContain('id="properties"');
+    expect(html).toContain('id="example"');
+    expect(html).toContain('>id<');
+    expect(html).toContain('&quot;id&quot;: &quot;1&quot;');
+    expect(renderToStaticMarkup(<OpenApiSchema page={{ ...page, example: undefined }} />)).not.toContain(
+      'id="example"',
+    );
   });
 });

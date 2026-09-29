@@ -6,9 +6,18 @@ import { englishLabels } from '@/lib/labels';
  */
 
 import type { BadgeColor } from '@/components/docs/Badge';
-import { OPENAPI_OPERATIONS } from '@/lib/openapi.generated';
+import { OPENAPI_OPERATIONS, OPENAPI_SCHEMAS } from '@/lib/openapi.generated';
 import { createSlugger } from '@/lib/slug';
-import type { NormalizedOperation, ThemeLabels, TocEntry } from '@/lib/types';
+import type {
+  ApiPlaygroundDisplay,
+  DocFrontmatter,
+  NormalizedOperation,
+  ResolvedApiPlayground,
+  SchemaPage,
+  SecurityScheme,
+  ThemeLabels,
+  TocEntry,
+} from '@/lib/types';
 
 export const METHOD_COLORS: Record<string, BadgeColor> = {
   GET: 'green',
@@ -16,7 +25,32 @@ export const METHOD_COLORS: Record<string, BadgeColor> = {
   PUT: 'orange',
   PATCH: 'purple',
   DELETE: 'red',
+  WEBHOOK: 'yellow',
 };
+
+const HTTP_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE']);
+
+/** Short sidebar badge text for a method. */
+export function methodBadgeText(method: string): string {
+  if (method === 'DELETE') return 'DEL';
+  if (method === 'WEBHOOK') return 'HOOK';
+  return method;
+}
+
+/**
+ * Normalizes an `openapi:` frontmatter value into a lookup key. Mirrors
+ * normalizeOperationKey in scripts/lib/openapi.mjs: the method (or "webhook")
+ * is uppercased and an optional leading spec qualifier is kept verbatim.
+ */
+export function normalizeOperationKey(value: unknown): string | undefined {
+  if (typeof value !== 'string' || !value.trim()) return undefined;
+  const [first, ...rest] = value.trim().split(/\s+/);
+  if (!rest.length) return undefined;
+  const upper = first.toUpperCase();
+  if (upper === 'WEBHOOK' || HTTP_METHODS.has(upper)) return `${upper} ${rest.join(' ')}`;
+  const inner = normalizeOperationKey(rest.join(' '));
+  return inner ? `${first} ${inner}` : undefined;
+}
 
 export function methodColor(method?: string): BadgeColor {
   return (method && METHOD_COLORS[method.toUpperCase()]) || 'gray';
@@ -29,14 +63,68 @@ export function statusColor(status: string): BadgeColor {
   return 'gray';
 }
 
+/** Options that change which generated sections an operation page renders. */
+export interface OperationSectionOptions {
+  /** Whether the "Try it" panel renders ahead of the reference sections. */
+  playground?: boolean;
+}
+
+/**
+ * Resolves the effective playground display for a page: the frontmatter
+ * `playground` value wins over `api.playground.display`.
+ */
+export function resolvePlaygroundDisplay(
+  playground: ResolvedApiPlayground,
+  frontmatter?: DocFrontmatter,
+): ApiPlaygroundDisplay {
+  const override = frontmatter?.playground;
+  if (override === 'interactive' || override === 'simple' || override === 'none') {
+    return override;
+  }
+  return playground.display;
+}
+
 /** Looks up the operation bound by an `openapi:` frontmatter value. */
 export function getOperation(key?: unknown): NormalizedOperation | undefined {
-  if (typeof key !== 'string' || !key.trim()) {
-    return undefined;
-  }
+  const normalized = normalizeOperationKey(key);
+  return normalized ? OPENAPI_OPERATIONS[normalized] : undefined;
+}
 
-  const [method, ...rest] = key.trim().split(/\s+/);
-  return OPENAPI_OPERATIONS[`${method.toUpperCase()} ${rest.join(' ')}`];
+/** Looks up the schema bound by an `openapi-schema:` frontmatter value. */
+export function getSchema(key?: unknown): SchemaPage | undefined {
+  if (typeof key !== 'string' || !key.trim()) return undefined;
+  return OPENAPI_SCHEMAS[key.trim().split(/\s+/).join(' ')];
+}
+
+/**
+ * Section headings for a schema page, in render order. Mirrors schemaAnchors
+ * in scripts/lib/openapi.mjs.
+ */
+export function schemaSections(page: SchemaPage, labels: ThemeLabels = englishLabels): TocEntry[] {
+  return [
+    ...(page.schema.children?.length
+      ? [{ name: labels.apiSchemaProperties, id: 'properties', size: 2 }]
+      : []),
+    ...(page.example ? [{ name: labels.apiExample, id: 'example', size: 2 }] : []),
+  ];
+}
+
+/** Where a security scheme's credential travels: a header unless it is a query or cookie API key. */
+export function securityLocation(scheme: SecurityScheme): 'header' | 'query' | 'cookie' {
+  return scheme.type === 'apiKey' && scheme.in ? scheme.in : 'header';
+}
+
+/** Security schemes that are sent in the given parameter location. */
+export function securityForLocation(
+  operation: NormalizedOperation,
+  location: 'header' | 'path' | 'query' | 'cookie',
+): SecurityScheme[] {
+  return operation.security.filter(scheme => securityLocation(scheme) === location);
+}
+
+/** Display name of the header, query, or cookie entry a scheme adds. */
+export function securityFieldName(scheme: SecurityScheme): string {
+  return scheme.type === 'apiKey' ? scheme.paramName || scheme.name : 'Authorization';
 }
 
 export function hasParameters(operation: NormalizedOperation): boolean {
@@ -61,7 +149,7 @@ export function operationParameterSections(
   return groups.filter(
     ({ location }) =>
       operation.parameters[location].length > 0 ||
-      (location === 'header' && operation.security.length > 0),
+      securityForLocation(operation, location).length > 0,
   );
 }
 
@@ -73,18 +161,24 @@ export function operationParameterSections(
 export function operationSections(
   operation: NormalizedOperation,
   labels: ThemeLabels = englishLabels,
+  options: OperationSectionOptions = {},
 ): TocEntry[] {
   const slugger = createSlugger();
+  const playground = options.playground && !operation.webhook;
   const names = [
+    playground ? 'Try it' : undefined,
     ...operationParameterSections(operation).map(section => section.name),
-    operation.requestBody ? 'Request body' : undefined,
+    operation.requestBody ? (operation.webhook ? 'Payload' : 'Request body') : undefined,
     operation.responses.length ? 'Responses' : undefined,
     operation.samples.length ? 'Code samples' : undefined,
   ].filter((name): name is string => Boolean(name));
 
   const translated = [
+    ...(playground ? [labels.apiPlayground] : []),
     ...operationParameterSections(operation, labels).map(section => section.name),
-    ...(operation.requestBody ? [labels.apiRequestBody] : []),
+    ...(operation.requestBody
+      ? [operation.webhook ? labels.apiPayload : labels.apiRequestBody]
+      : []),
     ...(operation.responses.length ? [labels.apiResponses] : []),
     ...(operation.samples.length ? [labels.apiCodeSamples] : []),
   ];

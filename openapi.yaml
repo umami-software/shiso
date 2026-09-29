@@ -88,6 +88,29 @@ paths:
       responses:
         '204':
           description: The user was deleted.
+x-webhooks:
+  user.created:
+    post:
+      tags: [Users API]
+      summary: User created
+      description: Sent to your webhook URL when a new user account is created.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [event, data]
+              properties:
+                event:
+                  type: string
+                  enum: [user.created]
+                  description: The event name.
+                data:
+                  $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Return any 2xx status to acknowledge receipt.
 components:
   securitySchemes:
     bearerAuth:

@@ -3,11 +3,12 @@ import { ContextualMenu } from '@/components/ContextualMenu';
 import { Badge } from '@/components/docs/Badge';
 import { ArrowLeft, ArrowRight, FileText } from '@/components/icons';
 import { OpenApiOperation } from '@/components/OpenApiOperation';
+import { OpenApiSchema } from '@/components/OpenApiSchema';
 import { PageActions } from '@/components/PageActions';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
 import { resolveLocale } from '@/lib/locale';
-import { getOperation, methodColor } from '@/lib/openapi';
+import { getOperation, getSchema, methodColor, resolvePlaygroundDisplay } from '@/lib/openapi';
 import { docsSite, getPageByPathname } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
 import type { DocModule, NormalizedDocsPage, RelatedEntry, SiteModel } from '@/lib/types';
@@ -86,6 +87,11 @@ export function DocContent({ page, doc, site }: DocContentProps) {
   const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
   const related = resolveRelated(doc.frontmatter?.related);
   const operation = getOperation(doc.frontmatter?.openapi);
+  const schema = operation ? undefined : getSchema(doc.frontmatter?.['openapi-schema']);
+  const playground =
+    operation && resolvePlaygroundDisplay(site.api.playground, doc.frontmatter) === 'interactive'
+      ? { proxy: site.api.playground.proxy }
+      : false;
   // Dates follow the page's language when it is a valid locale code.
   const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
     dateStyle: 'medium',
@@ -118,8 +124,12 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       </div>
       {operation && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Badge color={methodColor(operation.method)} size="sm" className="font-mono">
-            {operation.method}
+          <Badge
+            color={methodColor(operation.webhook ? 'WEBHOOK' : operation.method)}
+            size="sm"
+            className="font-mono"
+          >
+            {operation.webhook ? 'WEBHOOK' : operation.method}
           </Badge>
           <code className="font-mono text-muted-foreground text-sm">{operation.path}</code>
           {operation.deprecated && (
@@ -135,7 +145,8 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       <div className="docs-markdown">
         <Content />
       </div>
-      {operation && <OpenApiOperation operation={operation} />}
+      {operation && <OpenApiOperation operation={operation} playground={playground} />}
+      {schema && <OpenApiSchema page={schema} />}
       <PageActions
         key={page.url}
         page={page}

@@ -48,6 +48,17 @@ function normalizeNavbar(config: DocsConfig['navbar']): NormalizedNavbar | null 
   return links.length || primary ? { links, primary } : null;
 }
 
+function normalizePlayground(config: DocsConfig['api']): SiteModel['api']['playground'] {
+  const playground = config?.playground;
+  const display =
+    playground?.display === 'simple' || playground?.display === 'none'
+      ? playground.display
+      : 'interactive';
+  const proxy = playground?.proxy?.trim() || undefined;
+
+  return proxy ? { display, proxy } : { display };
+}
+
 function normalizeFooter(config: DocsConfig['footer']): NormalizedFooter | null {
   const socials = (config?.socials || []).filter(link => !!link?.href).map(normalizeLink);
   const links = (config?.links || [])
@@ -112,6 +123,7 @@ export function resolveSiteModel(
     drilldown: config.interaction?.drilldown,
     locale: shiso?.locale || 'en-US',
     labels: resolveLabels(shiso?.locale || 'en-US', shiso?.translations),
+    api: { playground: normalizePlayground(config.api) },
     docs,
   };
 }

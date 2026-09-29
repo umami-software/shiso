@@ -16,12 +16,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
-import {
-  loadOpenApiSpec,
-  normalizeOperationKey,
-  normalizeOperations,
-  operationToMarkdown,
-} from './lib/openapi.mjs';
+import { operationToMarkdown, schemaToMarkdown } from './lib/openapi.mjs';
+import { loadApiProject, lookupOperation, lookupSchema } from './lib/openapi-project.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
@@ -122,21 +118,28 @@ if (docsHomeUrl && docsHomeUrl !== '/' && !routes.includes('/')) {
 
 // Pages bound to an API operation publish the generated reference as markdown
 // too, so the .md copies and llms-full.txt stay useful to AI tools.
-let openApiByKey;
+let apiProject;
 {
   const docsConfig = (await loadDocsConfig({ root, expandGlobs: false })).config;
   if (docsConfig.api?.spec) {
-    const { spec } = await loadOpenApiSpec({ root, specPath: docsConfig.api.spec });
-    openApiByKey = new Map(normalizeOperations(spec).map(operation => [operation.key, operation]));
+    apiProject = await loadApiProject({ root, api: docsConfig.api });
   }
 }
 
-function withOperationMarkdown(source) {
-  if (!openApiByKey) return source;
+function frontmatterValue(source, name) {
   const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] || '';
-  const key = normalizeOperationKey(frontmatter.match(/^openapi:\s*(.+)$/m)?.[1]);
-  const operation = key ? openApiByKey.get(key) : undefined;
-  return operation ? `${source.trimEnd()}\n\n${operationToMarkdown(operation)}\n` : source;
+  return frontmatter
+    .match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1]
+    ?.trim()
+    .replace(/^["']|["']$/g, '');
+}
+
+function withOperationMarkdown(source) {
+  if (!apiProject) return source;
+  const operation = lookupOperation(apiProject, frontmatterValue(source, 'openapi'));
+  if (operation) return `${source.trimEnd()}\n\n${operationToMarkdown(operation)}\n`;
+  const schema = lookupSchema(apiProject, frontmatterValue(source, 'openapi-schema'));
+  return schema ? `${source.trimEnd()}\n\n${schemaToMarkdown(schema)}\n` : source;
 }
 
 // Raw markdown next to every page: "/docs/installation" -> "docs/installation.md".

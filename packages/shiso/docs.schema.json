@@ -738,13 +738,40 @@
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "spec": {
-          "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
-          "description": "Path to a local OpenAPI 3.0 or 3.1 spec (JSON or YAML), relative to the project root."
+          "anyOf": [
+            { "$ref": "#/definitions/nonEmptyStringValue" },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/definitions/nonEmptyStringValue" }
+            }
+          ],
+          "description": "One OpenAPI 3.0 or 3.1 spec (JSON or YAML) or a list of them: paths relative to the project root, or https URLs fetched at build time."
         },
         "directory": {
           "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
           "description": "Folder inside the content directory for generated endpoint pages.",
           "default": "api-reference"
+        },
+        "playground": {
+          "type": "object",
+          "description": "\"Try it\" panel settings for endpoint pages.",
+          "additionalProperties": false,
+          "properties": {
+            "$ref": { "$ref": "#/definitions/configRef" },
+            "display": {
+              "anyOf": [
+                { "enum": ["interactive", "simple", "none"] },
+                { "$ref": "#/definitions/configRefValue" }
+              ],
+              "description": "\"interactive\" (default) renders the Try it panel on endpoint pages; \"simple\" and \"none\" show the reference without it.",
+              "default": "interactive"
+            },
+            "proxy": {
+              "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }],
+              "description": "URL of a CORS proxy the playground sends requests through. \"$url\" in the value is replaced with the encoded target URL; without it, the target URL is appended. Requests go directly to the API when omitted."
+            }
+          }
         }
       }
     },
@@ -921,7 +948,9 @@
         "tag": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Short label shown after the page name." },
         "method": {
           "anyOf": [
-            { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE"] },
+            {
+              "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE", "WEBHOOK"]
+            },
             { "$ref": "#/definitions/configRefValue" }
           ],
           "description": "HTTP method badge shown after the page name on API reference pages."

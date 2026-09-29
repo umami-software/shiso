@@ -1,11 +1,19 @@
+import { ApiPlayground } from '@/components/ApiPlayground';
 import { CodeBlock } from '@/components/CodeBlock';
 import { Badge } from '@/components/docs/Badge';
 import { CodeGroup } from '@/components/docs/CodeGroup';
 import { Expandable } from '@/components/docs/Expandable';
 import { PropertiesTable } from '@/components/docs/PropertiesTable';
 import { useLabels } from '@/lib/label-context';
-import { operationParameterSections, operationSections, statusColor } from '@/lib/openapi';
-import type { NormalizedOperation, SchemaNode, ThemeLabels } from '@/lib/types';
+import {
+  operationParameterSections,
+  operationSections,
+  securityFieldName,
+  securityForLocation,
+  statusColor,
+} from '@/lib/openapi';
+import type { NormalizedOperation, SchemaNode, SecurityScheme, ThemeLabels } from '@/lib/types';
+import { securityPlaceholder } from '../../scripts/lib/request-samples.mjs';
 
 function FieldChildren({ node }: { node: SchemaNode }) {
   const labels = useLabels();
@@ -104,27 +112,63 @@ function HighlightedCode({
   );
 }
 
+/** How a credential is sent, e.g. "Bearer <token>" or "<api-key>". */
+function credentialExample(scheme: SecurityScheme): string {
+  const placeholder = securityPlaceholder(scheme);
+  if (scheme.type === 'apiKey') return placeholder;
+  const prefix =
+    scheme.type === 'http' && scheme.scheme && scheme.scheme !== 'bearer'
+      ? scheme.scheme.charAt(0).toUpperCase() + scheme.scheme.slice(1)
+      : 'Bearer';
+  return `${prefix} ${placeholder}`;
+}
+
 export interface OpenApiOperationProps {
   operation: NormalizedOperation;
+  /** Renders the "Try it" panel ahead of the reference; carries the proxy setting. */
+  playground?: { proxy?: string } | false;
 }
 
 /** The generated reference for one API operation, rendered under the page body. */
-export function OpenApiOperation({ operation }: OpenApiOperationProps) {
+export function OpenApiOperation({
+  operation,
+  playground: requested = false,
+}: OpenApiOperationProps) {
   const labels = useLabels();
-  const sectionEntries = operationSections(operation);
-  const sections = new Map(sectionEntries.map(entry => [entry.name, entry.id]));
+  // Webhooks describe requests the API sends, so there is nothing to try.
+  const playground = operation.webhook ? false : requested;
+  const options = { playground: !!playground };
+  const sectionEntries = operationSections(operation, labels, options);
+  // Ids come from the untranslated names so anchors are stable across locales.
+  const sections = new Map(
+    operationSections(operation, undefined, options).map(entry => [entry.name, entry.id]),
+  );
+  const parameterSections = operationParameterSections(operation, labels);
+  const parameterOffset = playground ? 1 : 0;
 
   return (
     <div className="docs-markdown">
-      {operationParameterSections(operation, labels).map(({ location, name }, index) => (
+      {playground && (
+        <section>
+          <h2 id={sections.get('Try it')}>{labels.apiPlayground}</h2>
+          <ApiPlayground operation={operation} proxy={playground.proxy} />
+        </section>
+      )}
+      {parameterSections.map(({ location, name }, index) => (
         <section key={location}>
-          <h2 id={sectionEntries[index].id}>{name}</h2>
+          <h2 id={sectionEntries[index + parameterOffset].id}>{name}</h2>
           <PropertiesTable>
-            {location === 'header' && operation.security.length > 0 && (
-              <PropertiesTable.Row name="Authorization" type="string" required>
-                {labels.apiCredentials} <code>Bearer &lt;token&gt;</code>.
+            {securityForLocation(operation, location).map(scheme => (
+              <PropertiesTable.Row
+                key={`security:${scheme.name}`}
+                name={securityFieldName(scheme)}
+                type="string"
+                required
+              >
+                {scheme.description || labels.apiCredentials}{' '}
+                <code>{credentialExample(scheme)}</code>.
               </PropertiesTable.Row>
-            )}
+            ))}
             {operation.parameters[location].map(parameter => (
               <PropertiesTable.Row
                 key={parameter.name}
@@ -143,7 +187,9 @@ export function OpenApiOperation({ operation }: OpenApiOperationProps) {
       ))}
       {operation.requestBody && (
         <section>
-          <h2 id={sections.get('Request body')}>{labels.apiRequestBody}</h2>
+          <h2 id={sections.get(operation.webhook ? 'Payload' : 'Request body')}>
+            {operation.webhook ? labels.apiPayload : labels.apiRequestBody}
+          </h2>
           <SchemaFields node={operation.requestBody.schema} />
           {operation.requestBody.example && (
             <HighlightedCode
