@@ -229,6 +229,7 @@ export async function loadDocsConfig({
   root = process.cwd(),
   configFile = 'docs.json',
   expandGlobs = true,
+  shiso,
 } = {}) {
   const requestedRoot = path.resolve(root);
   const requestedSourcePath = path.resolve(requestedRoot, configFile);
@@ -239,15 +240,17 @@ export async function loadDocsConfig({
   } = await resolveConfigReferences(requestedSourcePath, requestedRoot);
   const sourcePath = sourcePaths[0] || requestedSourcePath;
   const hasGlobs = hasNavigationGlobs(sourceConfig.navigation);
+  const shisoConfig = expandGlobs
+    ? (shiso ?? (await loadShisoConfig({ root: projectRoot })).config)
+    : undefined;
   let working = sourceConfig;
-  let specPaths = [];
+  let apiProject;
 
   // OpenAPI expansion runs before glob expansion so generated stub pages are
   // visible to navigation globs and every downstream consumer.
   if (expandGlobs && working.api?.spec) {
     const project = await loadApiProject({ root: projectRoot, api: working.api });
-    specPaths = project.specPaths;
-    const { config: shisoConfig } = await loadShisoConfig({ root: projectRoot });
+    apiProject = project;
 
     await generateOpenApiStubs({
       root: projectRoot,
@@ -270,9 +273,10 @@ export async function loadDocsConfig({
   const config = expandGlobs
     ? await expandNavigationGlobs(working, {
         root: projectRoot,
-        contentDir: (await loadShisoConfig({ root: projectRoot })).config.contentDir,
+        contentDir: shisoConfig.contentDir,
       })
     : working;
+  const specPaths = apiProject?.specPaths || [];
 
   return {
     config,
@@ -280,6 +284,7 @@ export async function loadDocsConfig({
     sourcePath,
     sourcePaths,
     hasGlobs,
+    apiProject,
     specPaths,
     /** @deprecated use specPaths */
     specPath: specPaths[0],

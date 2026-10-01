@@ -7,8 +7,6 @@ import { defineConfig, type Plugin, searchForWorkspaceRoot } from 'vite';
 import { shisoMdx } from './mdx.config.ts';
 import { generateIconRegistry } from './scripts/generate-icon-registry.mjs';
 import { shisoLastModified } from './scripts/generate-last-modified.mjs';
-import { generateOpenApiModule } from './scripts/generate-openapi.mjs';
-import { generateSearchIndex } from './scripts/generate-search-index.mjs';
 import { createDocsConfigModule } from './scripts/vite-docs-config.mjs';
 import { resolveCodeBlockConfig } from './src/lib/code-blocks.ts';
 import type { DocsConfig, ResolvedShisoConfig } from './src/lib/types.ts';
@@ -30,65 +28,6 @@ function shisoIconRegistry(getDocsConfig: () => DocsConfig, root: string, output
     async handleHotUpdate({ file }) {
       if (/\.(md|mdx|tsx)$/.test(file) || file.endsWith('docs.json')) {
         await generateIconRegistry({ config: getDocsConfig(), root, output });
-      }
-    },
-  };
-}
-
-/**
- * Keeps src/lib/search-index.generated.ts in sync with content, so the search
- * dialog can query page text without a server.
- */
-function shisoOpenApi(
-  getDocsConfig: () => DocsConfig,
-  getSpecPaths: () => string[],
-  root: string,
-  output: string,
-): Plugin {
-  const generate = () =>
-    generateOpenApiModule({
-      root,
-      config: getDocsConfig(),
-      theme: resolveCodeBlockConfig(getDocsConfig().styling).theme,
-      output,
-    });
-
-  return {
-    name: 'shiso-openapi',
-    async buildStart() {
-      await generate();
-    },
-    async handleHotUpdate({ file }) {
-      if (getSpecPaths().includes(path.resolve(file)) || file.endsWith('docs.json')) {
-        await generate();
-      }
-    },
-  };
-}
-
-function shisoSearchIndex(
-  getDocsConfig: () => DocsConfig,
-  getShisoConfig: () => ResolvedShisoConfig,
-  root: string,
-  output: string,
-): Plugin {
-  return {
-    name: 'shiso-search-index',
-    async buildStart() {
-      await generateSearchIndex({ config: getDocsConfig(), shiso: getShisoConfig(), root, output });
-    },
-    async handleHotUpdate({ file }) {
-      if (
-        /\.(md|mdx)$/.test(file) ||
-        file.endsWith('docs.json') ||
-        /shiso\.config\.\w+$/.test(file)
-      ) {
-        await generateSearchIndex({
-          config: getDocsConfig(),
-          shiso: getShisoConfig(),
-          root,
-          output,
-        });
       }
     },
   };
@@ -441,6 +380,7 @@ export default defineConfig(async () => {
   const generatedRoot = path.join(projectRoot, '.shiso');
   const configModule = await createDocsConfigModule({
     root: projectRoot,
+    outputDir: generatedRoot,
   });
   const getDocsConfig = configModule.getConfig as () => DocsConfig;
   const getShisoConfig = configModule.getShisoConfig as () => ResolvedShisoConfig;
@@ -485,18 +425,6 @@ export default defineConfig(async () => {
         root: projectRoot,
         output: path.join(generatedRoot, 'last-modified.ts'),
       }),
-      shisoSearchIndex(
-        getDocsConfig,
-        getShisoConfig,
-        projectRoot,
-        path.join(generatedRoot, 'search-index.generated.ts'),
-      ),
-      shisoOpenApi(
-        getDocsConfig,
-        () => configModule.getSpecPaths?.() ?? [],
-        projectRoot,
-        path.join(generatedRoot, 'openapi.generated.ts'),
-      ),
       shisoHtml(getDocsConfig),
       shisoMarkdownDev(getDocsConfig, getShisoConfig, projectRoot),
       shisoMdx({

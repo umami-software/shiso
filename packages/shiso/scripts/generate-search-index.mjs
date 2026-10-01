@@ -206,14 +206,16 @@ function collectSections(tree) {
     .filter(section => section.heading || section.text);
 }
 
-/** @param {{ config?: object, shiso?: object, root?: string, output?: string }} [options] */
+/** @param {{ config?: object, shiso?: object, project?: object, root?: string, output?: string }} [options] */
 export async function generateSearchIndex({
   config,
   shiso,
+  project: preparedProject,
   root = DEFAULT_ROOT,
   output = path.join(root, '.shiso/search-index.generated.ts'),
 } = {}) {
-  const docsJson = config ?? (await loadDocsConfig({ root })).config;
+  const loaded = config ? undefined : await loadDocsConfig({ root, shiso });
+  const docsJson = config ?? loaded.config;
   const { docsPrefix, contentDir } = shiso ?? (await loadShisoConfig({ root })).config;
 
   const seen = new Set();
@@ -222,7 +224,7 @@ export async function generateSearchIndex({
   // Pages bound to an API operation get synthesized sections from the spec, so
   // parameters and responses are searchable even though they render from data.
   const project = docsJson.api?.spec
-    ? await loadApiProject({ root, api: docsJson.api })
+    ? (preparedProject ?? loaded?.apiProject ?? (await loadApiProject({ root, api: docsJson.api })))
     : undefined;
 
   for (const scope of collectScopes(docsJson.navigation || {})) {

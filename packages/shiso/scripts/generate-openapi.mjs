@@ -26,7 +26,11 @@ async function getHighlighter(theme) {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighter({ themes: [theme.light, theme.dark], langs: [] });
   }
-  return highlighterPromise;
+  const highlighter = await highlighterPromise;
+  // Config fragments can change themes during a refresh without restarting
+  // the process. Keep the shared highlighter ready for the current theme.
+  await highlighter.loadTheme(theme.light, theme.dark);
+  return highlighter;
 }
 
 async function highlight(highlighter, source, lang, theme) {
@@ -90,7 +94,11 @@ async function writeIfChanged(output, contents) {
 export async function generateOpenApiModule({
   root,
   config,
-  theme = DEFAULT_OPENAPI_THEME,
+  project: preparedProject,
+  theme = {
+    light: config?.styling?.codeBlocks?.theme?.light || DEFAULT_OPENAPI_THEME.light,
+    dark: config?.styling?.codeBlocks?.theme?.dark || DEFAULT_OPENAPI_THEME.dark,
+  },
   output,
 }) {
   if (!config?.api?.spec) {
@@ -98,7 +106,7 @@ export async function generateOpenApiModule({
     return { operations: 0 };
   }
 
-  const project = await loadApiProject({ root, api: config.api });
+  const project = preparedProject ?? (await loadApiProject({ root, api: config.api }));
   const highlighter = await getHighlighter(theme);
   const operations = {};
   const schemas = {};
