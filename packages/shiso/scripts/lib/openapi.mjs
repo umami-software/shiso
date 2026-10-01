@@ -11,9 +11,24 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import {
+  getOperationSections,
+  getSchemaSections,
+  resolvePlaygroundDisplay,
+} from './reference-page.mjs';
 import { buildCodeSamples } from './request-samples.mjs';
 import { slugify } from './slug.mjs';
 
+export {
+  hasParameters as hasOperationParameters,
+  normalizeOperationKey,
+  normalizeSchemaKey,
+  operationSearchSections,
+  operationToMarkdown,
+  schemaSearchSections,
+  schemaToMarkdown,
+  securityLocation,
+} from './reference-page.mjs';
 export { buildCodeSamples, buildRequest } from './request-samples.mjs';
 
 const METHODS = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace'];
@@ -370,8 +385,6 @@ function parameterNode(spec, parameter) {
   return { location: resolved.in, node };
 }
 
-const HTTP_METHODS = new Set(METHODS.map(method => method.toUpperCase()));
-
 /**
  * Normalizes every operation in the spec into a serializable shape. OpenAPI
  * 3.1 `webhooks` (and the `x-webhooks` extension) become operations flagged
@@ -491,81 +504,6 @@ export function normalizeOperations(spec, { specId } = {}) {
   return operations;
 }
 
-function markdownSchemaLines(node, depth = 0) {
-  if (!node) return [];
-  const indent = '  '.repeat(depth);
-  const suffix = node.required ? ', required' : '';
-  const lines = [`${indent}- \`${node.name || 'body'}\` (${node.type}${suffix})`];
-  if (node.description) lines[0] += ` — ${node.description.split('\n')[0]}`;
-  for (const child of node.children || []) {
-    lines.push(...markdownSchemaLines(child, depth + 1));
-  }
-  return lines;
-}
-
-/** Renders an operation as markdown for the .md export and llms-full.txt. */
-export function operationToMarkdown(operation) {
-  const lines = [
-    operation.webhook
-      ? `## Webhook: ${operation.path}`
-      : `## ${operation.method} ${operation.path}`,
-    '',
-  ];
-
-  if (operation.summary) lines.push(operation.summary, '');
-  if (operation.description) lines.push(operation.description, '');
-  if (operation.security.length) {
-    lines.push(`Authentication: ${operation.security.map(scheme => scheme.label).join(', ')}`, '');
-  }
-
-  const allParameters = ['path', 'query', 'header', 'cookie'].flatMap(location =>
-    operation.parameters[location].map(parameter => ({ location, parameter })),
-  );
-  if (allParameters.length) {
-    lines.push('### Parameters', '');
-    for (const { location, parameter } of allParameters) {
-      const detail = [location, parameter.type, parameter.required ? 'required' : '']
-        .filter(Boolean)
-        .join(', ');
-      const description = parameter.description ? ` — ${parameter.description.split('\n')[0]}` : '';
-      lines.push(`- \`${parameter.name}\` (${detail})${description}`);
-    }
-    lines.push('');
-  }
-
-  if (operation.requestBody) {
-    lines.push(
-      operation.webhook ? '### Payload' : '### Request body',
-      '',
-      ...markdownSchemaLines(operation.requestBody.schema),
-      '',
-    );
-    if (operation.requestBody.example) {
-      lines.push('```json', operation.requestBody.example, '```', '');
-    }
-  }
-
-  if (operation.responses.length) {
-    lines.push('### Responses', '');
-    for (const response of operation.responses) {
-      const description = response.description ? ` — ${response.description}` : '';
-      lines.push(`#### ${response.status}${description}`, '');
-      if (response.example) {
-        lines.push('```json', response.example, '```', '');
-      }
-    }
-  }
-
-  if (operation.samples.length) {
-    lines.push('### Code samples', '');
-    for (const sample of operation.samples) {
-      lines.push(`**${sample.label}**`, '', `\`\`\`${sample.language}`, sample.source, '```', '');
-    }
-  }
-
-  return lines.join('\n').trim();
-}
-
 /**
  * Normalizes every named schema under components.schemas into a page-ready
  * shape, keyed by its name (and `<spec> <name>` on multi-spec sites).
@@ -589,44 +527,6 @@ export function normalizeSchemas(spec, { specId } = {}) {
   }
 
   return schemas;
-}
-
-/** Anchor ids for a schema page's generated sections; mirrors src/lib/openapi.ts. */
-export function schemaAnchors(page) {
-  return [
-    ...(page.schema?.children?.length ? ['properties'] : []),
-    ...(page.example ? ['example'] : []),
-  ];
-}
-
-/** Search-index sections for a schema page, matching schemaAnchors ids. */
-export function schemaSearchSections(page) {
-  return [
-    {
-      heading: undefined,
-      id: undefined,
-      text: [page.name, page.description].filter(Boolean).join(' '),
-    },
-    { heading: 'Properties', id: 'properties', text: schemaText(page.schema) },
-  ].filter(section => section.text.replace(/\s+/g, ' ').trim());
-}
-
-/** Renders a schema page as markdown for the .md export and llms-full.txt. */
-export function schemaToMarkdown(page) {
-  const lines = [`## ${page.name}`, ''];
-  if (page.description) lines.push(page.description, '');
-  if (page.schema?.children?.length) {
-    lines.push(
-      '### Properties',
-      '',
-      ...markdownSchemaLines(page.schema)
-        .slice(1)
-        .map(line => line.slice(2)),
-      '',
-    );
-  }
-  if (page.example) lines.push('### Example', '', '```json', page.example, '```', '');
-  return lines.join('\n').trim();
 }
 
 function yamlString(value) {
@@ -705,128 +605,18 @@ export function resolveApiDirectory(api) {
   return directory;
 }
 
-/** Where a scheme's credential travels; mirrors securityLocation in src/lib/openapi.ts. */
-export function securityLocation(scheme) {
-  return scheme.type === 'apiKey' && scheme.in ? scheme.in : 'header';
+/** Anchor ids derive from the reference module's section plan. */
+export function operationAnchors(operation, options) {
+  return getOperationSections(operation, options).map(section => section.id);
 }
 
-function securityForLocation(operation, location) {
-  return operation.security.filter(scheme => securityLocation(scheme) === location);
+export function schemaAnchors(page) {
+  return getSchemaSections(page).map(section => section.id);
 }
 
-/** True when the operation renders a Parameters section (incl. auth). */
-export function hasOperationParameters(operation) {
-  const { query, path: pathParams, header, cookie } = operation.parameters;
-  return (
-    query.length + pathParams.length + header.length + cookie.length > 0 ||
-    operation.security.length > 0
-  );
-}
-
-function operationParameterSections(operation) {
-  return [
-    { location: 'header', heading: 'Headers', id: 'headers' },
-    { location: 'path', heading: 'Path parameters', id: 'path-parameters' },
-    { location: 'query', heading: 'Query parameters', id: 'query-parameters' },
-    { location: 'cookie', heading: 'Cookie parameters', id: 'cookie-parameters' },
-  ].filter(
-    ({ location }) =>
-      operation.parameters[location].length > 0 ||
-      securityForLocation(operation, location).length > 0,
-  );
-}
-
-/**
- * Anchor ids for the generated sections, in render order. Mirrors
- * operationSections in src/lib/openapi.ts (asserted by tests/openapi.test.mjs).
- */
-export function operationAnchors(operation, { playground = false } = {}) {
-  return [
-    ...(playground && !operation.webhook ? ['try-it'] : []),
-    ...operationParameterSections(operation).map(section => section.id),
-    ...(operation.requestBody ? [operation.webhook ? 'payload' : 'request-body'] : []),
-    ...(operation.responses.length ? ['responses'] : []),
-    ...(operation.samples.length ? ['code-samples'] : []),
-  ];
-}
-
-function schemaText(node) {
-  if (!node) return '';
-  return [node.name, node.description, ...(node.children || []).map(schemaText)]
-    .filter(Boolean)
-    .join(' ');
-}
-
-/**
- * Whether an endpoint page renders the "Try it" panel. Mirrors
- * resolvePlaygroundDisplay in src/lib/openapi.ts: the page's `playground`
- * frontmatter wins over `api.playground.display`, and only "interactive"
- * (the default) renders the panel.
- */
+/** Compatibility helper for callers that only need the display setting. */
 export function hasPlayground(api, frontmatterValue) {
-  const override = String(frontmatterValue ?? '').trim();
-  if (['interactive', 'simple', 'none'].includes(override)) return override === 'interactive';
-  const display = api?.playground?.display;
-  return display !== 'simple' && display !== 'none';
-}
-
-/**
- * Normalizes an openapi frontmatter value into the operation lookup key:
- * "get /users" -> "GET /users", "webhook userCreated" -> "WEBHOOK userCreated",
- * and "users.yaml GET /users" -> "users.yaml GET /users" (a spec-qualified key
- * for multi-spec sites). Returns undefined for blank values.
- */
-export function normalizeOperationKey(value) {
-  if (typeof value !== 'string' || !value.trim()) return undefined;
-  const [first, ...rest] = value.trim().split(/\s+/);
-  if (!rest.length) return undefined;
-  const upper = first.toUpperCase();
-  if (upper === 'WEBHOOK' || HTTP_METHODS.has(upper)) {
-    return `${upper} ${rest.join(' ')}`;
-  }
-  const inner = normalizeOperationKey(rest.join(' '));
-  return inner ? `${first} ${inner}` : undefined;
-}
-
-/** Normalizes an openapi-schema frontmatter value: "User" or "users.yaml User". */
-export function normalizeSchemaKey(value) {
-  if (typeof value !== 'string' || !value.trim()) return undefined;
-  return value.trim().split(/\s+/).join(' ');
-}
-
-/** Search-index sections for an operation, matching operationAnchors ids. */
-export function operationSearchSections(operation) {
-  return [
-    {
-      heading: undefined,
-      id: undefined,
-      text: [operation.method, operation.path, operation.summary, operation.description]
-        .filter(Boolean)
-        .join(' '),
-    },
-    ...operationParameterSections(operation).map(({ location, heading, id }) => ({
-      heading,
-      id,
-      text: [
-        ...operation.parameters[location].map(schemaText),
-        ...securityForLocation(operation, location).flatMap(scheme => [
-          scheme.type === 'apiKey' ? scheme.paramName || scheme.name : 'Authorization',
-          'Authentication credentials',
-          scheme.label,
-        ]),
-      ].join(' '),
-    })),
-    {
-      heading: operation.webhook ? 'Payload' : 'Request body',
-      id: operation.webhook ? 'payload' : 'request-body',
-      text: schemaText(operation.requestBody?.schema),
-    },
-    {
-      heading: 'Responses',
-      id: 'responses',
-      text: operation.responses
-        .map(response => [response.status, response.description].filter(Boolean).join(' '))
-        .join(' '),
-    },
-  ].filter(section => section.text.replace(/\s+/g, ' ').trim());
+  return (
+    resolvePlaygroundDisplay(api?.playground, { playground: frontmatterValue }) === 'interactive'
+  );
 }

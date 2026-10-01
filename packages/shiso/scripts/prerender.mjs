@@ -16,8 +16,12 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
-import { operationToMarkdown, schemaToMarkdown } from './lib/openapi.mjs';
-import { loadApiProject, lookupOperation, lookupSchema } from './lib/openapi-project.mjs';
+import { loadApiProject } from './lib/openapi-project.mjs';
+import {
+  interpretReferencePage,
+  readReferenceFrontmatter,
+  referenceToMarkdown,
+} from './lib/reference-page.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 
 const DEFAULT_HEAD_OPEN = '<!--shiso-default-head-->';
@@ -116,30 +120,22 @@ if (docsHomeUrl && docsHomeUrl !== '/' && !routes.includes('/')) {
   );
 }
 
-// Pages bound to an API operation publish the generated reference as markdown
+// Reference pages publish their generated sections as markdown
 // too, so the .md copies and llms-full.txt stay useful to AI tools.
 let apiProject;
+let api;
 {
-  const docsConfig = (await loadDocsConfig({ root, expandGlobs: false })).config;
-  if (docsConfig.api?.spec) {
-    apiProject = await loadApiProject({ root, api: docsConfig.api });
-  }
+  const loaded = await loadDocsConfig({ root, expandGlobs: false });
+  api = loaded.config.api;
+  if (api?.spec) apiProject = await loadApiProject({ root, api });
 }
 
-function frontmatterValue(source, name) {
-  const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] || '';
-  return frontmatter
-    .match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1]
-    ?.trim()
-    .replace(/^["']|["']$/g, '');
-}
-
-function withOperationMarkdown(source) {
-  if (!apiProject) return source;
-  const operation = lookupOperation(apiProject, frontmatterValue(source, 'openapi'));
-  if (operation) return `${source.trimEnd()}\n\n${operationToMarkdown(operation)}\n`;
-  const schema = lookupSchema(apiProject, frontmatterValue(source, 'openapi-schema'));
-  return schema ? `${source.trimEnd()}\n\n${schemaToMarkdown(schema)}\n` : source;
+function withReferenceMarkdown(source) {
+  const reference = interpretReferencePage(readReferenceFrontmatter(source), apiProject, {
+    playground: api?.playground,
+  });
+  const markdown = referenceToMarkdown(reference);
+  return markdown ? `${source.trimEnd()}\n\n${markdown}\n` : source;
 }
 
 // Raw markdown next to every page: "/docs/installation" -> "docs/installation.md".
@@ -149,7 +145,7 @@ const markdownPages = getMarkdownPages();
 for (const { route, filePath } of markdownPages) {
   const source = await readFile(path.join(root, ...filePath.split('/').filter(Boolean)), 'utf8');
   const relative = withBase(route).replace(/^\//, '') || 'index';
-  await writePage(path.join(clientDir, `${relative}.md`), withOperationMarkdown(source));
+  await writePage(path.join(clientDir, `${relative}.md`), withReferenceMarkdown(source));
 }
 
 // AI discovery files. llms.txt is the concise, ordered map; llms-full.txt is

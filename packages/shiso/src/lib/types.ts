@@ -792,3 +792,30 @@ export interface SchemaPage {
   example?: string;
   exampleHtml?: string;
 }
+
+/** Generated section identity stays stable when its displayed name is translated. */
+export type ReferenceSection = {
+  id: string;
+  heading: string;
+  name: string;
+} & (
+  | { kind: 'parameters'; location: 'header' | 'path' | 'query' | 'cookie' }
+  | {
+      kind: 'playground' | 'request-body' | 'responses' | 'code-samples' | 'properties' | 'example';
+    }
+);
+
+export interface ReferenceIssue {
+  field: 'openapi' | 'openapi-schema';
+  value: string;
+  ambiguous: boolean;
+}
+
+/** One interpretation shared by every output of a reference page. */
+export interface ReferencePage {
+  operation?: NormalizedOperation;
+  schema?: SchemaPage;
+  playground: { proxy?: string } | false;
+  sections: ReferenceSection[];
+  issues: ReferenceIssue[];
+}

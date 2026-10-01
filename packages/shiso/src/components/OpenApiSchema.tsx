@@ -2,8 +2,8 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { Expandable } from '@/components/docs/Expandable';
 import { PropertiesTable } from '@/components/docs/PropertiesTable';
 import { useLabels } from '@/lib/label-context';
-import { schemaSections } from '@/lib/openapi';
-import type { SchemaNode, SchemaPage, ThemeLabels } from '@/lib/types';
+import { getSchemaSections } from '@/lib/openapi';
+import type { ReferenceSection, SchemaNode, SchemaPage, ThemeLabels } from '@/lib/types';
 
 function FieldChildren({ node }: { node: SchemaNode }) {
   const labels = useLabels();
@@ -59,12 +59,15 @@ function SchemaTable({ nodes, labels }: { nodes: SchemaNode[]; labels: ThemeLabe
 
 export interface OpenApiSchemaProps {
   page: SchemaPage;
+  sections?: ReferenceSection[];
 }
 
 /** The generated reference for one named component schema. */
-export function OpenApiSchema({ page }: OpenApiSchemaProps) {
+export function OpenApiSchema({ page, sections: preparedSections }: OpenApiSchemaProps) {
   const labels = useLabels();
-  const sections = new Map(schemaSections(page, labels).map(entry => [entry.id, entry.name]));
+  const sections = new Map(
+    (preparedSections ?? getSchemaSections(page, labels)).map(section => [section.kind, section]),
+  );
   const properties = sections.get('properties');
   const example = sections.get('example');
 
@@ -72,13 +75,13 @@ export function OpenApiSchema({ page }: OpenApiSchemaProps) {
     <div className="docs-markdown">
       {properties && (
         <section>
-          <h2 id="properties">{properties}</h2>
+          <h2 id={properties.id}>{properties.name}</h2>
           <SchemaTable nodes={page.schema.children ?? []} labels={labels} />
         </section>
       )}
       {example && page.example && (
         <section>
-          <h2 id="example">{example}</h2>
+          <h2 id={example.id}>{example.name}</h2>
           <CodeBlock data-language="json" data-title={page.name}>
             {page.exampleHtml ? (
               <code

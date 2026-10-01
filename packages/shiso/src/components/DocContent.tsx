@@ -8,10 +8,16 @@ import { PageActions } from '@/components/PageActions';
 import { getLastModified } from '@/lib/content';
 import { getScopeForPage } from '@/lib/docs-config';
 import { resolveLocale } from '@/lib/locale';
-import { getOperation, getSchema, methodColor, resolvePlaygroundDisplay } from '@/lib/openapi';
+import { getReferencePage, methodColor } from '@/lib/openapi';
 import { docsSite, getPageByPathname } from '@/lib/site-config';
 import { resolveContextualOptions } from '@/lib/site-model';
-import type { DocModule, NormalizedDocsPage, RelatedEntry, SiteModel } from '@/lib/types';
+import type {
+  DocModule,
+  NormalizedDocsPage,
+  ReferencePage,
+  RelatedEntry,
+  SiteModel,
+} from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 interface RelatedLink {
@@ -62,9 +68,10 @@ export interface DocContentProps {
   page: NormalizedDocsPage;
   doc: DocModule;
   site: SiteModel;
+  reference?: ReferencePage;
 }
 
-export function DocContent({ page, doc, site }: DocContentProps) {
+export function DocContent({ page, doc, site, reference: preparedReference }: DocContentProps) {
   const scope = getScopeForPage(docsSite, page);
   // Prev/next paging never crosses a version or language boundary.
   const pagerPages = scope.docs.pages.filter(item => !item.hidden);
@@ -86,12 +93,9 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       : page.section;
   const contextualOptions = resolveContextualOptions(site.contextualOptions, page, site.labels);
   const related = resolveRelated(doc.frontmatter?.related);
-  const operation = getOperation(doc.frontmatter?.openapi);
-  const schema = operation ? undefined : getSchema(doc.frontmatter?.['openapi-schema']);
-  const playground =
-    operation && resolvePlaygroundDisplay(site.api.playground, doc.frontmatter) === 'interactive'
-      ? { proxy: site.api.playground.proxy }
-      : false;
+  const reference =
+    preparedReference ?? getReferencePage(doc.frontmatter, site.api.playground, site.labels);
+  const { operation, schema, playground } = reference;
   // Dates follow the page's language when it is a valid locale code.
   const dateFormat = new Intl.DateTimeFormat(resolveLocale(page.language, site.locale), {
     dateStyle: 'medium',
@@ -145,8 +149,14 @@ export function DocContent({ page, doc, site }: DocContentProps) {
       <div className="docs-markdown">
         <Content />
       </div>
-      {operation && <OpenApiOperation operation={operation} playground={playground} />}
-      {schema && <OpenApiSchema page={schema} />}
+      {operation && (
+        <OpenApiOperation
+          operation={operation}
+          playground={playground}
+          sections={reference.sections}
+        />
+      )}
+      {schema && <OpenApiSchema page={schema} sections={reference.sections} />}
       <PageActions
         key={page.url}
         page={page}

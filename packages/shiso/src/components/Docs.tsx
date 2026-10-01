@@ -12,15 +12,15 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
-import {
-  getOperation,
-  getSchema,
-  operationSections,
-  resolvePlaygroundDisplay,
-  schemaSections,
-} from '@/lib/openapi';
+import { getReferencePage } from '@/lib/openapi';
 import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
-import type { DocModule, NormalizedDocsPage, SiteModel, TocEntry } from '@/lib/types';
+import type {
+  DocModule,
+  NormalizedDocsPage,
+  ReferencePage,
+  SiteModel,
+  TocEntry,
+} from '@/lib/types';
 
 /**
  * 404 view driven by the `errors.404` config key. The standard defaults to
@@ -65,23 +65,15 @@ export function Docs({ page, doc, site }: DocsProps) {
   }
 
   // API reference pages append their generated section anchors to the TOC.
-  const operation = getOperation(doc.frontmatter?.openapi);
-  const schema = operation ? undefined : getSchema(doc.frontmatter?.['openapi-schema']);
-  const toc = operation
-    ? [
-        ...(doc.toc || []),
-        ...operationSections(operation, site.labels, {
-          playground:
-            resolvePlaygroundDisplay(site.api.playground, doc.frontmatter) === 'interactive',
-        }),
-      ]
-    : schema
-      ? [...(doc.toc || []), ...schemaSections(schema, site.labels)]
-      : doc.toc;
+  const reference = getReferencePage(doc.frontmatter, site.api.playground, site.labels);
+  const toc = [
+    ...(doc.toc || []),
+    ...reference.sections.map(({ name, id }) => ({ name, id, size: 2 })),
+  ];
 
   return (
     <PanelProvider>
-      <DocsBody page={page} doc={doc} site={site} toc={toc} />
+      <DocsBody page={page} doc={doc} site={site} toc={toc} reference={reference} />
     </PanelProvider>
   );
 }
@@ -91,11 +83,13 @@ function DocsBody({
   doc,
   site,
   toc,
+  reference,
 }: {
   page: NormalizedDocsPage;
   doc: DocModule;
   site: SiteModel;
   toc: TocEntry[] | undefined;
+  reference: ReferencePage;
 }) {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -164,7 +158,7 @@ function DocsBody({
         </div>
         <div className="flex min-w-0 grow self-stretch flex-col">
           <div className="flex grow items-start gap-12">
-            <DocContent page={page} doc={doc} site={site} />
+            <DocContent page={page} doc={doc} site={site} reference={reference} />
             <div className="hidden min-w-0 max-w-60 basis-60 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:block lg:shrink-0">
               {panel ?? (
                 <PageLinks

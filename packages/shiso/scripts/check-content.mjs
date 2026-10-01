@@ -13,14 +13,8 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from './lib/mdast.mjs';
-import { hasPlayground, operationAnchors, schemaAnchors } from './lib/openapi.mjs';
-import {
-  isAmbiguousOperation,
-  isAmbiguousSchema,
-  loadApiProject,
-  lookupOperation,
-  lookupSchema,
-} from './lib/openapi-project.mjs';
+import { loadApiProject } from './lib/openapi-project.mjs';
+import { interpretReferencePage, readReferenceFrontmatter } from './lib/reference-page.mjs';
 import { createSlugger } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
@@ -159,18 +153,7 @@ function inspectMarkdown(source, filePath) {
     targets,
     title: /^title\s*:/m.test(frontmatter),
     description: /^description\s*:/m.test(frontmatter),
-    openapi: frontmatter
-      .match(/^openapi:\s*(.+)$/m)?.[1]
-      ?.trim()
-      .replace(/^["']|["']$/g, ''),
-    openapiSchema: frontmatter
-      .match(/^openapi-schema:\s*(.+)$/m)?.[1]
-      ?.trim()
-      .replace(/^["']|["']$/g, ''),
-    playground: frontmatter
-      .match(/^playground:\s*(.+)$/m)?.[1]
-      ?.trim()
-      .replace(/^["']|["']$/g, ''),
+    frontmatter: readReferenceFrontmatter(source),
   };
 }
 
@@ -278,28 +261,24 @@ export async function checkContent({ root = process.cwd(), config, shiso } = {})
     const source = await fs.readFile(page.filePath, 'utf8');
     const document = inspectMarkdown(source, page.filePath);
     const relative = path.relative(projectRoot, page.filePath).replace(/\\/g, '/');
-    const operation = project ? lookupOperation(project, document.openapi) : undefined;
-    const schema = project ? lookupSchema(project, document.openapiSchema) : undefined;
-    if (operation) {
-      const playground = !operation.webhook && hasPlayground(docsConfig.api, document.playground);
-      for (const anchor of operationAnchors(operation, { playground })) {
-        document.anchors.add(anchor);
+    const reference = interpretReferencePage(document.frontmatter, project, {
+      playground: docsConfig.api?.playground,
+    });
+    for (const section of reference.sections) document.anchors.add(section.id);
+    for (const { field, value, ambiguous } of reference.issues) {
+      const binding = `${relative} binds "${field}: ${value}", which`;
+      if (ambiguous) {
+        errors.push(
+          field === 'openapi'
+            ? `${binding} several specs define; prefix it with the spec, e.g. "openapi: ${project.specs[0].id} ${value}".`
+            : `${binding} several specs define; prefix it with the spec.`,
+        );
+      } else {
+        const kind = field === 'openapi' ? 'operation' : 'schema';
+        errors.push(
+          `${binding} matches no ${kind} in ${project ? 'the API spec' : 'an API spec (docs.json has no api.spec)'}.`,
+        );
       }
-    } else if (document.openapi) {
-      errors.push(
-        project && isAmbiguousOperation(project, document.openapi)
-          ? `${relative} binds "openapi: ${document.openapi}", which several specs define; prefix it with the spec, e.g. "openapi: ${project.specs[0].id} ${document.openapi}".`
-          : `${relative} binds "openapi: ${document.openapi}", which matches no operation in ${project ? 'the API spec' : 'an API spec (docs.json has no api.spec)'}.`,
-      );
-    }
-    if (schema) {
-      for (const anchor of schemaAnchors(schema)) document.anchors.add(anchor);
-    } else if (document.openapiSchema) {
-      errors.push(
-        project && isAmbiguousSchema(project, document.openapiSchema)
-          ? `${relative} binds "openapi-schema: ${document.openapiSchema}", which several specs define; prefix it with the spec.`
-          : `${relative} binds "openapi-schema: ${document.openapiSchema}", which matches no schema in ${project ? 'the API spec' : 'an API spec (docs.json has no api.spec)'}.`,
-      );
     }
     documents.set(page.filePath, document);
     if (!document.title) warnings.push(`${relative} has no frontmatter title.`);

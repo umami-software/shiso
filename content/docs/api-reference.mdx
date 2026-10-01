@@ -151,6 +151,11 @@ schema. Schema pages are ordinary content pages: add them to `navigation`,
 and they are searchable and exported as Markdown like every other page. See
 the [User object](/docs/api-reference/user) page in this site's API demo.
 
+When both `openapi` and `openapi-schema` resolve on the same page, the
+operation reference takes precedence. Rendering, search, link validation,
+and Markdown export all use its sections. Invalid bindings are still reported
+by the content checker.
+
 ## What gets generated
 
 - **Try it** — the interactive playground described below.

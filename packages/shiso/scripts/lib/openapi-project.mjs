@@ -15,9 +15,7 @@ import { parse as parseYaml } from 'yaml';
 import {
   DEFAULT_API_DIRECTORY,
   loadOpenApiSpec,
-  normalizeOperationKey,
   normalizeOperations,
-  normalizeSchemaKey,
   normalizeSchemas,
   resolveApiDirectory,
 } from './openapi.mjs';
@@ -170,28 +168,11 @@ export async function loadApiProject({ root, api, fetchImpl } = {}) {
   };
 }
 
-/** Resolves an `openapi:` frontmatter value against a loaded project. */
-export function lookupOperation(project, value) {
-  const key = normalizeOperationKey(value);
-  return key ? project.operationsByKey.get(key) : undefined;
-}
-
-/** Resolves an `openapi-schema:` frontmatter value against a loaded project. */
-export function lookupSchema(project, value) {
-  const key = normalizeSchemaKey(value);
-  return key ? project.schemasByKey.get(key) : undefined;
-}
-
-/** True when an `openapi:` value names an operation that several specs define. */
-export function isAmbiguousOperation(project, value) {
-  const key = normalizeOperationKey(value);
-  return !!key && project.ambiguous.has(key);
-}
-
-/** True when an `openapi-schema:` value names a schema that several specs define. */
-export function isAmbiguousSchema(project, value) {
-  const key = normalizeSchemaKey(value);
-  return !!key && project.ambiguous.has(key);
-}
+export {
+  isAmbiguousOperation,
+  isAmbiguousSchema,
+  lookupOperation,
+  lookupSchema,
+} from './reference-page.mjs';
 
 export { DEFAULT_API_DIRECTORY };

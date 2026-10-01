@@ -6,13 +6,18 @@ import { Expandable } from '@/components/docs/Expandable';
 import { PropertiesTable } from '@/components/docs/PropertiesTable';
 import { useLabels } from '@/lib/label-context';
 import {
-  operationParameterSections,
-  operationSections,
+  getOperationSections,
   securityFieldName,
   securityForLocation,
   statusColor,
 } from '@/lib/openapi';
-import type { NormalizedOperation, SchemaNode, SecurityScheme, ThemeLabels } from '@/lib/types';
+import type {
+  NormalizedOperation,
+  ReferenceSection,
+  SchemaNode,
+  SecurityScheme,
+  ThemeLabels,
+} from '@/lib/types';
 import { securityPlaceholder } from '../../scripts/lib/request-samples.mjs';
 
 function FieldChildren({ node }: { node: SchemaNode }) {
@@ -127,36 +132,37 @@ export interface OpenApiOperationProps {
   operation: NormalizedOperation;
   /** Renders the "Try it" panel ahead of the reference; carries the proxy setting. */
   playground?: { proxy?: string } | false;
+  sections?: ReferenceSection[];
 }
 
 /** The generated reference for one API operation, rendered under the page body. */
 export function OpenApiOperation({
   operation,
   playground: requested = false,
+  sections: preparedSections,
 }: OpenApiOperationProps) {
   const labels = useLabels();
-  // Webhooks describe requests the API sends, so there is nothing to try.
-  const playground = operation.webhook ? false : requested;
-  const options = { playground: !!playground };
-  const sectionEntries = operationSections(operation, labels, options);
-  // Ids come from the untranslated names so anchors are stable across locales.
-  const sections = new Map(
-    operationSections(operation, undefined, options).map(entry => [entry.name, entry.id]),
-  );
-  const parameterSections = operationParameterSections(operation, labels);
-  const parameterOffset = playground ? 1 : 0;
+  const plan =
+    preparedSections ?? getOperationSections(operation, { labels, playground: !!requested });
+  const sections = new Map(plan.map(section => [section.kind, section]));
+  const playgroundSection = sections.get('playground');
+  const playground = playgroundSection && requested;
+  const parameterSections = plan.filter(section => section.kind === 'parameters');
+  const requestBody = sections.get('request-body');
+  const responses = sections.get('responses');
+  const samples = sections.get('code-samples');
 
   return (
     <div className="docs-markdown">
-      {playground && (
+      {playground && playgroundSection && (
         <section>
-          <h2 id={sections.get('Try it')}>{labels.apiPlayground}</h2>
+          <h2 id={playgroundSection.id}>{playgroundSection.name}</h2>
           <ApiPlayground operation={operation} proxy={playground.proxy} />
         </section>
       )}
-      {parameterSections.map(({ location, name }, index) => (
+      {parameterSections.map(({ location, name, id }) => (
         <section key={location}>
-          <h2 id={sectionEntries[index + parameterOffset].id}>{name}</h2>
+          <h2 id={id}>{name}</h2>
           <PropertiesTable>
             {securityForLocation(operation, location).map(scheme => (
               <PropertiesTable.Row
@@ -185,11 +191,9 @@ export function OpenApiOperation({
           </PropertiesTable>
         </section>
       ))}
-      {operation.requestBody && (
+      {requestBody && operation.requestBody && (
         <section>
-          <h2 id={sections.get(operation.webhook ? 'Payload' : 'Request body')}>
-            {operation.webhook ? labels.apiPayload : labels.apiRequestBody}
-          </h2>
+          <h2 id={requestBody.id}>{requestBody.name}</h2>
           <SchemaFields node={operation.requestBody.schema} />
           {operation.requestBody.example && (
             <HighlightedCode
@@ -201,9 +205,9 @@ export function OpenApiOperation({
           )}
         </section>
       )}
-      {operation.responses.length > 0 && (
+      {responses && (
         <section>
-          <h2 id={sections.get('Responses')}>{labels.apiResponses}</h2>
+          <h2 id={responses.id}>{responses.name}</h2>
           {operation.responses.map(response => (
             <div key={response.status} className="mt-6 first:mt-0">
               <div className="flex items-center gap-2">
@@ -227,9 +231,9 @@ export function OpenApiOperation({
           ))}
         </section>
       )}
-      {operation.samples.length > 0 && (
+      {samples && (
         <section>
-          <h2 id={sections.get('Code samples')}>{labels.apiCodeSamples}</h2>
+          <h2 id={samples.id}>{samples.name}</h2>
           <CodeGroup>
             {operation.samples.map(sample => (
               <HighlightedCode

@@ -22,8 +22,12 @@ import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { headingText } from './lib/mdast.mjs';
-import { operationSearchSections, schemaSearchSections } from './lib/openapi.mjs';
-import { loadApiProject, lookupOperation, lookupSchema } from './lib/openapi-project.mjs';
+import { loadApiProject } from './lib/openapi-project.mjs';
+import {
+  interpretReferencePage,
+  readReferenceFrontmatter,
+  referenceSearchSections,
+} from './lib/reference-page.mjs';
 import { createSlugger, slugifyId } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
@@ -143,13 +147,6 @@ function collectVisiblePages(container, pages = [], hidden = false) {
   return pages;
 }
 
-/** Frontmatter is YAML, but search only needs single lines from it. */
-function frontmatterField(tree, name) {
-  const yaml = tree.children?.find(node => node.type === 'yaml');
-  const match = yaml?.value?.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'));
-  return match ? match[1].trim().replace(/^["']|["']$/g, '') : undefined;
-}
-
 function frontmatterTitle(tree) {
   const yaml = tree.children?.find(node => node.type === 'yaml');
   const match = yaml?.value?.match(/^title:\s*(.+)$/m);
@@ -266,21 +263,11 @@ export async function generateSearchIndex({
         records.push({ url, page, heading, id, text, ...scopeFields });
       }
 
-      const operation = project
-        ? lookupOperation(project, frontmatterField(tree, 'openapi'))
-        : undefined;
-      if (operation) {
-        for (const { heading, id, text } of operationSearchSections(operation)) {
-          records.push({ url, page, heading, id, text, ...scopeFields });
-        }
-      }
-      const schema = project
-        ? lookupSchema(project, frontmatterField(tree, 'openapi-schema'))
-        : undefined;
-      if (schema) {
-        for (const { heading, id, text } of schemaSearchSections(schema)) {
-          records.push({ url, page, heading, id, text, ...scopeFields });
-        }
+      const reference = interpretReferencePage(readReferenceFrontmatter(source), project, {
+        playground: docsJson.api?.playground,
+      });
+      for (const { heading, id, text } of referenceSearchSections(reference)) {
+        records.push({ url, page, heading, id, text, ...scopeFields });
       }
     }
   }
