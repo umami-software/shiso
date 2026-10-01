@@ -38,7 +38,7 @@ function normalizePath(rawPath: unknown): string {
   return collapsed || '/';
 }
 
-/** Mirrors normalizePageReference in docs-config.ts for the `page` slug. */
+/** Standalone slugs also accept TSX files and omit the content/pages prefix. */
 function normalizePageSlug(rawSlug: unknown): string {
   const value = typeof rawSlug === 'string' ? rawSlug : '';
 

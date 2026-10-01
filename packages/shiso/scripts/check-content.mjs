@@ -12,6 +12,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
+import { loadDocsNavigation } from './lib/docs-navigation.mjs';
 import { headingText } from './lib/mdast.mjs';
 import { loadApiProject } from './lib/openapi-project.mjs';
 import { interpretReferencePage, readReferenceFrontmatter } from './lib/reference-page.mjs';
@@ -20,21 +21,7 @@ import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
 
 const MARKDOWN_EXTENSIONS = new Set(['.md', '.mdx']);
-const PAGE_EXTENSIONS = ['.mdx', '.md'];
 const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter).use(remarkGfm);
-
-function normalizePageReference(value) {
-  const fileSlug =
-    String(value || '')
-      .trim()
-      .replace(/\\/g, '/')
-      .replace(/^\/+/, '')
-      .replace(/^docs\//, '')
-      .replace(/\.mdx?$/i, '')
-      .replace(/\/+$/, '') || 'index';
-  const routeSlug = fileSlug === 'index' ? 'index' : fileSlug.replace(/\/index$/, '') || 'index';
-  return { fileSlug, routeSlug };
-}
 
 function normalizeRoute(value) {
   const route = String(value || '/')
@@ -42,10 +29,6 @@ function normalizeRoute(value) {
     .replace(/\/{2,}/g, '/');
   const withoutIndex = route === '/index' ? '/' : route.replace(/\/index$/, '') || '/';
   return withoutIndex.length > 1 ? withoutIndex.replace(/\/+$/, '') : withoutIndex;
-}
-
-function pageRoute(routeSlug, docsPrefix) {
-  return normalizeRoute(routeSlug === 'index' ? docsPrefix || '/' : `${docsPrefix}/${routeSlug}`);
 }
 
 async function exists(filePath) {
@@ -76,35 +59,6 @@ async function listFiles(directory) {
   }
 
   return files;
-}
-
-function collectPageReferences(navigation) {
-  const references = [];
-
-  function visitContainer(container) {
-    if (!container || typeof container !== 'object') return;
-    // Groups reached through tabs/dropdowns/languages carry their own landing page.
-    if (typeof container.root === 'string') references.push(container.root);
-    if (Array.isArray(container.pages)) visitItems(container.pages);
-    for (const key of ['tabs', 'dropdowns', 'groups', 'versions', 'languages']) {
-      if (Array.isArray(container[key])) container[key].forEach(visitContainer);
-    }
-  }
-
-  function visitItems(items) {
-    for (const item of items) {
-      if (typeof item === 'string') {
-        references.push(item);
-      } else if (item && typeof item === 'object') {
-        if (typeof item.page === 'string') references.push(item.page);
-        if (typeof item.root === 'string') references.push(item.root);
-        if (Array.isArray(item.pages)) visitItems(item.pages);
-      }
-    }
-  }
-
-  visitContainer(navigation);
-  return references;
 }
 
 async function resolveFile(root, directory, slug, extensions) {
@@ -193,33 +147,23 @@ export async function checkContent({ root = process.cwd(), config, shiso } = {})
   const pages = [];
   const referencedFiles = new Set();
 
-  for (const reference of collectPageReferences(docsConfig.navigation)) {
-    const { fileSlug, routeSlug } = normalizePageReference(reference);
-    const filePath = await resolveFile(projectRoot, engine.contentDir, fileSlug, PAGE_EXTENSIONS);
-    const route = pageRoute(routeSlug, engine.docsPrefix);
+  let navigation;
+  try {
+    navigation = loadDocsNavigation({ root: projectRoot, config: docsConfig, shiso: engine });
+  } catch (error) {
+    return { valid: false, errors: [error.message], warnings };
+  }
 
-    if (!filePath) {
+  for (const { fileSlug, filePath, url } of navigation.site.pages) {
+    if (navigation.missingPages.has(fileSlug)) {
       errors.push(
         `docs.json references missing page "${fileSlug}" (expected ${engine.contentDir}/${fileSlug}.mdx or .md).`,
       );
       continue;
     }
-
-    const previous = routes.get(route);
-    if (previous && previous !== filePath) {
-      errors.push(
-        `Route "${route}" is produced by both "${path.relative(projectRoot, previous)}" and "${path.relative(projectRoot, filePath)}".`,
-      );
-      continue;
-    }
-    if (referencedFiles.has(filePath)) {
-      errors.push(`Page "${fileSlug}" is referenced more than once in navigation.`);
-      continue;
-    }
-
-    routes.set(route, filePath);
+    routes.set(url, filePath);
     referencedFiles.add(filePath);
-    pages.push({ route, filePath });
+    pages.push({ route: url, filePath });
   }
 
   for (const item of docsConfig.pages || []) {

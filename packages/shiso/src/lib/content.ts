@@ -1,6 +1,7 @@
 import { LAST_MODIFIED } from '@/generated/last-modified';
 import { CONTENT_DIR, PAGES_DIR } from '@/lib/paths';
 import type { DocModule } from '@/lib/types';
+import { docFileCandidates } from '../../scripts/lib/navigation.mjs';
 
 /**
  * Eagerly imports every content file at build time. Markdown/MDX modules
@@ -25,7 +26,7 @@ export const docModules = import.meta.glob('/content/**/*.{md,mdx,tsx}', {
  * file does not exist, which makes config normalization fail at startup/build.
  */
 export function resolveDocFile(fileSlug: string, contentDir = CONTENT_DIR): string | undefined {
-  const candidates = [`/${contentDir}/${fileSlug}.mdx`, `/${contentDir}/${fileSlug}.md`];
+  const candidates = docFileCandidates(fileSlug, contentDir).map(candidate => `/${candidate}`);
   return candidates.find(candidate => candidate in docModules);
 }
 

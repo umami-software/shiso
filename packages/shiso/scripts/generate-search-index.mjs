@@ -21,6 +21,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
+import { loadDocsNavigation } from './lib/docs-navigation.mjs';
 import { headingText } from './lib/mdast.mjs';
 import { loadApiProject } from './lib/openapi-project.mjs';
 import {
@@ -28,124 +29,13 @@ import {
   readReferenceFrontmatter,
   referenceSearchSections,
 } from './lib/reference-page.mjs';
-import { createSlugger, slugifyId } from './lib/slug.mjs';
+import { createSlugger } from './lib/slug.mjs';
 import { loadDocsConfig } from './load-docs-config.mjs';
 import { loadShisoConfig } from './load-shiso-config.mjs';
 
 const DEFAULT_ROOT = process.cwd();
 
 const parser = unified().use(remarkParse).use(remarkMdx).use(remarkFrontmatter).use(remarkGfm);
-
-/** Mirrors normalizePageReference in src/lib/docs-config.ts. */
-function normalizePageReference(pageRef) {
-  const value = pageRef
-    .trim()
-    .replace(/\\/g, '/')
-    .replace(/^\/+/, '')
-    .replace(/^docs\//, '')
-    .replace(/\.mdx?$/, '')
-    .replace(/\/+$/, '');
-
-  if (!value) {
-    return { fileSlug: 'index', slug: 'index' };
-  }
-
-  return {
-    fileSlug: value,
-    slug: value === 'index' ? 'index' : value.replace(/\/index$/, '') || 'index',
-  };
-}
-
-/**
- * One entry per navigation scope, mirroring collectScopeSources in
- * src/lib/docs-config.ts: ordinary navigation, versions, languages, and
- * versions nested inside languages. Hidden scopes are excluded from search,
- * matching how hidden pages are excluded.
- */
-function collectScopes(navigation) {
-  if (Array.isArray(navigation.versions)) {
-    return navigation.versions
-      .filter(version => !version.hidden)
-      .map(version => ({
-        id: slugifyId(version.version?.trim() || '', 'scope'),
-        version: version.version?.trim(),
-        container: version,
-      }));
-  }
-
-  if (Array.isArray(navigation.languages)) {
-    return navigation.languages
-      .filter(language => !language.hidden)
-      .flatMap(language => {
-        const languageLabel = language.language?.trim();
-
-        if (Array.isArray(language.versions)) {
-          return language.versions
-            .filter(version => !version.hidden)
-            .map(version => ({
-              id: slugifyId(`${languageLabel}-${version.version?.trim()}`, 'scope'),
-              language: languageLabel,
-              version: version.version?.trim(),
-              container: version,
-            }));
-        }
-
-        return [
-          {
-            id: slugifyId(languageLabel || '', 'scope'),
-            language: languageLabel,
-            container: language,
-          },
-        ];
-      });
-  }
-
-  return [{ id: 'default', container: navigation }];
-}
-
-/**
- * Collects `{ fileSlug, slug }` for every non-hidden page in the navigation
- * tree. A simplified mirror of the config walker: search only needs page refs
- * and hidden inheritance, not labels or ordering.
- */
-function collectVisiblePages(container, pages = [], hidden = false) {
-  const items = [
-    ...(container.pages || []),
-    ...(container.groups || []),
-    ...(container.tabs || []),
-    ...(container.dropdowns || []),
-  ];
-
-  for (const item of items) {
-    if (typeof item === 'string') {
-      if (!hidden) {
-        pages.push(normalizePageReference(item));
-      }
-      continue;
-    }
-
-    if (!item || typeof item !== 'object') {
-      continue;
-    }
-
-    const itemHidden = hidden || item.hidden === true;
-
-    if (typeof item.page === 'string') {
-      if (!itemHidden) {
-        pages.push(normalizePageReference(item.page));
-      }
-      continue;
-    }
-
-    if (typeof item.root === 'string' && !itemHidden) {
-      pages.push(normalizePageReference(item.root));
-    }
-
-    collectVisiblePages(item, pages, itemHidden);
-  }
-
-  return pages;
-}
 
 function frontmatterTitle(tree) {
   const yaml = tree.children?.find(node => node.type === 'yaml');
@@ -215,8 +105,13 @@ export async function generateSearchIndex({
   const docsJson = config ?? loaded.config;
   const { docsPrefix, contentDir } = shiso ?? (await loadShisoConfig({ root })).config;
 
-  const seen = new Set();
   const records = [];
+  let pageCount = 0;
+  const { site, missingPages } = loadDocsNavigation({
+    root,
+    config: docsJson,
+    shiso: { docsPrefix, contentDir },
+  });
 
   // Pages bound to an API operation get synthesized sections from the spec, so
   // parameters and responses are searchable even though they render from data.
@@ -224,39 +119,20 @@ export async function generateSearchIndex({
     ? (preparedProject ?? loaded?.apiProject ?? (await loadApiProject({ root, api: docsJson.api })))
     : undefined;
 
-  for (const scope of collectScopes(docsJson.navigation || {})) {
+  for (const scope of site.scopes) {
+    if (scope.hidden) continue;
     // Single-scope sites omit scope fields so their index stays unchanged.
     const scopeFields =
       scope.id === 'default'
         ? {}
         : { scopeId: scope.id, language: scope.language, version: scope.version };
 
-    for (const { fileSlug, slug } of collectVisiblePages(scope.container)) {
-      if (seen.has(fileSlug)) {
-        continue;
-      }
-
-      seen.add(fileSlug);
-
-      let source;
-      let filePath;
-
-      for (const extension of ['mdx', 'md']) {
-        filePath = path.join(root, contentDir, `${fileSlug}.${extension}`);
-        source = await fs.readFile(filePath, 'utf8').catch(() => undefined);
-
-        if (source !== undefined) {
-          break;
-        }
-      }
-
-      if (source === undefined) {
-        // Missing files fail config normalization; search just skips them.
-        continue;
-      }
+    for (const { fileSlug, filePath, url, hidden } of scope.docs.pages) {
+      if (hidden || missingPages.has(fileSlug)) continue;
+      const source = await fs.readFile(filePath, 'utf8');
+      pageCount += 1;
 
       const tree = parser.parse(source);
-      const url = slug === 'index' ? docsPrefix || '/' : `${docsPrefix}/${slug}`;
       const page = frontmatterTitle(tree) || fileSlug;
 
       for (const { heading, id, text } of collectSections(tree)) {
@@ -310,7 +186,7 @@ ${body}
     await fs.writeFile(output, contents);
   }
 
-  return { pages: seen.size, records: records.length, changed: previous !== contents };
+  return { pages: pageCount, records: records.length, changed: previous !== contents };
 }
 
 if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
