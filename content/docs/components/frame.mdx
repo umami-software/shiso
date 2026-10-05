@@ -18,6 +18,24 @@ captions.
 </Frame>
 ```
 
+## Image sizing
+
+Images are centered at their natural size, or at the dimensions specified on the
+image. They scale down to fit narrower screens without stretching to fill the
+frame. Multiple images stack vertically with space between them.
+
+Use `width` to display an image smaller than its source:
+
+<Frame caption="A preview limited to 320 pixels wide">
+  <img src="/images/sample.jpg" width={320} alt="Small docs layout preview" />
+</Frame>
+
+```tsx
+<Frame caption="A preview limited to 320 pixels wide">
+  <img src="/images/sample.jpg" width={320} alt="Small docs layout preview" />
+</Frame>
+```
+
 ## Markdown captions
 
 Caption strings support Markdown links, bold, italic, and inline code.

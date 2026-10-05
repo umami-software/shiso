@@ -63,7 +63,7 @@ export const styles = {
     'flex h-5 shrink-0 items-center text-muted-foreground [&_svg]:size-4 [&_svg]:fill-current',
   frame: 'relative overflow-hidden rounded-2xl border border-border bg-muted/25 p-2',
   frameContent:
-    'relative flex justify-center overflow-hidden rounded-xl [&_p]:m-0 [&_img]:m-0 [&_img]:w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0 [&_[data-slot=zoomable-image]]:w-full',
+    'relative flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl [&_p]:m-0 [&_p]:max-w-full [&_img]:m-0 [&_img]:h-auto [&_img]:max-w-full [&_video]:w-full [&_[data-slot=zoomable-image]]:m-0',
   frameCaption:
     'relative mt-3 px-4 pb-1 text-center text-sm leading-5 text-muted-foreground [&_p]:m-0 [&_a]:font-semibold',
 
