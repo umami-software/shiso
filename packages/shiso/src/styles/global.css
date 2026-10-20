@@ -331,25 +331,3 @@
     user-select: none;
   }
 }
-
-/* Mermaid diagrams, compiled to SVG by Ondine (https://ondine.sh). Ondine
-   colors everything through these variables, so diagrams follow the theme
-   (including dark mode) without re-rendering. :where() keeps specificity at
-   zero so a site's own `.ondine { --ondine-*: ... }` overrides win. The font
-   must stay monospace: Ondine sizes labels for a 0.6em-wide glyph. */
-@layer components {
-  :where(.ondine) {
-    --ondine-bg: var(--card);
-    --ondine-fg: var(--foreground);
-    --ondine-surface: var(--background);
-    --ondine-surface-alt: var(--muted);
-    --ondine-muted: var(--muted-foreground);
-    --ondine-line: var(--muted-foreground);
-    --ondine-border: color-mix(in srgb, var(--foreground) 35%, var(--card));
-    --ondine-accent: var(--primary);
-    --ondine-critical: var(--destructive);
-    --ondine-font: var(--font-mono);
-    --ondine-stroke: 1.5px;
-    --ondine-radius: 4px;
-  }
-}

@@ -18,9 +18,6 @@ const projectModules = new Set([
 
 const peerModules = new Set(['react', 'react-dom']);
 const sharedModules = new Set(['@mdx-js/react']);
-// Resolved by the site's own Vite build, so its WebAssembly payload is only
-// emitted as a lazy chunk there rather than copied into the runtime bundle.
-const dependencyModules = new Set(['ondine']);
 const runtimeAliases = new Map([
   ['use-sync-external-store/shim', path.join(sourceRoot, 'lib/vendor/use-sync-external-store.ts')],
   [
@@ -38,7 +35,6 @@ function isExternal(source) {
     projectModules.has(source) ||
     peerModules.has(packageName) ||
     sharedModules.has(source) ||
-    dependencyModules.has(packageName) ||
     source === '@umami/shiso/styles.css' ||
     source.endsWith('.css')
   );

@@ -135,13 +135,11 @@ async function highlightBlock(pre: MdNode, code: MdNode, config: ResolvedCodeBlo
   const requested = classes.map(value => value.match(/^language-(\S+)$/)?.[1]).find(Boolean);
   const meta = parseCodeMeta(typeof code.data?.meta === 'string' ? code.data.meta : '');
 
-  // Mermaid diagrams are compiled to SVG by `rehype-mermaid`, which runs next;
-  // keep the raw definition so CodeBlock can hand it over untouched.
+  // Mermaid diagrams render client-side via the <Mermaid> component; keep the
+  // raw definition so CodeBlock can hand it over untouched.
   if (requested === 'mermaid') {
     const metaRaw = typeof code.data?.meta === 'string' ? code.data.meta : '';
-    const placement = metaRaw.match(
-      /placement=["'](top-left|top-right|bottom-left|bottom-right)["']/,
-    )?.[1];
+    const placement = metaRaw.match(/placement=["'](top-left|top-right|bottom-left|bottom-right)["']/)?.[1];
     const actions = metaRaw.match(/actions=\{(true|false)\}/)?.[1];
     pre.properties = {
       ...(pre.properties as Properties),

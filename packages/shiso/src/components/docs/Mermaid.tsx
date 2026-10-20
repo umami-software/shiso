@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { useLabels } from '@/lib/label-context';
 import { styles } from './styles';
 
@@ -15,13 +15,6 @@ export interface MermaidProps {
   actions?: boolean;
   /** Corner for the controls. Defaults to "bottom-right". */
   placement?: MermaidPlacement;
-  /**
-   * Precompiled SVG. Shiso's MDX pipeline fills this in at build time for
-   * static definitions, so you rarely pass it yourself.
-   */
-  svg?: string;
-  /** Build-time compile error; shown in place of the diagram. */
-  error?: string;
   children?: ReactNode;
 }
 
@@ -45,27 +38,11 @@ export function mermaidSource(chart: string | undefined, children: ReactNode): s
   return raw.replace(/^\n+|\n+$/g, '').replace(/\\n$/, '');
 }
 
-type CompileInBrowser = (source: string) => string;
-
-let browserCompiler: Promise<CompileInBrowser> | undefined;
-
-/**
- * Lazily loads Ondine's WebAssembly compiler for definitions only known at
- * runtime (`chart={someVariable}`). Static diagrams never reach this: they
- * are compiled at build time by `lib/rehype-mermaid.ts`.
- */
-function loadBrowserCompiler(): Promise<CompileInBrowser> {
-  browserCompiler ??= Promise.all([
-    import('ondine/compiler/wasm'),
-    import('ondine/compiler/wasm/all'),
-  ]).then(([{ create }, { wasm: all }]) => {
-    const renderer = create({ modules: { all } });
-    return source => renderer.render(source).svg;
-  });
-  browserCompiler.catch(() => {
-    browserCompiler = undefined;
-  });
-  return browserCompiler;
+function isDarkMode(): boolean {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+  return document.documentElement.classList.contains('dark');
 }
 
 const PLACEMENT_CLASS: Record<MermaidPlacement, string> = {
@@ -76,64 +53,74 @@ const PLACEMENT_CLASS: Record<MermaidPlacement, string> = {
 };
 
 /**
- * Renders a Mermaid diagram as SVG compiled by Ondine (https://ondine.sh).
- * Static definitions arrive precompiled via `svg`, so server output already
- * contains the diagram and no renderer runs in the browser. Colors and fonts
- * come from `--ondine-*` CSS variables mapped to the site theme, so light and
- * dark mode switch without re-rendering. Dynamic definitions compile on the
- * client; until then (and without JS) the raw definition shows in a <pre>.
+ * Renders a Mermaid diagram. Server/prerender output is the raw definition in
+ * a <pre> so search indexing and no-JS still see the content; the client
+ * replaces it with SVG via a lazy `mermaid` import (kept out of the SSR bundle).
  */
 export function Mermaid({
   chart,
   title,
   actions,
   placement = 'bottom-right',
-  svg: precompiled,
-  error: precompileError,
   children,
 }: MermaidProps) {
   const labels = useLabels();
   const source = mermaidSource(chart, children);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgHostRef = useRef<HTMLDivElement>(null);
-  const [compiled, setCompiled] = useState<{ source: string; svg: string } | null>(null);
-  const [failed, setFailed] = useState<string | null>(null);
+  const diagramId = useId().replace(/[^a-zA-Z0-9]/g, '');
+  const [svg, setSvg] = useState<string | null>(null);
+  const [error, setError] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const needsBrowserCompile = !precompiled && !precompileError && Boolean(source.trim());
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    if (!needsBrowserCompile) {
+    setDark(isDarkMode());
+    const observer = new MutationObserver(() => setDark(isDarkMode()));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!source.trim() || typeof window === 'undefined') {
       return;
     }
 
     let cancelled = false;
-    setFailed(null);
-    loadBrowserCompiler()
-      .then(compile => {
-        const rendered = compile(source);
-        if (!cancelled) {
-          setCompiled({ source, svg: rendered });
+    setError(false);
+    setSvg(null);
+    (async () => {
+      try {
+        const { default: mermaid } = await import('mermaid');
+        if (cancelled) {
+          return;
         }
-      })
-      .catch(() => {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: dark ? 'dark' : 'neutral',
+          securityLevel: 'strict',
+        });
+        const { svg: rendered } = await mermaid.render(`shiso-mermaid-${diagramId}`, source);
         if (!cancelled) {
-          setFailed(source);
+          setSvg(rendered);
         }
-      });
+      } catch {
+        if (!cancelled) {
+          setError(true);
+        }
+      }
+    })();
 
     return () => {
       cancelled = true;
     };
-  }, [source, needsBrowserCompile]);
-
-  const svg = precompiled || (compiled?.source === source ? compiled.svg : null);
-  const error = Boolean(precompileError) || failed === source;
+  }, [source, diagramId, dark]);
 
   // Pan is native scroll; zoom controls scale the SVG host.
   const showControls = actions ?? true;
 
   return (
-    <figure className={styles.mermaid} data-slot="mermaid">
+    <figure className={styles.mermaid} data-dark={dark ? '' : undefined}>
       {title ? <figcaption className={styles.mermaidTitle}>{title}</figcaption> : null}
       <div ref={containerRef} className={styles.mermaidViewport}>
         {svg && !error ? (
@@ -141,7 +128,7 @@ export function Mermaid({
             ref={svgHostRef}
             className={styles.mermaidSvg}
             style={{ transform: `scale(${zoom})` }}
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: Ondine generates this SVG from the page's own diagram source.
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: mermaid generates this SVG from the page's own diagram source.
             dangerouslySetInnerHTML={{ __html: svg }}
             role="img"
             aria-label={title ? String(title) : labels.diagram}
@@ -151,11 +138,7 @@ export function Mermaid({
             {source}
           </pre>
         )}
-        {error ? (
-          <p className={styles.mermaidError} title={precompileError || undefined}>
-            {labels.diagramError}
-          </p>
-        ) : null}
+        {error ? <p className={styles.mermaidError}>{labels.diagramError}</p> : null}
         {showControls && svg && !error ? (
           <div className={`${styles.mermaidControls} ${PLACEMENT_CLASS[placement]}`}>
             <button

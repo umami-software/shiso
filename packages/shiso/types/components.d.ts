@@ -230,10 +230,6 @@ export interface MermaidProps {
   title?: ReactNode;
   actions?: boolean;
   placement?: MermaidPlacement;
-  /** Precompiled SVG; filled in at build time for static definitions. */
-  svg?: string;
-  /** Build-time compile error, shown in place of the diagram. */
-  error?: string;
   children?: ReactNode;
 }
 
