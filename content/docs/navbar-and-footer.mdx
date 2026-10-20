@@ -45,6 +45,23 @@ A highlighted button at the end of the navbar.
 - `href`: destination URL
 - `target`: optional `"_self"` or `"_blank"` override
 
+### Language-aware destinations
+
+On multilingual sites, navbar links and the primary button follow the current
+page's language:
+
+- A link to the docs root (`/docs`, or your configured `docsPrefix`) or the
+  default docs landing page opens the current language and version's landing page.
+- A link to a default-language standalone page, such as `/download`, opens its
+  counterpart in the current language when one is configured in `pages`.
+- External URLs, links to specific docs pages, and explicitly localized
+  standalone destinations keep their configured destinations. If a standalone
+  translation is missing, the original link is used.
+
+For example, on `/ja`, a `/docs` link can resolve to `/docs/ja` and a `/download`
+button to `/ja/download`. Destinations come from the configured pages; language
+prefixes are not guessed. Query parameters and fragments are preserved.
+
 ## Announcement banner
 
 The `banner` key shows a site-wide announcement above the header.

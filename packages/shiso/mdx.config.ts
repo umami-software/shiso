@@ -7,6 +7,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import type { Plugin } from 'vite';
 import { resolveCodeBlockConfig } from './src/lib/code-blocks.ts';
 import { type MdNode, toText } from './src/lib/mdast.ts';
+import { rehypeMermaid } from './src/lib/rehype-mermaid.ts';
 import { rehypeShiki } from './src/lib/rehype-shiki.ts';
 import { remarkToc } from './src/lib/remark-toc.ts';
 import type { MdxConfig, ResolvedCodeBlockConfig } from './src/lib/types.ts';
@@ -75,6 +76,8 @@ export function shisoMdx(options: ShisoMdxOptions = {}): Plugin {
       rehypePlugins: [
         ...(options.rehypePlugins || []),
         [rehypeShiki, codeBlocks],
+        // Must follow rehypeShiki: it reads the `data-language="mermaid"` tag shiki sets.
+        rehypeMermaid,
         rehypeZoomableImages,
         rehypeSlug,
         [

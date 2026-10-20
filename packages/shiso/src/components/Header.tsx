@@ -6,7 +6,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
 import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { isExternalHref } from '@/lib/paths';
-import { getHomeHref, getScopeByPathname } from '@/lib/site-config';
+import { getHomeHref, getNavbarHref, getScopeByPathname } from '@/lib/site-config';
 import type { NormalizedLink, SiteModel } from '@/lib/types';
 
 /**
@@ -19,6 +19,8 @@ function isRoutedHref(href: string, target?: string): boolean {
 }
 
 function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; primary?: boolean }) {
+  const { pathname } = useLocation();
+  const href = getNavbarHref(link.href, pathname);
   const iconOnly = !link.label;
   const accessibleLabel = link.ariaLabel || link.icon || link.href;
 
@@ -32,13 +34,9 @@ function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; prima
     </>
   );
 
-  if (isRoutedHref(link.href, link.target)) {
+  if (isRoutedHref(href, link.target)) {
     return (
-      <Link
-        to={link.href}
-        className={className}
-        aria-label={iconOnly ? accessibleLabel : undefined}
-      >
+      <Link to={href} className={className} aria-label={iconOnly ? accessibleLabel : undefined}>
         {content}
       </Link>
     );
@@ -46,7 +44,7 @@ function NavbarLinkItem({ link, primary = false }: { link: NormalizedLink; prima
 
   return (
     <a
-      href={link.href}
+      href={href}
       className={className}
       target={link.target}
       rel={link.target === '_blank' ? 'noreferrer' : undefined}

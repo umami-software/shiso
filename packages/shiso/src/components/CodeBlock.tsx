@@ -20,6 +20,10 @@ export interface CodeBlockProps extends ComponentProps<'pre'> {
   'data-diff-markers'?: string;
   'data-placement'?: MermaidPlacement;
   'data-actions'?: string;
+  /** Mermaid fences only: SVG compiled at build time by `lib/rehype-mermaid.ts`. */
+  'data-svg'?: string;
+  /** Mermaid fences only: the build-time compile error, when there was one. */
+  'data-error'?: string;
 }
 
 function reactChildrenToText(node: ReactNode): string {
@@ -69,6 +73,8 @@ export function CodeBlock({ children, className, style, ...rest }: CodeBlockProp
     'data-line-count': lineCount,
     'data-placement': placement,
     'data-actions': actions,
+    'data-svg': svg,
+    'data-error': diagramError,
     ...preProps
   } = rest;
   const textInput = useRef<HTMLPreElement>(null);
@@ -83,6 +89,8 @@ export function CodeBlock({ children, className, style, ...rest }: CodeBlockProp
         title={title}
         placement={placement}
         actions={actions === undefined ? undefined : actions !== 'false'}
+        svg={svg}
+        error={diagramError}
       />
     );
   }

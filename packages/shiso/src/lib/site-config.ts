@@ -10,7 +10,7 @@ import {
 } from '@/lib/docs-config';
 import { resolveLabels } from '@/lib/labels';
 import { getTextDirection, resolveLocale } from '@/lib/locale';
-import { DOCS_PREFIX, stripBase } from '@/lib/paths';
+import { DOCS_PREFIX, isExternalHref, stripBase } from '@/lib/paths';
 import { resolveSiteModel } from '@/lib/site-model';
 import { getStandalonePageByPathname, normalizeStandalonePages } from '@/lib/standalone-pages';
 import type {
@@ -108,6 +108,41 @@ export function getHomeHref(pathname: string): string {
 
   const language = getScopeByPathname(pathname).language;
   return (language && getStandaloneCounterpart(root, language)?.path) || '/';
+}
+
+/** Resolve generic navbar destinations in the current language's navigation scope. */
+export function getNavbarHref(href: string, pathname: string): string {
+  if (!href.startsWith('/') || isExternalHref(href)) {
+    return href;
+  }
+
+  const scope = getScopeByPathname(pathname);
+  if (!scope.language) {
+    return href;
+  }
+
+  // Keep query parameters and fragments when replacing only the destination path.
+  const suffixStart = href.search(/[?#]/);
+  const destination = suffixStart < 0 ? href : href.slice(0, suffixStart);
+  const suffix = suffixStart < 0 ? '' : href.slice(suffixStart);
+  const route = toRouteKey(destination);
+
+  if (route === toRouteKey(DOCS_PREFIX) || route === toRouteKey(docsHomeUrl)) {
+    return `${scope.firstPageUrl}${suffix}`;
+  }
+
+  const page = getStandalonePageByPathname(standalonePages, destination);
+  const defaultLanguage = getDefaultScope(docsSite).language;
+  // Explicit links to another language remain explicit. Only default-language
+  // standalone pages act as generic destinations, such as /download or /.
+  if (page && (!page.language || page.language === defaultLanguage)) {
+    const counterpart = getStandaloneCounterpart(page, scope.language);
+    if (counterpart) {
+      return `${counterpart.path}${suffix}`;
+    }
+  }
+
+  return href;
 }
 
 /** Document language and direction for a pathname, from its scope's language. */
