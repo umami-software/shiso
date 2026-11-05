@@ -54,16 +54,28 @@ export interface DropdownItem {
   hidden?: boolean;
 }
 
+export interface MenuItem {
+  item: string;
+  groups?: GroupItem[];
+  pages?: PageItem[];
+  page?: string;
+  href?: string;
+  icon?: string;
+  hidden?: boolean;
+  target?: LinkTarget;
+}
+
 export interface TabItem {
   tab: string;
   groups?: GroupItem[];
   pages?: PageItem[];
   dropdowns?: DropdownItem[];
+  menu?: MenuItem[];
   /** Link tab: navigates to this URL instead of owning docs pages. */
   href?: string;
   icon?: string;
   hidden?: boolean;
-  /** Internal normalized presentation; not a docs.json field. */
+  /** Presentation in top navigation: 'tab' for a link, 'dropdown' for a dropdown menu. */
   presentation?: 'tab' | 'dropdown';
 }
 

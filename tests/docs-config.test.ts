@@ -78,6 +78,62 @@ describe('page items', () => {
     expect(config.showTabs).toBe(true);
     expect(config.tabs[0]).toMatchObject({ label: 'Guides', presentation: 'dropdown' });
   });
+
+  it('supports mixing plain tabs and dropdowns via presentation: dropdown', () => {
+    const config = normalize({
+      tabs: [
+        { tab: 'Docs', pages: ['index'] },
+        { tab: 'API', presentation: 'dropdown', pages: ['api'] },
+      ],
+    });
+
+    expect(config.tabs.map(tab => [tab.label, tab.presentation])).toEqual([
+      ['Docs', 'tab'],
+      ['API', 'dropdown'],
+    ]);
+  });
+
+  it('normalizes tab menu with pages, groups, and links as a dropdown', () => {
+    const config = normalize({
+      tabs: [
+        {
+          tab: 'Resources',
+          menu: [
+            { item: 'Overview', page: 'resources/overview' },
+            {
+              item: 'Guides',
+              groups: [{ group: 'Basics', pages: ['guides/getting-started'] }],
+            },
+            { item: 'GitHub', href: 'https://github.com/umami-software' },
+          ],
+        },
+      ],
+    });
+
+    expect(config.tabs[0].presentation).toBe('dropdown');
+    const nodes = config.navigation.resources;
+    expect(nodes).toHaveLength(3);
+    expect(nodes[0]).toMatchObject({
+      kind: 'page',
+      page: { slug: 'resources/overview', label: 'Overview' },
+    });
+    expect(nodes[1]).toMatchObject({
+      kind: 'group',
+      label: 'Guides',
+      children: [
+        {
+          kind: 'group',
+          label: 'Basics',
+          children: [{ kind: 'page', page: { slug: 'guides/getting-started' } }],
+        },
+      ],
+    });
+    expect(nodes[2]).toMatchObject({
+      kind: 'link',
+      label: 'GitHub',
+      href: 'https://github.com/umami-software',
+    });
+  });
 });
 
 describe('external links', () => {

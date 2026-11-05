@@ -745,4 +745,141 @@ describe('navigation mode exclusivity', () => {
       ).valid,
     ).toBe(false);
   });
+
+  it('accepts presentation and menu on tabs', () => {
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              { tab: 'Docs', pages: ['index'] },
+              { tab: 'More', presentation: 'dropdown', pages: ['more'] },
+              {
+                tab: 'Menu',
+                menu: [
+                  { item: 'Page', page: 'p1' },
+                  { item: 'Link', href: 'https://example.com' },
+                  { item: 'Grouped', groups: [{ group: 'G', pages: ['p2'] }] },
+                ],
+              },
+            ],
+          },
+        },
+        schema,
+      ),
+    ).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects invalid tab presentation', () => {
+    expect(
+      validateConfig(
+        { navigation: { tabs: [{ tab: 'Docs', presentation: 'sidebar', pages: ['index'] }] } },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('rejects mutually exclusive tab menu fields', () => {
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [{ tab: 'Docs', menu: [{ item: 'P', page: 'p' }], pages: ['index'] }],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              {
+                tab: 'Docs',
+                menu: [{ item: 'P', page: 'p' }],
+                href: 'https://example.com',
+              },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              {
+                tab: 'Docs',
+                menu: [{ item: 'P', page: 'p' }],
+                groups: [{ group: 'G', pages: ['p'] }],
+              },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              {
+                tab: 'Docs',
+                menu: [{ item: 'P', page: 'p' }],
+                dropdowns: [{ dropdown: 'D', pages: ['p'] }],
+              },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
+
+  it('rejects mutually exclusive menuItem fields', () => {
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              {
+                tab: 'Docs',
+                menu: [{ item: 'P', href: 'https://example.com', page: 'p' }],
+              },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+
+    expect(
+      validateConfig(
+        {
+          navigation: {
+            tabs: [
+              {
+                tab: 'Docs',
+                menu: [
+                  {
+                    item: 'P',
+                    href: 'https://example.com',
+                    groups: [{ group: 'G', pages: ['p'] }],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        schema,
+      ).valid,
+    ).toBe(false);
+  });
 });
