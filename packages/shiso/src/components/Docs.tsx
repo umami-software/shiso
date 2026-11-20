@@ -1,16 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { DocContent } from '@/components/DocContent';
 import { PanelProvider, usePanelContent } from '@/components/docs/panel-context';
 import { Footer } from '@/components/Footer';
-import { Menu } from '@/components/icons';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { PageLinks } from '@/components/PageLinks';
 import { SearchSlot } from '@/components/Search';
 import { SideNav } from '@/components/SideNav';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { VersionSwitcher } from '@/components/VersionSwitcher';
 import { renderInlineMarkdown } from '@/lib/inline-markdown';
 import { getReferencePage } from '@/lib/openapi';
 import { docsHomeUrl, getScopeByPathname } from '@/lib/site-config';
@@ -92,18 +87,16 @@ function DocsBody({
   reference: ReferencePage;
 }) {
   const { pathname } = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
   // Navigation follows the scope (version/language) that owns the current page.
   const scopeDocs = getScopeByPathname(pathname).docs;
   const { tabs, navigation } = scopeDocs;
   // A <Panel> in the page replaces the table of contents in the right rail.
   const panel = usePanelContent();
 
-  // Close the mobile menu and start each newly loaded page at the top. Hash
-  // links keep their native section-scrolling behavior.
+  // Start each newly loaded page at the top. Hash links keep their native
+  // section-scrolling behavior.
   // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger
   useEffect(() => {
-    setMenuOpen(false);
     if (!window.location.hash) {
       window.scrollTo({ top: 0, left: 0 });
     }
@@ -111,37 +104,7 @@ function DocsBody({
 
   return (
     <div className="flex min-h-full flex-col gap-6 lg:gap-0">
-      <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-        <div className="flex justify-end lg:hidden">
-          <SheetTrigger render={<Button variant="outline" className="bg-card" />}>
-            <Menu className="size-3.5" />
-            {site.labels.menu}
-          </SheetTrigger>
-        </div>
-        <SheetContent
-          side="right"
-          className="w-[min(320px,85vw)] gap-0 overflow-y-auto bg-background p-4 sm:max-w-80"
-        >
-          <SheetTitle className="sr-only">{site.labels.documentationNavigation}</SheetTitle>
-          <div className="pt-8">
-            <div className="flex items-center gap-2 pb-4 lg:hidden">
-              <VersionSwitcher />
-              <LanguageSwitcher />
-            </div>
-            <SideNav
-              tabs={tabs}
-              navigation={navigation}
-              anchors={scopeDocs.anchors}
-              activeTabId={page.tabId}
-              drilldown={site.drilldown}
-              navigationLabel={site.labels.documentationNavigation}
-              expandLabel={site.labels.expand}
-              collapseLabel={site.labels.collapse}
-            />
-          </div>
-        </SheetContent>
-      </Sheet>
-      <div className="flex items-start gap-12 lg:min-h-[calc(100dvh-var(--header-height))] lg:pt-6">
+      <div className="flex items-start gap-12 pt-6 lg:min-h-[calc(100dvh-var(--header-height))]">
         <div className="hidden min-w-0 max-w-60 basis-60 flex-col gap-4 self-start lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] lg:flex lg:h-[calc(100dvh-var(--header-height)-3rem)] lg:shrink-0">
           <SearchSlot site={site} position="sidebar" className="w-full" />
           <SideNav

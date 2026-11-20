@@ -59,11 +59,14 @@ export function Search({
   config,
   labels,
   className,
+  compact = false,
 }: {
   config: ResolvedSearchConfig;
   labels: ThemeLabels;
   /** Extra classes for the trigger button (e.g. to stretch it in a column). */
   className?: string;
+  /** Collapse the trigger to just its icon on small screens. */
+  compact?: boolean;
 }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -189,17 +192,27 @@ export function Search({
         render={
           <Button
             variant="outline"
+            aria-label={compact ? config.prompt : undefined}
             className={cn(
               'h-auto gap-2 rounded-md bg-card px-2.5 py-1.5 text-muted-foreground hover:border-input hover:bg-card hover:text-foreground',
+              compact &&
+                'max-lg:size-8 max-lg:border-transparent max-lg:bg-transparent max-lg:p-0 max-lg:text-foreground max-lg:hover:border-transparent max-lg:hover:bg-accent',
               className,
             )}
           />
         }
       >
         <SearchIcon className="size-3.5" />
-        <span className="min-w-24 grow text-left">{config.prompt}</span>
+        <span className={cn('min-w-24 grow text-left', compact && 'max-lg:hidden')}>
+          {config.prompt}
+        </span>
         {config.shortcut ? (
-          <kbd className="rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans">
+          <kbd
+            className={cn(
+              'rounded-sm border border-border bg-muted px-[0.3rem] py-[0.05rem] text-[0.7rem] font-sans',
+              compact && 'max-lg:hidden',
+            )}
+          >
             {config.shortcutLabel}
           </kbd>
         ) : null}
@@ -276,10 +289,12 @@ export function SearchSlot({
   site,
   position,
   className,
+  compact,
 }: {
   site: SiteModel;
   position: SearchPosition;
   className?: string;
+  compact?: boolean;
 }) {
   const { pathname } = useLocation();
 
@@ -291,5 +306,7 @@ export function SearchSlot({
     return null;
   }
 
-  return <Search config={site.search} labels={site.labels} className={className} />;
+  return (
+    <Search config={site.search} labels={site.labels} className={className} compact={compact} />
+  );
 }

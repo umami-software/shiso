@@ -118,9 +118,11 @@ export function DocContent({ page, doc, site, reference: preparedReference }: Do
   return (
     <article className="min-w-0 grow" {...pagefindAttrs}>
       {eyebrow && <div className="text-sm font-medium text-primary">{eyebrow}</div>}
-      <div className="flex items-start justify-between gap-4">
+      {/* The title flexes from a zero basis, so the actions only wrap onto their
+          own row when they can't fit beside its longest word (mobile). */}
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         {title && (
-          <h1 className="mt-2 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,700)]">
+          <h1 className="mt-2 grow basis-0 text-4xl text-foreground leading-[1.2] tracking-[-0.03em] [font-family:var(--font-heading)] [font-weight:var(--font-heading-weight,700)]">
             {title}
           </h1>
         )}

@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router';
 import { ConfiguredIcon } from '@/components/ConfiguredIcon';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { MobileNav } from '@/components/MobileNav';
 import { SearchSlot } from '@/components/Search';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TopNav } from '@/components/TopNav';
@@ -87,7 +88,8 @@ export function Header({ site }: { site: SiteModel }) {
   return (
     <header className="sticky top-0 z-50 h-[var(--header-height)] shrink-0 border-border border-b bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-md">
       <div className="mx-auto grid h-full max-w-[1600px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-5">
-        <div className="flex min-w-0 items-center gap-5 justify-self-start">
+        <div className="flex min-w-0 items-center gap-3 justify-self-start lg:gap-5">
+          <MobileNav site={site} />
           {hasBrand ? (
             isRoutedHref(brandHref, logo?.target) ? (
               <Link to={brandHref} className={brandClassName}>
@@ -113,10 +115,10 @@ export function Header({ site }: { site: SiteModel }) {
           {docs.showTabs ? <TopNav docs={docs} label={labels.sections} /> : null}
         </div>
         <div className="flex min-w-0 items-center gap-2 justify-self-end">
-          <SearchSlot site={site} position="header" />
+          <SearchSlot site={site} position="header" compact />
           {/* The sidebar collapses into a sheet on small screens, so its
               search control moves up here until the column is visible. */}
-          <SearchSlot site={site} position="sidebar" className="lg:hidden" />
+          <SearchSlot site={site} position="sidebar" className="lg:hidden" compact />
           {navbar?.links.map(link => (
             <NavbarLinkItem key={link.href} link={link} />
           ))}
