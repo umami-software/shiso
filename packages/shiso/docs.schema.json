@@ -877,6 +877,32 @@
         { "$ref": "#/definitions/configRefValue" }
       ]
     },
+    "menuList": {
+      "anyOf": [
+        { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/menuItem" } },
+        { "$ref": "#/definitions/configRefValue" }
+      ]
+    },
+    "menuItem": {
+      "type": "object",
+      "allOf": [
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["item"] }] },
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["page"] }, { "required": ["href"] }] },
+        { "not": { "anyOf": [{ "required": ["href", "groups"] }, { "required": ["href", "pages"] }, { "required": ["href", "page"] }] } }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$ref": { "$ref": "#/definitions/configRef" },
+        "item": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Label for the menu item." },
+        "groups": { "$ref": "#/definitions/groupList" },
+        "pages": { "$ref": "#/definitions/pageItemList" },
+        "page": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Single page reference relative to the content directory." },
+        "href": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "External destination URL." },
+        "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the menu item." },
+        "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the menu item." },
+        "target": { "$ref": "#/definitions/targetValue" }
+      }
+    },
     "anchorList": {
       "anyOf": [
         { "type": "array", "items": { "$ref": "#/definitions/anchor" } },
@@ -1077,16 +1103,36 @@
       "type": "object",
       "allOf": [
         { "anyOf": [{ "required": ["$ref"] }, { "required": ["tab"] }] },
-        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["dropdowns"] }, { "required": ["href"] }] },
-        { "not": { "anyOf": [{ "required": ["href", "groups"] }, { "required": ["href", "pages"] }, { "required": ["href", "dropdowns"] }] } }
+        { "anyOf": [{ "required": ["$ref"] }, { "required": ["groups"] }, { "required": ["pages"] }, { "required": ["dropdowns"] }, { "required": ["menu"] }, { "required": ["href"] }] },
+        {
+          "not": {
+            "anyOf": [
+              { "required": ["href", "groups"] },
+              { "required": ["href", "pages"] },
+              { "required": ["href", "dropdowns"] },
+              { "required": ["href", "menu"] },
+              { "required": ["menu", "groups"] },
+              { "required": ["menu", "pages"] },
+              { "required": ["menu", "dropdowns"] }
+            ]
+          }
+        }
       ],
       "additionalProperties": false,
       "properties": {
         "$ref": { "$ref": "#/definitions/configRef" },
         "tab": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Tab label shown in the top navigation." },
+        "presentation": {
+          "anyOf": [
+            { "enum": ["tab", "dropdown"] },
+            { "$ref": "#/definitions/configRefValue" }
+          ],
+          "description": "How the tab renders in the top navigation: 'tab' for a plain link (default), or 'dropdown' for a dropdown menu."
+        },
         "groups": { "$ref": "#/definitions/groupList" },
         "pages": { "$ref": "#/definitions/pageItemList" },
         "dropdowns": { "$ref": "#/definitions/dropdownList" },
+        "menu": { "$ref": "#/definitions/menuList" },
         "href": { "allOf": [{ "$ref": "#/definitions/nonEmptyStringValue" }], "description": "Link tab: navigates to this URL (a standalone page or external site) instead of owning docs pages. Cannot be combined with groups, pages, or dropdowns." },
         "icon": { "allOf": [{ "$ref": "#/definitions/stringValue" }], "description": "Icon name shown beside the tab label." },
         "hidden": { "allOf": [{ "$ref": "#/definitions/booleanValue" }], "description": "Hide the tab from the top navigation." }

@@ -14,6 +14,7 @@
 /** @typedef {import('../../src/lib/types.ts').AnchorItem} AnchorItem */
 /** @typedef {import('../../src/lib/types.ts').DropdownItem} DropdownItem */
 /** @typedef {import('../../src/lib/types.ts').TabItem} TabItem */
+/** @typedef {import('../../src/lib/types.ts').MenuItem} MenuItem */
 /** @typedef {import('../../src/lib/types.ts').VersionItem} VersionItem */
 /** @typedef {import('../../src/lib/types.ts').LanguageItem} LanguageItem */
 /** @typedef {import('../../src/lib/types.ts').LinkTarget} LinkTarget */
@@ -666,6 +667,81 @@ function normalizeScope(name, source, anchors, resolveDocFile, docsPrefix) {
       nodes.push(...collectPages(tab.pages, context, state));
     }
 
+    if (Array.isArray(tab.menu)) {
+      tab.menu.forEach((menuItem, menuIndex) => {
+        const itemLabel = menuItem?.item?.trim();
+
+        if (!itemLabel) {
+          throw new Error(
+            `Invalid docs config: tab "${tabLabel}" menu item at index ${menuIndex} is missing "item".`,
+          );
+        }
+
+        const itemHidden = menuItem.hidden || context.hidden || undefined;
+
+        if (typeof menuItem.href === 'string' && menuItem.href) {
+          nodes.push({
+            kind: 'link',
+            label: itemLabel,
+            href: menuItem.href,
+            icon: menuItem.icon,
+            hidden: itemHidden,
+            target: normalizeLinkTarget(menuItem.href, menuItem.target),
+          });
+          return;
+        }
+
+        if (typeof menuItem.page === 'string') {
+          nodes.push({
+            kind: 'page',
+            order: addPage(menuItem.page, context, state, {
+              label: itemLabel,
+              icon: menuItem.icon,
+              hidden: itemHidden,
+            }),
+          });
+          return;
+        }
+
+        /** @type {WalkContext} */
+        const itemContext = {
+          ...context,
+          section: itemLabel,
+          hidden: itemHidden,
+        };
+        /** @type {PendingNode[]} */
+        const children = [];
+
+        if (Array.isArray(menuItem.groups)) {
+          menuItem.groups.forEach(group => {
+            if (!group?.group || !Array.isArray(group.pages)) {
+              throw new Error(
+                `Invalid docs config: tab "${tabLabel}" menu item "${itemLabel}" has an invalid group entry.`,
+              );
+            }
+
+            children.push(...collectPages([group], itemContext, state));
+          });
+        }
+
+        if (Array.isArray(menuItem.pages) && menuItem.pages.length) {
+          children.push(...collectPages(menuItem.pages, itemContext, state));
+        }
+
+        nodes.push({
+          kind: 'group',
+          label: itemLabel,
+          rootOrder:
+            typeof menuItem.root === 'string' && menuItem.root.trim()
+              ? addPage(menuItem.root, itemContext, state, { label: itemLabel })
+              : undefined,
+          children,
+          icon: menuItem.icon,
+          hidden: itemHidden,
+        });
+      });
+    }
+
     const isLinkTab = typeof tab.href === 'string' && !!tab.href;
 
     if (isLinkTab && state.pages.length !== pagesBefore) {
@@ -674,7 +750,7 @@ function normalizeScope(name, source, anchors, resolveDocFile, docsPrefix) {
       );
     }
 
-    if (!isLinkTab && state.pages.length === pagesBefore) {
+    if (!isLinkTab && state.pages.length === pagesBefore && !nodes.some(n => n.kind === 'link')) {
       throw new Error(
         `Invalid docs config: tab "${tabLabel}" does not contain any supported page entries.`,
       );
@@ -805,7 +881,7 @@ function normalizeScope(name, source, anchors, resolveDocFile, docsPrefix) {
       label: tab.tab?.trim() || '',
       url: href || firstPage?.url || pageToUrl('index', docsPrefix),
       icon: tab.icon,
-      presentation: tab.presentation || 'tab',
+      presentation: tab.presentation || (Array.isArray(tab.menu) ? 'dropdown' : 'tab'),
       hidden: tab.hidden || undefined,
       link: href ? true : undefined,
     };
